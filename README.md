@@ -87,7 +87,7 @@ python "C:\ALL_in_H\纳指记录\prepare_github_pages.py"
 
 输出说明：
 
-- `docs/index.html`：公开版基金池页面，移除 `持仓 / 定投`、`定投状态`、`持仓定投` 明细和明文持仓金额。
+- `docs/index.html`：公开版基金池页面，保留 `长期追踪` 图表；移除 `持仓 / 定投`、`定投状态`、`持仓定投` 明细和可编辑私密控件。
 - `docs/portfolio.html`：用 Staticrypt 加密后的完整私密页面，输入密钥后在浏览器本地解密查看。
 
 当前临时密钥保存在本地 `tmp/pages_password.txt`，不要提交到 GitHub。
@@ -135,7 +135,7 @@ python "C:\ALL_in_H\纳指记录\prepare_github_pages.py"
 
 发布 GitHub Pages 时：
 
-- `docs/index.html`：公开页会移除 `持仓定投` 和 `长期追踪` 私密内容。
+- `docs/index.html`：公开页保留长期追踪图表，方便分享长期组合变化；仍移除 `持仓定投` 的编辑明细。
 - `docs/portfolio.html`：加密完整页保留持仓、定投和长期追踪。
 
 ## 页面验证注意
