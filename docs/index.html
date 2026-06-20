@@ -1,0 +1,1490 @@
+
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>纳指 100 A 类基金池</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f4ed;
+      --paper: #faf9f5;
+      --panel: #faf9f5;
+      --panel-subtle: #f1efe6;
+      --ink: #141413;
+      --ink-soft: #3d3d3a;
+      --muted: #6b6a64;
+      --line: #e8e6dc;
+      --line-strong: #d4d1c5;
+      --accent: #1b365d;
+      --accent-strong: #173052;
+      --good: #2e6648;
+      --warn: #8a641d;
+      --bad: #8a2f2a;
+      --gold: #9a6500;
+      --soft-blue: #e4ecf5;
+      --soft-green: #e7ede3;
+      --soft-orange: #efe8d8;
+      --soft-red: #efe1dd;
+      --soft-gold: #f0e6c8;
+      --shadow: 0 4px 24px rgba(20, 20, 19, 0.05);
+      --font-data: "Inter", "Segoe UI", "SF Pro Text", Arial, "Microsoft YaHei UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Charter, Georgia, "Times New Roman", "Source Han Serif SC", "Songti SC", SimSun, serif;
+      line-height: 1.45;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+    button, input { font-family: inherit; }
+    .studio-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .studio-main { min-width: 0; display: grid; grid-template-rows: minmax(0, 1fr); }
+    .page { width: 100%; min-width: 0; margin: 0; padding: 0; }
+    .artifact {
+      background: var(--paper);
+      border: 0;
+      box-shadow: none;
+      min-height: 100vh;
+      padding: 34px 36px 28px;
+    }
+    .app-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 20px;
+      align-items: end;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line-strong);
+    }
+    .title-lockup { display: grid; gap: 8px; min-width: 0; }
+    h1 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(31px, 3.1vw, 38px);
+      line-height: 1.08;
+      letter-spacing: 0;
+      font-weight: 500;
+    }
+    .title-number {
+      font-family: var(--font-data);
+      font-variant-numeric: tabular-nums;
+      font-weight: 550;
+      letter-spacing: 0;
+    }
+    .subtitle {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .subtitle-chip {
+      align-items: center;
+      background: var(--panel-subtle);
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      color: var(--ink-soft);
+      display: inline-flex;
+      font-size: 12px;
+      font-weight: 500;
+      min-height: 24px;
+      padding: 3px 7px;
+      white-space: nowrap;
+    }
+    .subtitle-meta {
+      min-width: min(100%, 420px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .data-text,
+    .numeric {
+      font-family: var(--font-data);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0;
+    }
+    .subtitle,
+    .header-actions,
+    .header-control-bar,
+    .table-toolbar,
+    table,
+    .notes,
+    .visible-count,
+    .tabs {
+      font-family: var(--font-data);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0;
+    }
+    .header-actions {
+      align-items: flex-end;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-items: end;
+      justify-content: flex-end;
+      max-width: 620px;
+    }
+    .header-control-bar {
+      align-items: center;
+      background: #f1efe6;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+      padding: 4px;
+    }
+    .section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 0;
+      box-shadow: var(--shadow);
+      margin-top: 12px;
+      overflow: hidden;
+    }
+    .section-title {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: var(--paper);
+    }
+    .title-copy { display: grid; gap: 3px; }
+    h2 { margin: 0; font-size: 20px; line-height: 1.2; font-weight: 500; }
+    .hint { color: var(--muted); font-size: 13px; }
+    .title-metric {
+      color: var(--ink-soft);
+      font-family: var(--font-data);
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .title-metric strong {
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .table-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .visible-count { color: var(--muted); font-size: 13px; white-space: nowrap; }
+    .table-controls { display: flex; flex: 1 1 auto; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 9px; }
+    .filter-control { display: inline-flex; align-items: center; gap: 8px; }
+    .filter-label { color: var(--muted); font-size: 13px; white-space: nowrap; }
+    .select-menu { position: relative; min-width: 150px; }
+    .select-trigger {
+      width: 100%;
+      min-height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: var(--panel);
+      color: var(--ink);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 7px 10px 7px 12px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 1px 2px rgba(20, 20, 19, 0.04);
+    }
+    .select-trigger::after {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-right: 2px solid var(--muted);
+      border-bottom: 2px solid var(--muted);
+      transform: rotate(45deg) translateY(-2px);
+    }
+    .select-trigger[aria-expanded="true"]::after {
+      transform: rotate(225deg) translateY(-1px);
+    }
+    .select-list {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 6px);
+      z-index: 20;
+      width: 100%;
+      min-width: 144px;
+      margin: 0;
+      padding: 5px;
+      list-style: none;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: var(--panel);
+      box-shadow: 0 4px 24px rgba(20, 20, 19, 0.12);
+    }
+    .select-list[hidden] { display: none; }
+    .select-option {
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 9px;
+      color: var(--ink-soft);
+    }
+    .select-option:hover, .select-option[aria-selected="true"] {
+      background: var(--soft-blue);
+      color: var(--accent);
+    }
+    .ghost-button {
+      min-height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: var(--panel);
+      color: var(--accent);
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 7px 11px;
+    }
+    .ghost-button:hover { border-color: var(--line-strong); background: var(--soft-blue); }
+    .column-menu {
+      position: relative;
+    }
+    .column-panel {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 6px);
+      z-index: 30;
+      width: 286px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: var(--panel);
+      box-shadow: 0 4px 24px rgba(20, 20, 19, 0.12);
+      padding: 10px;
+    }
+    .column-panel[hidden] { display: none; }
+    .column-panel-head {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 2px 2px 9px;
+      border-bottom: 1px solid var(--line);
+    }
+    .column-panel-title {
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .column-reset {
+      border: 0;
+      background: transparent;
+      color: var(--accent);
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+      padding: 2px 0;
+    }
+    .column-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding-top: 9px;
+    }
+    .column-option {
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      color: var(--ink-soft);
+      cursor: pointer;
+      display: flex;
+      gap: 7px;
+      min-height: 34px;
+      padding: 6px 8px;
+      font-size: 12px;
+      user-select: none;
+    }
+    .column-option:hover { background: var(--soft-blue); color: var(--accent); }
+    .column-option.locked { cursor: default; color: var(--muted); background: #f7f5ee; }
+    .column-option input {
+      accent-color: var(--accent);
+      height: 14px;
+      margin: 0;
+      width: 14px;
+    }
+    .column-option input:disabled { opacity: 0.55; }
+    .is-column-hidden { display: none !important; }
+    .table-wrap {
+      background: var(--panel);
+      overflow: auto;
+      max-height: calc(100vh - 205px);
+      min-height: 360px;
+      position: relative;
+    }
+    table { width: max-content; border-collapse: separate; border-spacing: 0; min-width: 1970px; font-size: 13px; }
+    #main-table {
+      border-collapse: separate;
+      isolation: isolate;
+      table-layout: fixed;
+      width: 2168px;
+      min-width: 2168px;
+    }
+    col.rank-col { width: 48px; }
+    col.tier-col { width: 98px; }
+    col.fund-col { width: 300px; }
+    col.position-col { width: 124px; }
+    col.status-col { width: 86px; }
+    col.status-detail-col { width: 90px; }
+    col.size-col { width: 92px; }
+    col.limit-col { width: 104px; }
+    col.fee-col { width: 100px; }
+    col.tracking-col { width: 160px; }
+    col.detail-col { width: 170px; }
+    col.rules-col { width: 210px; }
+    col.return-col { width: 94px; }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 9px 11px;
+      text-align: left;
+      vertical-align: middle;
+    }
+    #main-table th,
+    #main-table td {
+      text-align: center;
+    }
+    #main-table th:nth-child(3),
+    #main-table td:nth-child(3),
+    #main-table th:nth-child(4),
+    #main-table td:nth-child(4),
+    #main-table th:nth-child(7),
+    #main-table td:nth-child(7),
+    #main-table th:nth-child(15),
+    #main-table td:nth-child(15),
+    #main-table th:nth-child(16),
+    #main-table td:nth-child(16) {
+      text-align: left;
+    }
+    #main-table th:nth-child(-n+2), #main-table td:nth-child(-n+2) {
+      padding-left: 8px;
+      padding-right: 8px;
+      text-align: center;
+    }
+    #main-table th:nth-child(1), #main-table td:nth-child(1) {
+      padding-left: 6px;
+      padding-right: 6px;
+      text-align: center;
+    }
+    #main-table th:nth-child(2), #main-table td:nth-child(2) {
+      padding-left: 6px;
+      padding-right: 6px;
+      text-align: center;
+    }
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 6;
+      background: #f1efe6;
+      color: var(--ink-soft);
+      font-weight: 500;
+      white-space: nowrap;
+      border-bottom: 1px solid var(--line-strong);
+    }
+    th.sortable { padding: 0; }
+    .sort-button {
+      width: 100%;
+      min-height: 43px;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 12px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      text-align: center;
+      white-space: nowrap;
+    }
+    #main-table th:nth-child(3) .sort-button,
+    #main-table th:nth-child(7) .sort-button,
+    #main-table th:nth-child(15) .sort-button,
+    #main-table th:nth-child(16) .sort-button {
+      justify-content: flex-start;
+      text-align: left;
+    }
+    .sort-button:hover, .sort-button:focus-visible { background: #e8e6dc; outline: none; }
+    .sort-indicator { width: 12px; color: var(--muted); font-size: 12px; }
+    tbody tr td { background: var(--panel); }
+    tbody tr:nth-child(even) td { background: #f7f5ee; }
+    tbody tr:hover td { background: #eef2f7; }
+    tbody tr[hidden] { display: none; }
+    #main-table th:nth-child(1), #main-table td:nth-child(1),
+    #main-table th:nth-child(2), #main-table td:nth-child(2),
+    #main-table th:nth-child(3), #main-table td:nth-child(3),
+    #main-table th:nth-child(4), #main-table td:nth-child(4) {
+      position: sticky;
+      background: var(--panel);
+      background-clip: border-box;
+      isolation: isolate;
+      z-index: 16;
+    }
+    #main-table tbody tr:nth-child(even) td:nth-child(-n+4) { background: #f7f5ee; }
+    #main-table tbody tr:nth-child(odd) td:nth-child(-n+4) { background: var(--panel); }
+    #main-table tbody tr:hover td:nth-child(-n+4) { background: #eef2f7; }
+    #main-table th:nth-child(1), #main-table td:nth-child(1) { left: 0; }
+    #main-table th:nth-child(2), #main-table td:nth-child(2) { left: 48px; }
+    #main-table th:nth-child(3), #main-table td:nth-child(3) { left: 146px; }
+    #main-table th:nth-child(4), #main-table td:nth-child(4) {
+      left: 446px;
+      box-shadow: 1px 0 0 var(--line-strong);
+    }
+    #main-table th:nth-child(-n+4) {
+      background: #f1efe6;
+      background-clip: border-box;
+      z-index: 26;
+    }
+    #main-table td:nth-child(-n+4) { z-index: 16; }
+    .tier-s-row td:first-child { box-shadow: inset 4px 0 var(--accent); }
+    .tier-a-row td:first-child { box-shadow: inset 4px 0 var(--good); }
+    .tier-b-row td:first-child { box-shadow: inset 4px 0 var(--accent); }
+    .tier-c-row td:first-child { box-shadow: inset 4px 0 var(--warn); }
+    .tier-d-row td:first-child { box-shadow: inset 4px 0 var(--bad); }
+    .num {
+      text-align: right;
+      white-space: nowrap;
+      font-family: var(--font-data);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0;
+    }
+    #main-table .num {
+      text-align: center;
+    }
+    td[data-sort-value] {
+      font-variant-numeric: tabular-nums;
+    }
+    #main-table td:nth-child(5),
+    #main-table td:nth-child(6),
+    #main-table td:nth-child(8),
+    #main-table td:nth-child(9),
+    #main-table td:nth-child(10),
+    #main-table td:nth-child(11),
+    #main-table td:nth-child(13),
+    #main-table td:nth-child(14),
+    #main-table td:nth-child(17),
+    #main-table td:nth-child(18),
+    .position-line strong,
+    .tier-pill,
+    .tag,
+    .rule-line strong,
+    .tracking-detail strong {
+      font-family: var(--font-data);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0;
+    }
+    .fund-cell { min-width: 280px; font-weight: 500; }
+    .fund {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 3px;
+      align-items: center;
+    }
+    .fund-name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .code { font-family: ui-monospace, Consolas, "SFMono-Regular", monospace; color: var(--muted); white-space: nowrap; font-size: 12px; }
+    .position-plan {
+      display: grid;
+      gap: 5px;
+      min-width: 108px;
+    }
+    .position-line {
+      align-items: baseline;
+      display: flex;
+      gap: 4px;
+      justify-content: flex-start;
+      white-space: nowrap;
+    }
+    .position-line em {
+      color: var(--muted);
+      font-size: 11px;
+      font-style: normal;
+    }
+    .position-line strong {
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 500;
+      font-family: var(--font-data);
+      font-variant-numeric: tabular-nums;
+    }
+    .position-line.paused-line strong { color: var(--bad); }
+    .position-line.muted-line strong { color: var(--muted); }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .tag.good, .tag.owned { color: var(--good); background: var(--soft-green); }
+    .tag.warn { color: var(--warn); background: var(--soft-orange); }
+    .tag.bad, .tag.paused { color: var(--bad); background: var(--soft-red); }
+    .tag.info, .tag.watch { color: var(--accent); background: var(--soft-blue); }
+    .tier-pill {
+      align-items: center;
+      border-radius: 4px;
+      display: inline-flex;
+      gap: 6px;
+      justify-content: center;
+      min-width: 70px;
+      padding: 4px 7px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .tier-pill strong {
+      align-items: center;
+      border-radius: 3px;
+      display: inline-flex;
+      justify-content: center;
+      min-width: 22px;
+      min-height: 22px;
+      color: var(--paper);
+      font-size: 13px;
+    }
+    .tier-s { color: var(--gold); background: var(--soft-gold); }
+    .tier-s strong { background: var(--accent); }
+    .tier-a { color: var(--good); background: var(--soft-green); }
+    .tier-a strong { background: var(--good); }
+    .tier-b { color: var(--accent); background: var(--soft-blue); }
+    .tier-b strong { background: var(--accent); }
+    .tier-c { color: var(--warn); background: var(--soft-orange); }
+    .tier-c strong { background: var(--warn); }
+    .tier-d { color: var(--bad); background: var(--soft-red); }
+    .tier-d strong { background: var(--bad); }
+    .fee-detail, .tracking-detail, .sell-rules { display: grid; gap: 5px; min-width: 0; width: 100%; }
+    .fee-detail span { color: var(--muted); font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
+    .tracking-detail strong { color: var(--accent); font-size: 13px; font-weight: 500; white-space: nowrap; }
+    .tracking-detail span { color: var(--muted); font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
+    .muted-cell { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .rule-line {
+      display: grid;
+      grid-template-columns: minmax(88px, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      padding: 4px 6px;
+      background: #f1efe6;
+      white-space: nowrap;
+    }
+    .rule-line span { color: var(--muted); font-size: 12px; }
+    .rule-line strong { font-size: 12px; }
+    .notes {
+      padding: 13px 16px 16px;
+      color: var(--muted);
+      font-size: 12px;
+      background: #f7f5ee;
+      border-top: 1px solid var(--line);
+    }
+    .notes p { margin: 6px 0; }
+    .scoring-wrap { max-height: none; min-height: 0; }
+    .scoring-table { min-width: 980px; }
+    .scoring-table th:nth-child(1) { width: 130px; }
+    .scoring-table th:nth-child(2) { width: 90px; }
+    .scoring-table th:nth-child(3) { width: 100px; }
+    .scoring-table th:nth-child(4) { width: 260px; }
+    .small-table { min-width: 760px; }
+    .tabs {
+      display: inline-flex;
+      gap: 3px;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      margin: 0;
+    }
+    .tab-button {
+      border: 0;
+      border-radius: 3px;
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      min-height: 36px;
+      padding: 8px 14px;
+      white-space: nowrap;
+    }
+    .tab-button[aria-selected="true"] {
+      background: var(--panel);
+      color: var(--ink);
+      box-shadow: 0 2px 10px rgba(20, 20, 19, 0.05);
+    }
+    .tab-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .tab-panel[hidden] { display: none; }
+    .rank-good { color: var(--good); font-weight: 500; }
+    .rank-bad { color: var(--bad); font-weight: 500; }
+    .source-panel .section-title { background: var(--panel); }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: minmax(390px, 0.82fr) minmax(520px, 1.18fr);
+      align-items: start;
+      gap: 0;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      overflow: hidden;
+    }
+    .portfolio-block {
+      min-width: 0;
+      border: 0;
+      background: var(--panel);
+      height: fit-content;
+    }
+    .portfolio-block + .portfolio-block {
+      border-left: 1px solid var(--line);
+    }
+    .portfolio-block .section-title {
+      background: #f7f5ee;
+      min-height: 56px;
+      padding-top: 13px;
+      padding-bottom: 13px;
+    }
+    .compact-table-wrap {
+      max-height: none;
+      min-height: 0;
+      height: fit-content;
+    }
+    .portfolio-table {
+      table-layout: fixed;
+      width: 100%;
+      min-width: 0;
+    }
+    .portfolio-table col.record-col { width: 8%; }
+    .portfolio-table col.rating-col { width: 18%; }
+    .holding-table col.holding-fund-col { width: 29%; }
+    .holding-table col.holding-amount-col { width: 22%; }
+    .holding-table col.holding-status-col { width: 23%; }
+    .auto-plan-table col.record-col { width: 6%; }
+    .auto-plan-table col.auto-fund-col { width: 24%; }
+    .auto-plan-table col.auto-status-col { width: 18%; }
+    .auto-plan-table col.auto-amount-col { width: 20%; }
+    .auto-plan-table col.auto-holding-col { width: 17%; }
+    .portfolio-table th,
+    .portfolio-table td {
+      padding-left: clamp(8px, 0.85vw, 12px);
+      padding-right: clamp(8px, 0.85vw, 12px);
+    }
+    .portfolio-table th,
+    .portfolio-table td {
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+    .portfolio-table th,
+    .portfolio-table td { overflow-wrap: anywhere; }
+    .portfolio-table .num,
+    .portfolio-table .tag { white-space: nowrap; }
+    .portfolio-tier {
+      min-width: 64px;
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+    .portfolio-tier strong {
+      min-width: 20px;
+      min-height: 20px;
+      font-size: 12px;
+    }
+    .editable-amount,
+    .editable-status {
+      cursor: pointer;
+      position: relative;
+      transition: background-color 120ms ease, box-shadow 120ms ease, color 120ms ease;
+    }
+    .editable-amount:hover,
+    .editable-amount:focus-visible,
+    .editable-status:hover,
+    .editable-status:focus-visible {
+      background: rgba(228, 236, 245, 0.52);
+      box-shadow: inset 0 -1px 0 var(--accent);
+      outline: none;
+    }
+    .portfolio-editor {
+      position: fixed;
+      z-index: 80;
+      width: min(270px, calc(100vw - 24px));
+      border: 1px solid var(--line-strong);
+      background: rgba(250, 249, 245, 0.98);
+      box-shadow: 0 18px 40px rgba(20, 20, 19, 0.16);
+      padding: 6px;
+      backdrop-filter: blur(12px);
+    }
+    .portfolio-editor[hidden] { display: none; }
+    .editor-panel {
+      display: grid;
+      gap: 8px;
+    }
+    .editor-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .editor-input {
+      width: 100%;
+      min-width: 0;
+      height: 38px;
+      border: 1px solid var(--line-strong);
+      border-radius: 3px;
+      background: #fffef9;
+      color: var(--ink);
+      font-family: var(--font-data);
+      font-size: 16px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      padding: 7px 9px;
+      outline: none;
+    }
+    .editor-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(27, 54, 93, 0.12);
+    }
+    .editor-suffix {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .editor-action {
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      background: var(--panel);
+      color: var(--ink-soft);
+      cursor: pointer;
+      font: inherit;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      min-height: 30px;
+      padding: 5px 9px;
+      white-space: nowrap;
+    }
+    .editor-action.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fffdf8;
+    }
+    .editor-action:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .editor-action.primary:hover {
+      background: var(--accent-strong);
+      color: #fffdf8;
+    }
+    .editor-options {
+      display: grid;
+      gap: 4px;
+    }
+    .editor-option {
+      width: 100%;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font: inherit;
+      font-size: 13px;
+      min-height: 36px;
+      padding: 7px 9px;
+      text-align: left;
+    }
+    .editor-option:hover,
+    .editor-option:focus-visible {
+      background: var(--soft-blue);
+      border-color: rgba(27, 54, 93, 0.16);
+      color: var(--accent);
+      outline: none;
+    }
+    .editor-option[aria-selected="true"] {
+      background: #f1efe6;
+      border-color: var(--line-strong);
+      color: var(--ink);
+    }
+    .editor-option[aria-selected="true"]::after {
+      content: "";
+      width: 7px;
+      height: 12px;
+      border-right: 2px solid var(--accent);
+      border-bottom: 2px solid var(--accent);
+      transform: rotate(45deg);
+    }
+    .record-index {
+      color: var(--muted);
+      width: 32px;
+      min-width: 32px;
+    }
+    .portfolio-table th:first-child,
+    .portfolio-table td:first-child {
+      padding-left: 10px;
+      padding-right: 8px;
+    }
+    .holding-table th:nth-child(1),
+    .holding-table td:nth-child(1),
+    .holding-table th:nth-child(3),
+    .holding-table td:nth-child(3),
+    .holding-table th:nth-child(4),
+    .holding-table td:nth-child(4),
+    .holding-table th:nth-child(5),
+    .holding-table td:nth-child(5),
+    .auto-plan-table th:nth-child(1),
+    .auto-plan-table td:nth-child(1),
+    .auto-plan-table th:nth-child(3),
+    .auto-plan-table td:nth-child(3),
+    .auto-plan-table th:nth-child(4),
+    .auto-plan-table td:nth-child(4),
+    .auto-plan-table th:nth-child(5),
+    .auto-plan-table td:nth-child(5),
+    .auto-plan-table th:nth-child(6),
+    .auto-plan-table td:nth-child(6) {
+      text-align: center;
+    }
+    .holding-table th:nth-child(2),
+    .holding-table td:nth-child(2),
+    .auto-plan-table th:nth-child(2),
+    .auto-plan-table td:nth-child(2) {
+      white-space: nowrap;
+    }
+    @media (max-width: 1100px) {
+      .studio-shell { grid-template-columns: 1fr; }
+      .page { padding: 0; }
+      .artifact { min-height: 100vh; padding: 22px 18px; }
+    }
+    @media (max-width: 900px) {
+      .app-header { grid-template-columns: 1fr; }
+      .header-actions { align-items: flex-start; justify-content: flex-start; justify-items: start; max-width: none; width: 100%; }
+      .header-control-bar { justify-content: flex-start; width: 100%; }
+      h1 { font-size: 30px; }
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .portfolio-block + .portfolio-block {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+      .section-title { align-items: stretch; }
+      .table-controls { width: 100%; justify-content: flex-start; }
+    }
+    @media (max-width: 760px) {
+      .table-wrap { max-height: calc(100vh - 230px); }
+      table { min-width: 1320px; font-size: 12px; }
+      th, td, .sort-button { padding: 8px 9px; }
+      .fund-cell { min-width: 180px; }
+      .rule-line { grid-template-columns: 1fr; gap: 2px; }
+      .portfolio-table { min-width: 0; font-size: 12px; }
+      .portfolio-table th,
+      .portfolio-table td {
+        padding-left: 7px;
+        padding-right: 7px;
+      }
+      .portfolio-table col.record-col { width: 8%; }
+      .portfolio-table col.rating-col { width: 18%; }
+      .holding-table col.holding-fund-col { width: 30%; }
+      .holding-table col.holding-amount-col { width: 21%; }
+      .holding-table col.holding-status-col { width: 23%; }
+      .auto-plan-table col.record-col { width: 7%; }
+      .auto-plan-table col.auto-fund-col { width: 23%; }
+      .auto-plan-table col.auto-status-col { width: 18%; }
+      .auto-plan-table col.auto-amount-col { width: 20%; }
+      .auto-plan-table col.auto-holding-col { width: 16%; }
+    }
+  </style>
+
+  <style>
+    .tab-link { color: var(--muted); text-decoration: none; }
+    .tab-link:hover { color: var(--ink); background: #f4f2ea; }
+    #main-table { width: 1958px; min-width: 1958px; }
+    #main-table th:nth-child(4), #main-table td:nth-child(4) {
+      position: static; left: auto; box-shadow: none; z-index: auto;
+    }
+    #main-table tbody tr:nth-child(even) td:nth-child(4),
+    #main-table tbody tr:nth-child(odd) td:nth-child(4),
+    #main-table tbody tr:hover td:nth-child(4) { background: inherit; }
+    #main-table th:nth-child(4) { background: #f1efe6; }
+  </style>
+</head>
+<body>
+  <div class="studio-shell">
+    <div class="studio-main">
+      <main class="page">
+      <div class="artifact">
+    <header class="app-header">
+      <div class="title-lockup">
+        <h1>纳指 <span class="title-number">100</span> A 类基金池</h1>
+        <p class="subtitle">
+          <span class="subtitle-chip">16 支</span>
+          <span class="subtitle-chip">QDII</span>
+          <span class="subtitle-chip">长期定投</span>
+          <span class="subtitle-chip">CNY</span>
+          <span class="subtitle-meta">更新：<span class="data-text">2026-06-20 19:14:10</span> · 东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
+        </p>
+      </div>
+      <div class="header-actions">
+        <div class="header-control-bar">
+          <nav class="tabs" aria-label="表格页签">
+            <button class="tab-button" type="button" role="tab" id="tab-main" aria-controls="panel-main" aria-selected="true">主表</button>
+            <a class="tab-button tab-link" href="portfolio.html">持仓定投</a>
+            <button class="tab-button" type="button" role="tab" id="tab-scoring" aria-controls="panel-scoring" aria-selected="false">梯队评级规则</button>
+            <button class="tab-button" type="button" role="tab" id="tab-sources" aria-controls="panel-sources" aria-selected="false">数据来源</button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section class="section tab-panel" id="panel-main" role="tabpanel" aria-labelledby="tab-main">
+      <div class="table-toolbar">
+        <div class="table-controls">
+          <div class="filter-control">
+            <span class="filter-label">梯队</span>
+            <div class="select-menu" id="tier-filter" data-filter-key="tier">
+              <button class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">全部梯队</button>
+              <ul class="select-list" role="listbox" hidden>
+                <li class="select-option" role="option" data-value="all" aria-selected="true">全部梯队</li>
+                <li class="select-option" role="option" data-value="S" aria-selected="false">S 档</li>
+                <li class="select-option" role="option" data-value="A" aria-selected="false">A 档</li>
+                <li class="select-option" role="option" data-value="B" aria-selected="false">B 档</li>
+                <li class="select-option" role="option" data-value="C" aria-selected="false">C 档</li>
+                <li class="select-option" role="option" data-value="D" aria-selected="false">D 档</li>
+              </ul>
+            </div>
+          </div>
+          <div class="filter-control">
+            <span class="filter-label">申购状态</span>
+            <div class="select-menu" id="subscription-filter" data-filter-key="subscription">
+              <button class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">全部申购</button>
+              <ul class="select-list" role="listbox" hidden>
+                <li class="select-option" role="option" data-value="all" aria-selected="true">全部申购</li>
+                <li class="select-option" role="option" data-value="限大额" aria-selected="false">限大额</li>
+                <li class="select-option" role="option" data-value="暂停申购" aria-selected="false">暂停申购</li>
+                <li class="select-option" role="option" data-value="开放申购" aria-selected="false">开放申购</li>
+              </ul>
+            </div>
+          </div>
+          <div class="column-menu" id="column-menu">
+            <button class="ghost-button" type="button" id="column-toggle" aria-haspopup="true" aria-expanded="false">列定制</button>
+            <div class="column-panel" id="column-panel" hidden>
+              <div class="column-panel-head">
+                <span class="column-panel-title">选择显示列</span>
+                <button class="column-reset" type="button" id="column-reset">恢复默认</button>
+              </div>
+              <div class="column-options" id="column-options"></div>
+            </div>
+          </div>
+          <button class="ghost-button" type="button" id="reset-filters">重置</button>
+        </div>
+        <div class="visible-count" id="visible-count">显示 <span class="data-text">16</span> / <span class="data-text">16</span> 支</div>
+      </div>
+      <div class="table-wrap">
+        <table id="main-table">
+          <colgroup>
+            <col class="rank-col">
+            <col class="tier-col">
+            <col class="fund-col">
+            
+            <col class="return-col">
+            <col class="return-col">
+            <col class="tracking-col">
+            <col class="fee-col">
+            <col class="size-col">
+            <col class="fee-col">
+            <col class="fee-col">
+            <col class="status-detail-col">
+            <col class="limit-col">
+            <col class="limit-col">
+            <col class="detail-col">
+            <col class="rules-col">
+            <col class="return-col">
+            
+          </colgroup>
+          <thead>
+            <tr>
+              <th>排名</th>
+              <th class="sortable" data-column-index="1" data-sort-type="number"><button type="button" class="sort-button">定投梯队<span class="sort-indicator"></span></button></th>
+              <th class="sortable" data-column-index="2" data-sort-type="text"><button type="button" class="sort-button">基金 / 代码<span class="sort-indicator"></span></button></th>
+              
+              <th class="sortable" data-column-index="4" data-sort-type="number"><button type="button" class="sort-button">近3年<span class="sort-indicator"></span></button></th>
+              <th class="sortable" data-column-index="5" data-sort-type="number"><button type="button" class="sort-button">近1年<span class="sort-indicator"></span></button></th>
+              <th class="sortable" data-column-index="6" data-sort-type="number"><button type="button" class="sort-button">跟踪误差<span class="sort-indicator"></span></button></th>
+              <th class="sortable" data-column-index="7" data-sort-type="number"><button type="button" class="sort-button">管理+托管<span class="sort-indicator"></span></button></th>
+              <th class="sortable" data-column-index="8" data-sort-type="number"><button type="button" class="sort-button">规模<span class="sort-indicator"></span></button></th>
+              <th class="sortable" data-column-index="9" data-sort-type="number"><button type="button" class="sort-button">买入费率<span class="sort-indicator"></span></button></th>
+              <th class="sortable" data-column-index="10" data-sort-type="number"><button type="button" class="sort-button">免赎回费门槛<span class="sort-indicator"></span></button></th>
+              <th class="sortable" data-column-index="11" data-sort-type="number"><button type="button" class="sort-button">申购状态<span class="sort-indicator"></span></button></th>
+              <th class="sortable" data-column-index="12" data-sort-type="number"><button type="button" class="sort-button">代销限额<span class="sort-indicator"></span></button></th>
+              <th class="sortable" data-column-index="13" data-sort-type="number"><button type="button" class="sort-button">直销限额<span class="sort-indicator"></span></button></th>
+              <th>费率项目</th>
+              <th class="sortable" data-column-index="15" data-sort-type="number"><button type="button" class="sort-button">卖出规则<span class="sort-indicator"></span></button></th>
+              <th class="sortable" data-column-index="16" data-sort-type="number"><button type="button" class="sort-button">日涨跌<span class="sort-indicator"></span></button></th>
+              
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr class="tier-row tier-b-row" data-subscription-status="限大额" data-tier="B" data-code="019441" data-fund-label="万家" data-score="47.7" data-agency-limit="10000.000000" data-direct-limit="10000.000000" data-agency-limit-text="10000元" data-direct-limit-text="10000元">
+              <td class="num row-rank"><span class="data-text">1</span></td>
+              <td class="num" data-sort-value="989"><span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">47.7</span></span></span></td>
+              <td class="fund-cell" data-sort-value="万家纳斯达克100指数发起式(QDII)A 019441">
+                <div class="fund">
+                  <span class="fund-name">万家纳斯达克100指数发起式(QDII)A</span>
+                  <span class="code"><span class="data-text">019441</span></span>
+                </div>
+              </td>
+              
+              <td class="num" data-sort-value="16.970000"><span class="data-text">+16.97%</span></td>
+              <td class="num" data-sort-value="26.480000"><span class="data-text">+26.48%</span></td>
+              <td data-sort-value="1.580000"><div class="tracking-detail"><strong><span class="data-text">+1.58%</span></strong><span>同类均值 <span class="data-text">+2.06%</span></span></div></td>
+              <td class="num" data-sort-value="0.650000"><span class="tag good"><span class="data-text">0.65%/年</span></span></td>
+              <td class="num" data-sort-value="4.380000"><span class="data-text">4.4亿</span></td>
+              <td class="num" data-sort-value="0.100000"><span class="data-text">0.100%</span></td>
+              <td data-sort-value="30.000000"><span class="tag warn">满<span class="data-text">30</span>天</span></td>
+              <td class="num" data-sort-value="1"><span class="tag warn">限大额</span></td>
+              <td class="num" data-sort-value="10000.000000"><span class="tag good"><span class="data-text">10000元</span></span></td>
+              <td class="num" data-sort-value="10000.000000"><span class="tag good"><span class="data-text">10000元</span></span></td>
+              <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.15%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
+              <td data-sort-value="30.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>7-30天</span><strong><span class="data-text">0.1%</span></strong></div><div class="rule-line"><span>≥30天</span><strong><span class="data-text">0%</span></strong></div></div></td>
+              <td class="num" data-sort-value="-0.950000"><span class="data-text">-0.95%</span></td>
+              
+            </tr>
+            
+
+            <tr class="tier-row tier-s-row" data-subscription-status="限大额" data-tier="S" data-code="040046" data-fund-label="华安" data-score="89.8" data-agency-limit="10.000000" data-direct-limit="1000.000000" data-agency-limit-text="10元" data-direct-limit-text="1000元">
+              <td class="num row-rank"><span class="data-text">2</span></td>
+              <td class="num" data-sort-value="999"><span class="tier-pill tier-s"><strong>S</strong><span><span class="data-text">89.8</span></span></span></td>
+              <td class="fund-cell" data-sort-value="华安纳斯达克100ETF联接(QDII)A 040046">
+                <div class="fund">
+                  <span class="fund-name">华安纳斯达克100ETF联接(QDII)A</span>
+                  <span class="code"><span class="data-text">040046</span></span>
+                </div>
+              </td>
+              
+              <td class="num" data-sort-value="18.060000"><span class="data-text">+18.06%</span></td>
+              <td class="num" data-sort-value="28.540000"><span class="data-text">+28.54%</span></td>
+              <td data-sort-value="1.050000"><div class="tracking-detail"><strong><span class="data-text">+1.05%</span></strong><span>同类均值 <span class="data-text">+2.06%</span></span></div></td>
+              <td class="num" data-sort-value="0.800000"><span class="tag warn"><span class="data-text">0.80%/年</span></span></td>
+              <td class="num" data-sort-value="47.030000"><span class="data-text">47.0亿</span></td>
+              <td class="num" data-sort-value="0.120000"><span class="data-text">0.120%</span></td>
+              <td data-sort-value="7.000000"><span class="tag good">满<span class="data-text">7</span>天</span></td>
+              <td class="num" data-sort-value="1"><span class="tag warn">限大额</span></td>
+              <td class="num" data-sort-value="10.000000"><span class="tag bad"><span class="data-text">10元</span></span></td>
+              <td class="num" data-sort-value="1000.000000"><span class="tag info"><span class="data-text">1000元</span></span></td>
+              <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.60%/年</span></span><span>托管费率 <span class="data-text">0.20%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
+              <td data-sort-value="7.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天</span><strong><span class="data-text">0%</span></strong></div></div></td>
+              <td class="num" data-sort-value="-1.020000"><span class="data-text">-1.02%</span></td>
+              
+            </tr>
+            
+
+            <tr class="tier-row tier-c-row" data-subscription-status="限大额" data-tier="C" data-code="000834" data-fund-label="大成" data-score="44.4" data-agency-limit="10.000000" data-direct-limit="100.000000" data-agency-limit-text="10元" data-direct-limit-text="100元">
+              <td class="num row-rank"><span class="data-text">3</span></td>
+              <td class="num" data-sort-value="988"><span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">44.4</span></span></span></td>
+              <td class="fund-cell" data-sort-value="大成纳斯达克100ETF联接(QDII)A 000834">
+                <div class="fund">
+                  <span class="fund-name">大成纳斯达克100ETF联接(QDII)A</span>
+                  <span class="code"><span class="data-text">000834</span></span>
+                </div>
+              </td>
+              
+              <td class="num" data-sort-value="16.730000"><span class="data-text">+16.73%</span></td>
+              <td class="num" data-sort-value="27.500000"><span class="data-text">+27.50%</span></td>
+              <td data-sort-value="1.040000"><div class="tracking-detail"><strong><span class="data-text">+1.04%</span></strong><span>同类均值 <span class="data-text">+2.06%</span></span></div></td>
+              <td class="num" data-sort-value="1.000000"><span class="tag bad"><span class="data-text">1.00%/年</span></span></td>
+              <td class="num" data-sort-value="34.530000"><span class="data-text">34.5亿</span></td>
+              <td class="num" data-sort-value="0.120000"><span class="data-text">0.120%</span></td>
+              <td data-sort-value="730.000000"><span class="tag bad">满<span class="data-text">730</span>天</span></td>
+              <td class="num" data-sort-value="1"><span class="tag warn">限大额</span></td>
+              <td class="num" data-sort-value="10.000000"><span class="tag bad"><span class="data-text">10元</span></span></td>
+              <td class="num" data-sort-value="100.000000"><span class="tag info"><span class="data-text">100元</span></span></td>
+              <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.80%/年</span></span><span>托管费率 <span class="data-text">0.20%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
+              <td data-sort-value="730.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天-&lt;1年</span><strong><span class="data-text">0.5%</span></strong></div><div class="rule-line"><span>≥1年-&lt;2年</span><strong><span class="data-text">0.25%</span></strong></div><div class="rule-line"><span>≥2年</span><strong><span class="data-text">0%</span></strong></div></div></td>
+              <td class="num" data-sort-value="-1.020000"><span class="data-text">-1.02%</span></td>
+              
+            </tr>
+            
+
+            <tr class="tier-row tier-d-row" data-subscription-status="限大额" data-tier="D" data-code="539001" data-fund-label="建信" data-score="22.9" data-agency-limit="100.000000" data-direct-limit="100.000000" data-agency-limit-text="100元" data-direct-limit-text="100元">
+              <td class="num row-rank"><span class="data-text">4</span></td>
+              <td class="num" data-sort-value="984"><span class="tier-pill tier-d"><strong>D</strong><span><span class="data-text">22.9</span></span></span></td>
+              <td class="fund-cell" data-sort-value="建信纳斯达克100指数(QDII)A人民币 539001">
+                <div class="fund">
+                  <span class="fund-name">建信纳斯达克100指数(QDII)A人民币</span>
+                  <span class="code"><span class="data-text">539001</span></span>
+                </div>
+              </td>
+              
+              <td class="num" data-sort-value="16.800000"><span class="data-text">+16.80%</span></td>
+              <td class="num" data-sort-value="26.370000"><span class="data-text">+26.37%</span></td>
+              <td data-sort-value="2.150000"><div class="tracking-detail"><strong><span class="data-text">+2.15%</span></strong><span>同类均值 <span class="data-text">+2.06%</span></span></div></td>
+              <td class="num" data-sort-value="1.000000"><span class="tag bad"><span class="data-text">1.00%/年</span></span></td>
+              <td class="num" data-sort-value="16.240000"><span class="data-text">16.2亿</span></td>
+              <td class="num" data-sort-value="0.120000"><span class="data-text">0.120%</span></td>
+              <td data-sort-value="90.000000"><span class="tag warn">满<span class="data-text">90</span>天</span></td>
+              <td class="num" data-sort-value="1"><span class="tag warn">限大额</span></td>
+              <td class="num" data-sort-value="100.000000"><span class="tag info"><span class="data-text">100元</span></span></td>
+              <td class="num" data-sort-value="100.000000"><span class="tag info"><span class="data-text">100元</span></span></td>
+              <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.80%/年</span></span><span>托管费率 <span class="data-text">0.20%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
+              <td data-sort-value="90.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>7-30天</span><strong><span class="data-text">0.5%</span></strong></div><div class="rule-line"><span>30-90天</span><strong><span class="data-text">0.3%</span></strong></div><div class="rule-line"><span>≥90天</span><strong><span class="data-text">0%</span></strong></div></div></td>
+              <td class="num" data-sort-value="-0.930000"><span class="data-text">-0.93%</span></td>
+              
+            </tr>
+            
+
+            <tr class="tier-row tier-d-row" data-subscription-status="限大额" data-tier="D" data-code="018966" data-fund-label="汇添富" data-score="28.6" data-agency-limit="100.000000" data-direct-limit="100.000000" data-agency-limit-text="100元" data-direct-limit-text="100元">
+              <td class="num row-rank"><span class="data-text">5</span></td>
+              <td class="num" data-sort-value="985"><span class="tier-pill tier-d"><strong>D</strong><span><span class="data-text">28.6</span></span></span></td>
+              <td class="fund-cell" data-sort-value="汇添富纳斯达克100ETF发起式联接(QDII)人民币A 018966">
+                <div class="fund">
+                  <span class="fund-name">汇添富纳斯达克100ETF发起式联接(QDII)人民币A</span>
+                  <span class="code"><span class="data-text">018966</span></span>
+                </div>
+              </td>
+              
+              <td class="num" data-sort-value="16.410000"><span class="data-text">+16.41%</span></td>
+              <td class="num" data-sort-value="25.650000"><span class="data-text">+25.65%</span></td>
+              <td data-sort-value="1.700000"><div class="tracking-detail"><strong><span class="data-text">+1.70%</span></strong><span>同类均值 <span class="data-text">+2.06%</span></span></div></td>
+              <td class="num" data-sort-value="0.650000"><span class="tag good"><span class="data-text">0.65%/年</span></span></td>
+              <td class="num" data-sort-value="10.350000"><span class="data-text">10.3亿</span></td>
+              <td class="num" data-sort-value="0.120000"><span class="data-text">0.120%</span></td>
+              <td data-sort-value="7.000000"><span class="tag good">满<span class="data-text">7</span>天</span></td>
+              <td class="num" data-sort-value="1"><span class="tag warn">限大额</span></td>
+              <td class="num" data-sort-value="100.000000"><span class="tag info"><span class="data-text">100元</span></span></td>
+              <td class="num" data-sort-value="100.000000"><span class="tag info"><span class="data-text">100元</span></span></td>
+              <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.15%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
+              <td data-sort-value="7.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天</span><strong><span class="data-text">0%</span></strong></div></div></td>
+              <td class="num" data-sort-value="-0.960000"><span class="data-text">-0.96%</span></td>
+              
+            </tr>
+            
+
+            <tr class="tier-row tier-b-row" data-subscription-status="限大额" data-tier="B" data-code="016452" data-fund-label="南方" data-score="62.2" data-agency-limit="50.000000" data-direct-limit="50.000000" data-agency-limit-text="50元" data-direct-limit-text="50元">
+              <td class="num row-rank"><span class="data-text">6</span></td>
+              <td class="num" data-sort-value="993"><span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">62.2</span></span></span></td>
+              <td class="fund-cell" data-sort-value="南方纳斯达克100指数发起(QDII)A 016452">
+                <div class="fund">
+                  <span class="fund-name">南方纳斯达克100指数发起(QDII)A</span>
+                  <span class="code"><span class="data-text">016452</span></span>
+                </div>
+              </td>
+              
+              <td class="num" data-sort-value="17.270000"><span class="data-text">+17.27%</span></td>
+              <td class="num" data-sort-value="27.100000"><span class="data-text">+27.10%</span></td>
+              <td data-sort-value="1.460000"><div class="tracking-detail"><strong><span class="data-text">+1.46%</span></strong><span>同类均值 <span class="data-text">+2.06%</span></span></div></td>
+              <td class="num" data-sort-value="0.650000"><span class="tag good"><span class="data-text">0.65%/年</span></span></td>
+              <td class="num" data-sort-value="31.110000"><span class="data-text">31.1亿</span></td>
+              <td class="num" data-sort-value="0.120000"><span class="data-text">0.120%</span></td>
+              <td data-sort-value="7.000000"><span class="tag good">满<span class="data-text">7</span>天</span></td>
+              <td class="num" data-sort-value="1"><span class="tag warn">限大额</span></td>
+              <td class="num" data-sort-value="50.000000"><span class="tag info"><span class="data-text">50元</span></span></td>
+              <td class="num" data-sort-value="50.000000"><span class="tag info"><span class="data-text">50元</span></span></td>
+              <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.15%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
+              <td data-sort-value="7.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天</span><strong><span class="data-text">0%</span></strong></div></div></td>
+              <td class="num" data-sort-value="-0.980000"><span class="data-text">-0.98%</span></td>
+              
+            </tr>
+            
+
+            <tr class="tier-row tier-a-row" data-subscription-status="限大额" data-tier="A" data-code="270042" data-fund-label="广发" data-score="71.3" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
+              <td class="num row-rank"><span class="data-text">7</span></td>
+              <td class="num" data-sort-value="996"><span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">71.3</span></span></span></td>
+              <td class="fund-cell" data-sort-value="广发纳斯达克100ETF联接人民币(QDII)A 270042">
+                <div class="fund">
+                  <span class="fund-name">广发纳斯达克100ETF联接人民币(QDII)A</span>
+                  <span class="code"><span class="data-text">270042</span></span>
+                </div>
+              </td>
+              
+              <td class="num" data-sort-value="17.860000"><span class="data-text">+17.86%</span></td>
+              <td class="num" data-sort-value="27.890000"><span class="data-text">+27.89%</span></td>
+              <td data-sort-value="1.110000"><div class="tracking-detail"><strong><span class="data-text">+1.11%</span></strong><span>同类均值 <span class="data-text">+2.06%</span></span></div></td>
+              <td class="num" data-sort-value="1.000000"><span class="tag bad"><span class="data-text">1.00%/年</span></span></td>
+              <td class="num" data-sort-value="97.160000"><span class="data-text">97.2亿</span></td>
+              <td class="num" data-sort-value="0.130000"><span class="data-text">0.130%</span></td>
+              <td data-sort-value="730.000000"><span class="tag bad">满<span class="data-text">730</span>天</span></td>
+              <td class="num" data-sort-value="1"><span class="tag warn">限大额</span></td>
+              <td class="num" data-sort-value="10.000000"><span class="tag bad"><span class="data-text">10元</span></span></td>
+              <td class="num" data-sort-value="10.000000"><span class="tag bad"><span class="data-text">10元</span></span></td>
+              <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.80%/年</span></span><span>托管费率 <span class="data-text">0.20%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
+              <td data-sort-value="730.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天-&lt;1年</span><strong><span class="data-text">0.5%</span></strong></div><div class="rule-line"><span>≥1年-&lt;2年</span><strong><span class="data-text">0.3%</span></strong></div><div class="rule-line"><span>≥2年</span><strong><span class="data-text">0%</span></strong></div></div></td>
+              <td class="num" data-sort-value="-1.000000"><span class="data-text">-1.00%</span></td>
+              
+            </tr>
+            
+
+            <tr class="tier-row tier-b-row" data-subscription-status="限大额" data-tier="B" data-code="019172" data-fund-label="摩根" data-score="49.0" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
+              <td class="num row-rank"><span class="data-text">8</span></td>
+              <td class="num" data-sort-value="990"><span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">49.0</span></span></span></td>
+              <td class="fund-cell" data-sort-value="摩根纳斯达克100指数(QDII)人民币A 019172">
+                <div class="fund">
+                  <span class="fund-name">摩根纳斯达克100指数(QDII)人民币A</span>
+                  <span class="code"><span class="data-text">019172</span></span>
+                </div>
+              </td>
+              
+              <td class="num" data-sort-value="16.960000"><span class="data-text">+16.96%</span></td>
+              <td class="num" data-sort-value="27.560000"><span class="data-text">+27.56%</span></td>
+              <td data-sort-value="2.240000"><div class="tracking-detail"><strong><span class="data-text">+2.24%</span></strong><span>同类均值 <span class="data-text">+2.06%</span></span></div></td>
+              <td class="num" data-sort-value="0.600000"><span class="tag good"><span class="data-text">0.60%/年</span></span></td>
+              <td class="num" data-sort-value="21.780000"><span class="data-text">21.8亿</span></td>
+              <td class="num" data-sort-value="0.120000"><span class="data-text">0.120%</span></td>
+              <td data-sort-value="7.000000"><span class="tag good">满<span class="data-text">7</span>天</span></td>
+              <td class="num" data-sort-value="1"><span class="tag warn">限大额</span></td>
+              <td class="num" data-sort-value="10.000000"><span class="tag bad"><span class="data-text">10元</span></span></td>
+              <td class="num" data-sort-value="10.000000"><span class="tag bad"><span class="data-text">10元</span></span></td>
+              <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.10%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
+              <td data-sort-value="7.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天</span><strong><span class="data-text">0%</span></strong></div></div></td>
+              <td class="num" data-sort-value="-0.910000"><span class="data-text">-0.91%</span></td>
+              
+            </tr>
+            
+
+            <tr class="tier-row tier-b-row" data-subscription-status="限大额" data-tier="B" data-code="019547" data-fund-label="招商" data-score="54.2" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
+              <td class="num row-rank"><span class="data-text">9</span></td>
+              <td class="num" data-sort-value="991"><span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">54.2</span></span></span></td>
+              <td class="fund-cell" data-sort-value="招商纳斯达克100ETF发起式联接(QDII)A 019547">
+                <div class="fund">
+                  <span class="fund-name">招商纳斯达克100ETF发起式联接(QDII)A</span>
+                  <span class="code"><span class="data-text">019547</span></span>
+                </div>
+              </td>
+              
+              <td class="num" data-sort-value="17.130000"><span class="data-text">+17.13%</span></td>
+              <td class="num" data-sort-value="27.010000"><span class="data-text">+27.01%</span></td>
+              <td data-sort-value="1.690000"><div class="tracking-detail"><strong><span class="data-text">+1.69%</span></strong><span>同类均值 <span class="data-text">+2.06%</span></span></div></td>
+              <td class="num" data-sort-value="0.650000"><span class="tag good"><span class="data-text">0.65%/年</span></span></td>
+              <td class="num" data-sort-value="16.520000"><span class="data-text">16.5亿</span></td>
+              <td class="num" data-sort-value="0.120000"><span class="data-text">0.120%</span></td>
+              <td data-sort-value="7.000000"><span class="tag good">满<span class="data-text">7</span>天</span></td>
+              <td class="num" data-sort-value="1"><span class="tag warn">限大额</span></td>
+              <td class="num" data-sort-value="10.000000"><span class="tag bad"><span class="data-text">10元</span></span></td>
+              <td class="num" data-sort-value="10.000000"><span class="tag bad"><span class="data-text">10元</span></span></td>
+              <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.15%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
+              <td data-sort-value="7.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天</span><strong><span class="data-text">0%</span></strong></div></div></td>
+              <td class="num" data-sort-value="-0.920000"><span class="data-text">-0.92%</span></td>
+              
+            </tr>
+            
+
+            <tr class="tier-row tier-c-row" data-subscription-status="限大额" data-tier="C" data-code="019736" data-fund-label="宝盈" data-score="43.0" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
+              <td class="num row-rank"><span class="data-text">10</span></td>
+              <td class="num" data-sort-value="987"><span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">43.0</span></span></span></td>
+              <td class="fund-cell" data-sort-value="宝盈纳斯达克100指数发起(QDII)A人民币 019736">
+                <div class="fund">
+                  <span class="fund-name">宝盈纳斯达克100指数发起(QDII)A人民币</span>
+                  <span class="code"><span class="data-text">019736</span></span>
+                </div>
+              </td>
+              
+              <td class="num" data-sort-value="16.730000"><span class="data-text">+16.73%</span></td>
+              <td class="num" data-sort-value="26.760000"><span class="data-text">+26.76%</span></td>
+              <td data-sort-value="1.630000"><div class="tracking-detail"><strong><span class="data-text">+1.63%</span></strong><span>同类均值 <span class="data-text">+2.06%</span></span></div></td>
+              <td class="num" data-sort-value="0.650000"><span class="tag good"><span class="data-text">0.65%/年</span></span></td>
+              <td class="num" data-sort-value="5.680000"><span class="data-text">5.7亿</span></td>
+              <td class="num" data-sort-value="0.120000"><span class="data-text">0.120%</span></td>
+              <td data-sort-value="7.000000"><span class="tag good">满<span class="data-text">7</span>天</span></td>
+              <td class="num" data-sort-value="1"><span class="tag warn">限大额</span></td>
+              <td class="num" data-sort-value="10.000000"><span class="tag bad"><span class="data-text">10元</span></span></td>
+              <td class="num" data-sort-value="10.000000"><span class="tag bad"><span class="data-text">10元</span></span></td>
+              <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.15%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
+              <td data-sort-value="7.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天</span><strong><span class="data-text">0%</span></strong></div></div></td>
+              <td class="num" data-sort-value="-0.900000"><span class="data-text">-0.90%</span></td>
+              
+            </tr>
+            
+
+            <tr class="tier-row tier-b-row" data-subscription-status="限大额" data-tier="B" data-code="019524" data-fund-label="华泰柏瑞" data-score="56.0" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
+              <td class="num row-rank"><span class="data-text">11</span></td>
+              <td class="num" data-sort-value="992"><span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">56.0</span></span></span></td>
+              <td class="fund-cell" data-sort-value="华泰柏瑞纳斯达克100ETF发起式联接(QDII)A 019524">
+                <div class="fund">
+                  <span class="fund-name">华泰柏瑞纳斯达克100ETF发起式联接(QDII)A</span>
+                  <span class="code"><span class="data-text">019524</span></span>
+                </div>
+              </td>
+              
+              <td class="num" data-sort-value="17.290000"><span class="data-text">+17.29%</span></td>
+              <td class="num" data-sort-value="26.660000"><span class="data-text">+26.66%</span></td>
+              <td data-sort-value="1.520000"><div class="tracking-detail"><strong><span class="data-text">+1.52%</span></strong><span>同类均值 <span class="data-text">+2.06%</span></span></div></td>
+              <td class="num" data-sort-value="0.650000"><span class="tag good"><span class="data-text">0.65%/年</span></span></td>
+              <td class="num" data-sort-value="7.020000"><span class="data-text">7.0亿</span></td>
+              <td class="num" data-sort-value="0.120000"><span class="data-text">0.120%</span></td>
+              <td data-sort-value="30.000000"><span class="tag warn">满<span class="data-text">30</span>天</span></td>
+              <td class="num" data-sort-value="1"><span class="tag warn">限大额</span></td>
+              <td class="num" data-sort-value="10.000000"><span class="tag bad"><span class="data-text">10元</span></span></td>
+              <td class="num" data-sort-value="10.000000"><span class="tag bad"><span class="data-text">10元</span></span></td>
+              <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.15%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
+              <td data-sort-value="30.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>7-30天</span><strong><span class="data-text">0.1%</span></strong></div><div class="rule-line"><span>≥30天</span><strong><span class="data-text">0%</span></strong></div></div></td>
+              <td class="num" data-sort-value="-0.950000"><span class="data-text">-0.95%</span></td>
+              
+            </tr>
+            
+
+            <tr class="tier-row tier-a-row" data-subscription-status="暂停申购" data-tier="A" data-code="018043" data-fund-label="天弘" data-score="66.6" data-agency-limit="100.000000" data-direct-limit="100.000000" data-agency-limit-text="100元" data-direct-limit-text="100元">
+              <td class="num row-rank"><span class="data-text">12</span></td>
+              <td class="num" data-sort-value="995"><span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">66.6</span></span></span></td>
+              <td class="fund-cell" data-sort-value="天弘纳斯达克100指数发起(QDII)A 018043">
+                <div class="fund">
+                  <span class="fund-name">天弘纳斯达克100指数发起(QDII)A</span>
+                  <span class="code"><span class="data-text">018043</span></span>
+                </div>
+              </td>
+              
+              <td class="num" data-sort-value="17.240000"><span class="data-text">+17.24%</span></td>
+              <td class="num" data-sort-value="27.540000"><span class="data-text">+27.54%</span></td>
+              <td data-sort-value="1.430000"><div class="tracking-detail"><strong><span class="data-text">+1.43%</span></strong><span>同类均值 <span class="data-text">+2.06%</span></span></div></td>
+              <td class="num" data-sort-value="0.600000"><span class="tag good"><span class="data-text">0.60%/年</span></span></td>
+              <td class="num" data-sort-value="21.860000"><span class="data-text">21.9亿</span></td>
+              <td class="num" data-sort-value="0.100000"><span class="data-text">0.100%</span></td>
+              <td data-sort-value="365.000000"><span class="tag bad">满<span class="data-text">365</span>天</span></td>
+              <td class="num" data-sort-value="2"><span class="tag bad">暂停申购</span></td>
+              <td class="num" data-sort-value="100.000000"><span class="tag info"><span class="data-text">100元</span></span></td>
+              <td class="num" data-sort-value="100.000000"><span class="tag info"><span class="data-text">100元</span></span></td>
+              <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.10%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
+              <td data-sort-value="365.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>7-180天</span><strong><span class="data-text">0.5%</span></strong></div><div class="rule-line"><span>180-365天</span><strong><span class="data-text">0.25%</span></strong></div><div class="rule-line"><span>≥365天</span><strong><span class="data-text">0%</span></strong></div></div></td>
+              <td class="num" data-sort-value="-0.950000"><span class="data-text">-0.95%</span></td>
+              
+            </tr>
+            
+
+            <tr class="tier-row tier-s-row" data-subscription-status="暂停申购" data-tier="S" data-code="016055" data-fund-label="博时" data-score="77.6" data-agency-limit="100.000000" data-direct-limit="100.000000" data-agency-limit-text="100元" data-direct-limit-text="100元">
+              <td class="num row-rank"><span class="data-text">13</span></td>
+              <td class="num" data-sort-value="998"><span class="tier-pill tier-s"><strong>S</strong><span><span class="data-text">77.6</span></span></span></td>
+              <td class="fund-cell" data-sort-value="博时纳斯达克100ETF发起式联接(QDII)A人民币 016055">
+                <div class="fund">
+                  <span class="fund-name">博时纳斯达克100ETF发起式联接(QDII)A人民币</span>
+                  <span class="code"><span class="data-text">016055</span></span>
+                </div>
+              </td>
+              
+              <td class="num" data-sort-value="17.650000"><span class="data-text">+17.65%</span></td>
+              <td class="num" data-sort-value="28.110000"><span class="data-text">+28.11%</span></td>
+              <td data-sort-value="1.420000"><div class="tracking-detail"><strong><span class="data-text">+1.42%</span></strong><span>同类均值 <span class="data-text">+2.06%</span></span></div></td>
+              <td class="num" data-sort-value="0.650000"><span class="tag good"><span class="data-text">0.65%/年</span></span></td>
+              <td class="num" data-sort-value="13.010000"><span class="data-text">13.0亿</span></td>
+              <td class="num" data-sort-value="0.100000"><span class="data-text">0.100%</span></td>
+              <td data-sort-value="7.000000"><span class="tag good">满<span class="data-text">7</span>天</span></td>
+              <td class="num" data-sort-value="2"><span class="tag bad">暂停申购</span></td>
+              <td class="num" data-sort-value="100.000000"><span class="tag info"><span class="data-text">100元</span></span></td>
+              <td class="num" data-sort-value="100.000000"><span class="tag info"><span class="data-text">100元</span></span></td>
+              <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.15%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
+              <td data-sort-value="7.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天</span><strong><span class="data-text">0%</span></strong></div></div></td>
+              <td class="num" data-sort-value="-0.960000"><span class="data-text">-0.96%</span></td>
+              
+            </tr>
+            
+
+            <tr class="tier-row tier-a-row" data-subscription-status="暂停申购" data-tier="A" data-code="016532" data-fund-label="嘉实" data-score="75.5" data-agency-limit="100.000000" data-direct-limit="1000.000000" data-agency-limit-text="100元" data-direct-limit-text="1000元">
+              <td class="num row-rank"><span class="data-text">14</span></td>
+              <td class="num" data-sort-value="997"><span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">75.5</span></span></span></td>
+              <td class="fund-cell" data-sort-value="嘉实纳斯达克100ETF发起联接(QDII)A人民币 016532">
+                <div class="fund">
+                  <span class="fund-name">嘉实纳斯达克100ETF发起联接(QDII)A人民币</span>
+                  <span class="code"><span class="data-text">016532</span></span>
+                </div>
+              </td>
+              
+              <td class="num" data-sort-value="17.810000"><span class="data-text">+17.81%</span></td>
+              <td class="num" data-sort-value="27.090000"><span class="data-text">+27.09%</span></td>
+              <td data-sort-value="1.480000"><div class="tracking-detail"><strong><span class="data-text">+1.48%</span></strong><span>同类均值 <span class="data-text">+2.06%</span></span></div></td>
+              <td class="num" data-sort-value="0.600000"><span class="tag good"><span class="data-text">0.60%/年</span></span></td>
+              <td class="num" data-sort-value="18.860000"><span class="data-text">18.9亿</span></td>
+              <td class="num" data-sort-value="0.100000"><span class="data-text">0.100%</span></td>
+              <td data-sort-value="30.000000"><span class="tag warn">满<span class="data-text">30</span>天</span></td>
+              <td class="num" data-sort-value="2"><span class="tag bad">暂停申购</span></td>
+              <td class="num" data-sort-value="100.000000"><span class="tag info"><span class="data-text">100元</span></span></td>
+              <td class="num" data-sort-value="1000.000000"><span class="tag info"><span class="data-text">1000元</span></span></td>
+              <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.10%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
+              <td data-sort-value="30.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>7-30天</span><strong><span class="data-text">0.1%</span></strong></div><div class="rule-line"><span>≥30天</span><strong><span class="data-text">0%</span></strong></div></div></td>
+              <td class="num" data-sort-value="-0.960000"><span class="data-text">-0.96%</span></td>
+              
+            </tr>
+            
+
+            <tr class="tier-row tier-c-row" data-subscription-status="暂停申购" data-tier="C" data-code="015299" data-fund-label="华夏" data-score="41.3" data-agency-limit="100.000000" data-direct-limit="100.000000" data-agency-limit-text="100元" data-direct-limit-text="100元">
+              <td class="num row-rank"><span class="data-text">15</span></td>
+              <td class="num" data-sort-value="986"><span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">41.3</span></span></span></td>
+              <td class="fund-cell" data-sort-value="华夏纳斯达克100ETF发起式联接(QDII)A 015299">
+                <div class="fund">
+                  <span class="fund-name">华夏纳斯达克100ETF发起式联接(QDII)A</span>
+                  <span class="code"><span class="data-text">015299</span></span>
+                </div>
+              </td>
+              
+              <td class="num" data-sort-value="17.250000"><span class="data-text">+17.25%</span></td>
+              <td class="num" data-sort-value="27.580000"><span class="data-text">+27.58%</span></td>
+              <td data-sort-value="2.460000"><div class="tracking-detail"><strong><span class="data-text">+2.46%</span></strong><span>同类均值 <span class="data-text">+2.06%</span></span></div></td>
+              <td class="num" data-sort-value="0.800000"><span class="tag warn"><span class="data-text">0.80%/年</span></span></td>
+              <td class="num" data-sort-value="3.150000"><span class="data-text">3.1亿</span></td>
+              <td class="num" data-sort-value="0.120000"><span class="data-text">0.120%</span></td>
+              <td data-sort-value="7.000000"><span class="tag good">满<span class="data-text">7</span>天</span></td>
+              <td class="num" data-sort-value="2"><span class="tag bad">暂停申购</span></td>
+              <td class="num" data-sort-value="100.000000"><span class="tag info"><span class="data-text">100元</span></span></td>
+              <td class="num" data-sort-value="100.000000"><span class="tag info"><span class="data-text">100元</span></span></td>
+              <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.60%/年</span></span><span>托管费率 <span class="data-text">0.20%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
+              <td data-sort-value="7.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天</span><strong><span class="data-text">0%</span></strong></div></div></td>
+              <td class="num" data-sort-value="-0.970000"><span class="data-text">-0.97%</span></td>
+              
+            </tr>
+            
+
+            <tr class="tier-row tier-b-row" data-subscription-status="暂停申购" data-tier="B" data-code="161130" data-fund-label="易方达" data-score="64.7" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
+              <td class="num row-rank"><span class="data-text">16</span></td>
+              <td class="num" data-sort-value="994"><span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">64.7</span></span></span></td>
+              <td class="fund-cell" data-sort-value="易方达纳斯达克100ETF联接(QDII-LOF)A(人民币) 161130">
+                <div class="fund">
+                  <span class="fund-name">易方达纳斯达克100ETF联接(QDII-LOF)A(人民币)</span>
+                  <span class="code"><span class="data-text">161130</span></span>
+                </div>
+              </td>
+              
+              <td class="num" data-sort-value="17.450000"><span class="data-text">+17.45%</span></td>
+              <td class="num" data-sort-value="27.030000"><span class="data-text">+27.03%</span></td>
+              <td data-sort-value="1.420000"><div class="tracking-detail"><strong><span class="data-text">+1.42%</span></strong><span>同类均值 <span class="data-text">+2.06%</span></span></div></td>
+              <td class="num" data-sort-value="0.600000"><span class="tag good"><span class="data-text">0.60%/年</span></span></td>
+              <td class="num" data-sort-value="15.170000"><span class="data-text">15.2亿</span></td>
+              <td class="num" data-sort-value="0.120000"><span class="data-text">0.120%</span></td>
+              <td data-sort-value="730.000000"><span class="tag bad">满<span class="data-text">730</span>天</span></td>
+              <td class="num" data-sort-value="2"><span class="tag bad">暂停申购</span></td>
+              <td class="num" data-sort-value="10.000000"><span class="tag bad"><span class="data-text">10元</span></span></td>
+              <td class="num" data-sort-value="10.000000"><span class="tag bad"><span class="data-text">10元</span></span></td>
+              <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.10%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
+              <td data-sort-value="730.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;等于6天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天-&lt;等于364天</span><strong><span class="data-text">0.5%</span></strong></div><div class="rule-line"><span>≥365天-&lt;等于729天</span><strong><span class="data-text">0.25%</span></strong></div><div class="rule-line"><span>≥730天</span><strong><span class="data-text">0%</span></strong></div></div></td>
+              <td class="num" data-sort-value="-0.990000"><span class="data-text">-0.99%</span></td>
+              
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    
