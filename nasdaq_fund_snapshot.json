@@ -1,0 +1,963 @@
+{
+  "generated_at": "2026-06-21T02:23:43",
+  "scoring_model": {
+    "method": "return-priority model for the current A-share watchlist; return metrics carry 55%, tracking error and base fee carry 35%, fund size carries 6%, transaction frictions carry 4%; subscription status and purchase limits are execution filters only and do not affect tier scores; lower-is-better metrics are reverse normalized; fund size uses log10 before normalization",
+    "tier_method": "S/A/B/C/D relative percentile buckets within the current watchlist",
+    "weights": {
+      "three_year": 0.35,
+      "one_year": 0.2,
+      "tracking_error": 0.2,
+      "base_fee": 0.15,
+      "fund_size": 0.06,
+      "buy_rate": 0.02,
+      "free_days": 0.02
+    },
+    "rules": [
+      {
+        "key": "three_year",
+        "label": "近3年收益",
+        "weight": 0.35,
+        "direction": "越高越好",
+        "method": "东方财富 SYL_3Y，同池归一化",
+        "reason": "核心目标是长期收益优先；机构和指数基金社区通常会先看长期业绩是否稳定跟上标的。"
+      },
+      {
+        "key": "one_year",
+        "label": "近1年收益",
+        "weight": 0.2,
+        "direction": "越高越好",
+        "method": "东方财富 SYL_1N，同池归一化",
+        "reason": "保留近端表现，避免只看长期旧数据；权重低于 3 年收益，防止追短期热点。"
+      },
+      {
+        "key": "tracking_error",
+        "label": "跟踪误差",
+        "weight": 0.2,
+        "direction": "越低越好",
+        "method": "天天基金特色数据页，反向归一化",
+        "reason": "iShares、State Street 和 Bogleheads 都把跟踪质量视为指数基金核心指标；误差越小越稳定。"
+      },
+      {
+        "key": "base_fee",
+        "label": "管理+托管",
+        "weight": 0.15,
+        "direction": "越低越好",
+        "method": "管理费率 + 托管费率，反向归一化",
+        "reason": "Vanguard 等机构长期强调低费率会改善投资者净回报；管理费和托管费是长期持有的持续拖累。"
+      },
+      {
+        "key": "fund_size",
+        "label": "基金规模",
+        "weight": 0.06,
+        "direction": "适度越大越好",
+        "method": "东方财富 ENDNAV 转亿元，取 log10 后归一化",
+        "reason": "规模只作稳定性和流动性辅助项；它不替代收益、跟踪质量和费用。"
+      },
+      {
+        "key": "buy_rate",
+        "label": "买入费率",
+        "weight": 0.02,
+        "direction": "越低越好",
+        "method": "申购费率，反向归一化",
+        "reason": "一次性交易成本会影响定投入场，但长期影响弱于持续费用和跟踪质量。"
+      },
+      {
+        "key": "free_days",
+        "label": "赎回灵活性",
+        "weight": 0.02,
+        "direction": "越短越好",
+        "method": "达到 0% 赎回费所需天数，反向归一化",
+        "reason": "赎回灵活性是辅助条件，不应压过收益、跟踪误差和持续费用。"
+      }
+    ]
+  },
+  "auto_invest_plan": {
+    "frequency": "日定投",
+    "next_debit_date": "2026-06-22",
+    "active_total": 300,
+    "paused_total": 220,
+    "active_amounts": {
+      "040046": 10,
+      "019441": 200,
+      "016452": 50,
+      "270042": 10,
+      "019172": 10,
+      "019547": 10,
+      "019524": 10
+    },
+    "paused_amounts": {
+      "018966": 100,
+      "539001": 100,
+      "000834": 10,
+      "019736": 10
+    }
+  },
+  "holding_plan": {
+    "holding_total": 560,
+    "holding_count": 8,
+    "holding_amounts": {
+      "016452": 250,
+      "018966": 100,
+      "539001": 100,
+      "019441": 50,
+      "019172": 20,
+      "019547": 20,
+      "000834": 10,
+      "040046": 10
+    },
+    "active_without_holding": [
+      "019524",
+      "270042"
+    ],
+    "holding_but_paused": [
+      "000834",
+      "018966",
+      "539001"
+    ]
+  },
+  "tracking_plan": {
+    "schema_version": 1,
+    "file": "portfolio_tracking.json",
+    "record_count": 1,
+    "latest_date": "2026-06-21",
+    "note": "Long-term holding and return records are stored in portfolio_tracking.json; generated HTML reads the saved records but does not invent market value or profit."
+  },
+  "funds": [
+    {
+      "code": "019441",
+      "name": "万家纳斯达克100指数发起式(QDII)A",
+      "status": "定投中",
+      "holding_amount": 50,
+      "auto_invest_amount": 200,
+      "paused_auto_invest_amount": 0,
+      "holding_horizon": "long",
+      "holding_horizon_text": "长期持有",
+      "investing_tier": "B",
+      "investing_score": 47.7,
+      "investing_rank": 11,
+      "subscription_status": "限大额",
+      "subscription_status_raw": "限大额(单日投资上限10000元)",
+      "fund_size_billion": 4.38,
+      "daily_limit": 10000.0,
+      "agency_limit_label": "",
+      "direct_limit": 10000.0,
+      "buy_rate": 0.1,
+      "management_fee": 0.5,
+      "custody_fee": 0.15,
+      "sales_fee": 0.0,
+      "base_annual_fee_rate": 0.65,
+      "operation_fee": 0.65,
+      "one_year": 26.48,
+      "three_year": 16.97,
+      "day_change": -0.95,
+      "tracking_index": "纳斯达克100指数",
+      "tracking_error": 1.58,
+      "tracking_avg_error": 2.06,
+      "tracking_error_date": "2026-06-17",
+      "free_after_days": 30,
+      "redemption_rules": [
+        [
+          "<7天",
+          1.5
+        ],
+        [
+          "7-30天",
+          0.1
+        ],
+        [
+          "≥30天",
+          0.0
+        ]
+      ],
+      "source_notes": [
+        "基础行情/限额/规模: 东方财富移动接口",
+        "费率/赎回: 天天基金基金费率页",
+        "跟踪误差: 天天基金特色数据页"
+      ],
+      "direct_limit_source": "直销限额: 万家基金公告正文，A/C单日单个基金账户单笔或多笔申购含定投累计金额限制；生效日/公告日: 2026-06-22；公告未区分直销/代销；A类、C类分别计算；同时设置13.5亿元总规模上限。；https://pdf.dfcfw.com/pdf/H2_AN202606191823686344_1.pdf"
+    },
+    {
+      "code": "040046",
+      "name": "华安纳斯达克100ETF联接(QDII)A",
+      "status": "定投中",
+      "holding_amount": 10,
+      "auto_invest_amount": 10,
+      "paused_auto_invest_amount": 0,
+      "holding_horizon": "long",
+      "holding_horizon_text": "长期持有",
+      "investing_tier": "S",
+      "investing_score": 89.8,
+      "investing_rank": 1,
+      "subscription_status": "限大额",
+      "subscription_status_raw": "限大额(单日投资上限10元)",
+      "fund_size_billion": 47.03,
+      "daily_limit": 10.0,
+      "agency_limit_label": "",
+      "direct_limit": 1000.0,
+      "buy_rate": 0.12,
+      "management_fee": 0.6,
+      "custody_fee": 0.2,
+      "sales_fee": 0.0,
+      "base_annual_fee_rate": 0.8,
+      "operation_fee": 0.8,
+      "one_year": 28.54,
+      "three_year": 18.06,
+      "day_change": -1.02,
+      "tracking_index": "纳斯达克100指数",
+      "tracking_error": 1.05,
+      "tracking_avg_error": 2.06,
+      "tracking_error_date": "2026-06-17",
+      "free_after_days": 7,
+      "redemption_rules": [
+        [
+          "<7天",
+          1.5
+        ],
+        [
+          "≥7天",
+          0.0
+        ]
+      ],
+      "source_notes": [
+        "基础行情/限额/规模: 东方财富移动接口",
+        "费率/赎回: 天天基金基金费率页",
+        "跟踪误差: 天天基金特色数据页"
+      ],
+      "direct_limit_source": "直销限额: 华安基金公告PDF，直销机构单日每个基金账户累计申购/定投限额；生效日/公告日: 2025-12-05；公告明确普通渠道每类人民币份额10元，直销机构1000元。；https://pdf.dfcfw.com/pdf/H2_AN202512041793575251_1.pdf"
+    },
+    {
+      "code": "000834",
+      "name": "大成纳斯达克100ETF联接(QDII)A",
+      "status": "暂停定投",
+      "holding_amount": 10,
+      "auto_invest_amount": 0,
+      "paused_auto_invest_amount": 10,
+      "holding_horizon": "long",
+      "holding_horizon_text": "长期持有",
+      "investing_tier": "C",
+      "investing_score": 44.4,
+      "investing_rank": 12,
+      "subscription_status": "限大额",
+      "subscription_status_raw": "限大额(单日投资上限10元)",
+      "fund_size_billion": 34.53,
+      "daily_limit": 10.0,
+      "agency_limit_label": "",
+      "direct_limit": 100.0,
+      "buy_rate": 0.12,
+      "management_fee": 0.8,
+      "custody_fee": 0.2,
+      "sales_fee": 0.0,
+      "base_annual_fee_rate": 1.0,
+      "operation_fee": 1.0,
+      "one_year": 27.5,
+      "three_year": 16.73,
+      "day_change": -1.02,
+      "tracking_index": "纳斯达克100指数",
+      "tracking_error": 1.04,
+      "tracking_avg_error": 2.06,
+      "tracking_error_date": "2026-06-17",
+      "free_after_days": 730,
+      "redemption_rules": [
+        [
+          "<7天",
+          1.5
+        ],
+        [
+          "≥7天-<1年",
+          0.5
+        ],
+        [
+          "≥1年-<2年",
+          0.25
+        ],
+        [
+          "≥2年",
+          0.0
+        ]
+      ],
+      "source_notes": [
+        "基础行情/限额/规模: 东方财富移动接口",
+        "费率/赎回: 天天基金基金费率页",
+        "跟踪误差: 天天基金特色数据页"
+      ],
+      "direct_limit_source": "直销限额: 大成基金公告PDF，直销渠道单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-06-04；公告明确直销渠道100元，代销机构10元。；https://pdf.dfcfw.com/pdf/H2_AN202606031823188725_1.pdf"
+    },
+    {
+      "code": "539001",
+      "name": "建信纳斯达克100指数(QDII)A人民币",
+      "status": "暂停定投",
+      "holding_amount": 100,
+      "auto_invest_amount": 0,
+      "paused_auto_invest_amount": 100,
+      "holding_horizon": "long",
+      "holding_horizon_text": "长期持有",
+      "investing_tier": "D",
+      "investing_score": 22.9,
+      "investing_rank": 16,
+      "subscription_status": "限大额",
+      "subscription_status_raw": "限大额(单日投资上限100元)",
+      "fund_size_billion": 16.24,
+      "daily_limit": 100.0,
+      "agency_limit_label": "",
+      "direct_limit": 100.0,
+      "buy_rate": 0.12,
+      "management_fee": 0.8,
+      "custody_fee": 0.2,
+      "sales_fee": 0.0,
+      "base_annual_fee_rate": 1.0,
+      "operation_fee": 1.0,
+      "one_year": 26.37,
+      "three_year": 16.8,
+      "day_change": -0.93,
+      "tracking_index": "纳斯达克100指数",
+      "tracking_error": 2.15,
+      "tracking_avg_error": 2.06,
+      "tracking_error_date": "2026-06-17",
+      "free_after_days": 90,
+      "redemption_rules": [
+        [
+          "<7天",
+          1.5
+        ],
+        [
+          "7-30天",
+          0.5
+        ],
+        [
+          "30-90天",
+          0.3
+        ],
+        [
+          "≥90天",
+          0.0
+        ]
+      ],
+      "source_notes": [
+        "基础行情/限额/规模: 东方财富移动接口",
+        "费率/赎回: 天天基金基金费率页",
+        "跟踪误差: 天天基金特色数据页"
+      ],
+      "direct_limit_source": "直销限额: 建信基金公告PDF，人民币份额单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-02-27；公告未区分直销/代销；按人民币A/C/D份额统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202602261820057584_1.pdf"
+    },
+    {
+      "code": "018966",
+      "name": "汇添富纳斯达克100ETF发起式联接(QDII)人民币A",
+      "status": "暂停定投",
+      "holding_amount": 100,
+      "auto_invest_amount": 0,
+      "paused_auto_invest_amount": 100,
+      "holding_horizon": "long",
+      "holding_horizon_text": "长期持有",
+      "investing_tier": "D",
+      "investing_score": 28.6,
+      "investing_rank": 15,
+      "subscription_status": "限大额",
+      "subscription_status_raw": "限大额(单日投资上限100元)",
+      "fund_size_billion": 10.35,
+      "daily_limit": 100.0,
+      "agency_limit_label": "",
+      "direct_limit": 100.0,
+      "buy_rate": 0.12,
+      "management_fee": 0.5,
+      "custody_fee": 0.15,
+      "sales_fee": 0.0,
+      "base_annual_fee_rate": 0.65,
+      "operation_fee": 0.65,
+      "one_year": 25.65,
+      "three_year": 16.41,
+      "day_change": -0.96,
+      "tracking_index": "纳斯达克100指数",
+      "tracking_error": 1.7,
+      "tracking_avg_error": 2.06,
+      "tracking_error_date": "2026-06-17",
+      "free_after_days": 7,
+      "redemption_rules": [
+        [
+          "<7天",
+          1.5
+        ],
+        [
+          "≥7天",
+          0.0
+        ]
+      ],
+      "source_notes": [
+        "基础行情/限额/规模: 东方财富移动接口",
+        "费率/赎回: 天天基金基金费率页",
+        "跟踪误差: 天天基金特色数据页"
+      ],
+      "direct_limit_source": "直销限额: 汇添富基金公告PDF，人民币A/C/E单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-04-17；公告未区分直销/代销，按本基金人民币A/C/E统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202604171821282012_1.pdf"
+    },
+    {
+      "code": "016452",
+      "name": "南方纳斯达克100指数发起(QDII)A",
+      "status": "定投中",
+      "holding_amount": 250,
+      "auto_invest_amount": 50,
+      "paused_auto_invest_amount": 0,
+      "holding_horizon": "long",
+      "holding_horizon_text": "长期持有",
+      "investing_tier": "B",
+      "investing_score": 62.2,
+      "investing_rank": 7,
+      "subscription_status": "限大额",
+      "subscription_status_raw": "限大额(单日投资上限50元)",
+      "fund_size_billion": 31.11,
+      "daily_limit": 50.0,
+      "agency_limit_label": "",
+      "direct_limit": 50.0,
+      "buy_rate": 0.12,
+      "management_fee": 0.5,
+      "custody_fee": 0.15,
+      "sales_fee": 0.0,
+      "base_annual_fee_rate": 0.65,
+      "operation_fee": 0.65,
+      "one_year": 27.1,
+      "three_year": 17.27,
+      "day_change": -0.98,
+      "tracking_index": "纳斯达克100指数",
+      "tracking_error": 1.46,
+      "tracking_avg_error": 2.06,
+      "tracking_error_date": "2026-06-17",
+      "free_after_days": 7,
+      "redemption_rules": [
+        [
+          "<7天",
+          1.5
+        ],
+        [
+          "≥7天",
+          0.0
+        ]
+      ],
+      "source_notes": [
+        "基础行情/限额/规模: 东方财富移动接口",
+        "费率/赎回: 天天基金基金费率页",
+        "跟踪误差: 天天基金特色数据页"
+      ],
+      "direct_limit_source": "直销限额: 南方基金官网产品状态及限额接口，A类大额申购/定投/转换转入限额；生效日/公告日: 2026-06-18；官网产品状态接口未区分直销/代销；按南方基金官网A类当前限额记录。；https://www.nffund.com/new/transaction-guide/product-status-and-limits.html"
+    },
+    {
+      "code": "270042",
+      "name": "广发纳斯达克100ETF联接人民币(QDII)A",
+      "status": "定投中",
+      "holding_amount": 0,
+      "auto_invest_amount": 10,
+      "paused_auto_invest_amount": 0,
+      "holding_horizon": "long",
+      "holding_horizon_text": "长期持有",
+      "investing_tier": "A",
+      "investing_score": 71.3,
+      "investing_rank": 4,
+      "subscription_status": "限大额",
+      "subscription_status_raw": "限大额(单日投资上限10元)",
+      "fund_size_billion": 97.16,
+      "daily_limit": 10.0,
+      "agency_limit_label": "",
+      "direct_limit": 10.0,
+      "buy_rate": 0.13,
+      "management_fee": 0.8,
+      "custody_fee": 0.2,
+      "sales_fee": 0.0,
+      "base_annual_fee_rate": 1.0,
+      "operation_fee": 1.0,
+      "one_year": 27.89,
+      "three_year": 17.86,
+      "day_change": -1.0,
+      "tracking_index": "纳斯达克100指数",
+      "tracking_error": 1.11,
+      "tracking_avg_error": 2.06,
+      "tracking_error_date": "2026-06-17",
+      "free_after_days": 730,
+      "redemption_rules": [
+        [
+          "<7天",
+          1.5
+        ],
+        [
+          "≥7天-<1年",
+          0.5
+        ],
+        [
+          "≥1年-<2年",
+          0.3
+        ],
+        [
+          "≥2年",
+          0.0
+        ]
+      ],
+      "source_notes": [
+        "基础行情/限额/规模: 东方财富移动接口",
+        "费率/赎回: 天天基金基金费率页",
+        "跟踪误差: 天天基金特色数据页"
+      ],
+      "direct_limit_source": "直销限额: 东方财富移动接口及截图汇总表，人民币A当前代销/直销限购口径；生效日/公告日: 2026-06-19；未抓到近期单独大额限购公告；按公开接口代销10元和截图直销10元记录。；https://fundf10.eastmoney.com/jjfl_270042.html"
+    },
+    {
+      "code": "019172",
+      "name": "摩根纳斯达克100指数(QDII)人民币A",
+      "status": "定投中",
+      "holding_amount": 20,
+      "auto_invest_amount": 10,
+      "paused_auto_invest_amount": 0,
+      "holding_horizon": "long",
+      "holding_horizon_text": "长期持有",
+      "investing_tier": "B",
+      "investing_score": 49.0,
+      "investing_rank": 10,
+      "subscription_status": "限大额",
+      "subscription_status_raw": "限大额(单日投资上限10元)",
+      "fund_size_billion": 21.78,
+      "daily_limit": 10.0,
+      "agency_limit_label": "",
+      "direct_limit": 10.0,
+      "buy_rate": 0.12,
+      "management_fee": 0.5,
+      "custody_fee": 0.1,
+      "sales_fee": 0.0,
+      "base_annual_fee_rate": 0.6,
+      "operation_fee": 0.6,
+      "one_year": 27.56,
+      "three_year": 16.96,
+      "day_change": -0.91,
+      "tracking_index": "纳斯达克100指数",
+      "tracking_error": 2.24,
+      "tracking_avg_error": 2.06,
+      "tracking_error_date": "2026-06-17",
+      "free_after_days": 7,
+      "redemption_rules": [
+        [
+          "<7天",
+          1.5
+        ],
+        [
+          "≥7天",
+          0.0
+        ]
+      ],
+      "source_notes": [
+        "基础行情/限额/规模: 东方财富移动接口",
+        "费率/赎回: 天天基金基金费率页",
+        "跟踪误差: 天天基金特色数据页"
+      ],
+      "direct_limit_source": "直销限额: 摩根基金公告正文，人民币A/C单日申购/定投/转换转入累计限额；生效日/公告日: 2026-06-11；公告未区分直销/代销，按人民币份额统一限制记录；该公告比2026-04-27的100元公告更新。；https://pdf.dfcfw.com/pdf/H2_AN202606101823421439_1.pdf"
+    },
+    {
+      "code": "019547",
+      "name": "招商纳斯达克100ETF发起式联接(QDII)A",
+      "status": "定投中",
+      "holding_amount": 20,
+      "auto_invest_amount": 10,
+      "paused_auto_invest_amount": 0,
+      "holding_horizon": "long",
+      "holding_horizon_text": "长期持有",
+      "investing_tier": "B",
+      "investing_score": 54.2,
+      "investing_rank": 9,
+      "subscription_status": "限大额",
+      "subscription_status_raw": "限大额(单日投资上限10元)",
+      "fund_size_billion": 16.52,
+      "daily_limit": 10.0,
+      "agency_limit_label": "",
+      "direct_limit": 10.0,
+      "buy_rate": 0.12,
+      "management_fee": 0.5,
+      "custody_fee": 0.15,
+      "sales_fee": 0.0,
+      "base_annual_fee_rate": 0.65,
+      "operation_fee": 0.65,
+      "one_year": 27.01,
+      "three_year": 17.13,
+      "day_change": -0.92,
+      "tracking_index": "纳斯达克100指数",
+      "tracking_error": 1.69,
+      "tracking_avg_error": 2.06,
+      "tracking_error_date": "2026-06-17",
+      "free_after_days": 7,
+      "redemption_rules": [
+        [
+          "<7天",
+          1.5
+        ],
+        [
+          "≥7天",
+          0.0
+        ]
+      ],
+      "source_notes": [
+        "基础行情/限额/规模: 东方财富移动接口",
+        "费率/赎回: 天天基金基金费率页",
+        "跟踪误差: 天天基金特色数据页"
+      ],
+      "direct_limit_source": "直销限额: 招商基金公告PDF，A/C单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-06-10；公告未区分直销/代销，按本基金A/C统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202606091823377663_1.pdf"
+    },
+    {
+      "code": "019736",
+      "name": "宝盈纳斯达克100指数发起(QDII)A人民币",
+      "status": "暂停定投",
+      "holding_amount": 0,
+      "auto_invest_amount": 0,
+      "paused_auto_invest_amount": 10,
+      "holding_horizon": "long",
+      "holding_horizon_text": "长期持有",
+      "investing_tier": "C",
+      "investing_score": 43.0,
+      "investing_rank": 13,
+      "subscription_status": "限大额",
+      "subscription_status_raw": "限大额(单日投资上限10元)",
+      "fund_size_billion": 5.68,
+      "daily_limit": 10.0,
+      "agency_limit_label": "",
+      "direct_limit": 10.0,
+      "buy_rate": 0.12,
+      "management_fee": 0.5,
+      "custody_fee": 0.15,
+      "sales_fee": 0.0,
+      "base_annual_fee_rate": 0.65,
+      "operation_fee": 0.65,
+      "one_year": 26.76,
+      "three_year": 16.73,
+      "day_change": -0.9,
+      "tracking_index": "纳斯达克100指数",
+      "tracking_error": 1.63,
+      "tracking_avg_error": 2.06,
+      "tracking_error_date": "2026-06-17",
+      "free_after_days": 7,
+      "redemption_rules": [
+        [
+          "<7天",
+          1.5
+        ],
+        [
+          "≥7天",
+          0.0
+        ]
+      ],
+      "source_notes": [
+        "基础行情/限额/规模: 东方财富移动接口",
+        "费率/赎回: 天天基金基金费率页",
+        "跟踪误差: 天天基金特色数据页"
+      ],
+      "direct_limit_source": "直销限额: 宝盈基金公告正文，A/C人民币份额申购含定投限制金额；生效日/公告日: 2026-06-11；公告未区分直销/代销；A/C均为10元。；https://pdf.dfcfw.com/pdf/H2_AN202606101823409504_1.pdf"
+    },
+    {
+      "code": "019524",
+      "name": "华泰柏瑞纳斯达克100ETF发起式联接(QDII)A",
+      "status": "定投中",
+      "holding_amount": 0,
+      "auto_invest_amount": 10,
+      "paused_auto_invest_amount": 0,
+      "holding_horizon": "long",
+      "holding_horizon_text": "长期持有",
+      "investing_tier": "B",
+      "investing_score": 56.0,
+      "investing_rank": 8,
+      "subscription_status": "限大额",
+      "subscription_status_raw": "限大额(单日投资上限10元)",
+      "fund_size_billion": 7.02,
+      "daily_limit": 10.0,
+      "agency_limit_label": "",
+      "direct_limit": 10.0,
+      "buy_rate": 0.12,
+      "management_fee": 0.5,
+      "custody_fee": 0.15,
+      "sales_fee": 0.0,
+      "base_annual_fee_rate": 0.65,
+      "operation_fee": 0.65,
+      "one_year": 26.66,
+      "three_year": 17.29,
+      "day_change": -0.95,
+      "tracking_index": "纳斯达克100指数",
+      "tracking_error": 1.52,
+      "tracking_avg_error": 2.06,
+      "tracking_error_date": "2026-06-17",
+      "free_after_days": 30,
+      "redemption_rules": [
+        [
+          "<7天",
+          1.5
+        ],
+        [
+          "7-30天",
+          0.1
+        ],
+        [
+          "≥30天",
+          0.0
+        ]
+      ],
+      "source_notes": [
+        "基础行情/限额/规模: 东方财富移动接口",
+        "费率/赎回: 天天基金基金费率页",
+        "跟踪误差: 天天基金特色数据页"
+      ],
+      "direct_limit_source": "直销限额: 华泰柏瑞基金公告正文，A/C/I份额申购含定投限制金额；生效日/公告日: 2026-04-23；公告未区分直销/代销；A/C/I份额合并计算10元。；https://pdf.dfcfw.com/pdf/H2_AN202604231821470346_1.pdf"
+    },
+    {
+      "code": "018043",
+      "name": "天弘纳斯达克100指数发起(QDII)A",
+      "status": "候选",
+      "holding_amount": 0,
+      "auto_invest_amount": 0,
+      "paused_auto_invest_amount": 0,
+      "holding_horizon": "long",
+      "holding_horizon_text": "长期持有",
+      "investing_tier": "A",
+      "investing_score": 66.6,
+      "investing_rank": 5,
+      "subscription_status": "暂停申购",
+      "subscription_status_raw": "暂停申购(单日投资上限100元)",
+      "fund_size_billion": 21.86,
+      "daily_limit": 100.0,
+      "agency_limit_label": "",
+      "direct_limit": 100.0,
+      "buy_rate": 0.1,
+      "management_fee": 0.5,
+      "custody_fee": 0.1,
+      "sales_fee": 0.0,
+      "base_annual_fee_rate": 0.6,
+      "operation_fee": 0.6,
+      "one_year": 27.54,
+      "three_year": 17.24,
+      "day_change": -0.95,
+      "tracking_index": "纳斯达克100指数",
+      "tracking_error": 1.43,
+      "tracking_avg_error": 2.06,
+      "tracking_error_date": "2026-06-17",
+      "free_after_days": 365,
+      "redemption_rules": [
+        [
+          "<7天",
+          1.5
+        ],
+        [
+          "7-180天",
+          0.5
+        ],
+        [
+          "180-365天",
+          0.25
+        ],
+        [
+          "≥365天",
+          0.0
+        ]
+      ],
+      "source_notes": [
+        "基础行情/限额/规模: 东方财富移动接口",
+        "费率/赎回: 天天基金基金费率页",
+        "跟踪误差: 天天基金特色数据页"
+      ],
+      "direct_limit_source": "直销限额: 天弘基金公告正文，A/C/D单日单个基金账户申购含定投累计限额；生效日/公告日: 2026-04-08；公告未区分直销/代销；A类018043、C类018044、D类022525均为100元。；https://pdf.dfcfw.com/pdf/H2_AN202604071821036124_1.pdf"
+    },
+    {
+      "code": "016055",
+      "name": "博时纳斯达克100ETF发起式联接(QDII)A人民币",
+      "status": "候选",
+      "holding_amount": 0,
+      "auto_invest_amount": 0,
+      "paused_auto_invest_amount": 0,
+      "holding_horizon": "long",
+      "holding_horizon_text": "长期持有",
+      "investing_tier": "S",
+      "investing_score": 77.6,
+      "investing_rank": 2,
+      "subscription_status": "暂停申购",
+      "subscription_status_raw": "暂停申购(单日投资上限100元)",
+      "fund_size_billion": 13.01,
+      "daily_limit": 100.0,
+      "agency_limit_label": "",
+      "direct_limit": 100,
+      "buy_rate": 0.1,
+      "management_fee": 0.5,
+      "custody_fee": 0.15,
+      "sales_fee": 0.0,
+      "base_annual_fee_rate": 0.65,
+      "operation_fee": 0.65,
+      "one_year": 28.11,
+      "three_year": 17.65,
+      "day_change": -0.96,
+      "tracking_index": "纳斯达克100指数",
+      "tracking_error": 1.42,
+      "tracking_avg_error": 2.06,
+      "tracking_error_date": "2026-06-17",
+      "free_after_days": 7,
+      "redemption_rules": [
+        [
+          "<7天",
+          1.5
+        ],
+        [
+          "≥7天",
+          0.0
+        ]
+      ],
+      "source_notes": [
+        "基础行情/限额/规模: 东方财富移动接口",
+        "费率/赎回: 天天基金基金费率页",
+        "跟踪误差: 天天基金特色数据页"
+      ],
+      "direct_limit_source": "直销限额: 脚本内置回退值，待基金公司直销公告核验"
+    },
+    {
+      "code": "016532",
+      "name": "嘉实纳斯达克100ETF发起联接(QDII)A人民币",
+      "status": "候选",
+      "holding_amount": 0,
+      "auto_invest_amount": 0,
+      "paused_auto_invest_amount": 0,
+      "holding_horizon": "long",
+      "holding_horizon_text": "长期持有",
+      "investing_tier": "A",
+      "investing_score": 75.5,
+      "investing_rank": 3,
+      "subscription_status": "暂停申购",
+      "subscription_status_raw": "暂停申购(单日投资上限100元)",
+      "fund_size_billion": 18.86,
+      "daily_limit": 100.0,
+      "agency_limit_label": "",
+      "direct_limit": 1000.0,
+      "buy_rate": 0.1,
+      "management_fee": 0.5,
+      "custody_fee": 0.1,
+      "sales_fee": 0.0,
+      "base_annual_fee_rate": 0.6,
+      "operation_fee": 0.6,
+      "one_year": 27.09,
+      "three_year": 17.81,
+      "day_change": -0.96,
+      "tracking_index": "纳斯达克100指数",
+      "tracking_error": 1.48,
+      "tracking_avg_error": 2.06,
+      "tracking_error_date": "2026-06-17",
+      "free_after_days": 30,
+      "redemption_rules": [
+        [
+          "<7天",
+          1.5
+        ],
+        [
+          "7-30天",
+          0.1
+        ],
+        [
+          "≥30天",
+          0.0
+        ]
+      ],
+      "source_notes": [
+        "基础行情/限额/规模: 东方财富移动接口",
+        "费率/赎回: 天天基金基金费率页",
+        "跟踪误差: 天天基金特色数据页"
+      ],
+      "direct_limit_source": "直销限额: 嘉实基金公告正文，直销销售机构A人民币单日单个基金账户申购含定投累计限额；生效日/公告日: 2025-11-11；公告明确直销A/C/I人民币各1000元，非直销A/C/I人民币各100元；表内代销限额仍按公开平台接口100元。；https://pdf.dfcfw.com/pdf/H2_AN202511111779112505_1.pdf"
+    },
+    {
+      "code": "015299",
+      "name": "华夏纳斯达克100ETF发起式联接(QDII)A",
+      "status": "候选",
+      "holding_amount": 0,
+      "auto_invest_amount": 0,
+      "paused_auto_invest_amount": 0,
+      "holding_horizon": "long",
+      "holding_horizon_text": "长期持有",
+      "investing_tier": "C",
+      "investing_score": 41.3,
+      "investing_rank": 14,
+      "subscription_status": "暂停申购",
+      "subscription_status_raw": "暂停申购(单日投资上限100元)",
+      "fund_size_billion": 3.15,
+      "daily_limit": 100.0,
+      "agency_limit_label": "",
+      "direct_limit": 100,
+      "buy_rate": 0.12,
+      "management_fee": 0.6,
+      "custody_fee": 0.2,
+      "sales_fee": 0.0,
+      "base_annual_fee_rate": 0.8,
+      "operation_fee": 0.8,
+      "one_year": 27.58,
+      "three_year": 17.25,
+      "day_change": -0.97,
+      "tracking_index": "纳斯达克100指数",
+      "tracking_error": 2.46,
+      "tracking_avg_error": 2.06,
+      "tracking_error_date": "2026-06-17",
+      "free_after_days": 7,
+      "redemption_rules": [
+        [
+          "<7天",
+          1.5
+        ],
+        [
+          "≥7天",
+          0.0
+        ]
+      ],
+      "source_notes": [
+        "基础行情/限额/规模: 东方财富移动接口",
+        "费率/赎回: 天天基金基金费率页",
+        "跟踪误差: 天天基金特色数据页"
+      ],
+      "direct_limit_source": "直销限额: 脚本内置回退值，待基金公司直销公告核验"
+    },
+    {
+      "code": "161130",
+      "name": "易方达纳斯达克100ETF联接(QDII-LOF)A(人民币)",
+      "status": "候选",
+      "holding_amount": 0,
+      "auto_invest_amount": 0,
+      "paused_auto_invest_amount": 0,
+      "holding_horizon": "long",
+      "holding_horizon_text": "长期持有",
+      "investing_tier": "B",
+      "investing_score": 64.7,
+      "investing_rank": 6,
+      "subscription_status": "暂停申购",
+      "subscription_status_raw": "暂停申购(单日投资上限10元)",
+      "fund_size_billion": 15.17,
+      "daily_limit": 10.0,
+      "agency_limit_label": "",
+      "direct_limit": 10.0,
+      "buy_rate": 0.12,
+      "management_fee": 0.5,
+      "custody_fee": 0.1,
+      "sales_fee": 0.0,
+      "base_annual_fee_rate": 0.6,
+      "operation_fee": 0.6,
+      "one_year": 27.03,
+      "three_year": 17.45,
+      "day_change": -0.99,
+      "tracking_index": "纳斯达克100指数",
+      "tracking_error": 1.42,
+      "tracking_avg_error": 2.06,
+      "tracking_error_date": "2026-06-17",
+      "free_after_days": 730,
+      "redemption_rules": [
+        [
+          "<等于6天",
+          1.5
+        ],
+        [
+          "≥7天-<等于364天",
+          0.5
+        ],
+        [
+          "≥365天-<等于729天",
+          0.25
+        ],
+        [
+          "≥730天",
+          0.0
+        ]
+      ],
+      "source_notes": [
+        "基础行情/限额/规模: 东方财富移动接口",
+        "费率/赎回: 天天基金基金费率页",
+        "跟踪误差: 天天基金特色数据页"
+      ],
+      "direct_limit_source": "直销限额: 易方达基金公告正文，A人民币份额在全部销售机构单日单个基金账户申购含定投累计限额；生效日/公告日: 2025-11-04；公告明确人民币A/C份额在全部销售机构累计申购限额均为10元。；https://pdf.dfcfw.com/pdf/H2_AN202511031774389358_1.pdf"
+    }
+  ]
+}

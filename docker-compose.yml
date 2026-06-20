@@ -1,0 +1,13 @@
+name: nasdaq-fund-table
+
+services:
+  nasdaq-fund-table:
+    image: python:3.11-slim-bookworm
+    container_name: nasdaq-fund-table
+    working_dir: /site
+    command: python serve_static.py
+    ports:
+      - "8765:80"
+    volumes:
+      - ./:/site:ro
+    restart: unless-stopped

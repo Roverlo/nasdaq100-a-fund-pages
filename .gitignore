@@ -1,0 +1,10 @@
+.agents/
+.codex/
+.git.empty-backup-*/
+__pycache__/
+tmp/
+.staticrypt.json
+*.pyc
+*.pyo
+*.log
+node_modules/

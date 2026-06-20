@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "records": [
+    {
+      "date": "2026-06-21",
+      "recorded_at": "2026-06-21T02:22:05",
+      "holding_total": 560,
+      "active_auto_invest_total": 300,
+      "paused_auto_invest_total": 220,
+      "market_value": null,
+      "cost_basis": null,
+      "profit": null,
+      "return_rate": null,
+      "funds": {
+        "019441": {
+          "name": "万家",
+          "rating": "B",
+          "score": 47.7,
+          "holding_amount": 50,
+          "active_auto_invest_amount": 200,
+          "paused_auto_invest_amount": 0,
+          "market_value": null,
+          "cost_basis": null,
+          "profit": null,
+          "return_rate": null
+        },
+        "040046": {
+          "name": "华安",
+          "rating": "S",
+          "score": 89.8,
+          "holding_amount": 10,
+          "active_auto_invest_amount": 10,
+          "paused_auto_invest_amount": 0,
+          "market_value": null,
+          "cost_basis": null,
+          "profit": null,
+          "return_rate": null
+        },
+        "000834": {
+          "name": "大成",
+          "rating": "C",
+          "score": 44.4,
+          "holding_amount": 10,
+          "active_auto_invest_amount": 0,
+          "paused_auto_invest_amount": 10,
+          "market_value": null,
+          "cost_basis": null,
+          "profit": null,
+          "return_rate": null
+        },
+        "539001": {
+          "name": "建信",
+          "rating": "D",
+          "score": 22.9,
+          "holding_amount": 100,
+          "active_auto_invest_amount": 0,
+          "paused_auto_invest_amount": 100,
+          "market_value": null,
+          "cost_basis": null,
+          "profit": null,
+          "return_rate": null
+        },
+        "018966": {
+          "name": "汇添富",
+          "rating": "D",
+          "score": 28.6,
+          "holding_amount": 100,
+          "active_auto_invest_amount": 0,
+          "paused_auto_invest_amount": 100,
+          "market_value": null,
+          "cost_basis": null,
+          "profit": null,
+          "return_rate": null
+        },
+        "016452": {
+          "name": "南方",
+          "rating": "B",
+          "score": 62.2,
+          "holding_amount": 250,
+          "active_auto_invest_amount": 50,
+          "paused_auto_invest_amount": 0,
+          "market_value": null,
+          "cost_basis": null,
+          "profit": null,
+          "return_rate": null
+        },
+        "270042": {
+          "name": "广发",
+          "rating": "A",
+          "score": 71.3,
+          "holding_amount": 0,
+          "active_auto_invest_amount": 10,
+          "paused_auto_invest_amount": 0,
+          "market_value": null,
+          "cost_basis": null,
+          "profit": null,
+          "return_rate": null
+        },
+        "019172": {
+          "name": "摩根",
+          "rating": "B",
+          "score": 49.0,
+          "holding_amount": 20,
+          "active_auto_invest_amount": 10,
+          "paused_auto_invest_amount": 0,
+          "market_value": null,
+          "cost_basis": null,
+          "profit": null,
+          "return_rate": null
+        },
+        "019547": {
+          "name": "招商",
+          "rating": "B",
+          "score": 54.2,
+          "holding_amount": 20,
+          "active_auto_invest_amount": 10,
+          "paused_auto_invest_amount": 0,
+          "market_value": null,
+          "cost_basis": null,
+          "profit": null,
+          "return_rate": null
+        },
+        "019736": {
+          "name": "宝盈",
+          "rating": "C",
+          "score": 43.0,
+          "holding_amount": 0,
+          "active_auto_invest_amount": 0,
+          "paused_auto_invest_amount": 10,
+          "market_value": null,
+          "cost_basis": null,
+          "profit": null,
+          "return_rate": null
+        },
+        "019524": {
+          "name": "华泰柏瑞",
+          "rating": "B",
+          "score": 56.0,
+          "holding_amount": 0,
+          "active_auto_invest_amount": 10,
+          "paused_auto_invest_amount": 0,
+          "market_value": null,
+          "cost_basis": null,
+          "profit": null,
+          "return_rate": null
+        },
+        "018043": {
+          "name": "天弘",
+          "rating": "A",
+          "score": 66.6,
+          "holding_amount": 0,
+          "active_auto_invest_amount": 0,
+          "paused_auto_invest_amount": 0,
+          "market_value": null,
+          "cost_basis": null,
+          "profit": null,
+          "return_rate": null
+        },
+        "016055": {
+          "name": "博时",
+          "rating": "S",
+          "score": 77.6,
+          "holding_amount": 0,
+          "active_auto_invest_amount": 0,
+          "paused_auto_invest_amount": 0,
+          "market_value": null,
+          "cost_basis": null,
+          "profit": null,
+          "return_rate": null
+        },
+        "016532": {
+          "name": "嘉实",
+          "rating": "A",
+          "score": 75.5,
+          "holding_amount": 0,
+          "active_auto_invest_amount": 0,
+          "paused_auto_invest_amount": 0,
+          "market_value": null,
+          "cost_basis": null,
+          "profit": null,
+          "return_rate": null
+        },
+        "015299": {
+          "name": "华夏",
+          "rating": "C",
+          "score": 41.3,
+          "holding_amount": 0,
+          "active_auto_invest_amount": 0,
+          "paused_auto_invest_amount": 0,
+          "market_value": null,
+          "cost_basis": null,
+          "profit": null,
+          "return_rate": null
+        },
+        "161130": {
+          "name": "易方达",
+          "rating": "B",
+          "score": 64.7,
+          "holding_amount": 0,
+          "active_auto_invest_amount": 0,
+          "paused_auto_invest_amount": 0,
+          "market_value": null,
+          "cost_basis": null,
+          "profit": null,
+          "return_rate": null
+        }
+      },
+      "note": "初始追踪记录"
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "019441": {
+    "limit": 10000,
+    "source_note": "万家基金公告正文，A/C单日单个基金账户单笔或多笔申购含定投累计金额限制",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202606191823686344_1.pdf",
+    "effective_date": "2026-06-22",
+    "channel_note": "公告未区分直销/代销；A类、C类分别计算；同时设置13.5亿元总规模上限。"
+  },
+  "019442": {
+    "limit": 10000,
+    "source_note": "万家基金公告正文，A/C单日单个基金账户单笔或多笔申购含定投累计金额限制",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202606191823686344_1.pdf",
+    "effective_date": "2026-06-22",
+    "channel_note": "公告未区分直销/代销；A类、C类分别计算；同时设置13.5亿元总规模上限。"
+  },
+  "040046": {
+    "limit": 1000,
+    "source_note": "华安基金公告PDF，直销机构单日每个基金账户累计申购/定投限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202512041793575251_1.pdf",
+    "effective_date": "2025-12-05",
+    "channel_note": "公告明确普通渠道每类人民币份额10元，直销机构1000元。"
+  },
+  "014978": {
+    "limit": 1000,
+    "source_note": "华安基金公告PDF，直销机构单日每个基金账户累计申购/定投限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202512041793575251_1.pdf",
+    "effective_date": "2025-12-05",
+    "channel_note": "公告明确普通渠道每类人民币份额10元，直销机构1000元。"
+  },
+  "021778": {
+    "limit": 1000,
+    "source_note": "广发基金公告正文，F类份额单日单个基金账户申购/定投/不定投/转换转入业务限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202606021823148642_1.pdf",
+    "effective_date": "2026-06-03",
+    "channel_note": "公告仅调整021778人民币F类，A/C人民币份额未在该公告中暂停大额申购；截图代销列显示无。"
+  },
+  "021000": {
+    "limit": 1000,
+    "source_note": "南方基金官网产品状态及用户截图汇总表，I类大额申购/定投/转换转入限额",
+    "source_url": "https://www.nffund.com/new/transaction-guide/product-status-and-limits.html",
+    "effective_date": "2026-06-19",
+    "channel_note": "I类为直销/专属份额；截图代销列显示无，直销列显示1000。"
+  },
+  "000834": {
+    "limit": 100,
+    "source_note": "大成基金公告PDF，直销渠道单日单个基金账户申购/定投累计限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202606031823188725_1.pdf",
+    "effective_date": "2026-06-04",
+    "channel_note": "公告明确直销渠道100元，代销机构10元。"
+  },
+  "008971": {
+    "limit": 100,
+    "source_note": "大成基金公告PDF，直销渠道单日单个基金账户申购/定投累计限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202606031823188725_1.pdf",
+    "effective_date": "2026-06-04",
+    "channel_note": "公告明确直销渠道100元，代销机构10元。"
+  },
+  "539001": {
+    "limit": 100,
+    "source_note": "建信基金公告PDF，人民币份额单日单个基金账户申购/定投累计限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202602261820057584_1.pdf",
+    "effective_date": "2026-02-27",
+    "channel_note": "公告未区分直销/代销；按人民币A/C/D份额统一限制记录。"
+  },
+  "023422": {
+    "limit": 100,
+    "source_note": "建信基金公告PDF，人民币份额单日单个基金账户申购/定投累计限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202602261820057584_1.pdf",
+    "effective_date": "2026-02-27",
+    "channel_note": "公告未区分直销/代销；按人民币A/C/D份额统一限制记录。"
+  },
+  "012752": {
+    "limit": 100,
+    "source_note": "建信基金公告PDF，人民币份额单日单个基金账户申购/定投累计限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202602261820057584_1.pdf",
+    "effective_date": "2026-02-27",
+    "channel_note": "公告未区分直销/代销；按人民币A/C/D份额统一限制记录。"
+  },
+  "018966": {
+    "limit": 100,
+    "source_note": "汇添富基金公告PDF，人民币A/C/E单日单个基金账户申购/定投累计限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202604171821282012_1.pdf",
+    "effective_date": "2026-04-17",
+    "channel_note": "公告未区分直销/代销，按本基金人民币A/C/E统一限制记录。"
+  },
+  "021773": {
+    "limit": 100,
+    "source_note": "汇添富基金公告PDF，人民币A/C/E单日单个基金账户申购/定投累计限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202604171821282012_1.pdf",
+    "effective_date": "2026-04-17",
+    "channel_note": "公告未区分直销/代销，按本基金人民币A/C/E统一限制记录。"
+  },
+  "018967": {
+    "limit": 100,
+    "source_note": "汇添富基金公告PDF，人民币A/C/E单日单个基金账户申购/定投累计限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202604171821282012_1.pdf",
+    "effective_date": "2026-04-17",
+    "channel_note": "公告未区分直销/代销，按本基金人民币A/C/E统一限制记录。"
+  },
+  "016452": {
+    "limit": 50,
+    "source_note": "南方基金官网产品状态及限额接口，A类大额申购/定投/转换转入限额",
+    "source_url": "https://www.nffund.com/new/transaction-guide/product-status-and-limits.html",
+    "effective_date": "2026-06-18",
+    "channel_note": "官网产品状态接口未区分直销/代销；按南方基金官网A类当前限额记录。"
+  },
+  "016453": {
+    "limit": 50,
+    "source_note": "南方基金官网产品状态及限额接口，C类大额申购/定投/转换转入限额",
+    "source_url": "https://www.nffund.com/new/transaction-guide/product-status-and-limits.html",
+    "effective_date": "2026-06-18",
+    "channel_note": "官网产品状态接口未区分直销/代销；按南方基金官网C类当前限额记录。"
+  },
+  "270042": {
+    "limit": 10,
+    "source_note": "东方财富移动接口及截图汇总表，人民币A当前代销/直销限购口径",
+    "source_url": "https://fundf10.eastmoney.com/jjfl_270042.html",
+    "effective_date": "2026-06-19",
+    "channel_note": "未抓到近期单独大额限购公告；按公开接口代销10元和截图直销10元记录。"
+  },
+  "006479": {
+    "limit": 10,
+    "source_note": "东方财富移动接口及截图汇总表，人民币C当前代销/直销限购口径",
+    "source_url": "https://fundf10.eastmoney.com/jjfl_006479.html",
+    "effective_date": "2026-06-19",
+    "channel_note": "未抓到近期单独大额限购公告；按公开接口代销10元和截图直销10元记录。"
+  },
+  "019172": {
+    "limit": 10,
+    "source_note": "摩根基金公告正文，人民币A/C单日申购/定投/转换转入累计限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202606101823421439_1.pdf",
+    "effective_date": "2026-06-11",
+    "channel_note": "公告未区分直销/代销，按人民币份额统一限制记录；该公告比2026-04-27的100元公告更新。"
+  },
+  "019173": {
+    "limit": 10,
+    "source_note": "摩根基金公告正文，人民币A/C单日申购/定投/转换转入累计限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202606101823421439_1.pdf",
+    "effective_date": "2026-06-11",
+    "channel_note": "公告未区分直销/代销，按人民币份额统一限制记录；该公告比2026-04-27的100元公告更新。"
+  },
+  "019547": {
+    "limit": 10,
+    "source_note": "招商基金公告PDF，A/C单日单个基金账户申购/定投累计限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202606091823377663_1.pdf",
+    "effective_date": "2026-06-10",
+    "channel_note": "公告未区分直销/代销，按本基金A/C统一限制记录。"
+  },
+  "019548": {
+    "limit": 10,
+    "source_note": "招商基金公告PDF，A/C单日单个基金账户申购/定投累计限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202606091823377663_1.pdf",
+    "effective_date": "2026-06-10",
+    "channel_note": "公告未区分直销/代销，按本基金A/C统一限制记录。"
+  },
+  "019736": {
+    "limit": 10,
+    "source_note": "宝盈基金公告正文，A/C人民币份额申购含定投限制金额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202606101823409504_1.pdf",
+    "effective_date": "2026-06-11",
+    "channel_note": "公告未区分直销/代销；A/C均为10元。"
+  },
+  "019737": {
+    "limit": 10,
+    "source_note": "宝盈基金公告正文，A/C人民币份额申购含定投限制金额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202606101823409504_1.pdf",
+    "effective_date": "2026-06-11",
+    "channel_note": "公告未区分直销/代销；A/C均为10元。"
+  },
+  "019524": {
+    "limit": 10,
+    "source_note": "华泰柏瑞基金公告正文，A/C/I份额申购含定投限制金额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202604231821470346_1.pdf",
+    "effective_date": "2026-04-23",
+    "channel_note": "公告未区分直销/代销；A/C/I份额合并计算10元。"
+  },
+  "022664": {
+    "limit": 10,
+    "source_note": "华泰柏瑞基金公告正文，A/C/I份额申购含定投限制金额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202604231821470346_1.pdf",
+    "effective_date": "2026-04-23",
+    "channel_note": "公告未区分直销/代销；A/C/I份额合并计算10元。"
+  },
+  "019525": {
+    "limit": 10,
+    "source_note": "华泰柏瑞基金公告正文，A/C/I份额申购含定投限制金额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202604231821470346_1.pdf",
+    "effective_date": "2026-04-23",
+    "channel_note": "公告未区分直销/代销；A/C/I份额合并计算10元。"
+  },
+  "018043": {
+    "limit": 100,
+    "source_note": "天弘基金公告正文，A/C/D单日单个基金账户申购含定投累计限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202604071821036124_1.pdf",
+    "effective_date": "2026-04-08",
+    "channel_note": "公告未区分直销/代销；A类018043、C类018044、D类022525均为100元。"
+  },
+  "016532": {
+    "limit": 1000,
+    "source_note": "嘉实基金公告正文，直销销售机构A人民币单日单个基金账户申购含定投累计限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202511111779112505_1.pdf",
+    "effective_date": "2025-11-11",
+    "channel_note": "公告明确直销A/C/I人民币各1000元，非直销A/C/I人民币各100元；表内代销限额仍按公开平台接口100元。"
+  },
+  "161130": {
+    "limit": 10,
+    "source_note": "易方达基金公告正文，A人民币份额在全部销售机构单日单个基金账户申购含定投累计限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202511031774389358_1.pdf",
+    "effective_date": "2025-11-04",
+    "channel_note": "公告明确人民币A/C份额在全部销售机构累计申购限额均为10元。"
+  }
+}
