@@ -889,6 +889,147 @@
       border-top: 1px solid var(--line);
       background: var(--panel);
     }
+    .tracking-chart-grid {
+      display: grid;
+      grid-template-columns: minmax(420px, 1.15fr) minmax(320px, 0.85fr);
+      border-top: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .tracking-chart-stack {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-width: 0;
+    }
+    .tracking-chart-card,
+    .tracking-allocation-card {
+      min-width: 0;
+      background: var(--panel);
+    }
+    .tracking-chart-card + .tracking-chart-card,
+    .tracking-allocation-card {
+      border-left: 1px solid var(--line);
+    }
+    .tracking-chart-card .section-title,
+    .tracking-allocation-card .section-title {
+      background: #f7f5ee;
+      min-height: 52px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+    .chart-frame {
+      padding: 12px 14px 14px;
+      min-height: 236px;
+    }
+    .tracking-chart-svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      min-height: 210px;
+    }
+    .chart-bg { fill: #faf9f5; }
+    .chart-grid {
+      stroke: var(--line);
+      stroke-width: 1;
+    }
+    .chart-axis {
+      fill: var(--muted);
+      font-family: var(--font-data);
+      font-size: 11px;
+    }
+    .chart-empty {
+      fill: var(--muted);
+      font-family: var(--font-data);
+      font-size: 13px;
+    }
+    .chart-series {
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2.3;
+    }
+    .chart-series-1 { stroke: var(--accent); }
+    .chart-series-2 { stroke: var(--good); }
+    .chart-point {
+      stroke: var(--panel);
+      stroke-width: 2;
+    }
+    .chart-point-1 { fill: var(--accent); }
+    .chart-point-2 { fill: var(--good); }
+    .chart-legend {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+      height: 22px;
+      font-family: var(--font-data);
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .chart-legend-item {
+      align-items: center;
+      display: inline-flex;
+      gap: 5px;
+      white-space: nowrap;
+    }
+    .legend-dot {
+      border-radius: 99px;
+      display: inline-block;
+      height: 7px;
+      width: 7px;
+    }
+    .legend-dot-1 { background: var(--accent); }
+    .legend-dot-2 { background: var(--good); }
+    .allocation-list {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+    }
+    .allocation-row {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+    .allocation-head {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-family: var(--font-data);
+      font-size: 12px;
+      min-width: 0;
+    }
+    .allocation-head > span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .allocation-head strong {
+      color: var(--ink);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .allocation-track {
+      background: #ebe8dc;
+      border-radius: 99px;
+      height: 7px;
+      overflow: hidden;
+    }
+    .allocation-track span {
+      display: block;
+      height: 100%;
+      min-width: 3px;
+    }
+    .allocation-track .tier-s { background: var(--accent); }
+    .allocation-track .tier-a { background: var(--good); }
+    .allocation-track .tier-b { background: #52759f; }
+    .allocation-track .tier-c { background: var(--warn); }
+    .allocation-track .tier-d { background: var(--bad); }
+    .allocation-empty {
+      color: var(--muted);
+      font-family: var(--font-data);
+      font-size: 13px;
+      padding: 14px;
+    }
     .tracking-block {
       min-width: 0;
       background: var(--panel);
@@ -971,8 +1112,15 @@
       .header-control-bar { justify-content: flex-start; width: 100%; }
       h1 { font-size: 30px; }
       .portfolio-grid { grid-template-columns: 1fr; }
+      .tracking-chart-grid { grid-template-columns: 1fr; }
+      .tracking-chart-stack { grid-template-columns: 1fr; }
       .tracking-grid { grid-template-columns: 1fr; }
       .portfolio-block + .portfolio-block {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+      .tracking-chart-card + .tracking-chart-card,
+      .tracking-allocation-card {
         border-left: 0;
         border-top: 1px solid var(--line);
       }
@@ -1035,7 +1183,7 @@
           <span class="subtitle-chip">QDII</span>
           <span class="subtitle-chip">长期定投</span>
           <span class="subtitle-chip">CNY</span>
-          <span class="subtitle-meta">更新：<span class="data-text">2026-06-21 02:23:43</span> · 东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
+          <span class="subtitle-meta">更新：<span class="data-text">2026-06-21 03:22:56</span> · 东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
         </p>
       </div>
       <div class="header-actions">
@@ -1043,7 +1191,7 @@
           <nav class="tabs" aria-label="表格页签">
             <button class="tab-button" type="button" role="tab" id="tab-main" aria-controls="panel-main" aria-selected="true">主表</button>
             <a class="tab-button tab-link" href="portfolio.html">持仓定投</a>
-            
+            <button class="tab-button" type="button" role="tab" id="tab-tracking" aria-controls="panel-tracking" aria-selected="false">长期追踪</button>
             <button class="tab-button" type="button" role="tab" id="tab-scoring" aria-controls="panel-scoring" aria-selected="false">梯队评级规则</button>
             <button class="tab-button" type="button" role="tab" id="tab-sources" aria-controls="panel-sources" aria-selected="false">数据来源</button>
           </nav>

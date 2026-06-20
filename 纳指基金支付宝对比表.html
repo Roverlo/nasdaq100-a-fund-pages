@@ -889,6 +889,147 @@
       border-top: 1px solid var(--line);
       background: var(--panel);
     }
+    .tracking-chart-grid {
+      display: grid;
+      grid-template-columns: minmax(420px, 1.15fr) minmax(320px, 0.85fr);
+      border-top: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .tracking-chart-stack {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-width: 0;
+    }
+    .tracking-chart-card,
+    .tracking-allocation-card {
+      min-width: 0;
+      background: var(--panel);
+    }
+    .tracking-chart-card + .tracking-chart-card,
+    .tracking-allocation-card {
+      border-left: 1px solid var(--line);
+    }
+    .tracking-chart-card .section-title,
+    .tracking-allocation-card .section-title {
+      background: #f7f5ee;
+      min-height: 52px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+    .chart-frame {
+      padding: 12px 14px 14px;
+      min-height: 236px;
+    }
+    .tracking-chart-svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      min-height: 210px;
+    }
+    .chart-bg { fill: #faf9f5; }
+    .chart-grid {
+      stroke: var(--line);
+      stroke-width: 1;
+    }
+    .chart-axis {
+      fill: var(--muted);
+      font-family: var(--font-data);
+      font-size: 11px;
+    }
+    .chart-empty {
+      fill: var(--muted);
+      font-family: var(--font-data);
+      font-size: 13px;
+    }
+    .chart-series {
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2.3;
+    }
+    .chart-series-1 { stroke: var(--accent); }
+    .chart-series-2 { stroke: var(--good); }
+    .chart-point {
+      stroke: var(--panel);
+      stroke-width: 2;
+    }
+    .chart-point-1 { fill: var(--accent); }
+    .chart-point-2 { fill: var(--good); }
+    .chart-legend {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+      height: 22px;
+      font-family: var(--font-data);
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .chart-legend-item {
+      align-items: center;
+      display: inline-flex;
+      gap: 5px;
+      white-space: nowrap;
+    }
+    .legend-dot {
+      border-radius: 99px;
+      display: inline-block;
+      height: 7px;
+      width: 7px;
+    }
+    .legend-dot-1 { background: var(--accent); }
+    .legend-dot-2 { background: var(--good); }
+    .allocation-list {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+    }
+    .allocation-row {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+    .allocation-head {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-family: var(--font-data);
+      font-size: 12px;
+      min-width: 0;
+    }
+    .allocation-head > span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .allocation-head strong {
+      color: var(--ink);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .allocation-track {
+      background: #ebe8dc;
+      border-radius: 99px;
+      height: 7px;
+      overflow: hidden;
+    }
+    .allocation-track span {
+      display: block;
+      height: 100%;
+      min-width: 3px;
+    }
+    .allocation-track .tier-s { background: var(--accent); }
+    .allocation-track .tier-a { background: var(--good); }
+    .allocation-track .tier-b { background: #52759f; }
+    .allocation-track .tier-c { background: var(--warn); }
+    .allocation-track .tier-d { background: var(--bad); }
+    .allocation-empty {
+      color: var(--muted);
+      font-family: var(--font-data);
+      font-size: 13px;
+      padding: 14px;
+    }
     .tracking-block {
       min-width: 0;
       background: var(--panel);
@@ -971,8 +1112,15 @@
       .header-control-bar { justify-content: flex-start; width: 100%; }
       h1 { font-size: 30px; }
       .portfolio-grid { grid-template-columns: 1fr; }
+      .tracking-chart-grid { grid-template-columns: 1fr; }
+      .tracking-chart-stack { grid-template-columns: 1fr; }
       .tracking-grid { grid-template-columns: 1fr; }
       .portfolio-block + .portfolio-block {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+      .tracking-chart-card + .tracking-chart-card,
+      .tracking-allocation-card {
         border-left: 0;
         border-top: 1px solid var(--line);
       }
@@ -1022,7 +1170,7 @@
           <span class="subtitle-chip">QDII</span>
           <span class="subtitle-chip">长期定投</span>
           <span class="subtitle-chip">CNY</span>
-          <span class="subtitle-meta">更新：<span class="data-text">2026-06-21 02:23:43</span> · 东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
+          <span class="subtitle-meta">更新：<span class="data-text">2026-06-21 03:22:56</span> · 东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
         </p>
       </div>
       <div class="header-actions">
@@ -1806,6 +1954,108 @@
           <span class="tracking-metric">当前持有 <strong><span class="data-text">560元</span></strong></span>
           <span class="tracking-metric">定投中 <strong><span class="data-text">300元</span> / 期</strong></span>
           <span class="tracking-metric">暂停 <strong><span class="data-text">220元</span> / 期</strong></span>
+        </div>
+      </div>
+      <div class="tracking-chart-grid">
+        <div class="tracking-chart-stack">
+          <div class="tracking-chart-card">
+            <div class="section-title"><h2>资产轨迹</h2><span class="title-metric">持有记录 / 市值</span></div>
+            <div class="chart-frame">
+    <svg class="tracking-chart-svg" viewBox="0 0 640 220" role="img" aria-label="持有记录">
+      <rect class="chart-bg" x="0" y="0" width="640" height="220" />
+      <line class="chart-grid" x1="46" y1="18.00" x2="622" y2="18.00" /><text class="chart-axis" x="38" y="22.00" text-anchor="end">604.8</text><line class="chart-grid" x1="46" y1="103.00" x2="622" y2="103.00" /><text class="chart-axis" x="38" y="107.00" text-anchor="end">560</text><line class="chart-grid" x1="46" y1="188.00" x2="622" y2="188.00" /><text class="chart-axis" x="38" y="192.00" text-anchor="end">515.2</text>
+      <foreignObject x="46" y="0" width="576" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="chart-legend"><span class="chart-legend-item"><i class="legend-dot legend-dot-1"></i>持有记录</span></div></foreignObject>
+      <path class="chart-series chart-series-1" d="M 334.00 103.00" /><circle class="chart-point chart-point-1" cx="334.00" cy="103.00" r="3.2" />
+      <text class="chart-axis" x="46" y="211" text-anchor="start">2026-06-21</text>
+      <text class="chart-axis" x="622" y="211" text-anchor="end">2026-06-21</text>
+    </svg>
+    </div>
+          </div>
+          <div class="tracking-chart-card">
+            <div class="section-title"><h2>收益轨迹</h2><span class="title-metric">收益 / 收益率</span></div>
+            <div class="chart-frame">
+        <svg class="tracking-chart-svg" viewBox="0 0 640 220" role="img" aria-label="等待收益记录">
+          <rect class="chart-bg" x="0" y="0" width="640" height="220" />
+          <line class="chart-grid" x1="46" y1="103.00" x2="622" y2="103.00" />
+          <text class="chart-empty" x="320.00" y="110.00" text-anchor="middle">等待收益记录</text>
+        </svg>
+        </div>
+          </div>
+        </div>
+        <div class="tracking-allocation-card">
+          <div class="section-title"><h2>持仓结构</h2><span class="title-metric">按当前持有金额</span></div>
+          <div class="allocation-list">
+            <div class="allocation-row">
+              <div class="allocation-head">
+                <span>南方 <span class="data-text">016452</span></span>
+                <strong>250元 · 44.6%</strong>
+              </div>
+              <div class="allocation-track"><span class="tier-b" style="width: 44.64%"></span></div>
+            </div>
+            
+
+            <div class="allocation-row">
+              <div class="allocation-head">
+                <span>汇添富 <span class="data-text">018966</span></span>
+                <strong>100元 · 17.9%</strong>
+              </div>
+              <div class="allocation-track"><span class="tier-d" style="width: 17.86%"></span></div>
+            </div>
+            
+
+            <div class="allocation-row">
+              <div class="allocation-head">
+                <span>建信 <span class="data-text">539001</span></span>
+                <strong>100元 · 17.9%</strong>
+              </div>
+              <div class="allocation-track"><span class="tier-d" style="width: 17.86%"></span></div>
+            </div>
+            
+
+            <div class="allocation-row">
+              <div class="allocation-head">
+                <span>万家 <span class="data-text">019441</span></span>
+                <strong>50元 · 8.9%</strong>
+              </div>
+              <div class="allocation-track"><span class="tier-b" style="width: 8.93%"></span></div>
+            </div>
+            
+
+            <div class="allocation-row">
+              <div class="allocation-head">
+                <span>招商 <span class="data-text">019547</span></span>
+                <strong>20元 · 3.6%</strong>
+              </div>
+              <div class="allocation-track"><span class="tier-b" style="width: 3.57%"></span></div>
+            </div>
+            
+
+            <div class="allocation-row">
+              <div class="allocation-head">
+                <span>摩根 <span class="data-text">019172</span></span>
+                <strong>20元 · 3.6%</strong>
+              </div>
+              <div class="allocation-track"><span class="tier-b" style="width: 3.57%"></span></div>
+            </div>
+            
+
+            <div class="allocation-row">
+              <div class="allocation-head">
+                <span>华安 <span class="data-text">040046</span></span>
+                <strong>10元 · 1.8%</strong>
+              </div>
+              <div class="allocation-track"><span class="tier-s" style="width: 1.79%"></span></div>
+            </div>
+            
+
+            <div class="allocation-row">
+              <div class="allocation-head">
+                <span>大成 <span class="data-text">000834</span></span>
+                <strong>10元 · 1.8%</strong>
+              </div>
+              <div class="allocation-track"><span class="tier-c" style="width: 1.79%"></span></div>
+            </div>
+            </div>
         </div>
       </div>
       <div class="tracking-grid">

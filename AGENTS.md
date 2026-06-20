@@ -17,7 +17,7 @@
 - `generate_nasdaq_fund_table.py`：唯一应编辑的生成脚本，含基金池、持仓、定投、评分、样式和交互。
 - `纳指基金支付宝对比表.html`：生成产物，浏览器直接打开查看。
 - `nasdaq_fund_snapshot.json`：本次抓取和计算快照，用于核对字段、评分、持仓和定投总额。
-- `portfolio_tracking.json`：长期追踪记录，用于跨天、跨周、跨月保存持仓、市值、收益和收益率。生成脚本只在文件不存在或无记录时写入初始基线，不要每次刷新自动追加重复记录。
+- `portfolio_tracking.json`：长期追踪记录，用于跨天、跨周、跨月保存持仓、市值、收益和收益率。生成脚本只在文件不存在或无记录时写入初始基线，不要每次刷新自动追加重复记录。页面应把它渲染成图表化追踪面板，而不只是表格。
 - `direct_limits.json`：人工或 AI 从基金公司公告核实后的直销限额覆盖表。
 - `direct_limit_candidates.json`：候选公告列表，不等于已核实直销限额。
 
@@ -65,7 +65,7 @@ python -m py_compile "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts
 - `持仓定投` tab 的“当前持有”和“定投计划”明细表都要在 `基金` 后展示 `评级` 列；评级必须复用主表同一套 `score_cards` / `investing_tier` / `investing_score`，不要做持仓专属评分。
 - `持仓定投` tab 支持点击金额和定投状态做浏览器内手动编辑。金额用页面浮层编辑器，状态用自定义浮层菜单，不要用会撑开表格的原生 inline input/select。编辑结果写入 `localStorage` 的 `nasdaqFundPortfolioStateV1`，会即时刷新主表、两张明细表和标题总额，但不会自动写回 `generate_nasdaq_fund_table.py`。
 - 如果用户确认浏览器内编辑结果要长期固化，必须把对应值同步回 `HOLDING_AMOUNTS`、`AUTO_INVEST_AMOUNTS`、`PAUSED_AUTO_INVEST_AMOUNTS`，再重新生成 HTML 和快照。
-- `长期追踪` tab 是私密数据页，布局参考 open-design 的紧凑 artifact/workbench 结构：一行关键指标、左侧快照时间轴、右侧基金明细，不放解释性大段文字。公开 GitHub Pages 的 `index.html` 必须剥离该 tab，完整内容只保留在加密 `portfolio.html`。
+- `长期追踪` tab 布局参考 open-design 的紧凑 artifact/workbench 结构，以及 Ghostfolio、Wealthfolio、Portfolio Performance 的长期组合追踪视角：一行关键指标、资产轨迹图、收益轨迹图、持仓结构条、快照时间轴、基金明细，不放解释性大段文字。未知个人收益数据保持 `null` / `--`，不要用基金涨幅伪造个人收益。
 - 表格布局尽量基于容器自适应，不要为了单个屏幕写死宽度。
 - in-app browser 对 `file://` 页面可能禁止自动刷新或评估；遇到浏览器策略阻止时，用 HTML/JSON 结构检查验证，并提示用户手动刷新。
 - in-app browser 对 `http://127.0.0.1:8765/` 可用于自动 reload、DOM 检查和截图验证；容器未启动时先启动 `nasdaq-fund-table` 服务。

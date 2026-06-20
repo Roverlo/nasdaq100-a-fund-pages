@@ -37,13 +37,7 @@ class PublicPageFilter(HTMLParser):
             self.output.append('<a class="tab-button tab-link" href="portfolio.html">持仓定投</a>')
             self.skip_depth = 1
             return
-        if tag == "button" and attrs_dict.get("id") == "tab-tracking":
-            self.skip_depth = 1
-            return
         if tag == "section" and attrs_dict.get("id") == "panel-portfolio":
-            self.skip_depth = 1
-            return
-        if tag == "section" and attrs_dict.get("id") == "panel-tracking":
             self.skip_depth = 1
             return
         if tag == "div" and attrs_dict.get("id") == "portfolio-editor":

@@ -127,9 +127,11 @@ python "C:\ALL_in_H\纳指记录\prepare_github_pages.py"
 
 ## 长期追踪
 
-`长期追踪` tab 读取 `portfolio_tracking.json`。生成脚本只在文件不存在或没有记录时写入一条初始基线，不会每次刷新自动追加，避免长期记录里堆积重复快照。
+`长期追踪` tab 读取 `portfolio_tracking.json`，展示资产轨迹、收益轨迹、持仓结构、追踪快照和基金级明细。设计参考 `nexu-io/open-design` 的单页 artifact / dashboard 思路，以及 Ghostfolio、Wealthfolio、Portfolio Performance 这类投资追踪工具的长期组合视角。
 
-当前基线只包含已知的持仓金额和定投计划；真实市值、累计收益、收益率需要以后按支付宝/账户截图或手动记录写入 `portfolio_tracking.json`。未知值保持 `null`，页面显示为 `--`，不要用基金阶段涨幅替代个人实际收益。
+生成脚本只在文件不存在或没有记录时写入一条初始基线，不会每次刷新自动追加，避免长期记录里堆积重复快照。
+
+当前基线只包含已知的持仓金额和定投计划；真实市值、累计收益、收益率需要以后按支付宝/账户截图或手动记录写入 `portfolio_tracking.json`。未知值保持 `null`，页面显示为 `--`，图表也不会伪造趋势，不要用基金阶段涨幅替代个人实际收益。
 
 发布 GitHub Pages 时：
 

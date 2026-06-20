@@ -1443,6 +1443,18 @@ def tracking_percent(value: object) -> str:
     return data_text(f"{sign}{number:.2f}%")
 
 
+def tracking_value(value: object) -> Optional[float]:
+    if value is None or value == "":
+        return None
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    if not math.isfinite(number):
+        return None
+    return number
+
+
 def tracking_float(value: object) -> float:
     try:
         return float(value)
@@ -1455,6 +1467,193 @@ def tracking_amount_label(value: object) -> str:
     if number.is_integer():
         return f"{int(number)}"
     return f"{number:.2f}"
+
+
+def tracking_date_label(record: dict[str, object]) -> str:
+    return str(record.get("date") or record.get("recorded_at") or "-")
+
+
+def tracking_svg_axis_value(value: float, suffix: str = "") -> str:
+    if abs(value) >= 10000:
+        return f"{value / 10000:.1f}万{suffix}"
+    if float(value).is_integer():
+        return f"{int(value)}{suffix}"
+    return f"{value:.1f}{suffix}"
+
+
+def tracking_series_points(records: list[dict[str, object]], key: str) -> list[Optional[float]]:
+    return [tracking_value(record.get(key)) for record in records]
+
+
+def tracking_path(points: list[Optional[float]], low: float, high: float, width: int, height: int) -> str:
+    left, right, top, bottom = 46, 18, 18, 32
+    chart_w = width - left - right
+    chart_h = height - top - bottom
+    count = len(points)
+    parts = []
+    for index, value in enumerate(points):
+        if value is None:
+            continue
+        x = left + (chart_w / 2 if count <= 1 else chart_w * index / (count - 1))
+        y = top + chart_h * (1 - ((value - low) / (high - low) if high != low else 0.5))
+        parts.append((x, y))
+    if not parts:
+        return ""
+    if len(parts) == 1:
+        x, y = parts[0]
+        return f"M {x:.2f} {y:.2f}"
+    return " ".join(
+        f"{'M' if index == 0 else 'L'} {x:.2f} {y:.2f}"
+        for index, (x, y) in enumerate(parts)
+    )
+
+
+def tracking_point_circles(points: list[Optional[float]], low: float, high: float, width: int, height: int, class_name: str) -> str:
+    left, right, top, bottom = 46, 18, 18, 32
+    chart_w = width - left - right
+    chart_h = height - top - bottom
+    count = len(points)
+    circles = []
+    for index, value in enumerate(points):
+        if value is None:
+            continue
+        x = left + (chart_w / 2 if count <= 1 else chart_w * index / (count - 1))
+        y = top + chart_h * (1 - ((value - low) / (high - low) if high != low else 0.5))
+        circles.append(f'<circle class="{class_name}" cx="{x:.2f}" cy="{y:.2f}" r="3.2" />')
+    return "".join(circles)
+
+
+def tracking_line_chart_svg(
+    records: list[dict[str, object]],
+    series: list[dict[str, str]],
+    empty_label: str,
+    percent_axis: bool = False,
+) -> str:
+    width, height = 640, 220
+    left, right, top, bottom = 46, 18, 18, 32
+    chart_w = width - left - right
+    chart_h = height - top - bottom
+    records = records[-24:] or []
+    series_values = [(item, tracking_series_points(records, item["key"])) for item in series]
+    all_values = [value for _, values in series_values for value in values if value is not None]
+    if not all_values:
+        return f"""
+        <svg class="tracking-chart-svg" viewBox="0 0 {width} {height}" role="img" aria-label="{html.escape(empty_label)}">
+          <rect class="chart-bg" x="0" y="0" width="{width}" height="{height}" />
+          <line class="chart-grid" x1="{left}" y1="{top + chart_h / 2:.2f}" x2="{left + chart_w}" y2="{top + chart_h / 2:.2f}" />
+          <text class="chart-empty" x="{width / 2:.2f}" y="{height / 2:.2f}" text-anchor="middle">{html.escape(empty_label)}</text>
+        </svg>
+        """
+    low = min(all_values)
+    high = max(all_values)
+    if low == high:
+        pad = max(abs(low) * 0.08, 10 if not percent_axis else 1)
+        low -= pad
+        high += pad
+    grid_lines = []
+    for step in range(3):
+        y = top + chart_h * step / 2
+        value = high - (high - low) * step / 2
+        label = tracking_svg_axis_value(value, "%" if percent_axis else "")
+        grid_lines.append(
+            f'<line class="chart-grid" x1="{left}" y1="{y:.2f}" x2="{left + chart_w}" y2="{y:.2f}" />'
+            f'<text class="chart-axis" x="{left - 8}" y="{y + 4:.2f}" text-anchor="end">{html.escape(label)}</text>'
+        )
+    if records:
+        first_label = tracking_date_label(records[0])
+        last_label = tracking_date_label(records[-1])
+    else:
+        first_label = last_label = "-"
+    paths = []
+    legends = []
+    for index, (item, values) in enumerate(series_values):
+        path = tracking_path(values, low, high, width, height)
+        if path:
+            class_name = f"chart-series chart-series-{index + 1}"
+            point_class = f"chart-point chart-point-{index + 1}"
+            paths.append(f'<path class="{class_name}" d="{path}" />')
+            paths.append(tracking_point_circles(values, low, high, width, height, point_class))
+            legends.append(
+                f'<span class="chart-legend-item"><i class="legend-dot legend-dot-{index + 1}"></i>{html.escape(item["label"])}</span>'
+            )
+    legend_html = f'<foreignObject x="{left}" y="0" width="{chart_w}" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="chart-legend">{"".join(legends)}</div></foreignObject>'
+    return f"""
+    <svg class="tracking-chart-svg" viewBox="0 0 {width} {height}" role="img" aria-label="{html.escape(series[0]["label"])}">
+      <rect class="chart-bg" x="0" y="0" width="{width}" height="{height}" />
+      {''.join(grid_lines)}
+      {legend_html}
+      {''.join(paths)}
+      <text class="chart-axis" x="{left}" y="{height - 9}" text-anchor="start">{html.escape(first_label)}</text>
+      <text class="chart-axis" x="{left + chart_w}" y="{height - 9}" text-anchor="end">{html.escape(last_label)}</text>
+    </svg>
+    """
+
+
+def tracking_asset_chart_svg(payload: dict[str, object]) -> str:
+    records = tracking_records(payload)
+    return tracking_line_chart_svg(
+        records,
+        [
+            {"key": "holding_total", "label": "持有记录"},
+            {"key": "market_value", "label": "市值"},
+        ],
+        "等待更多资产记录",
+    )
+
+
+def tracking_return_chart_svg(payload: dict[str, object]) -> str:
+    records = tracking_records(payload)
+    values = [tracking_value(record.get("return_rate")) for record in records]
+    if any(value is not None for value in values):
+        return tracking_line_chart_svg(
+            records,
+            [{"key": "return_rate", "label": "收益率"}],
+            "等待收益率记录",
+            percent_axis=True,
+        )
+    return tracking_line_chart_svg(
+        records,
+        [{"key": "profit", "label": "收益"}],
+        "等待收益记录",
+    )
+
+
+def tracking_allocation_html(
+    funds: list[Fund],
+    cards: dict[str, dict[str, object]],
+    payload: dict[str, object],
+) -> str:
+    latest = latest_tracking_record(payload)
+    tracked_funds = latest.get("funds") if isinstance(latest.get("funds"), dict) else {}
+    funds_by_code = {fund.code: fund for fund in funds}
+    items = []
+    for fund in tracking_visible_funds(funds, cards, payload):
+        item = tracked_funds.get(fund.code) if isinstance(tracked_funds, dict) else None
+        if not isinstance(item, dict):
+            item = {}
+        amount = tracking_float(item.get("holding_amount", HOLDING_AMOUNTS.get(fund.code, 0)))
+        if amount <= 0:
+            continue
+        items.append((fund.code, amount))
+    total = sum(amount for _, amount in items)
+    if total <= 0:
+        return '<div class="allocation-empty">暂无持仓金额</div>'
+    rows = []
+    for code, amount in sorted(items, key=lambda item: item[1], reverse=True):
+        share = amount / total * 100
+        tier = str(cards.get(code, {}).get("tier", "-"))
+        rows.append(
+            f"""
+            <div class="allocation-row">
+              <div class="allocation-head">
+                <span>{fund_record_name(funds_by_code, code)}</span>
+                <strong>{tracking_amount_label(amount)}元 · {share:.1f}%</strong>
+              </div>
+              <div class="allocation-track"><span class="{tier_class(tier)}" style="width: {share:.2f}%"></span></div>
+            </div>
+            """
+        )
+    return "\n".join(rows)
 
 
 def default_tracking_funds(funds: list[Fund], cards: dict[str, dict[str, object]]) -> dict[str, dict[str, object]]:
@@ -1703,6 +1902,9 @@ def build_html(
     tracking_snapshot_table_rows = tracking_snapshot_rows(tracking_payload)
     tracking_detail_table_rows = tracking_fund_rows(funds, cards, tracking_payload)
     tracking_visible_count = len(tracking_visible_funds(funds, cards, tracking_payload))
+    tracking_asset_chart = tracking_asset_chart_svg(tracking_payload)
+    tracking_return_chart = tracking_return_chart_svg(tracking_payload)
+    tracking_allocation = tracking_allocation_html(funds, cards, tracking_payload)
     tracking_latest = latest_tracking_record(tracking_payload)
     tracking_count = len(tracking_records(tracking_payload))
     tracking_latest_date = tracking_latest.get("date") or tracking_latest.get("recorded_at") or "-"
@@ -2622,6 +2824,147 @@ def build_html(
       border-top: 1px solid var(--line);
       background: var(--panel);
     }}
+    .tracking-chart-grid {{
+      display: grid;
+      grid-template-columns: minmax(420px, 1.15fr) minmax(320px, 0.85fr);
+      border-top: 1px solid var(--line);
+      background: var(--panel);
+    }}
+    .tracking-chart-stack {{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-width: 0;
+    }}
+    .tracking-chart-card,
+    .tracking-allocation-card {{
+      min-width: 0;
+      background: var(--panel);
+    }}
+    .tracking-chart-card + .tracking-chart-card,
+    .tracking-allocation-card {{
+      border-left: 1px solid var(--line);
+    }}
+    .tracking-chart-card .section-title,
+    .tracking-allocation-card .section-title {{
+      background: #f7f5ee;
+      min-height: 52px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }}
+    .chart-frame {{
+      padding: 12px 14px 14px;
+      min-height: 236px;
+    }}
+    .tracking-chart-svg {{
+      display: block;
+      width: 100%;
+      height: auto;
+      min-height: 210px;
+    }}
+    .chart-bg {{ fill: #faf9f5; }}
+    .chart-grid {{
+      stroke: var(--line);
+      stroke-width: 1;
+    }}
+    .chart-axis {{
+      fill: var(--muted);
+      font-family: var(--font-data);
+      font-size: 11px;
+    }}
+    .chart-empty {{
+      fill: var(--muted);
+      font-family: var(--font-data);
+      font-size: 13px;
+    }}
+    .chart-series {{
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2.3;
+    }}
+    .chart-series-1 {{ stroke: var(--accent); }}
+    .chart-series-2 {{ stroke: var(--good); }}
+    .chart-point {{
+      stroke: var(--panel);
+      stroke-width: 2;
+    }}
+    .chart-point-1 {{ fill: var(--accent); }}
+    .chart-point-2 {{ fill: var(--good); }}
+    .chart-legend {{
+      align-items: center;
+      display: flex;
+      gap: 12px;
+      height: 22px;
+      font-family: var(--font-data);
+      font-size: 11px;
+      color: var(--muted);
+    }}
+    .chart-legend-item {{
+      align-items: center;
+      display: inline-flex;
+      gap: 5px;
+      white-space: nowrap;
+    }}
+    .legend-dot {{
+      border-radius: 99px;
+      display: inline-block;
+      height: 7px;
+      width: 7px;
+    }}
+    .legend-dot-1 {{ background: var(--accent); }}
+    .legend-dot-2 {{ background: var(--good); }}
+    .allocation-list {{
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+    }}
+    .allocation-row {{
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }}
+    .allocation-head {{
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-family: var(--font-data);
+      font-size: 12px;
+      min-width: 0;
+    }}
+    .allocation-head > span {{
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }}
+    .allocation-head strong {{
+      color: var(--ink);
+      font-weight: 600;
+      white-space: nowrap;
+    }}
+    .allocation-track {{
+      background: #ebe8dc;
+      border-radius: 99px;
+      height: 7px;
+      overflow: hidden;
+    }}
+    .allocation-track span {{
+      display: block;
+      height: 100%;
+      min-width: 3px;
+    }}
+    .allocation-track .tier-s {{ background: var(--accent); }}
+    .allocation-track .tier-a {{ background: var(--good); }}
+    .allocation-track .tier-b {{ background: #52759f; }}
+    .allocation-track .tier-c {{ background: var(--warn); }}
+    .allocation-track .tier-d {{ background: var(--bad); }}
+    .allocation-empty {{
+      color: var(--muted);
+      font-family: var(--font-data);
+      font-size: 13px;
+      padding: 14px;
+    }}
     .tracking-block {{
       min-width: 0;
       background: var(--panel);
@@ -2704,8 +3047,15 @@ def build_html(
       .header-control-bar {{ justify-content: flex-start; width: 100%; }}
       h1 {{ font-size: 30px; }}
       .portfolio-grid {{ grid-template-columns: 1fr; }}
+      .tracking-chart-grid {{ grid-template-columns: 1fr; }}
+      .tracking-chart-stack {{ grid-template-columns: 1fr; }}
       .tracking-grid {{ grid-template-columns: 1fr; }}
       .portfolio-block + .portfolio-block {{
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }}
+      .tracking-chart-card + .tracking-chart-card,
+      .tracking-allocation-card {{
         border-left: 0;
         border-top: 1px solid var(--line);
       }}
@@ -2928,6 +3278,22 @@ def build_html(
           <span class="tracking-metric">当前持有 <strong>{fmt_yuan(holding_total)}</strong></span>
           <span class="tracking-metric">定投中 <strong>{fmt_yuan(active_auto_invest_total)} / 期</strong></span>
           <span class="tracking-metric">暂停 <strong>{fmt_yuan(paused_auto_invest_total)} / 期</strong></span>
+        </div>
+      </div>
+      <div class="tracking-chart-grid">
+        <div class="tracking-chart-stack">
+          <div class="tracking-chart-card">
+            <div class="section-title"><h2>资产轨迹</h2><span class="title-metric">持有记录 / 市值</span></div>
+            <div class="chart-frame">{tracking_asset_chart}</div>
+          </div>
+          <div class="tracking-chart-card">
+            <div class="section-title"><h2>收益轨迹</h2><span class="title-metric">收益 / 收益率</span></div>
+            <div class="chart-frame">{tracking_return_chart}</div>
+          </div>
+        </div>
+        <div class="tracking-allocation-card">
+          <div class="section-title"><h2>持仓结构</h2><span class="title-metric">按当前持有金额</span></div>
+          <div class="allocation-list">{tracking_allocation}</div>
         </div>
       </div>
       <div class="tracking-grid">
