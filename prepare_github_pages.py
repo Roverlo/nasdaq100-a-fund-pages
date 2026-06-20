@@ -1,9 +1,6 @@
 import argparse
-import os
 import re
 import shutil
-import subprocess
-import tempfile
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -11,7 +8,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 SOURCE_HTML = ROOT / "纳指基金支付宝对比表.html"
 DOCS_DIR = ROOT / "docs"
-PRIVATE_HTML = ROOT / "tmp" / "portfolio-private.html"
 
 
 class PublicPageFilter(HTMLParser):
@@ -158,55 +154,13 @@ def strip_private_data(html: str) -> str:
     return public_html
 
 
-def run_staticrypt(password: str) -> None:
-    PRIVATE_HTML.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(SOURCE_HTML, PRIVATE_HTML)
-    with tempfile.TemporaryDirectory() as tmp:
-        out_dir = Path(tmp) / "encrypted"
-        env = os.environ.copy()
-        env["STATICRYPT_PASSWORD"] = password
-        npx = "npx.cmd" if os.name == "nt" else "npx"
-        cmd = [
-            npx,
-            "staticrypt",
-            str(PRIVATE_HTML),
-            "--directory",
-            str(out_dir),
-            "--template-title",
-            "持仓定投",
-            "--template-instructions",
-            "输入密钥查看持仓定投页面",
-            "--template-button",
-            "查看",
-            "--template-placeholder",
-            "密钥",
-            "--template-error",
-            "密钥不正确",
-            "--template-color-primary",
-            "#1b365d",
-            "--template-color-secondary",
-            "#f5f4ed",
-            "--remember",
-            "7",
-            "--short",
-        ]
-        subprocess.run(cmd, cwd=ROOT, env=env, check=True)
-        encrypted = out_dir / PRIVATE_HTML.name
-        shutil.copy2(encrypted, DOCS_DIR / "portfolio.html")
-
-
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Prepare GitHub Pages public and protected HTML files.")
-    parser.add_argument("--password", default=os.environ.get("PORTFOLIO_PAGE_PASSWORD", ""))
-    args = parser.parse_args()
-    if not args.password:
-        raise SystemExit("Set --password or PORTFOLIO_PAGE_PASSWORD for the protected portfolio page.")
-    if len(args.password) < 12:
-        raise SystemExit("Password is too short; use at least 12 characters.")
+    parser = argparse.ArgumentParser(description="Prepare GitHub Pages public HTML files.")
+    parser.parse_args()
     html = SOURCE_HTML.read_text(encoding="utf-8")
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
     (DOCS_DIR / "index.html").write_text(strip_private_data(html), encoding="utf-8")
-    run_staticrypt(args.password)
+    shutil.copy2(SOURCE_HTML, DOCS_DIR / "portfolio.html")
     (DOCS_DIR / ".nojekyll").write_text("", encoding="utf-8")
     print(f"wrote {DOCS_DIR / 'index.html'}")
     print(f"wrote {DOCS_DIR / 'portfolio.html'}")
