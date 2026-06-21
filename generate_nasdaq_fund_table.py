@@ -3147,15 +3147,6 @@ def build_html(
     .tracking-fund-table col.rating-col {{ width: 13%; }}
     .tracking-fund-table col.amount-col {{ width: 13%; }}
     .tracking-fund-table col.plan-col {{ width: 15%; }}
-    .tracking-file {{
-      color: var(--muted);
-      font-family: var(--font-data);
-      font-size: 12px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      max-width: min(64vw, 620px);
-    }}
     .holding-table th:nth-child(1),
     .holding-table td:nth-child(1),
     .holding-table th:nth-child(3),
@@ -3421,7 +3412,6 @@ def build_html(
       <div class="section-title tracking-head">
         <div class="title-copy">
           <h2>长期追踪</h2>
-          <span class="tracking-file">{tracking_path_html(tracking_file)}</span>
         </div>
         <div class="tracking-metrics">
           <span class="tracking-metric">最近记录 <strong>{data_text(tracking_latest_date)}</strong></span>

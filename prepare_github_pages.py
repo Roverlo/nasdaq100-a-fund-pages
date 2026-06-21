@@ -27,7 +27,8 @@ class PublicPageFilter(HTMLParser):
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         attrs_dict = dict(attrs)
         if self.skip_depth:
-            self.skip_depth += 1
+            if tag not in self.VOID_TAGS:
+                self.skip_depth += 1
             return
         if tag == "button" and attrs_dict.get("id") == "tab-portfolio":
             self.output.append('<a class="tab-button tab-link" href="portfolio.html">持仓定投</a>')
@@ -151,7 +152,7 @@ def strip_private_data(html: str) -> str:
     public_html = parser.get_html()
     public_html = re.sub(r"const initialPortfolioState = \{.*?\};", "const initialPortfolioState = {};", public_html, flags=re.S)
     public_html = public_html.replace("纳指 100 A 类基金池", "纳指 100 A 类基金池")
-    return public_html
+    return "\n".join(line.rstrip() for line in public_html.splitlines()) + "\n"
 
 
 def main() -> int:
