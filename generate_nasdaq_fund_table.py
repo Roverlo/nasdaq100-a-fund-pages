@@ -2797,11 +2797,21 @@ def build_html(
     }}
     .notes p {{ margin: 6px 0; }}
     .scoring-wrap {{ max-height: none; min-height: 0; }}
-    .scoring-table {{ min-width: 980px; }}
-    .scoring-table th:nth-child(1) {{ width: 130px; }}
-    .scoring-table th:nth-child(2) {{ width: 90px; }}
-    .scoring-table th:nth-child(3) {{ width: 100px; }}
-    .scoring-table th:nth-child(4) {{ width: 260px; }}
+    .scoring-table {{
+      min-width: 0;
+      table-layout: fixed;
+      width: 100%;
+    }}
+    .scoring-table th:nth-child(1) {{ width: 12%; }}
+    .scoring-table th:nth-child(2) {{ width: 8%; }}
+    .scoring-table th:nth-child(3) {{ width: 10%; }}
+    .scoring-table th:nth-child(4) {{ width: 24%; }}
+    .scoring-table th:nth-child(5) {{ width: 46%; }}
+    .scoring-table th,
+    .scoring-table td {{
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }}
     .small-table {{ min-width: 760px; }}
     .tabs {{
       display: inline-flex;
@@ -2835,6 +2845,22 @@ def build_html(
     .rank-good {{ color: var(--good); font-weight: 500; }}
     .rank-bad {{ color: var(--bad); font-weight: 500; }}
     .source-panel .section-title {{ background: var(--panel); }}
+    .source-table {{
+      min-width: 0;
+      table-layout: fixed;
+      width: 100%;
+    }}
+    .source-table th:first-child,
+    .source-table td:first-child {{
+      width: 76px;
+      white-space: nowrap;
+    }}
+    .source-table th:nth-child(2),
+    .source-table td:nth-child(2) {{
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }}
     .portfolio-grid {{
       display: grid;
       grid-template-columns: minmax(390px, 0.82fr) minmax(520px, 1.18fr);
@@ -4149,7 +4175,7 @@ def build_html(
     <section class="section tab-panel" id="panel-sources" role="tabpanel" aria-labelledby="tab-sources" hidden>
       <div class="section-title"><h2>数据来源</h2><span class="hint">每只基金抓取状态。</span></div>
       <div class="table-wrap">
-        <table class="small-table">
+        <table class="small-table source-table">
           <thead><tr><th>代码</th><th>来源状态</th></tr></thead>
           <tbody>{source_rows}</tbody>
         </table>
