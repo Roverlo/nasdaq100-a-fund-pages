@@ -1349,11 +1349,11 @@ def scoring_rule_rows() -> str:
         rows.append(
             f"""
             <tr>
-              <td>{html.escape(rule["label"])}</td>
-              <td class="num" data-sort-value="{rule["weight"]:.6f}">{rule["weight"] * 100:.0f}%</td>
-              <td>{html.escape(rule["direction"])}</td>
-              <td>{html.escape(rule["method"])}</td>
-              <td>{html.escape(rule["reason"])}</td>
+              <td data-label="指标">{html.escape(rule["label"])}</td>
+              <td class="num" data-label="权重" data-sort-value="{rule["weight"]:.6f}">{rule["weight"] * 100:.0f}%</td>
+              <td data-label="方向">{html.escape(rule["direction"])}</td>
+              <td data-label="计算口径">{html.escape(rule["method"])}</td>
+              <td data-label="纳入评级的理由">{html.escape(rule["reason"])}</td>
             </tr>
             """
         )
@@ -1383,11 +1383,11 @@ def holding_record_rows(funds_by_code: dict[str, Fund], cards: dict[str, dict[st
         rows.append(
             f"""
             <tr data-code="{html.escape(code)}">
-              <td class="num record-index">{data_text(str(index))}</td>
-              <td>{fund_record_name(funds_by_code, code)}</td>
-              <td class="num">{fund_record_rating(cards, code)}</td>
-              <td class="num editable-amount" data-field="holding" data-sort-value="{amount:.6f}" tabindex="0" role="button" title="点击修改持有金额">{fmt_yuan(amount)}</td>
-              <td class="editable-status" data-field="status" tabindex="0" role="button" title="点击选择定投状态"><span class="tag {fund_status_class(code)}">{fund_status(code)}</span></td>
+              <td class="num record-index" data-label="序号">{data_text(str(index))}</td>
+              <td data-label="基金">{fund_record_name(funds_by_code, code)}</td>
+              <td class="num" data-label="评级">{fund_record_rating(cards, code)}</td>
+              <td class="num editable-amount" data-label="持有金额" data-field="holding" data-sort-value="{amount:.6f}" tabindex="0" role="button" title="点击修改持有金额">{fmt_yuan(amount)}</td>
+              <td class="editable-status" data-label="定投状态" data-field="status" tabindex="0" role="button" title="点击选择定投状态"><span class="tag {fund_status_class(code)}">{fund_status(code)}</span></td>
             </tr>
             """
         )
@@ -1413,12 +1413,12 @@ def auto_invest_record_rows(funds_by_code: dict[str, Fund], cards: dict[str, dic
         rows.append(
             f"""
             <tr data-code="{html.escape(code)}">
-              <td class="num record-index">{data_text(str(index))}</td>
-              <td>{fund_record_name(funds_by_code, code)}</td>
-              <td class="num">{fund_record_rating(cards, code)}</td>
-              <td class="editable-status" data-field="status" tabindex="0" role="button" title="点击选择定投状态"><span class="tag {fund_status_class(code)}">{status}</span></td>
-              <td class="num editable-amount" data-field="plan_amount" data-sort-value="{amount:.6f}" tabindex="0" role="button" title="点击修改定投金额">{fmt_yuan(amount)} / 期</td>
-              <td class="num editable-amount" data-field="holding" data-sort-value="{holding_amount:.6f}" tabindex="0" role="button" title="点击修改持有金额">{fmt_yuan(holding_amount)}</td>
+              <td class="num record-index" data-label="序号">{data_text(str(index))}</td>
+              <td data-label="基金">{fund_record_name(funds_by_code, code)}</td>
+              <td class="num" data-label="评级">{fund_record_rating(cards, code)}</td>
+              <td class="editable-status" data-label="状态" data-field="status" tabindex="0" role="button" title="点击选择定投状态"><span class="tag {fund_status_class(code)}">{status}</span></td>
+              <td class="num editable-amount" data-label="金额" data-field="plan_amount" data-sort-value="{amount:.6f}" tabindex="0" role="button" title="点击修改定投金额">{fmt_yuan(amount)} / 期</td>
+              <td class="num editable-amount" data-label="当前持有" data-field="holding" data-sort-value="{holding_amount:.6f}" tabindex="0" role="button" title="点击修改持有金额">{fmt_yuan(holding_amount)}</td>
             </tr>
             """
         )
@@ -1875,13 +1875,13 @@ def tracking_snapshot_rows(payload: dict[str, object]) -> str:
         rows.append(
             f"""
             <tr>
-              <td class="num record-index">{data_text(str(index))}</td>
-              <td>{html.escape(date)}</td>
-              <td class="num">{tracking_number(record.get("holding_total"), "元")}</td>
-              <td class="num">{tracking_number(record.get("active_auto_invest_total"), "元/期")}</td>
-              <td class="num">{tracking_number(record.get("market_value"), "元")}</td>
-              <td class="num">{tracking_number(record.get("profit"), "元")}</td>
-              <td class="num">{tracking_percent(record.get("return_rate"))}</td>
+              <td class="num record-index" data-label="序号">{data_text(str(index))}</td>
+              <td data-label="日期">{html.escape(date)}</td>
+              <td class="num" data-label="持有">{tracking_number(record.get("holding_total"), "元")}</td>
+              <td class="num" data-label="定投中">{tracking_number(record.get("active_auto_invest_total"), "元/期")}</td>
+              <td class="num" data-label="市值">{tracking_number(record.get("market_value"), "元")}</td>
+              <td class="num" data-label="收益">{tracking_number(record.get("profit"), "元")}</td>
+              <td class="num" data-label="收益率">{tracking_percent(record.get("return_rate"))}</td>
             </tr>
             """
         )
@@ -1935,15 +1935,15 @@ def tracking_year_summary_rows(payload: dict[str, object]) -> str:
         rows.append(
             f"""
             <tr>
-              <td class="num">{data_text(year)}</td>
-              <td class="num">{data_text(str(len(year_records)))}</td>
-              <td>{html.escape(tracking_date_label(first))}</td>
-              <td>{html.escape(tracking_date_label(latest))}</td>
-              <td class="num">{tracking_delta_number(latest.get("holding_total"), first.get("holding_total"), "元")}</td>
-              <td class="num">{tracking_number(latest.get("holding_total"), "元")}</td>
-              <td class="num">{tracking_number(latest.get("market_value"), "元")}</td>
-              <td class="num">{tracking_number(latest.get("profit"), "元")}</td>
-              <td class="num">{tracking_percent(latest.get("return_rate"))}</td>
+              <td class="num" data-label="年份">{data_text(year)}</td>
+              <td class="num" data-label="记录">{data_text(str(len(year_records)))}</td>
+              <td data-label="首条">{html.escape(tracking_date_label(first))}</td>
+              <td data-label="末条">{html.escape(tracking_date_label(latest))}</td>
+              <td class="num" data-label="持有变化">{tracking_delta_number(latest.get("holding_total"), first.get("holding_total"), "元")}</td>
+              <td class="num" data-label="期末持有">{tracking_number(latest.get("holding_total"), "元")}</td>
+              <td class="num" data-label="期末市值">{tracking_number(latest.get("market_value"), "元")}</td>
+              <td class="num" data-label="期末收益">{tracking_number(latest.get("profit"), "元")}</td>
+              <td class="num" data-label="收益率">{tracking_percent(latest.get("return_rate"))}</td>
             </tr>
             """
         )
@@ -2005,14 +2005,14 @@ def tracking_fund_rows(
         rows.append(
             f"""
             <tr data-code="{html.escape(fund.code)}">
-              <td class="num record-index">{data_text(str(index))}</td>
-              <td>{fund_record_name(funds_by_code, fund.code)}</td>
-              <td class="num">{fund_record_rating(cards, fund.code)}</td>
-              <td class="num">{tracking_number(holding_amount, "元")}</td>
-              <td class="num">{data_text(plan_text)}</td>
-              <td class="num">{tracking_number(item.get("market_value"), "元")}</td>
-              <td class="num">{tracking_number(item.get("profit"), "元")}</td>
-              <td class="num">{tracking_percent(item.get("return_rate"))}</td>
+              <td class="num record-index" data-label="序号">{data_text(str(index))}</td>
+              <td data-label="基金">{fund_record_name(funds_by_code, fund.code)}</td>
+              <td class="num" data-label="评级">{fund_record_rating(cards, fund.code)}</td>
+              <td class="num" data-label="持有">{tracking_number(holding_amount, "元")}</td>
+              <td class="num" data-label="定投">{data_text(plan_text)}</td>
+              <td class="num" data-label="市值">{tracking_number(item.get("market_value"), "元")}</td>
+              <td class="num" data-label="收益">{tracking_number(item.get("profit"), "元")}</td>
+              <td class="num" data-label="收益率">{tracking_percent(item.get("return_rate"))}</td>
             </tr>
             """
         )
@@ -2176,7 +2176,9 @@ def build_html(
     sources = []
     for fund in funds:
         source_text = "；".join([*fund.source_notes, fund.direct_limit_source])
-        sources.append(f"<tr><td>{data_text(fund.code)}</td><td>{html.escape(source_text)}</td></tr>")
+        sources.append(
+            f'<tr><td data-label="代码">{data_text(fund.code)}</td><td data-label="来源状态">{html.escape(source_text)}</td></tr>'
+        )
     source_rows = "\n".join(sources)
 
     return f"""<!doctype html>
@@ -2185,6 +2187,7 @@ def build_html(
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>纳指 100 A 类基金池</title>
+  <link rel="icon" href="data:,">
   <style>
     :root {{
       color-scheme: light;
@@ -3113,13 +3116,16 @@ def build_html(
     .tracking-overview-card + .tracking-overview-card {{
       border-left: 1px solid var(--line);
     }}
-    .tracking-overview-card span {{
+    .tracking-overview-card > span {{
       color: var(--muted);
       display: block;
       font-family: var(--font-data);
       font-size: 12px;
       margin-bottom: 5px;
       white-space: nowrap;
+    }}
+    .tracking-overview-card strong .data-text {{
+      display: inline;
     }}
     .tracking-overview-card strong {{
       color: var(--ink);
@@ -3390,28 +3396,51 @@ def build_html(
       .section-title {{ align-items: stretch; }}
       .table-controls {{ width: 100%; justify-content: flex-start; }}
     }}
-    @media (max-width: 760px) {{
+    @media (max-width: 900px) {{
       html {{ background: var(--panel); }}
       body {{ background: var(--panel); }}
       .artifact {{ padding: 14px 10px 18px; }}
+      .app-header,
+      .title-lockup,
+      .subtitle,
+      .header-actions,
+      .header-control-bar {{
+        min-width: 0;
+        max-width: 100%;
+      }}
       .app-header {{
         gap: 12px;
         padding-bottom: 12px;
       }}
-      h1 {{ font-size: 25px; line-height: 1.15; }}
+      h1 {{
+        font-size: 25px;
+        line-height: 1.15;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+      }}
+      .title-number {{
+        font-family: inherit;
+        font-weight: 600;
+      }}
       .subtitle {{
         align-items: flex-start;
         gap: 5px;
       }}
       .subtitle-meta {{
-        min-width: 100%;
+        flex: 1 1 100%;
+        min-width: 0;
+        width: 100%;
         white-space: normal;
         overflow: visible;
         text-overflow: clip;
         line-height: 1.45;
       }}
+      .header-actions {{
+        overflow: hidden;
+        width: 100%;
+      }}
       .header-control-bar {{
-        overflow-x: auto;
+        overflow: visible;
         width: 100%;
         justify-content: flex-start;
         scrollbar-width: none;
@@ -3419,12 +3448,15 @@ def build_html(
       .header-control-bar::-webkit-scrollbar {{ display: none; }}
       .tabs {{
         display: inline-flex;
-        flex-wrap: nowrap;
-        min-width: max-content;
+        flex-wrap: wrap;
+        flex: 1 1 auto;
+        min-width: 0;
+        width: 100%;
       }}
       .tab-button {{
+        flex: 1 1 auto;
         min-height: 34px;
-        padding: 7px 10px;
+        padding: 7px 8px;
         white-space: nowrap;
       }}
       .section {{
@@ -3595,12 +3627,60 @@ def build_html(
         color: var(--ink-soft);
         padding: 2px 6px;
       }}
-      .table-wrap {{ max-height: calc(100vh - 230px); }}
+      .table-wrap {{
+        max-height: none;
+        min-height: 0;
+      }}
       table {{ min-width: 1320px; font-size: 12px; }}
       th, td, .sort-button {{ padding: 8px 9px; }}
       .fund-cell {{ min-width: 180px; }}
       .rule-line {{ grid-template-columns: 1fr; gap: 2px; }}
-      .tracking-overview-grid {{ grid-template-columns: 1fr; }}
+      .tracking-overview-grid {{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }}
+      .tracking-overview-card {{
+        border-left: 0;
+        padding: 10px 11px;
+      }}
+      .tracking-overview-card:nth-child(even) {{
+        border-left: 1px solid var(--line);
+      }}
+      .tracking-overview-card strong {{
+        font-size: 15px;
+        overflow: visible;
+        text-overflow: clip;
+        white-space: nowrap;
+      }}
+      .tracking-overview-card:first-child strong {{
+        white-space: normal;
+      }}
+      .tracking-metrics {{
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+      }}
+      .tracking-metric {{
+        align-items: flex-start;
+        display: grid;
+        gap: 2px;
+        min-width: 0;
+        white-space: normal;
+      }}
+      .tracking-metric strong {{
+        line-height: 1.25;
+      }}
+      .tracking-subtabs {{
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding: 7px 10px;
+        scrollbar-width: none;
+      }}
+      .tracking-subtabs::-webkit-scrollbar {{ display: none; }}
+      .tracking-subtab {{
+        flex: 0 0 auto;
+        padding-left: 11px;
+        padding-right: 11px;
+      }}
       .tracking-overview-card + .tracking-overview-card {{ border-left: 0; }}
       .portfolio-table {{ min-width: 0; font-size: 12px; }}
       .portfolio-table th,
@@ -3618,6 +3698,122 @@ def build_html(
       .auto-plan-table col.auto-status-col {{ width: 18%; }}
       .auto-plan-table col.auto-amount-col {{ width: 20%; }}
       .auto-plan-table col.auto-holding-col {{ width: 16%; }}
+      #panel-portfolio .table-wrap,
+      #panel-tracking .compact-table-wrap,
+      #panel-scoring .scoring-wrap,
+      #panel-sources .table-wrap {{
+        overflow: visible;
+      }}
+      #panel-portfolio .portfolio-table,
+      #panel-tracking .tracking-table,
+      #panel-scoring .scoring-table,
+      #panel-sources .small-table {{
+        display: block;
+        min-width: 0;
+        width: 100%;
+      }}
+      #panel-portfolio .portfolio-table colgroup,
+      #panel-tracking .tracking-table colgroup,
+      #panel-scoring .scoring-table colgroup,
+      #panel-sources .small-table colgroup,
+      #panel-portfolio .portfolio-table thead,
+      #panel-tracking .tracking-table thead,
+      #panel-scoring .scoring-table thead,
+      #panel-sources .small-table thead {{
+        display: none;
+      }}
+      #panel-portfolio .portfolio-table tbody,
+      #panel-tracking .tracking-table tbody,
+      #panel-scoring .scoring-table tbody,
+      #panel-sources .small-table tbody {{
+        display: grid;
+        gap: 8px;
+        padding: 8px;
+      }}
+      #panel-portfolio .portfolio-table tr,
+      #panel-tracking .tracking-table tr,
+      #panel-scoring .scoring-table tr,
+      #panel-sources .small-table tr {{
+        border: 1px solid var(--line);
+        background: var(--panel);
+        display: grid;
+        min-width: 0;
+      }}
+      #panel-portfolio .portfolio-table tr:nth-child(even),
+      #panel-tracking .tracking-table tr:nth-child(even),
+      #panel-scoring .scoring-table tr:nth-child(even),
+      #panel-sources .small-table tr:nth-child(even) {{
+        background: #f7f5ee;
+      }}
+      #panel-portfolio .portfolio-table td,
+      #panel-tracking .tracking-table td,
+      #panel-scoring .scoring-table td,
+      #panel-sources .small-table td {{
+        align-items: center;
+        background: transparent !important;
+        border-bottom: 1px solid var(--line);
+        display: grid;
+        gap: 8px;
+        grid-template-columns: minmax(70px, 0.34fr) minmax(0, 1fr);
+        min-width: 0;
+        overflow: visible;
+        overflow-wrap: anywhere;
+        padding: 8px 10px;
+        text-align: left;
+        white-space: normal;
+      }}
+      #panel-portfolio .portfolio-table td:last-child,
+      #panel-tracking .tracking-table td:last-child,
+      #panel-scoring .scoring-table td:last-child,
+      #panel-sources .small-table td:last-child {{
+        border-bottom: 0;
+      }}
+      #panel-portfolio .portfolio-table td::before,
+      #panel-tracking .tracking-table td::before,
+      #panel-scoring .scoring-table td::before,
+      #panel-sources .small-table td::before {{
+        color: var(--muted);
+        content: attr(data-label);
+        font-family: var(--font-data);
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.35;
+      }}
+      #panel-portfolio .portfolio-table td > *,
+      #panel-tracking .tracking-table td > *,
+      #panel-scoring .scoring-table td > *,
+      #panel-sources .small-table td > * {{
+        min-width: 0;
+      }}
+      #panel-portfolio .portfolio-table .num,
+      #panel-tracking .tracking-table .num,
+      #panel-scoring .scoring-table .num,
+      #panel-sources .small-table .num {{
+        text-align: left;
+        white-space: normal;
+      }}
+      #panel-portfolio .portfolio-table .record-index,
+      #panel-tracking .tracking-table .record-index {{
+        width: auto;
+        min-width: 0;
+      }}
+      #panel-portfolio .portfolio-table .tier-pill,
+      #panel-tracking .tracking-table .tier-pill {{
+        justify-self: start;
+        min-width: 0;
+      }}
+      #panel-sources .small-table td:nth-child(2),
+      #panel-scoring .scoring-table td:nth-child(5) {{
+        align-items: start;
+        line-height: 1.55;
+      }}
+      .chart-frame {{
+        min-height: 0;
+        padding: 10px;
+      }}
+      .tracking-chart-svg {{
+        min-height: 180px;
+      }}
     }}
   </style>
 </head>

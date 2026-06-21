@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>纳指 100 A 类基金池</title>
+  <link rel="icon" href="data:,">
   <style>
     :root {
       color-scheme: light;
@@ -932,13 +933,16 @@
     .tracking-overview-card + .tracking-overview-card {
       border-left: 1px solid var(--line);
     }
-    .tracking-overview-card span {
+    .tracking-overview-card > span {
       color: var(--muted);
       display: block;
       font-family: var(--font-data);
       font-size: 12px;
       margin-bottom: 5px;
       white-space: nowrap;
+    }
+    .tracking-overview-card strong .data-text {
+      display: inline;
     }
     .tracking-overview-card strong {
       color: var(--ink);
@@ -1209,28 +1213,51 @@
       .section-title { align-items: stretch; }
       .table-controls { width: 100%; justify-content: flex-start; }
     }
-    @media (max-width: 760px) {
+    @media (max-width: 900px) {
       html { background: var(--panel); }
       body { background: var(--panel); }
       .artifact { padding: 14px 10px 18px; }
+      .app-header,
+      .title-lockup,
+      .subtitle,
+      .header-actions,
+      .header-control-bar {
+        min-width: 0;
+        max-width: 100%;
+      }
       .app-header {
         gap: 12px;
         padding-bottom: 12px;
       }
-      h1 { font-size: 25px; line-height: 1.15; }
+      h1 {
+        font-size: 25px;
+        line-height: 1.15;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+      }
+      .title-number {
+        font-family: inherit;
+        font-weight: 600;
+      }
       .subtitle {
         align-items: flex-start;
         gap: 5px;
       }
       .subtitle-meta {
-        min-width: 100%;
+        flex: 1 1 100%;
+        min-width: 0;
+        width: 100%;
         white-space: normal;
         overflow: visible;
         text-overflow: clip;
         line-height: 1.45;
       }
+      .header-actions {
+        overflow: hidden;
+        width: 100%;
+      }
       .header-control-bar {
-        overflow-x: auto;
+        overflow: visible;
         width: 100%;
         justify-content: flex-start;
         scrollbar-width: none;
@@ -1238,12 +1265,15 @@
       .header-control-bar::-webkit-scrollbar { display: none; }
       .tabs {
         display: inline-flex;
-        flex-wrap: nowrap;
-        min-width: max-content;
+        flex-wrap: wrap;
+        flex: 1 1 auto;
+        min-width: 0;
+        width: 100%;
       }
       .tab-button {
+        flex: 1 1 auto;
         min-height: 34px;
-        padding: 7px 10px;
+        padding: 7px 8px;
         white-space: nowrap;
       }
       .section {
@@ -1414,12 +1444,60 @@
         color: var(--ink-soft);
         padding: 2px 6px;
       }
-      .table-wrap { max-height: calc(100vh - 230px); }
+      .table-wrap {
+        max-height: none;
+        min-height: 0;
+      }
       table { min-width: 1320px; font-size: 12px; }
       th, td, .sort-button { padding: 8px 9px; }
       .fund-cell { min-width: 180px; }
       .rule-line { grid-template-columns: 1fr; gap: 2px; }
-      .tracking-overview-grid { grid-template-columns: 1fr; }
+      .tracking-overview-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .tracking-overview-card {
+        border-left: 0;
+        padding: 10px 11px;
+      }
+      .tracking-overview-card:nth-child(even) {
+        border-left: 1px solid var(--line);
+      }
+      .tracking-overview-card strong {
+        font-size: 15px;
+        overflow: visible;
+        text-overflow: clip;
+        white-space: nowrap;
+      }
+      .tracking-overview-card:first-child strong {
+        white-space: normal;
+      }
+      .tracking-metrics {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+      }
+      .tracking-metric {
+        align-items: flex-start;
+        display: grid;
+        gap: 2px;
+        min-width: 0;
+        white-space: normal;
+      }
+      .tracking-metric strong {
+        line-height: 1.25;
+      }
+      .tracking-subtabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding: 7px 10px;
+        scrollbar-width: none;
+      }
+      .tracking-subtabs::-webkit-scrollbar { display: none; }
+      .tracking-subtab {
+        flex: 0 0 auto;
+        padding-left: 11px;
+        padding-right: 11px;
+      }
       .tracking-overview-card + .tracking-overview-card { border-left: 0; }
       .portfolio-table { min-width: 0; font-size: 12px; }
       .portfolio-table th,
@@ -1437,6 +1515,122 @@
       .auto-plan-table col.auto-status-col { width: 18%; }
       .auto-plan-table col.auto-amount-col { width: 20%; }
       .auto-plan-table col.auto-holding-col { width: 16%; }
+      #panel-portfolio .table-wrap,
+      #panel-tracking .compact-table-wrap,
+      #panel-scoring .scoring-wrap,
+      #panel-sources .table-wrap {
+        overflow: visible;
+      }
+      #panel-portfolio .portfolio-table,
+      #panel-tracking .tracking-table,
+      #panel-scoring .scoring-table,
+      #panel-sources .small-table {
+        display: block;
+        min-width: 0;
+        width: 100%;
+      }
+      #panel-portfolio .portfolio-table colgroup,
+      #panel-tracking .tracking-table colgroup,
+      #panel-scoring .scoring-table colgroup,
+      #panel-sources .small-table colgroup,
+      #panel-portfolio .portfolio-table thead,
+      #panel-tracking .tracking-table thead,
+      #panel-scoring .scoring-table thead,
+      #panel-sources .small-table thead {
+        display: none;
+      }
+      #panel-portfolio .portfolio-table tbody,
+      #panel-tracking .tracking-table tbody,
+      #panel-scoring .scoring-table tbody,
+      #panel-sources .small-table tbody {
+        display: grid;
+        gap: 8px;
+        padding: 8px;
+      }
+      #panel-portfolio .portfolio-table tr,
+      #panel-tracking .tracking-table tr,
+      #panel-scoring .scoring-table tr,
+      #panel-sources .small-table tr {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        display: grid;
+        min-width: 0;
+      }
+      #panel-portfolio .portfolio-table tr:nth-child(even),
+      #panel-tracking .tracking-table tr:nth-child(even),
+      #panel-scoring .scoring-table tr:nth-child(even),
+      #panel-sources .small-table tr:nth-child(even) {
+        background: #f7f5ee;
+      }
+      #panel-portfolio .portfolio-table td,
+      #panel-tracking .tracking-table td,
+      #panel-scoring .scoring-table td,
+      #panel-sources .small-table td {
+        align-items: center;
+        background: transparent !important;
+        border-bottom: 1px solid var(--line);
+        display: grid;
+        gap: 8px;
+        grid-template-columns: minmax(70px, 0.34fr) minmax(0, 1fr);
+        min-width: 0;
+        overflow: visible;
+        overflow-wrap: anywhere;
+        padding: 8px 10px;
+        text-align: left;
+        white-space: normal;
+      }
+      #panel-portfolio .portfolio-table td:last-child,
+      #panel-tracking .tracking-table td:last-child,
+      #panel-scoring .scoring-table td:last-child,
+      #panel-sources .small-table td:last-child {
+        border-bottom: 0;
+      }
+      #panel-portfolio .portfolio-table td::before,
+      #panel-tracking .tracking-table td::before,
+      #panel-scoring .scoring-table td::before,
+      #panel-sources .small-table td::before {
+        color: var(--muted);
+        content: attr(data-label);
+        font-family: var(--font-data);
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.35;
+      }
+      #panel-portfolio .portfolio-table td > *,
+      #panel-tracking .tracking-table td > *,
+      #panel-scoring .scoring-table td > *,
+      #panel-sources .small-table td > * {
+        min-width: 0;
+      }
+      #panel-portfolio .portfolio-table .num,
+      #panel-tracking .tracking-table .num,
+      #panel-scoring .scoring-table .num,
+      #panel-sources .small-table .num {
+        text-align: left;
+        white-space: normal;
+      }
+      #panel-portfolio .portfolio-table .record-index,
+      #panel-tracking .tracking-table .record-index {
+        width: auto;
+        min-width: 0;
+      }
+      #panel-portfolio .portfolio-table .tier-pill,
+      #panel-tracking .tracking-table .tier-pill {
+        justify-self: start;
+        min-width: 0;
+      }
+      #panel-sources .small-table td:nth-child(2),
+      #panel-scoring .scoring-table td:nth-child(5) {
+        align-items: start;
+        line-height: 1.55;
+      }
+      .chart-frame {
+        min-height: 0;
+        padding: 10px;
+      }
+      .tracking-chart-svg {
+        min-height: 180px;
+      }
     }
   </style>
 
@@ -1466,7 +1660,7 @@
           <span class="subtitle-chip">QDII</span>
           <span class="subtitle-chip">长期定投</span>
           <span class="subtitle-chip">CNY</span>
-          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-21 18:56:01</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
+          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-21 19:43:49</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
           <span class="subtitle-meta">来源：东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
         </p>
       </div>
@@ -2579,15 +2773,15 @@
                 <thead><tr><th>年份</th><th>记录</th><th>首条</th><th>持有变化</th><th>期末持有</th><th>期末市值</th><th>期末收益</th><th>收益率</th></tr></thead>
                 <tbody>
             <tr>
-              <td class="num"><span class="data-text">2026</span></td>
-              <td class="num"><span class="data-text">1</span></td>
-              <td>2026-06-21</td>
+              <td class="num" data-label="年份"><span class="data-text">2026</span></td>
+              <td class="num" data-label="记录"><span class="data-text">1</span></td>
+              <td data-label="首条">2026-06-21</td>
 
-              <td class="num"><span class="data-text">0元</span></td>
-              <td class="num"><span class="data-text">560元</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="持有变化"><span class="data-text">0元</span></td>
+              <td class="num" data-label="期末持有"><span class="data-text">560元</span></td>
+              <td class="num" data-label="期末市值"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="期末收益"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
             </tr>
             </tbody>
               </table>
@@ -2693,134 +2887,134 @@
                 <thead><tr><th>序号</th><th>基金</th><th>评级</th><th>定投</th><th>市值</th><th>收益</th><th>收益率</th></tr></thead>
                 <tbody>
             <tr data-code="016452">
-              <td class="num record-index"><span class="data-text">1</span></td>
-              <td>南方 <span class="data-text">016452</span></td>
-              <td class="num"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">62.2</span></span></span></td>
+              <td class="num record-index" data-label="序号"><span class="data-text">1</span></td>
+              <td data-label="基金">南方 <span class="data-text">016452</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">62.2</span></span></span></td>
 
-              <td class="num"><span class="data-text">50元/期</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="定投"><span class="data-text">50元/期</span></td>
+              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
             </tr>
 
 
             <tr data-code="018966">
-              <td class="num record-index"><span class="data-text">2</span></td>
-              <td>汇添富 <span class="data-text">018966</span></td>
-              <td class="num"><span class="tier-pill portfolio-tier tier-d"><strong>D</strong><span><span class="data-text">28.6</span></span></span></td>
+              <td class="num record-index" data-label="序号"><span class="data-text">2</span></td>
+              <td data-label="基金">汇添富 <span class="data-text">018966</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-d"><strong>D</strong><span><span class="data-text">28.6</span></span></span></td>
 
-              <td class="num"><span class="data-text">暂停 100元/期</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="定投"><span class="data-text">暂停 100元/期</span></td>
+              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
             </tr>
 
 
             <tr data-code="539001">
-              <td class="num record-index"><span class="data-text">3</span></td>
-              <td>建信 <span class="data-text">539001</span></td>
-              <td class="num"><span class="tier-pill portfolio-tier tier-d"><strong>D</strong><span><span class="data-text">22.9</span></span></span></td>
+              <td class="num record-index" data-label="序号"><span class="data-text">3</span></td>
+              <td data-label="基金">建信 <span class="data-text">539001</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-d"><strong>D</strong><span><span class="data-text">22.9</span></span></span></td>
 
-              <td class="num"><span class="data-text">暂停 100元/期</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="定投"><span class="data-text">暂停 100元/期</span></td>
+              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
             </tr>
 
 
             <tr data-code="019441">
-              <td class="num record-index"><span class="data-text">4</span></td>
-              <td>万家 <span class="data-text">019441</span></td>
-              <td class="num"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">47.7</span></span></span></td>
+              <td class="num record-index" data-label="序号"><span class="data-text">4</span></td>
+              <td data-label="基金">万家 <span class="data-text">019441</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">47.7</span></span></span></td>
 
-              <td class="num"><span class="data-text">200元/期</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="定投"><span class="data-text">200元/期</span></td>
+              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
             </tr>
 
 
             <tr data-code="019547">
-              <td class="num record-index"><span class="data-text">5</span></td>
-              <td>招商 <span class="data-text">019547</span></td>
-              <td class="num"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">54.2</span></span></span></td>
+              <td class="num record-index" data-label="序号"><span class="data-text">5</span></td>
+              <td data-label="基金">招商 <span class="data-text">019547</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">54.2</span></span></span></td>
 
-              <td class="num"><span class="data-text">10元/期</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="定投"><span class="data-text">10元/期</span></td>
+              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
             </tr>
 
 
             <tr data-code="019172">
-              <td class="num record-index"><span class="data-text">6</span></td>
-              <td>摩根 <span class="data-text">019172</span></td>
-              <td class="num"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">49.0</span></span></span></td>
+              <td class="num record-index" data-label="序号"><span class="data-text">6</span></td>
+              <td data-label="基金">摩根 <span class="data-text">019172</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">49.0</span></span></span></td>
 
-              <td class="num"><span class="data-text">10元/期</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="定投"><span class="data-text">10元/期</span></td>
+              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
             </tr>
 
 
             <tr data-code="040046">
-              <td class="num record-index"><span class="data-text">7</span></td>
-              <td>华安 <span class="data-text">040046</span></td>
-              <td class="num"><span class="tier-pill portfolio-tier tier-s"><strong>S</strong><span><span class="data-text">89.8</span></span></span></td>
+              <td class="num record-index" data-label="序号"><span class="data-text">7</span></td>
+              <td data-label="基金">华安 <span class="data-text">040046</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-s"><strong>S</strong><span><span class="data-text">89.8</span></span></span></td>
 
-              <td class="num"><span class="data-text">10元/期</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="定投"><span class="data-text">10元/期</span></td>
+              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
             </tr>
 
 
             <tr data-code="000834">
-              <td class="num record-index"><span class="data-text">8</span></td>
-              <td>大成 <span class="data-text">000834</span></td>
-              <td class="num"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">44.4</span></span></span></td>
+              <td class="num record-index" data-label="序号"><span class="data-text">8</span></td>
+              <td data-label="基金">大成 <span class="data-text">000834</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">44.4</span></span></span></td>
 
-              <td class="num"><span class="data-text">暂停 10元/期</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="定投"><span class="data-text">暂停 10元/期</span></td>
+              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
             </tr>
 
 
             <tr data-code="270042">
-              <td class="num record-index"><span class="data-text">9</span></td>
-              <td>广发 <span class="data-text">270042</span></td>
-              <td class="num"><span class="tier-pill portfolio-tier tier-a"><strong>A</strong><span><span class="data-text">71.3</span></span></span></td>
+              <td class="num record-index" data-label="序号"><span class="data-text">9</span></td>
+              <td data-label="基金">广发 <span class="data-text">270042</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-a"><strong>A</strong><span><span class="data-text">71.3</span></span></span></td>
 
-              <td class="num"><span class="data-text">10元/期</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="定投"><span class="data-text">10元/期</span></td>
+              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
             </tr>
 
 
             <tr data-code="019524">
-              <td class="num record-index"><span class="data-text">10</span></td>
-              <td>华泰柏瑞 <span class="data-text">019524</span></td>
-              <td class="num"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">56.0</span></span></span></td>
+              <td class="num record-index" data-label="序号"><span class="data-text">10</span></td>
+              <td data-label="基金">华泰柏瑞 <span class="data-text">019524</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">56.0</span></span></span></td>
 
-              <td class="num"><span class="data-text">10元/期</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="定投"><span class="data-text">10元/期</span></td>
+              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
             </tr>
 
 
             <tr data-code="019736">
-              <td class="num record-index"><span class="data-text">11</span></td>
-              <td>宝盈 <span class="data-text">019736</span></td>
-              <td class="num"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">43.0</span></span></span></td>
+              <td class="num record-index" data-label="序号"><span class="data-text">11</span></td>
+              <td data-label="基金">宝盈 <span class="data-text">019736</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">43.0</span></span></span></td>
 
-              <td class="num"><span class="data-text">暂停 10元/期</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="定投"><span class="data-text">暂停 10元/期</span></td>
+              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
             </tr>
             </tbody>
               </table>
@@ -2846,13 +3040,13 @@
                 <thead><tr><th>序号</th><th>日期</th><th>持有</th><th>市值</th><th>收益</th><th>收益率</th></tr></thead>
                 <tbody>
             <tr>
-              <td class="num record-index"><span class="data-text">1</span></td>
-              <td>2026-06-21</td>
-              <td class="num"><span class="data-text">560元</span></td>
+              <td class="num record-index" data-label="序号"><span class="data-text">1</span></td>
+              <td data-label="日期">2026-06-21</td>
+              <td class="num" data-label="持有"><span class="data-text">560元</span></td>
 
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
             </tr>
             </tbody>
               </table>
@@ -2874,65 +3068,65 @@
           <thead><tr><th>指标</th><th>权重</th><th>方向</th><th>纳入评级的理由</th></tr></thead>
           <tbody>
             <tr>
-              <td>近3年收益</td>
-              <td class="num" data-sort-value="0.350000">35%</td>
-              <td>越高越好</td>
+              <td data-label="指标">近3年收益</td>
+              <td class="num" data-label="权重" data-sort-value="0.350000">35%</td>
+              <td data-label="方向">越高越好</td>
 
-              <td>核心目标是长期收益优先；机构和指数基金社区通常会先看长期业绩是否稳定跟上标的。</td>
+              <td data-label="纳入评级的理由">核心目标是长期收益优先；机构和指数基金社区通常会先看长期业绩是否稳定跟上标的。</td>
             </tr>
 
 
             <tr>
-              <td>近1年收益</td>
-              <td class="num" data-sort-value="0.200000">20%</td>
-              <td>越高越好</td>
+              <td data-label="指标">近1年收益</td>
+              <td class="num" data-label="权重" data-sort-value="0.200000">20%</td>
+              <td data-label="方向">越高越好</td>
 
-              <td>保留近端表现，避免只看长期旧数据；权重低于 3 年收益，防止追短期热点。</td>
+              <td data-label="纳入评级的理由">保留近端表现，避免只看长期旧数据；权重低于 3 年收益，防止追短期热点。</td>
             </tr>
 
 
             <tr>
-              <td>跟踪误差</td>
-              <td class="num" data-sort-value="0.200000">20%</td>
-              <td>越低越好</td>
+              <td data-label="指标">跟踪误差</td>
+              <td class="num" data-label="权重" data-sort-value="0.200000">20%</td>
+              <td data-label="方向">越低越好</td>
 
-              <td>iShares、State Street 和 Bogleheads 都把跟踪质量视为指数基金核心指标；误差越小越稳定。</td>
+              <td data-label="纳入评级的理由">iShares、State Street 和 Bogleheads 都把跟踪质量视为指数基金核心指标；误差越小越稳定。</td>
             </tr>
 
 
             <tr>
-              <td>管理+托管</td>
-              <td class="num" data-sort-value="0.150000">15%</td>
-              <td>越低越好</td>
+              <td data-label="指标">管理+托管</td>
+              <td class="num" data-label="权重" data-sort-value="0.150000">15%</td>
+              <td data-label="方向">越低越好</td>
 
-              <td>Vanguard 等机构长期强调低费率会改善投资者净回报；管理费和托管费是长期持有的持续拖累。</td>
+              <td data-label="纳入评级的理由">Vanguard 等机构长期强调低费率会改善投资者净回报；管理费和托管费是长期持有的持续拖累。</td>
             </tr>
 
 
             <tr>
-              <td>基金规模</td>
-              <td class="num" data-sort-value="0.060000">6%</td>
-              <td>适度越大越好</td>
+              <td data-label="指标">基金规模</td>
+              <td class="num" data-label="权重" data-sort-value="0.060000">6%</td>
+              <td data-label="方向">适度越大越好</td>
 
-              <td>规模只作稳定性和流动性辅助项；它不替代收益、跟踪质量和费用。</td>
+              <td data-label="纳入评级的理由">规模只作稳定性和流动性辅助项；它不替代收益、跟踪质量和费用。</td>
             </tr>
 
 
             <tr>
-              <td>买入费率</td>
-              <td class="num" data-sort-value="0.020000">2%</td>
-              <td>越低越好</td>
+              <td data-label="指标">买入费率</td>
+              <td class="num" data-label="权重" data-sort-value="0.020000">2%</td>
+              <td data-label="方向">越低越好</td>
 
-              <td>一次性交易成本会影响定投入场，但长期影响弱于持续费用和跟踪质量。</td>
+              <td data-label="纳入评级的理由">一次性交易成本会影响定投入场，但长期影响弱于持续费用和跟踪质量。</td>
             </tr>
 
 
             <tr>
-              <td>赎回灵活性</td>
-              <td class="num" data-sort-value="0.020000">2%</td>
-              <td>越短越好</td>
+              <td data-label="指标">赎回灵活性</td>
+              <td class="num" data-label="权重" data-sort-value="0.020000">2%</td>
+              <td data-label="方向">越短越好</td>
 
-              <td>赎回灵活性是辅助条件，不应压过收益、跟踪误差和持续费用。</td>
+              <td data-label="纳入评级的理由">赎回灵活性是辅助条件，不应压过收益、跟踪误差和持续费用。</td>
             </tr>
             </tbody>
         </table>
@@ -2948,22 +3142,22 @@
       <div class="table-wrap">
         <table class="small-table">
           <thead><tr><th>代码</th><th>来源状态</th></tr></thead>
-          <tbody><tr><td><span class="data-text">019441</span></td><td>基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 万家基金公告正文，A/C单日单个基金账户单笔或多笔申购含定投累计金额限制；生效日/公告日: 2026-06-22；公告未区分直销/代销；A类、C类分别计算；同时设置13.5亿元总规模上限。；https://pdf.dfcfw.com/pdf/H2_AN202606191823686344_1.pdf</td></tr>
-<tr><td><span class="data-text">040046</span></td><td>基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 华安基金公告PDF，直销机构单日每个基金账户累计申购/定投限额；生效日/公告日: 2025-12-05；公告明确普通渠道每类人民币份额10元，直销机构1000元。；https://pdf.dfcfw.com/pdf/H2_AN202512041793575251_1.pdf</td></tr>
-<tr><td><span class="data-text">000834</span></td><td>基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 大成基金公告PDF，直销渠道单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-06-04；公告明确直销渠道100元，代销机构10元。；https://pdf.dfcfw.com/pdf/H2_AN202606031823188725_1.pdf</td></tr>
-<tr><td><span class="data-text">539001</span></td><td>基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 建信基金公告PDF，人民币份额单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-02-27；公告未区分直销/代销；按人民币A/C/D份额统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202602261820057584_1.pdf</td></tr>
-<tr><td><span class="data-text">018966</span></td><td>基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 汇添富基金公告PDF，人民币A/C/E单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-04-17；公告未区分直销/代销，按本基金人民币A/C/E统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202604171821282012_1.pdf</td></tr>
-<tr><td><span class="data-text">016452</span></td><td>基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 南方基金官网产品状态及限额接口，A类大额申购/定投/转换转入限额；生效日/公告日: 2026-06-18；官网产品状态接口未区分直销/代销；按南方基金官网A类当前限额记录。；https://www.nffund.com/new/transaction-guide/product-status-and-limits.html</td></tr>
-<tr><td><span class="data-text">270042</span></td><td>基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 东方财富移动接口及截图汇总表，人民币A当前代销/直销限购口径；生效日/公告日: 2026-06-19；未抓到近期单独大额限购公告；按公开接口代销10元和截图直销10元记录。；https://fundf10.eastmoney.com/jjfl_270042.html</td></tr>
-<tr><td><span class="data-text">019172</span></td><td>基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 摩根基金公告正文，人民币A/C单日申购/定投/转换转入累计限额；生效日/公告日: 2026-06-11；公告未区分直销/代销，按人民币份额统一限制记录；该公告比2026-04-27的100元公告更新。；https://pdf.dfcfw.com/pdf/H2_AN202606101823421439_1.pdf</td></tr>
-<tr><td><span class="data-text">019547</span></td><td>基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 招商基金公告PDF，A/C单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-06-10；公告未区分直销/代销，按本基金A/C统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202606091823377663_1.pdf</td></tr>
-<tr><td><span class="data-text">019736</span></td><td>基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 宝盈基金公告正文，A/C人民币份额申购含定投限制金额；生效日/公告日: 2026-06-11；公告未区分直销/代销；A/C均为10元。；https://pdf.dfcfw.com/pdf/H2_AN202606101823409504_1.pdf</td></tr>
-<tr><td><span class="data-text">019524</span></td><td>基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 华泰柏瑞基金公告正文，A/C/I份额申购含定投限制金额；生效日/公告日: 2026-04-23；公告未区分直销/代销；A/C/I份额合并计算10元。；https://pdf.dfcfw.com/pdf/H2_AN202604231821470346_1.pdf</td></tr>
-<tr><td><span class="data-text">018043</span></td><td>基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 天弘基金公告正文，A/C/D单日单个基金账户申购含定投累计限额；生效日/公告日: 2026-04-08；公告未区分直销/代销；A类018043、C类018044、D类022525均为100元。；https://pdf.dfcfw.com/pdf/H2_AN202604071821036124_1.pdf</td></tr>
-<tr><td><span class="data-text">016055</span></td><td>基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 脚本内置回退值，待基金公司直销公告核验</td></tr>
-<tr><td><span class="data-text">016532</span></td><td>基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 嘉实基金公告正文，直销销售机构A人民币单日单个基金账户申购含定投累计限额；生效日/公告日: 2025-11-11；公告明确直销A/C/I人民币各1000元，非直销A/C/I人民币各100元；表内代销限额仍按公开平台接口100元。；https://pdf.dfcfw.com/pdf/H2_AN202511111779112505_1.pdf</td></tr>
-<tr><td><span class="data-text">015299</span></td><td>基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 脚本内置回退值，待基金公司直销公告核验</td></tr>
-<tr><td><span class="data-text">161130</span></td><td>基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 易方达基金公告正文，A人民币份额在全部销售机构单日单个基金账户申购含定投累计限额；生效日/公告日: 2025-11-04；公告明确人民币A/C份额在全部销售机构累计申购限额均为10元。；https://pdf.dfcfw.com/pdf/H2_AN202511031774389358_1.pdf</td></tr></tbody>
+          <tbody><tr><td data-label="代码"><span class="data-text">019441</span></td><td data-label="来源状态">基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 万家基金公告正文，A/C单日单个基金账户单笔或多笔申购含定投累计金额限制；生效日/公告日: 2026-06-22；公告未区分直销/代销；A类、C类分别计算；同时设置13.5亿元总规模上限。；https://pdf.dfcfw.com/pdf/H2_AN202606191823686344_1.pdf</td></tr>
+<tr><td data-label="代码"><span class="data-text">040046</span></td><td data-label="来源状态">基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 华安基金公告PDF，直销机构单日每个基金账户累计申购/定投限额；生效日/公告日: 2025-12-05；公告明确普通渠道每类人民币份额10元，直销机构1000元。；https://pdf.dfcfw.com/pdf/H2_AN202512041793575251_1.pdf</td></tr>
+<tr><td data-label="代码"><span class="data-text">000834</span></td><td data-label="来源状态">基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 大成基金公告PDF，直销渠道单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-06-04；公告明确直销渠道100元，代销机构10元。；https://pdf.dfcfw.com/pdf/H2_AN202606031823188725_1.pdf</td></tr>
+<tr><td data-label="代码"><span class="data-text">539001</span></td><td data-label="来源状态">基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 建信基金公告PDF，人民币份额单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-02-27；公告未区分直销/代销；按人民币A/C/D份额统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202602261820057584_1.pdf</td></tr>
+<tr><td data-label="代码"><span class="data-text">018966</span></td><td data-label="来源状态">基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 汇添富基金公告PDF，人民币A/C/E单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-04-17；公告未区分直销/代销，按本基金人民币A/C/E统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202604171821282012_1.pdf</td></tr>
+<tr><td data-label="代码"><span class="data-text">016452</span></td><td data-label="来源状态">基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 南方基金官网产品状态及限额接口，A类大额申购/定投/转换转入限额；生效日/公告日: 2026-06-18；官网产品状态接口未区分直销/代销；按南方基金官网A类当前限额记录。；https://www.nffund.com/new/transaction-guide/product-status-and-limits.html</td></tr>
+<tr><td data-label="代码"><span class="data-text">270042</span></td><td data-label="来源状态">基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 东方财富移动接口及截图汇总表，人民币A当前代销/直销限购口径；生效日/公告日: 2026-06-19；未抓到近期单独大额限购公告；按公开接口代销10元和截图直销10元记录。；https://fundf10.eastmoney.com/jjfl_270042.html</td></tr>
+<tr><td data-label="代码"><span class="data-text">019172</span></td><td data-label="来源状态">基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 摩根基金公告正文，人民币A/C单日申购/定投/转换转入累计限额；生效日/公告日: 2026-06-11；公告未区分直销/代销，按人民币份额统一限制记录；该公告比2026-04-27的100元公告更新。；https://pdf.dfcfw.com/pdf/H2_AN202606101823421439_1.pdf</td></tr>
+<tr><td data-label="代码"><span class="data-text">019547</span></td><td data-label="来源状态">基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 招商基金公告PDF，A/C单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-06-10；公告未区分直销/代销，按本基金A/C统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202606091823377663_1.pdf</td></tr>
+<tr><td data-label="代码"><span class="data-text">019736</span></td><td data-label="来源状态">基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 宝盈基金公告正文，A/C人民币份额申购含定投限制金额；生效日/公告日: 2026-06-11；公告未区分直销/代销；A/C均为10元。；https://pdf.dfcfw.com/pdf/H2_AN202606101823409504_1.pdf</td></tr>
+<tr><td data-label="代码"><span class="data-text">019524</span></td><td data-label="来源状态">基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 华泰柏瑞基金公告正文，A/C/I份额申购含定投限制金额；生效日/公告日: 2026-04-23；公告未区分直销/代销；A/C/I份额合并计算10元。；https://pdf.dfcfw.com/pdf/H2_AN202604231821470346_1.pdf</td></tr>
+<tr><td data-label="代码"><span class="data-text">018043</span></td><td data-label="来源状态">基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 天弘基金公告正文，A/C/D单日单个基金账户申购含定投累计限额；生效日/公告日: 2026-04-08；公告未区分直销/代销；A类018043、C类018044、D类022525均为100元。；https://pdf.dfcfw.com/pdf/H2_AN202604071821036124_1.pdf</td></tr>
+<tr><td data-label="代码"><span class="data-text">016055</span></td><td data-label="来源状态">基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 脚本内置回退值，待基金公司直销公告核验</td></tr>
+<tr><td data-label="代码"><span class="data-text">016532</span></td><td data-label="来源状态">基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 嘉实基金公告正文，直销销售机构A人民币单日单个基金账户申购含定投累计限额；生效日/公告日: 2025-11-11；公告明确直销A/C/I人民币各1000元，非直销A/C/I人民币各100元；表内代销限额仍按公开平台接口100元。；https://pdf.dfcfw.com/pdf/H2_AN202511111779112505_1.pdf</td></tr>
+<tr><td data-label="代码"><span class="data-text">015299</span></td><td data-label="来源状态">基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 脚本内置回退值，待基金公司直销公告核验</td></tr>
+<tr><td data-label="代码"><span class="data-text">161130</span></td><td data-label="来源状态">基础行情/限额/规模: 东方财富移动接口；费率/赎回: 天天基金基金费率页；跟踪误差: 天天基金特色数据页；直销限额: 易方达基金公告正文，A人民币份额在全部销售机构单日单个基金账户申购含定投累计限额；生效日/公告日: 2025-11-04；公告明确人民币A/C份额在全部销售机构累计申购限额均为10元。；https://pdf.dfcfw.com/pdf/H2_AN202511031774389358_1.pdf</td></tr></tbody>
         </table>
       </div>
     </section>
