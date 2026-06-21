@@ -20,6 +20,10 @@
 - `纳指基金支付宝对比表.html`：生成后的浏览器页面。
 - `nasdaq_fund_snapshot.json`：抓取结果、评分结果、持仓和定投快照。
 - `portfolio_tracking.json`：长期追踪记录，保存跨天、跨周、跨月的持仓、市值、收益和收益率。
+- `data/nasdaq_funds.db`：SQLite 长期数据层，保存基金、每日主表快照、评级、持仓、定投和未来交易流水。
+- `data/schema.sql`：SQLite 表结构和视图定义。
+- `data/examples.sql`：用于学习和排查的常用 SQL 查询示例。
+- `sync_sqlite_db.py`：把当前 JSON 快照同步进 SQLite 的脚本。
 - `direct_limits.json`：直销限额的人工/AI 核实结果。
 - `direct_limit_candidates.json`：候选公告，不代表已确认限额。
 - `AGENTS.md`：给后续 Codex 维护本项目用的规则。
@@ -32,7 +36,7 @@
 python "C:\ALL_in_H\纳指记录\refresh_all.py"
 ```
 
-`refresh_all.py` 是本地和 GitHub Actions 共用的完整刷新入口，会依次执行：编译生成器、抓取并生成主表、更新长期追踪当日记录、准备 `docs/` 发布页、运行结构一致性校验和抓取健康校验。
+`refresh_all.py` 是本地和 GitHub Actions 共用的完整刷新入口，会依次执行：编译生成器、抓取并生成主表、更新长期追踪当日记录、准备 `docs/` 发布页、同步 SQLite 数据库、运行结构一致性校验和抓取健康校验。
 
 如需单独调试生成器：
 
@@ -40,6 +44,7 @@ python "C:\ALL_in_H\纳指记录\refresh_all.py"
 python -m py_compile "C:\ALL_in_H\纳指记录\generate_nasdaq_fund_table.py"
 python "C:\ALL_in_H\纳指记录\generate_nasdaq_fund_table.py" --output-dir "C:\ALL_in_H\纳指记录"
 python "C:\ALL_in_H\纳指记录\prepare_github_pages.py"
+python "C:\ALL_in_H\纳指记录\sync_sqlite_db.py"
 python "C:\ALL_in_H\纳指记录\validate_refresh_outputs.py"
 ```
 
@@ -110,6 +115,43 @@ GitHub Actions 工作流位于 `.github/workflows/refresh.yml`。它每天按北
 每次自动任务都会运行 `python refresh_all.py`。校验通过后才会进入提交判断；如果主表、快照、长期追踪或发布页之间不一致，或者本次基础行情、费率赎回、跟踪误差抓取不是 16/16 全部成功，任务会失败，不会静默发布半更新页面。
 
 `should_commit_refresh.py` 会在自动提交前过滤纯时间戳变化。如果只变了 `generated_at`、`recorded_at` 或页面上的“数据更新”时间，而基金业务数据没有变化，GitHub Actions 会跳过提交，避免每天制造 3 个低价值 commit。
+
+## SQLite 数据层
+
+第四阶段已经接入 SQLite。当前定位是：`nasdaq_fund_snapshot.json` 和 `portfolio_tracking.json` 继续作为静态页面生成输入，`data/nasdaq_funds.db` 作为长期结构化查询、学习数据库和未来扩展交易流水的存储层。
+
+刷新入口：
+
+```powershell
+python "C:\ALL_in_H\纳指记录\sync_sqlite_db.py"
+```
+
+完整刷新时不需要单独运行它，`refresh_all.py` 会自动调用。数据库文件会随仓库提交，因此 GitHub Actions 每次业务数据发生变化时也会同步一份 SQLite 到 GitHub 仓库；纯时间戳变化会被提交保护过滤。
+
+核心表：
+
+- `funds`：基金基础信息。
+- `refresh_runs`：按日期记录抓取健康状态。
+- `scoring_models`：当天评级模型、权重和规则。
+- `fund_daily_snapshots`：每天每只基金的主表字段。
+- `score_snapshots`：每天每只基金的评级、分数、排名。
+- `portfolio_records`：每天组合级持仓、定投、市值、收益。
+- `portfolio_positions`：每天每只基金的持仓、市值、收益和评级。
+- `auto_invest_plans`：每天每只基金的定投状态、金额、频率和下次扣款日。
+- `transactions`：预留的交易流水表，后续可记录买入、卖出、分红、费用等明细。
+
+常用视图：
+
+- `v_latest_fund_scores`：最新主表评级。
+- `v_portfolio_latest_positions`：最新持仓和定投。
+- `v_monthly_portfolio_summary`：月度组合汇总。
+- `v_active_auto_invest_latest`：当前定投中的基金。
+
+学习 SQL 时可以先看：
+
+```text
+C:\ALL_in_H\纳指记录\data\examples.sql
+```
 
 ## 修改持仓和定投
 

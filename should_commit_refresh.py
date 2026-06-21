@@ -88,6 +88,8 @@ def should_commit() -> bool:
         previous = git_show_head(path)
         if previous is None:
             return True
+        if path.endswith(".db"):
+            return True
         current = current_path.read_text(encoding="utf-8")
         if normalize_text(path, previous) != normalize_text(path, current):
             return True

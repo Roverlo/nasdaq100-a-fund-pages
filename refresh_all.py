@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 GENERATOR = ROOT / "generate_nasdaq_fund_table.py"
 PREPARE_PAGES = ROOT / "prepare_github_pages.py"
+DB_SYNC = ROOT / "sync_sqlite_db.py"
 VALIDATOR = ROOT / "validate_refresh_outputs.py"
 COMMIT_GUARD = ROOT / "should_commit_refresh.py"
 
@@ -30,6 +31,8 @@ def main() -> int:
     py_compile.compile(str(GENERATOR), doraise=True)
     run_step([sys.executable, str(GENERATOR), "--output-dir", str(ROOT)], retries=1)
     run_step([sys.executable, str(PREPARE_PAGES)])
+    py_compile.compile(str(DB_SYNC), doraise=True)
+    run_step([sys.executable, str(DB_SYNC)])
     py_compile.compile(str(VALIDATOR), doraise=True)
     py_compile.compile(str(COMMIT_GUARD), doraise=True)
     run_step([sys.executable, str(VALIDATOR)])

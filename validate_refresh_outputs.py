@@ -1,5 +1,6 @@
 import json
 import re
+import sqlite3
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -12,6 +13,7 @@ DOCS_INDEX = ROOT / "docs" / "index.html"
 DOCS_PORTFOLIO = ROOT / "docs" / "portfolio.html"
 SNAPSHOT = ROOT / "nasdaq_fund_snapshot.json"
 TRACKING = ROOT / generator.TRACKING_FILENAME
+DATABASE = ROOT / "data" / "nasdaq_funds.db"
 
 FULL_MAIN_COLUMNS = 18
 PUBLIC_MAIN_COLUMNS = 16
@@ -263,6 +265,72 @@ def validate_tracking(snapshot: dict, tracking: dict) -> None:
                 fail(f"tracking fund {code} {key} expected {expected}, got {tracking_fund.get(key)}")
 
 
+def validate_database(snapshot: dict, tracking: dict) -> None:
+    if not DATABASE.exists():
+        fail(f"missing SQLite database: {DATABASE}")
+    latest_tracking = tracking.get("records", [])[-1]
+    latest_record_date = str(latest_tracking.get("date") or latest_tracking.get("recorded_at") or "")[:10]
+    latest_snapshot_date = str(snapshot.get("generated_at") or "")[:10] or latest_record_date
+    expected_fund_count = len(snapshot.get("funds", []))
+    expected_tables = {
+        "funds",
+        "refresh_runs",
+        "scoring_models",
+        "fund_daily_snapshots",
+        "score_snapshots",
+        "portfolio_records",
+        "portfolio_positions",
+        "auto_invest_plans",
+        "transactions",
+    }
+    with sqlite3.connect(DATABASE) as conn:
+        existing_tables = {
+            row[0]
+            for row in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'"
+            )
+        }
+        missing = expected_tables - existing_tables
+        if missing:
+            fail(f"SQLite database missing tables: {sorted(missing)}")
+        fund_count = conn.execute("SELECT COUNT(*) FROM funds").fetchone()[0]
+        if fund_count != expected_fund_count:
+            fail(f"SQLite funds expected {expected_fund_count}, got {fund_count}")
+        for table, date_column, date_value in (
+            ("fund_daily_snapshots", "snapshot_date", latest_snapshot_date),
+            ("score_snapshots", "snapshot_date", latest_snapshot_date),
+            ("portfolio_positions", "record_date", latest_record_date),
+            ("auto_invest_plans", "record_date", latest_record_date),
+        ):
+            count = conn.execute(
+                f"SELECT COUNT(*) FROM {table} WHERE {date_column} = ?",
+                (date_value,),
+            ).fetchone()[0]
+            if count != expected_fund_count:
+                fail(f"SQLite {table} expected {expected_fund_count} rows for {date_value}, got {count}")
+        row = conn.execute(
+            """
+            SELECT holding_total, active_auto_invest_total, paused_auto_invest_total
+            FROM portfolio_records
+            WHERE record_date = ?
+            """,
+            (latest_record_date,),
+        ).fetchone()
+        if row is None:
+            fail("SQLite missing latest portfolio record")
+        expected_totals = (
+            snapshot.get("holding_plan", {}).get("holding_total"),
+            snapshot.get("auto_invest_plan", {}).get("active_total"),
+            snapshot.get("auto_invest_plan", {}).get("paused_total"),
+        )
+        actual_totals = (row[0], row[1], row[2])
+        if actual_totals != expected_totals:
+            fail(f"SQLite portfolio totals expected {expected_totals}, got {actual_totals}")
+        view_count = conn.execute("SELECT COUNT(*) FROM v_latest_fund_scores").fetchone()[0]
+        if view_count != expected_fund_count:
+            fail(f"SQLite v_latest_fund_scores expected {expected_fund_count}, got {view_count}")
+
+
 def main() -> int:
     validate_table(FULL_HTML, FULL_MAIN_COLUMNS, FUND_COUNT)
     validate_table(DOCS_PORTFOLIO, FULL_MAIN_COLUMNS, FUND_COUNT)
@@ -274,6 +342,7 @@ def main() -> int:
     tracking = load_json(TRACKING)
     validate_snapshot(snapshot)
     validate_tracking(snapshot, tracking)
+    validate_database(snapshot, tracking)
     print("refresh output validation passed")
     return 0
 

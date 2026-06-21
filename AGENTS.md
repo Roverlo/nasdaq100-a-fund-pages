@@ -18,6 +18,10 @@
 - `纳指基金支付宝对比表.html`：生成产物，浏览器直接打开查看。
 - `nasdaq_fund_snapshot.json`：本次抓取和计算快照，用于核对字段、评分、持仓和定投总额。
 - `portfolio_tracking.json`：长期追踪记录，用于跨天、跨周、跨月保存持仓、市值、收益和收益率。生成脚本应按北京时间做“同日更新、跨日追加”：每天 3 次自动刷新只更新当天记录，第二天才追加新记录。页面应把它渲染成图表化追踪面板，而不只是表格。
+- `data/nasdaq_funds.db`：SQLite 长期数据层，用于十年级别的结构化查询和学习；它由 `sync_sqlite_db.py` 从 `nasdaq_fund_snapshot.json` 与 `portfolio_tracking.json` 同步生成，不要手工改库后忘记回写源数据。
+- `data/schema.sql`：SQLite 表和视图定义。改数据库结构时优先改这里，再让 `sync_sqlite_db.py` 应用。
+- `data/examples.sql`：学习和排查用 SQL 示例。
+- `sync_sqlite_db.py`：数据库同步脚本，完整刷新入口会自动调用。
 - `direct_limits.json`：人工或 AI 从基金公司公告核实后的直销限额覆盖表。
 - `direct_limit_candidates.json`：候选公告列表，不等于已核实直销限额。
 
@@ -47,7 +51,7 @@ Copy-Item -LiteralPath "C:\ALL_in_H\纳指记录\generate_nasdaq_fund_table.py" 
 python -m py_compile "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts\generate_nasdaq_fund_table.py"
 ```
 
-`refresh_all.py` 会编译生成器、抓取并生成主表、更新 `portfolio_tracking.json` 当天记录、准备 GitHub Pages 的 `docs/`、编译提交判断脚本、运行 `validate_refresh_outputs.py`。不要跳过这个入口后只手动生成 HTML。
+`refresh_all.py` 会编译生成器、抓取并生成主表、更新 `portfolio_tracking.json` 当天记录、准备 GitHub Pages 的 `docs/`、同步 `data/nasdaq_funds.db`、编译提交判断脚本、运行 `validate_refresh_outputs.py`。不要跳过这个入口后只手动生成 HTML。
 
 再做结构检查：
 
@@ -57,6 +61,15 @@ python -m py_compile "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts
 - `holding_plan.holding_total` 应匹配页面当前持有总额。
 - `nasdaq_fund_snapshot.json` 中 `source_health.checks` 应要求基础行情、费率赎回、跟踪误差均为 `16/16` 成功；如果接口不可用导致回退值生成，应让验证失败，不要发布“假刷新”。
 - `portfolio_tracking.json` 应存在，最新记录日期应等于当前北京时间日期；最新记录的评级、评分、持仓金额、定投金额应与 `nasdaq_fund_snapshot.json` 一致；未知的市值、收益、收益率保持 `null` / `--`，不要用基金涨幅伪造个人收益。
+- `data/nasdaq_funds.db` 应存在，`funds`、`fund_daily_snapshots`、`score_snapshots`、`portfolio_records`、`portfolio_positions`、`auto_invest_plans` 应与最新 JSON 口径一致；`transactions` 可以为空但表必须存在。
+
+## SQLite 数据规则
+
+- 当前数据库是长期查询和学习层，不替代生成器常量、主表快照和追踪 JSON 的源头地位。
+- 个人真实收益字段仍按用户截图或手工输入维护；不要从基金阶段涨幅推导 `market_value`、`cost_basis`、`profit`、`return_rate`。
+- `sync_sqlite_db.py` 对 `generated_at`、`recorded_at` 做低噪声处理：同一天业务数据没变时，不应仅因时间戳导致 SQLite 文件变化，避免 GitHub Actions 每天 3 次无意义提交。
+- 要学习数据库或排查数据时，优先用 `data/examples.sql` 和这些视图：`v_latest_fund_scores`、`v_portfolio_latest_positions`、`v_monthly_portfolio_summary`、`v_active_auto_invest_latest`。
+- 如果以后要记录真实买卖流水，写入 `transactions`；但交易流水一旦作为事实数据使用，也要在 README 或专门记录文件中说明来源口径。
 
 ## 自动刷新
 
