@@ -1441,24 +1441,6 @@ def fund_record_rating(cards: dict[str, dict[str, object]], code: str) -> str:
     return f'<span class="tier-pill portfolio-tier {tier_class(tier)}"><strong>{tier}</strong><span>{data_text(f"{score:.1f}")}</span></span>'
 
 
-def holding_record_rows(funds_by_code: dict[str, Fund], cards: dict[str, dict[str, object]]) -> str:
-    rows = []
-    sorted_holdings = sorted(HOLDING_AMOUNTS.items(), key=lambda item: fund_amount_sort_key(funds_by_code, item))
-    for index, (code, amount) in enumerate(sorted_holdings, start=1):
-        rows.append(
-            f"""
-            <tr data-code="{html.escape(code)}">
-              <td class="num record-index" data-label="序号">{data_text(str(index))}</td>
-              <td data-label="基金">{fund_record_name(funds_by_code, code)}</td>
-              <td class="num" data-label="评级">{fund_record_rating(cards, code)}</td>
-              <td class="num editable-amount" data-label="持有金额" data-field="holding" data-sort-value="{amount:.6f}" tabindex="0" role="button" title="点击修改持有金额">{fmt_yuan(amount)}</td>
-              <td class="editable-status" data-label="定投状态" data-field="status" tabindex="0" role="button" title="点击选择定投状态"><span class="tag {fund_status_class(code)}">{fund_status(code)}</span></td>
-            </tr>
-            """
-        )
-    return "\n".join(rows)
-
-
 def auto_invest_record_rows(funds_by_code: dict[str, Fund], cards: dict[str, dict[str, object]]) -> str:
     rows = []
     merged_codes = sorted(
@@ -1474,14 +1456,16 @@ def auto_invest_record_rows(funds_by_code: dict[str, Fund], cards: dict[str, dic
         paused_amount = PAUSED_AUTO_INVEST_AMOUNTS.get(code, 0)
         holding_amount = HOLDING_AMOUNTS.get(code, 0)
         status = "定投中" if active_amount else "暂停定投"
+        status_rank = 0 if active_amount else 1
         amount = active_amount or paused_amount
+        score = float(cards.get(code, {}).get("score", 0))
         rows.append(
             f"""
             <tr data-code="{html.escape(code)}">
               <td class="num record-index" data-label="序号">{data_text(str(index))}</td>
               <td data-label="基金">{fund_record_name(funds_by_code, code)}</td>
-              <td class="num" data-label="评级">{fund_record_rating(cards, code)}</td>
-              <td class="editable-status" data-label="状态" data-field="status" tabindex="0" role="button" title="点击选择定投状态"><span class="tag {fund_status_class(code)}">{status}</span></td>
+              <td class="num" data-label="评级" data-sort-value="{score:.6f}">{fund_record_rating(cards, code)}</td>
+              <td class="editable-status" data-label="状态" data-field="status" data-sort-value="{status_rank}" tabindex="0" role="button" title="点击选择定投状态"><span class="tag {fund_status_class(code)}">{status}</span></td>
               <td class="num editable-amount" data-label="金额" data-field="plan_amount" data-sort-value="{amount:.6f}" tabindex="0" role="button" title="点击修改定投金额">{fmt_yuan(amount)} / 期</td>
               <td class="num editable-amount" data-label="当前持有" data-field="holding" data-sort-value="{holding_amount:.6f}" tabindex="0" role="button" title="点击修改持有金额">{fmt_yuan(holding_amount)}</td>
             </tr>
@@ -1953,7 +1937,7 @@ def tracking_snapshot_rows(payload: dict[str, object]) -> str:
               <td class="num" data-label="收益">{tracking_number(record.get("profit"), "元")}</td>
               <td class="num" data-label="收益率">{tracking_percent(record.get("return_rate"))}</td>
             </tr>
-            """
+            """.strip()
         )
     return "\n".join(rows)
 
@@ -4047,7 +4031,7 @@ def build_html(
                 <col class="auto-amount-col">
                 <col class="auto-holding-col">
               </colgroup>
-              <thead><tr><th>序号</th><th>基金</th><th>评级</th><th>状态</th><th>金额</th><th>当前持有</th></tr></thead>
+              <thead><tr><th>序号</th><th>基金</th><th class="sortable" data-plan-column-index="2" data-sort-type="number"><button type="button" class="sort-button">评级<span class="sort-indicator"></span></button></th><th class="sortable" data-plan-column-index="3" data-sort-type="number"><button type="button" class="sort-button">状态<span class="sort-indicator"></span></button></th><th class="sortable" data-plan-column-index="4" data-sort-type="number"><button type="button" class="sort-button">金额<span class="sort-indicator"></span></button></th><th class="sortable" data-plan-column-index="5" data-sort-type="number"><button type="button" class="sort-button">当前持有<span class="sort-indicator"></span></button></th></tr></thead>
               <tbody>{auto_invest_rows}</tbody>
             </table>
           </div>
@@ -4405,7 +4389,10 @@ def build_html(
           const statusCell = row.querySelector('[data-field="status"]');
           const amountCell = row.querySelector('[data-field="plan_amount"]');
           const holdingCell = row.querySelector('[data-field="holding"]');
-          if (statusCell) statusCell.innerHTML = statusTag(status);
+          if (statusCell) {{
+            statusCell.dataset.sortValue = String(statusRank(status));
+            statusCell.innerHTML = statusTag(status);
+          }}
           if (amountCell) {{
             const amount = planAmount(item);
             amountCell.dataset.sortValue = String(amount);
@@ -4582,6 +4569,34 @@ def build_html(
           return Number.isNaN(number) ? 0 : number;
         }}
         return raw.toLocaleLowerCase("zh-CN");
+      }}
+      function updatePlanSortIndicators(planHeaders, activePlanHeader, direction) {{
+        planHeaders.forEach((header) => {{
+          const indicator = header.querySelector(".sort-indicator");
+          if (!indicator) return;
+          indicator.textContent = header === activePlanHeader ? (direction === "asc" ? "↑" : "↓") : "↕";
+        }});
+      }}
+      function updatePlanRowIndexes(planBody) {{
+        Array.from(planBody.querySelectorAll("tr")).forEach((row, index) => {{
+          const indexCell = row.querySelector(".record-index");
+          if (indexCell) indexCell.innerHTML = dataText(String(index + 1));
+        }});
+      }}
+      function sortPlanTable(planTable, header, direction) {{
+        const planBody = planTable.querySelector("tbody");
+        if (!planBody) return;
+        const type = header.dataset.sortType || "text";
+        const columnIndex = Number(header.dataset.planColumnIndex);
+        const rows = Array.from(planBody.querySelectorAll("tr"));
+        rows.sort((a, b) => {{
+          const aValue = readValue(a.children[columnIndex], type);
+          const bValue = readValue(b.children[columnIndex], type);
+          const result = type === "number" ? aValue - bValue : String(aValue).localeCompare(String(bValue), "zh-CN", {{ numeric: true }});
+          return direction === "asc" ? result : -result;
+        }});
+        rows.forEach((row) => planBody.appendChild(row));
+        updatePlanRowIndexes(planBody);
       }}
       function updateIndicators() {{
         headers.forEach((header, index) => {{
@@ -4804,6 +4819,21 @@ def build_html(
         }});
       }}
       document.querySelectorAll(".portfolio-table").forEach((portfolioTable) => {{
+        const planHeaders = Array.from(portfolioTable.querySelectorAll("th.sortable[data-plan-column-index]"));
+        let activePlanHeader = null;
+        let activePlanDirection = "desc";
+        planHeaders.forEach((header) => {{
+          const indicator = header.querySelector(".sort-indicator");
+          if (indicator) indicator.textContent = "↕";
+          const button = header.querySelector(".sort-button");
+          if (!button) return;
+          button.addEventListener("click", () => {{
+            activePlanDirection = activePlanHeader === header && activePlanDirection === "desc" ? "asc" : "desc";
+            activePlanHeader = header;
+            sortPlanTable(portfolioTable, header, activePlanDirection);
+            updatePlanSortIndicators(planHeaders, activePlanHeader, activePlanDirection);
+          }});
+        }});
         portfolioTable.addEventListener("click", (event) => {{
           const amountCell = event.target.closest(".editable-amount");
           if (amountCell && portfolioTable.contains(amountCell)) {{

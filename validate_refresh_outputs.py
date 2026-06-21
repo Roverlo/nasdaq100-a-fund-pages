@@ -76,6 +76,7 @@ class PageInspector(HTMLParser):
         self.subscription_filter_options: list[str] = []
         self.holding_table_count = 0
         self.auto_plan_table_count = 0
+        self.plan_sort_header_count = 0
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         attr = dict(attrs)
@@ -92,6 +93,8 @@ class PageInspector(HTMLParser):
             self.holding_table_count += 1
         if tag == "table" and "auto-plan-table" in classes:
             self.auto_plan_table_count += 1
+        if tag == "th" and "sortable" in classes and "data-plan-column-index" in attr:
+            self.plan_sort_header_count += 1
         if "data-mobile-card" in attr:
             self.mobile_card_count += 1
             if "data-status" in attr:
@@ -235,8 +238,12 @@ def validate_tabs(path: Path, required_panels: set[str], require_portfolio_link:
     if require_portfolio_link:
         if page.auto_plan_table_count:
             fail(f"{path.name} public page should not contain portfolio auto-plan table")
+        if page.plan_sort_header_count:
+            fail(f"{path.name} public page should not contain portfolio sort headers")
     elif page.auto_plan_table_count != 1:
         fail(f"{path.name} auto-plan table expected 1, got {page.auto_plan_table_count}")
+    elif page.plan_sort_header_count != 4:
+        fail(f"{path.name} auto-plan sortable headers expected 4, got {page.plan_sort_header_count}")
     forbidden_patterns = [
         r"C:\\ALL_in_H\\",
         r"tracking-file",
