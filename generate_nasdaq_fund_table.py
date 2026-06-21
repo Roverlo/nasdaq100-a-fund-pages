@@ -2070,6 +2070,65 @@ def main_rows(funds: list[Fund]) -> str:
     return "\n".join(rows)
 
 
+def mobile_fund_cards(funds: list[Fund]) -> str:
+    cards = score_cards(funds)
+    items = []
+    for index, fund in enumerate(funds, 1):
+        card = cards[fund.code]
+        tier = str(card["tier"])
+        score = float(card["score"])
+        rank = int(card["rank"])
+        status = fund_status(fund.code)
+        status_class = fund_status_class(fund.code)
+        holding_amount = HOLDING_AMOUNTS.get(fund.code, 0)
+        active_amount = AUTO_INVEST_AMOUNTS.get(fund.code, 0)
+        paused_amount = PAUSED_AUTO_INVEST_AMOUNTS.get(fund.code, 0)
+        if active_amount:
+            plan_text = f"{fmt_yuan(active_amount)} / 期"
+        elif paused_amount:
+            plan_text = f"暂停 {fmt_yuan(paused_amount)} / 期"
+        else:
+            plan_text = "未设置"
+        items.append(
+            f"""
+            <article class="mobile-fund-card tier-{tier.lower()}-card" data-mobile-card data-status="{html.escape(status)}" data-subscription-status="{html.escape(fund.subscription_status)}" data-tier="{tier}" data-code="{fund.code}" data-score="{score:.1f}">
+              <div class="mobile-card-head">
+                <div class="mobile-card-title">
+                  <strong>{html.escape(fund_display_name(fund))}</strong>
+                  <span class="code">{data_text(fund.code)}</span>
+                </div>
+                <div class="mobile-card-rating">
+                  <span class="mobile-rank">#<span class="mobile-rank-number">{data_text(index)}</span></span>
+                  <span class="tier-pill {tier_class(tier)}"><strong>{tier}</strong><span>{data_text(f"{score:.1f}")}</span></span>
+                </div>
+              </div>
+              <div class="mobile-card-private">
+                <div class="mobile-position-lines">
+                  <span><em>持有</em><strong>{fmt_yuan(holding_amount) if holding_amount else data_text("0元")}</strong></span>
+                  <span><em>定投</em><strong>{plan_text}</strong></span>
+                </div>
+                <span class="tag {status_class} mobile-status">{html.escape(status)}</span>
+              </div>
+              <div class="mobile-metric-grid">
+                <div><span>近3年</span><strong>{fmt_percent(fund.three_year)}</strong></div>
+                <div><span>近1年</span><strong>{fmt_percent(fund.one_year)}</strong></div>
+                <div><span>跟踪误差</span><strong>{fmt_percent(fund.tracking_error)}</strong></div>
+                <div><span>管理+托管</span><strong>{fmt_fee(fund.base_annual_fee_rate)}</strong></div>
+                <div><span>规模</span><strong>{fmt_size_billion(fund.fund_size_billion)}</strong></div>
+                <div><span>买入费率</span><strong>{fmt_buy_rate(fund.buy_rate)}</strong></div>
+              </div>
+              <div class="mobile-card-foot">
+                <span class="tag {subscription_status_class(fund.subscription_status)}">{html.escape(fund.subscription_status)}</span>
+                <span>免赎回 满{data_text(fund.free_after_days) if fund.free_after_days is not None else '未知'}天</span>
+                <span>代销 {agency_limit_text(fund)}</span>
+                <span>直销 {normalize_limit_text(fund.direct_limit)}</span>
+              </div>
+            </article>
+            """
+        )
+    return "\n".join(line.rstrip() for line in "\n".join(items).splitlines())
+
+
 def build_html(
     funds: list[Fund],
     tracking_payload: Optional[dict[str, object]] = None,
@@ -2078,6 +2137,7 @@ def build_html(
     generated_at = now_beijing().strftime("%Y-%m-%d %H:%M:%S")
     refresh_schedule_text = " / ".join(AUTO_REFRESH_TIMES_BEIJING)
     rows = main_rows(funds)
+    mobile_cards = mobile_fund_cards(funds)
     cards = score_cards(funds)
     if tracking_payload is None:
         tracking_payload = {"schema_version": TRACKING_SCHEMA_VERSION, "records": [default_tracking_record(funds, cards)]}
@@ -2456,6 +2516,9 @@ def build_html(
       max-height: calc(100vh - 205px);
       min-height: 360px;
       position: relative;
+    }}
+    .mobile-fund-list {{
+      display: none;
     }}
     table {{ width: max-content; border-collapse: separate; border-spacing: 0; min-width: 1970px; font-size: 13px; }}
     #main-table {{
@@ -3328,6 +3391,212 @@ def build_html(
       .table-controls {{ width: 100%; justify-content: flex-start; }}
     }}
     @media (max-width: 760px) {{
+      html {{ background: var(--panel); }}
+      body {{ background: var(--panel); }}
+      .artifact {{ padding: 14px 10px 18px; }}
+      .app-header {{
+        gap: 12px;
+        padding-bottom: 12px;
+      }}
+      h1 {{ font-size: 25px; line-height: 1.15; }}
+      .subtitle {{
+        align-items: flex-start;
+        gap: 5px;
+      }}
+      .subtitle-meta {{
+        min-width: 100%;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        line-height: 1.45;
+      }}
+      .header-control-bar {{
+        overflow-x: auto;
+        width: 100%;
+        justify-content: flex-start;
+        scrollbar-width: none;
+      }}
+      .header-control-bar::-webkit-scrollbar {{ display: none; }}
+      .tabs {{
+        display: inline-flex;
+        flex-wrap: nowrap;
+        min-width: max-content;
+      }}
+      .tab-button {{
+        min-height: 34px;
+        padding: 7px 10px;
+        white-space: nowrap;
+      }}
+      .section {{
+        margin-top: 10px;
+      }}
+      .table-toolbar {{
+        align-items: stretch;
+        gap: 9px;
+        padding: 10px;
+      }}
+      .table-controls {{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        width: 100%;
+      }}
+      .filter-control {{
+        align-items: stretch;
+        display: grid;
+        gap: 4px;
+      }}
+      .filter-label {{
+        font-size: 12px;
+      }}
+      .select-menu {{
+        min-width: 0;
+        width: 100%;
+      }}
+      .select-trigger,
+      .ghost-button {{
+        min-height: 34px;
+        padding: 7px 9px;
+      }}
+      #column-menu {{
+        display: none;
+      }}
+      #reset-filters {{
+        width: 100%;
+      }}
+      .visible-count {{
+        order: 2;
+        width: 100%;
+        text-align: right;
+      }}
+      #panel-main > .table-wrap {{
+        display: none;
+      }}
+      .mobile-fund-list {{
+        background: var(--panel);
+        display: grid;
+        gap: 8px;
+        padding: 8px;
+      }}
+      .mobile-fund-card {{
+        border: 1px solid var(--line);
+        background: var(--panel);
+        display: grid;
+        gap: 9px;
+        padding: 11px;
+      }}
+      .mobile-fund-card[hidden] {{
+        display: none;
+      }}
+      .tier-s-card {{ border-left: 4px solid var(--accent); }}
+      .tier-a-card {{ border-left: 4px solid var(--good); }}
+      .tier-b-card {{ border-left: 4px solid var(--accent); }}
+      .tier-c-card {{ border-left: 4px solid var(--warn); }}
+      .tier-d-card {{ border-left: 4px solid var(--bad); }}
+      .mobile-card-head {{
+        display: grid;
+        gap: 7px;
+      }}
+      .mobile-card-title {{
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        min-width: 0;
+      }}
+      .mobile-card-title strong {{
+        color: var(--ink);
+        font-size: 15px;
+        font-weight: 600;
+      }}
+      .mobile-card-rating {{
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: flex-start;
+        min-width: 0;
+      }}
+      .mobile-rank {{
+        color: var(--muted);
+        font-family: var(--font-data);
+        font-size: 12px;
+      }}
+      .mobile-card-rating .tier-pill {{
+        flex: 0 0 auto;
+      }}
+      .mobile-card-private {{
+        align-items: center;
+        border-top: 1px solid var(--line);
+        display: grid;
+        gap: 7px;
+        grid-template-columns: minmax(0, 1fr) auto;
+        padding-top: 9px;
+      }}
+      .mobile-position-lines {{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px 12px;
+      }}
+      .mobile-position-lines span {{
+        align-items: baseline;
+        display: inline-flex;
+        gap: 4px;
+        white-space: nowrap;
+      }}
+      .mobile-position-lines em {{
+        color: var(--muted);
+        font-style: normal;
+        font-size: 12px;
+      }}
+      .mobile-position-lines strong {{
+        color: var(--ink);
+        font-family: var(--font-data);
+        font-size: 13px;
+        font-weight: 600;
+      }}
+      .mobile-metric-grid {{
+        border-top: 1px solid var(--line);
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0;
+      }}
+      .mobile-metric-grid div {{
+        border-bottom: 1px solid var(--line);
+        display: grid;
+        gap: 3px;
+        min-height: 49px;
+        padding: 8px 4px;
+      }}
+      .mobile-metric-grid div:nth-child(odd) {{
+        border-right: 1px solid var(--line);
+        padding-right: 9px;
+      }}
+      .mobile-metric-grid div:nth-child(even) {{
+        padding-left: 9px;
+      }}
+      .mobile-metric-grid span,
+      .mobile-card-foot {{
+        color: var(--muted);
+        font-size: 12px;
+      }}
+      .mobile-metric-grid strong {{
+        color: var(--ink);
+        font-family: var(--font-data);
+        font-size: 14px;
+        font-weight: 600;
+      }}
+      .mobile-card-foot {{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 8px;
+        line-height: 1.45;
+      }}
+      .mobile-card-foot > span:not(.tag) {{
+        border: 1px solid var(--line);
+        color: var(--ink-soft);
+        padding: 2px 6px;
+      }}
       .table-wrap {{ max-height: calc(100vh - 230px); }}
       table {{ min-width: 1320px; font-size: 12px; }}
       th, td, .sort-button {{ padding: 8px 9px; }}
@@ -3488,6 +3757,9 @@ def build_html(
 {rows}
           </tbody>
         </table>
+      </div>
+      <div class="mobile-fund-list" id="mobile-fund-list" aria-label="手机基金列表">
+{mobile_cards}
       </div>
     </section>
 
@@ -3734,6 +4006,7 @@ def build_html(
       const columnOptions = document.getElementById("column-options");
       const columnReset = document.getElementById("column-reset");
       const portfolioEditor = document.getElementById("portfolio-editor");
+      const mobileFundList = document.getElementById("mobile-fund-list");
       const tableColumns = Array.from(table.querySelectorAll("colgroup col"));
       const allHeaderCells = Array.from(table.querySelectorAll("thead th"));
       const lockedColumnIndexes = new Set([0, 1, 2, 3]);
@@ -3822,6 +4095,26 @@ def build_html(
         if (holdingTotalNode) holdingTotalNode.innerHTML = dataText(formatYuan(holdingTotal));
         if (activeTotalNode) activeTotalNode.innerHTML = `${{dataText(formatYuan(activeTotal))}} / 期`;
       }}
+      function updateMobileCard(code) {{
+        if (!mobileFundList) return;
+        const item = portfolioState[code];
+        const card = mobileFundList.querySelector(`[data-mobile-card][data-code="${{code}}"]`);
+        if (!item || !card) return;
+        const status = currentStatus(item);
+        card.dataset.status = status;
+        const statusNode = card.querySelector(".mobile-status");
+        if (statusNode) {{
+          statusNode.className = `tag ${{tagClass(status)}} mobile-status`;
+          statusNode.textContent = status;
+        }}
+        const lines = card.querySelectorAll(".mobile-position-lines strong");
+        if (lines[0]) lines[0].innerHTML = item.holding > 0 ? dataText(formatYuan(item.holding)) : dataText("0元");
+        if (lines[1]) {{
+          if (item.active > 0) lines[1].innerHTML = `${{dataText(formatYuan(item.active))}} / 期`;
+          else if (item.paused > 0) lines[1].innerHTML = `暂停 ${{dataText(formatYuan(item.paused))}} / 期`;
+          else lines[1].textContent = "未设置";
+        }}
+      }}
       function updateMainRow(code) {{
         const item = portfolioState[code];
         const row = table.querySelector(`tbody tr[data-code="${{code}}"]`);
@@ -3889,6 +4182,7 @@ def build_html(
       }}
       function refreshPortfolioViews() {{
         Object.keys(portfolioState).forEach((code) => updateMainRow(code));
+        Object.keys(portfolioState).forEach((code) => updateMobileCard(code));
         updateHoldingRows();
         updateAutoRows();
         updateTitleTotals();
@@ -4065,6 +4359,9 @@ def build_html(
         Array.from(tbody.querySelectorAll("tr:not([hidden])")).forEach((row, index) => {{
           const rankCell = row.querySelector(".row-rank");
           if (rankCell) rankCell.textContent = String(index + 1);
+          const mobileCard = mobileFundList ? mobileFundList.querySelector(`[data-mobile-card][data-code="${{row.dataset.code}}"]`) : null;
+          const mobileRank = mobileCard ? mobileCard.querySelector(".mobile-rank-number") : null;
+          if (mobileRank) mobileRank.innerHTML = dataText(String(index + 1));
         }});
       }}
       function updateVisibleCount() {{
@@ -4163,7 +4460,10 @@ def build_html(
           const statusMatched = matchesStatus(row.dataset.status || "", filters.status);
           const tierMatched = filters.tier === "all" || row.dataset.tier === filters.tier;
           const subscriptionMatched = matchesSubscription(row.dataset.subscriptionStatus || "", filters.subscription);
-          row.hidden = !(statusMatched && tierMatched && subscriptionMatched);
+          const hidden = !(statusMatched && tierMatched && subscriptionMatched);
+          row.hidden = hidden;
+          const mobileCard = mobileFundList ? mobileFundList.querySelector(`[data-mobile-card][data-code="${{row.dataset.code}}"]`) : null;
+          if (mobileCard) mobileCard.hidden = hidden;
         }});
         updateRanks();
         updateVisibleCount();
@@ -4200,6 +4500,12 @@ def build_html(
           return direction === "asc" ? result : -result;
         }});
         rows.forEach((row) => tbody.appendChild(row));
+        if (mobileFundList) {{
+          rows.forEach((row) => {{
+            const card = mobileFundList.querySelector(`[data-mobile-card][data-code="${{row.dataset.code}}"]`);
+            if (card) mobileFundList.appendChild(card);
+          }});
+        }}
         applyFilter();
         updateIndicators();
       }}

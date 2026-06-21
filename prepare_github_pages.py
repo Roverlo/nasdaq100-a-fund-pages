@@ -43,6 +43,9 @@ class PublicPageFilter(HTMLParser):
         if tag == "div" and attrs_dict.get("id") == "status-filter":
             self.skip_depth = 1
             return
+        if "mobile-card-private" in set((attrs_dict.get("class") or "").split()):
+            self.skip_depth = 1
+            return
         if tag == "table" and attrs_dict.get("id") == "main-table":
             self.in_main_table = True
             self.main_table_depth = 1

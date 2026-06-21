@@ -336,6 +336,9 @@
       min-height: 360px;
       position: relative;
     }
+    .mobile-fund-list {
+      display: none;
+    }
     table { width: max-content; border-collapse: separate; border-spacing: 0; min-width: 1970px; font-size: 13px; }
     #main-table {
       border-collapse: separate;
@@ -1207,6 +1210,212 @@
       .table-controls { width: 100%; justify-content: flex-start; }
     }
     @media (max-width: 760px) {
+      html { background: var(--panel); }
+      body { background: var(--panel); }
+      .artifact { padding: 14px 10px 18px; }
+      .app-header {
+        gap: 12px;
+        padding-bottom: 12px;
+      }
+      h1 { font-size: 25px; line-height: 1.15; }
+      .subtitle {
+        align-items: flex-start;
+        gap: 5px;
+      }
+      .subtitle-meta {
+        min-width: 100%;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        line-height: 1.45;
+      }
+      .header-control-bar {
+        overflow-x: auto;
+        width: 100%;
+        justify-content: flex-start;
+        scrollbar-width: none;
+      }
+      .header-control-bar::-webkit-scrollbar { display: none; }
+      .tabs {
+        display: inline-flex;
+        flex-wrap: nowrap;
+        min-width: max-content;
+      }
+      .tab-button {
+        min-height: 34px;
+        padding: 7px 10px;
+        white-space: nowrap;
+      }
+      .section {
+        margin-top: 10px;
+      }
+      .table-toolbar {
+        align-items: stretch;
+        gap: 9px;
+        padding: 10px;
+      }
+      .table-controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        width: 100%;
+      }
+      .filter-control {
+        align-items: stretch;
+        display: grid;
+        gap: 4px;
+      }
+      .filter-label {
+        font-size: 12px;
+      }
+      .select-menu {
+        min-width: 0;
+        width: 100%;
+      }
+      .select-trigger,
+      .ghost-button {
+        min-height: 34px;
+        padding: 7px 9px;
+      }
+      #column-menu {
+        display: none;
+      }
+      #reset-filters {
+        width: 100%;
+      }
+      .visible-count {
+        order: 2;
+        width: 100%;
+        text-align: right;
+      }
+      #panel-main > .table-wrap {
+        display: none;
+      }
+      .mobile-fund-list {
+        background: var(--panel);
+        display: grid;
+        gap: 8px;
+        padding: 8px;
+      }
+      .mobile-fund-card {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        display: grid;
+        gap: 9px;
+        padding: 11px;
+      }
+      .mobile-fund-card[hidden] {
+        display: none;
+      }
+      .tier-s-card { border-left: 4px solid var(--accent); }
+      .tier-a-card { border-left: 4px solid var(--good); }
+      .tier-b-card { border-left: 4px solid var(--accent); }
+      .tier-c-card { border-left: 4px solid var(--warn); }
+      .tier-d-card { border-left: 4px solid var(--bad); }
+      .mobile-card-head {
+        display: grid;
+        gap: 7px;
+      }
+      .mobile-card-title {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        min-width: 0;
+      }
+      .mobile-card-title strong {
+        color: var(--ink);
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .mobile-card-rating {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: flex-start;
+        min-width: 0;
+      }
+      .mobile-rank {
+        color: var(--muted);
+        font-family: var(--font-data);
+        font-size: 12px;
+      }
+      .mobile-card-rating .tier-pill {
+        flex: 0 0 auto;
+      }
+      .mobile-card-private {
+        align-items: center;
+        border-top: 1px solid var(--line);
+        display: grid;
+        gap: 7px;
+        grid-template-columns: minmax(0, 1fr) auto;
+        padding-top: 9px;
+      }
+      .mobile-position-lines {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px 12px;
+      }
+      .mobile-position-lines span {
+        align-items: baseline;
+        display: inline-flex;
+        gap: 4px;
+        white-space: nowrap;
+      }
+      .mobile-position-lines em {
+        color: var(--muted);
+        font-style: normal;
+        font-size: 12px;
+      }
+      .mobile-position-lines strong {
+        color: var(--ink);
+        font-family: var(--font-data);
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .mobile-metric-grid {
+        border-top: 1px solid var(--line);
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0;
+      }
+      .mobile-metric-grid div {
+        border-bottom: 1px solid var(--line);
+        display: grid;
+        gap: 3px;
+        min-height: 49px;
+        padding: 8px 4px;
+      }
+      .mobile-metric-grid div:nth-child(odd) {
+        border-right: 1px solid var(--line);
+        padding-right: 9px;
+      }
+      .mobile-metric-grid div:nth-child(even) {
+        padding-left: 9px;
+      }
+      .mobile-metric-grid span,
+      .mobile-card-foot {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .mobile-metric-grid strong {
+        color: var(--ink);
+        font-family: var(--font-data);
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .mobile-card-foot {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 8px;
+        line-height: 1.45;
+      }
+      .mobile-card-foot > span:not(.tag) {
+        border: 1px solid var(--line);
+        color: var(--ink-soft);
+        padding: 2px 6px;
+      }
       .table-wrap { max-height: calc(100vh - 230px); }
       table { min-width: 1320px; font-size: 12px; }
       th, td, .sort-button { padding: 8px 9px; }
@@ -1246,7 +1455,7 @@
           <span class="subtitle-chip">QDII</span>
           <span class="subtitle-chip">长期定投</span>
           <span class="subtitle-chip">CNY</span>
-          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-21 17:06:44</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
+          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-21 18:44:35</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
           <span class="subtitle-meta">来源：东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
         </p>
       </div>
@@ -1798,6 +2007,568 @@
             
           </tbody>
         </table>
+      </div>
+      <div class="mobile-fund-list" id="mobile-fund-list" aria-label="手机基金列表">
+
+            <article class="mobile-fund-card tier-b-card" data-mobile-card data-status="定投中" data-subscription-status="限大额" data-tier="B" data-code="019441" data-score="47.7">
+              <div class="mobile-card-head">
+                <div class="mobile-card-title">
+                  <strong>万家</strong>
+                  <span class="code"><span class="data-text">019441</span></span>
+                </div>
+                <div class="mobile-card-rating">
+                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">1</span></span></span>
+                  <span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">47.7</span></span></span>
+                </div>
+              </div>
+              <div class="mobile-card-private">
+                <div class="mobile-position-lines">
+                  <span><em>持有</em><strong><span class="data-text">50元</span></strong></span>
+                  <span><em>定投</em><strong><span class="data-text">200元</span> / 期</strong></span>
+                </div>
+                <span class="tag owned mobile-status">定投中</span>
+              </div>
+              <div class="mobile-metric-grid">
+                <div><span>近3年</span><strong><span class="data-text">+16.97%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+26.48%</span></strong></div>
+                <div><span>跟踪误差</span><strong><span class="data-text">+1.58%</span></strong></div>
+                <div><span>管理+托管</span><strong><span class="data-text">0.65%/年</span></strong></div>
+                <div><span>规模</span><strong><span class="data-text">4.4亿</span></strong></div>
+                <div><span>买入费率</span><strong><span class="data-text">0.100%</span></strong></div>
+              </div>
+              <div class="mobile-card-foot">
+                <span class="tag warn">限大额</span>
+                <span>免赎回 满<span class="data-text">30</span>天</span>
+                <span>代销 <span class="data-text">10000元</span></span>
+                <span>直销 <span class="data-text">10000元</span></span>
+              </div>
+            </article>
+
+
+            <article class="mobile-fund-card tier-s-card" data-mobile-card data-status="定投中" data-subscription-status="限大额" data-tier="S" data-code="040046" data-score="89.8">
+              <div class="mobile-card-head">
+                <div class="mobile-card-title">
+                  <strong>华安</strong>
+                  <span class="code"><span class="data-text">040046</span></span>
+                </div>
+                <div class="mobile-card-rating">
+                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">2</span></span></span>
+                  <span class="tier-pill tier-s"><strong>S</strong><span><span class="data-text">89.8</span></span></span>
+                </div>
+              </div>
+              <div class="mobile-card-private">
+                <div class="mobile-position-lines">
+                  <span><em>持有</em><strong><span class="data-text">10元</span></strong></span>
+                  <span><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span>
+                </div>
+                <span class="tag owned mobile-status">定投中</span>
+              </div>
+              <div class="mobile-metric-grid">
+                <div><span>近3年</span><strong><span class="data-text">+18.06%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+28.54%</span></strong></div>
+                <div><span>跟踪误差</span><strong><span class="data-text">+1.05%</span></strong></div>
+                <div><span>管理+托管</span><strong><span class="data-text">0.80%/年</span></strong></div>
+                <div><span>规模</span><strong><span class="data-text">47.0亿</span></strong></div>
+                <div><span>买入费率</span><strong><span class="data-text">0.120%</span></strong></div>
+              </div>
+              <div class="mobile-card-foot">
+                <span class="tag warn">限大额</span>
+                <span>免赎回 满<span class="data-text">7</span>天</span>
+                <span>代销 <span class="data-text">10元</span></span>
+                <span>直销 <span class="data-text">1000元</span></span>
+              </div>
+            </article>
+
+
+            <article class="mobile-fund-card tier-c-card" data-mobile-card data-status="暂停定投" data-subscription-status="限大额" data-tier="C" data-code="000834" data-score="44.4">
+              <div class="mobile-card-head">
+                <div class="mobile-card-title">
+                  <strong>大成</strong>
+                  <span class="code"><span class="data-text">000834</span></span>
+                </div>
+                <div class="mobile-card-rating">
+                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">3</span></span></span>
+                  <span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">44.4</span></span></span>
+                </div>
+              </div>
+              <div class="mobile-card-private">
+                <div class="mobile-position-lines">
+                  <span><em>持有</em><strong><span class="data-text">10元</span></strong></span>
+                  <span><em>定投</em><strong>暂停 <span class="data-text">10元</span> / 期</strong></span>
+                </div>
+                <span class="tag paused mobile-status">暂停定投</span>
+              </div>
+              <div class="mobile-metric-grid">
+                <div><span>近3年</span><strong><span class="data-text">+16.73%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+27.50%</span></strong></div>
+                <div><span>跟踪误差</span><strong><span class="data-text">+1.04%</span></strong></div>
+                <div><span>管理+托管</span><strong><span class="data-text">1.00%/年</span></strong></div>
+                <div><span>规模</span><strong><span class="data-text">34.5亿</span></strong></div>
+                <div><span>买入费率</span><strong><span class="data-text">0.120%</span></strong></div>
+              </div>
+              <div class="mobile-card-foot">
+                <span class="tag warn">限大额</span>
+                <span>免赎回 满<span class="data-text">730</span>天</span>
+                <span>代销 <span class="data-text">10元</span></span>
+                <span>直销 <span class="data-text">100元</span></span>
+              </div>
+            </article>
+
+
+            <article class="mobile-fund-card tier-d-card" data-mobile-card data-status="暂停定投" data-subscription-status="限大额" data-tier="D" data-code="539001" data-score="22.9">
+              <div class="mobile-card-head">
+                <div class="mobile-card-title">
+                  <strong>建信</strong>
+                  <span class="code"><span class="data-text">539001</span></span>
+                </div>
+                <div class="mobile-card-rating">
+                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">4</span></span></span>
+                  <span class="tier-pill tier-d"><strong>D</strong><span><span class="data-text">22.9</span></span></span>
+                </div>
+              </div>
+              <div class="mobile-card-private">
+                <div class="mobile-position-lines">
+                  <span><em>持有</em><strong><span class="data-text">100元</span></strong></span>
+                  <span><em>定投</em><strong>暂停 <span class="data-text">100元</span> / 期</strong></span>
+                </div>
+                <span class="tag paused mobile-status">暂停定投</span>
+              </div>
+              <div class="mobile-metric-grid">
+                <div><span>近3年</span><strong><span class="data-text">+16.80%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+26.37%</span></strong></div>
+                <div><span>跟踪误差</span><strong><span class="data-text">+2.15%</span></strong></div>
+                <div><span>管理+托管</span><strong><span class="data-text">1.00%/年</span></strong></div>
+                <div><span>规模</span><strong><span class="data-text">16.2亿</span></strong></div>
+                <div><span>买入费率</span><strong><span class="data-text">0.120%</span></strong></div>
+              </div>
+              <div class="mobile-card-foot">
+                <span class="tag warn">限大额</span>
+                <span>免赎回 满<span class="data-text">90</span>天</span>
+                <span>代销 <span class="data-text">100元</span></span>
+                <span>直销 <span class="data-text">100元</span></span>
+              </div>
+            </article>
+
+
+            <article class="mobile-fund-card tier-d-card" data-mobile-card data-status="暂停定投" data-subscription-status="限大额" data-tier="D" data-code="018966" data-score="28.6">
+              <div class="mobile-card-head">
+                <div class="mobile-card-title">
+                  <strong>汇添富</strong>
+                  <span class="code"><span class="data-text">018966</span></span>
+                </div>
+                <div class="mobile-card-rating">
+                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">5</span></span></span>
+                  <span class="tier-pill tier-d"><strong>D</strong><span><span class="data-text">28.6</span></span></span>
+                </div>
+              </div>
+              <div class="mobile-card-private">
+                <div class="mobile-position-lines">
+                  <span><em>持有</em><strong><span class="data-text">100元</span></strong></span>
+                  <span><em>定投</em><strong>暂停 <span class="data-text">100元</span> / 期</strong></span>
+                </div>
+                <span class="tag paused mobile-status">暂停定投</span>
+              </div>
+              <div class="mobile-metric-grid">
+                <div><span>近3年</span><strong><span class="data-text">+16.41%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+25.65%</span></strong></div>
+                <div><span>跟踪误差</span><strong><span class="data-text">+1.70%</span></strong></div>
+                <div><span>管理+托管</span><strong><span class="data-text">0.65%/年</span></strong></div>
+                <div><span>规模</span><strong><span class="data-text">10.3亿</span></strong></div>
+                <div><span>买入费率</span><strong><span class="data-text">0.120%</span></strong></div>
+              </div>
+              <div class="mobile-card-foot">
+                <span class="tag warn">限大额</span>
+                <span>免赎回 满<span class="data-text">7</span>天</span>
+                <span>代销 <span class="data-text">100元</span></span>
+                <span>直销 <span class="data-text">100元</span></span>
+              </div>
+            </article>
+
+
+            <article class="mobile-fund-card tier-b-card" data-mobile-card data-status="定投中" data-subscription-status="限大额" data-tier="B" data-code="016452" data-score="62.2">
+              <div class="mobile-card-head">
+                <div class="mobile-card-title">
+                  <strong>南方</strong>
+                  <span class="code"><span class="data-text">016452</span></span>
+                </div>
+                <div class="mobile-card-rating">
+                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">6</span></span></span>
+                  <span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">62.2</span></span></span>
+                </div>
+              </div>
+              <div class="mobile-card-private">
+                <div class="mobile-position-lines">
+                  <span><em>持有</em><strong><span class="data-text">250元</span></strong></span>
+                  <span><em>定投</em><strong><span class="data-text">50元</span> / 期</strong></span>
+                </div>
+                <span class="tag owned mobile-status">定投中</span>
+              </div>
+              <div class="mobile-metric-grid">
+                <div><span>近3年</span><strong><span class="data-text">+17.27%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+27.10%</span></strong></div>
+                <div><span>跟踪误差</span><strong><span class="data-text">+1.46%</span></strong></div>
+                <div><span>管理+托管</span><strong><span class="data-text">0.65%/年</span></strong></div>
+                <div><span>规模</span><strong><span class="data-text">31.1亿</span></strong></div>
+                <div><span>买入费率</span><strong><span class="data-text">0.120%</span></strong></div>
+              </div>
+              <div class="mobile-card-foot">
+                <span class="tag warn">限大额</span>
+                <span>免赎回 满<span class="data-text">7</span>天</span>
+                <span>代销 <span class="data-text">50元</span></span>
+                <span>直销 <span class="data-text">50元</span></span>
+              </div>
+            </article>
+
+
+            <article class="mobile-fund-card tier-a-card" data-mobile-card data-status="定投中" data-subscription-status="限大额" data-tier="A" data-code="270042" data-score="71.3">
+              <div class="mobile-card-head">
+                <div class="mobile-card-title">
+                  <strong>广发</strong>
+                  <span class="code"><span class="data-text">270042</span></span>
+                </div>
+                <div class="mobile-card-rating">
+                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">7</span></span></span>
+                  <span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">71.3</span></span></span>
+                </div>
+              </div>
+              <div class="mobile-card-private">
+                <div class="mobile-position-lines">
+                  <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
+                  <span><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span>
+                </div>
+                <span class="tag owned mobile-status">定投中</span>
+              </div>
+              <div class="mobile-metric-grid">
+                <div><span>近3年</span><strong><span class="data-text">+17.86%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+27.89%</span></strong></div>
+                <div><span>跟踪误差</span><strong><span class="data-text">+1.11%</span></strong></div>
+                <div><span>管理+托管</span><strong><span class="data-text">1.00%/年</span></strong></div>
+                <div><span>规模</span><strong><span class="data-text">97.2亿</span></strong></div>
+                <div><span>买入费率</span><strong><span class="data-text">0.130%</span></strong></div>
+              </div>
+              <div class="mobile-card-foot">
+                <span class="tag warn">限大额</span>
+                <span>免赎回 满<span class="data-text">730</span>天</span>
+                <span>代销 <span class="data-text">10元</span></span>
+                <span>直销 <span class="data-text">10元</span></span>
+              </div>
+            </article>
+
+
+            <article class="mobile-fund-card tier-b-card" data-mobile-card data-status="定投中" data-subscription-status="限大额" data-tier="B" data-code="019172" data-score="49.0">
+              <div class="mobile-card-head">
+                <div class="mobile-card-title">
+                  <strong>摩根</strong>
+                  <span class="code"><span class="data-text">019172</span></span>
+                </div>
+                <div class="mobile-card-rating">
+                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">8</span></span></span>
+                  <span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">49.0</span></span></span>
+                </div>
+              </div>
+              <div class="mobile-card-private">
+                <div class="mobile-position-lines">
+                  <span><em>持有</em><strong><span class="data-text">20元</span></strong></span>
+                  <span><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span>
+                </div>
+                <span class="tag owned mobile-status">定投中</span>
+              </div>
+              <div class="mobile-metric-grid">
+                <div><span>近3年</span><strong><span class="data-text">+16.96%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+27.56%</span></strong></div>
+                <div><span>跟踪误差</span><strong><span class="data-text">+2.24%</span></strong></div>
+                <div><span>管理+托管</span><strong><span class="data-text">0.60%/年</span></strong></div>
+                <div><span>规模</span><strong><span class="data-text">21.8亿</span></strong></div>
+                <div><span>买入费率</span><strong><span class="data-text">0.120%</span></strong></div>
+              </div>
+              <div class="mobile-card-foot">
+                <span class="tag warn">限大额</span>
+                <span>免赎回 满<span class="data-text">7</span>天</span>
+                <span>代销 <span class="data-text">10元</span></span>
+                <span>直销 <span class="data-text">10元</span></span>
+              </div>
+            </article>
+
+
+            <article class="mobile-fund-card tier-b-card" data-mobile-card data-status="定投中" data-subscription-status="限大额" data-tier="B" data-code="019547" data-score="54.2">
+              <div class="mobile-card-head">
+                <div class="mobile-card-title">
+                  <strong>招商</strong>
+                  <span class="code"><span class="data-text">019547</span></span>
+                </div>
+                <div class="mobile-card-rating">
+                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">9</span></span></span>
+                  <span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">54.2</span></span></span>
+                </div>
+              </div>
+              <div class="mobile-card-private">
+                <div class="mobile-position-lines">
+                  <span><em>持有</em><strong><span class="data-text">20元</span></strong></span>
+                  <span><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span>
+                </div>
+                <span class="tag owned mobile-status">定投中</span>
+              </div>
+              <div class="mobile-metric-grid">
+                <div><span>近3年</span><strong><span class="data-text">+17.13%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+27.01%</span></strong></div>
+                <div><span>跟踪误差</span><strong><span class="data-text">+1.69%</span></strong></div>
+                <div><span>管理+托管</span><strong><span class="data-text">0.65%/年</span></strong></div>
+                <div><span>规模</span><strong><span class="data-text">16.5亿</span></strong></div>
+                <div><span>买入费率</span><strong><span class="data-text">0.120%</span></strong></div>
+              </div>
+              <div class="mobile-card-foot">
+                <span class="tag warn">限大额</span>
+                <span>免赎回 满<span class="data-text">7</span>天</span>
+                <span>代销 <span class="data-text">10元</span></span>
+                <span>直销 <span class="data-text">10元</span></span>
+              </div>
+            </article>
+
+
+            <article class="mobile-fund-card tier-c-card" data-mobile-card data-status="暂停定投" data-subscription-status="限大额" data-tier="C" data-code="019736" data-score="43.0">
+              <div class="mobile-card-head">
+                <div class="mobile-card-title">
+                  <strong>宝盈</strong>
+                  <span class="code"><span class="data-text">019736</span></span>
+                </div>
+                <div class="mobile-card-rating">
+                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">10</span></span></span>
+                  <span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">43.0</span></span></span>
+                </div>
+              </div>
+              <div class="mobile-card-private">
+                <div class="mobile-position-lines">
+                  <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
+                  <span><em>定投</em><strong>暂停 <span class="data-text">10元</span> / 期</strong></span>
+                </div>
+                <span class="tag paused mobile-status">暂停定投</span>
+              </div>
+              <div class="mobile-metric-grid">
+                <div><span>近3年</span><strong><span class="data-text">+16.73%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+26.76%</span></strong></div>
+                <div><span>跟踪误差</span><strong><span class="data-text">+1.63%</span></strong></div>
+                <div><span>管理+托管</span><strong><span class="data-text">0.65%/年</span></strong></div>
+                <div><span>规模</span><strong><span class="data-text">5.7亿</span></strong></div>
+                <div><span>买入费率</span><strong><span class="data-text">0.120%</span></strong></div>
+              </div>
+              <div class="mobile-card-foot">
+                <span class="tag warn">限大额</span>
+                <span>免赎回 满<span class="data-text">7</span>天</span>
+                <span>代销 <span class="data-text">10元</span></span>
+                <span>直销 <span class="data-text">10元</span></span>
+              </div>
+            </article>
+
+
+            <article class="mobile-fund-card tier-b-card" data-mobile-card data-status="定投中" data-subscription-status="限大额" data-tier="B" data-code="019524" data-score="56.0">
+              <div class="mobile-card-head">
+                <div class="mobile-card-title">
+                  <strong>华泰柏瑞</strong>
+                  <span class="code"><span class="data-text">019524</span></span>
+                </div>
+                <div class="mobile-card-rating">
+                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">11</span></span></span>
+                  <span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">56.0</span></span></span>
+                </div>
+              </div>
+              <div class="mobile-card-private">
+                <div class="mobile-position-lines">
+                  <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
+                  <span><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span>
+                </div>
+                <span class="tag owned mobile-status">定投中</span>
+              </div>
+              <div class="mobile-metric-grid">
+                <div><span>近3年</span><strong><span class="data-text">+17.29%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+26.66%</span></strong></div>
+                <div><span>跟踪误差</span><strong><span class="data-text">+1.52%</span></strong></div>
+                <div><span>管理+托管</span><strong><span class="data-text">0.65%/年</span></strong></div>
+                <div><span>规模</span><strong><span class="data-text">7.0亿</span></strong></div>
+                <div><span>买入费率</span><strong><span class="data-text">0.120%</span></strong></div>
+              </div>
+              <div class="mobile-card-foot">
+                <span class="tag warn">限大额</span>
+                <span>免赎回 满<span class="data-text">30</span>天</span>
+                <span>代销 <span class="data-text">10元</span></span>
+                <span>直销 <span class="data-text">10元</span></span>
+              </div>
+            </article>
+
+
+            <article class="mobile-fund-card tier-a-card" data-mobile-card data-status="候选" data-subscription-status="暂停申购" data-tier="A" data-code="018043" data-score="66.6">
+              <div class="mobile-card-head">
+                <div class="mobile-card-title">
+                  <strong>天弘</strong>
+                  <span class="code"><span class="data-text">018043</span></span>
+                </div>
+                <div class="mobile-card-rating">
+                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">12</span></span></span>
+                  <span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">66.6</span></span></span>
+                </div>
+              </div>
+              <div class="mobile-card-private">
+                <div class="mobile-position-lines">
+                  <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
+                  <span><em>定投</em><strong>未设置</strong></span>
+                </div>
+                <span class="tag watch mobile-status">候选</span>
+              </div>
+              <div class="mobile-metric-grid">
+                <div><span>近3年</span><strong><span class="data-text">+17.24%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+27.54%</span></strong></div>
+                <div><span>跟踪误差</span><strong><span class="data-text">+1.43%</span></strong></div>
+                <div><span>管理+托管</span><strong><span class="data-text">0.60%/年</span></strong></div>
+                <div><span>规模</span><strong><span class="data-text">21.9亿</span></strong></div>
+                <div><span>买入费率</span><strong><span class="data-text">0.100%</span></strong></div>
+              </div>
+              <div class="mobile-card-foot">
+                <span class="tag bad">暂停申购</span>
+                <span>免赎回 满<span class="data-text">365</span>天</span>
+                <span>代销 <span class="data-text">100元</span></span>
+                <span>直销 <span class="data-text">100元</span></span>
+              </div>
+            </article>
+
+
+            <article class="mobile-fund-card tier-s-card" data-mobile-card data-status="候选" data-subscription-status="暂停申购" data-tier="S" data-code="016055" data-score="77.6">
+              <div class="mobile-card-head">
+                <div class="mobile-card-title">
+                  <strong>博时</strong>
+                  <span class="code"><span class="data-text">016055</span></span>
+                </div>
+                <div class="mobile-card-rating">
+                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">13</span></span></span>
+                  <span class="tier-pill tier-s"><strong>S</strong><span><span class="data-text">77.6</span></span></span>
+                </div>
+              </div>
+              <div class="mobile-card-private">
+                <div class="mobile-position-lines">
+                  <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
+                  <span><em>定投</em><strong>未设置</strong></span>
+                </div>
+                <span class="tag watch mobile-status">候选</span>
+              </div>
+              <div class="mobile-metric-grid">
+                <div><span>近3年</span><strong><span class="data-text">+17.65%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+28.11%</span></strong></div>
+                <div><span>跟踪误差</span><strong><span class="data-text">+1.42%</span></strong></div>
+                <div><span>管理+托管</span><strong><span class="data-text">0.65%/年</span></strong></div>
+                <div><span>规模</span><strong><span class="data-text">13.0亿</span></strong></div>
+                <div><span>买入费率</span><strong><span class="data-text">0.100%</span></strong></div>
+              </div>
+              <div class="mobile-card-foot">
+                <span class="tag bad">暂停申购</span>
+                <span>免赎回 满<span class="data-text">7</span>天</span>
+                <span>代销 <span class="data-text">100元</span></span>
+                <span>直销 <span class="data-text">100元</span></span>
+              </div>
+            </article>
+
+
+            <article class="mobile-fund-card tier-a-card" data-mobile-card data-status="候选" data-subscription-status="暂停申购" data-tier="A" data-code="016532" data-score="75.5">
+              <div class="mobile-card-head">
+                <div class="mobile-card-title">
+                  <strong>嘉实</strong>
+                  <span class="code"><span class="data-text">016532</span></span>
+                </div>
+                <div class="mobile-card-rating">
+                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">14</span></span></span>
+                  <span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">75.5</span></span></span>
+                </div>
+              </div>
+              <div class="mobile-card-private">
+                <div class="mobile-position-lines">
+                  <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
+                  <span><em>定投</em><strong>未设置</strong></span>
+                </div>
+                <span class="tag watch mobile-status">候选</span>
+              </div>
+              <div class="mobile-metric-grid">
+                <div><span>近3年</span><strong><span class="data-text">+17.81%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+27.09%</span></strong></div>
+                <div><span>跟踪误差</span><strong><span class="data-text">+1.48%</span></strong></div>
+                <div><span>管理+托管</span><strong><span class="data-text">0.60%/年</span></strong></div>
+                <div><span>规模</span><strong><span class="data-text">18.9亿</span></strong></div>
+                <div><span>买入费率</span><strong><span class="data-text">0.100%</span></strong></div>
+              </div>
+              <div class="mobile-card-foot">
+                <span class="tag bad">暂停申购</span>
+                <span>免赎回 满<span class="data-text">30</span>天</span>
+                <span>代销 <span class="data-text">100元</span></span>
+                <span>直销 <span class="data-text">1000元</span></span>
+              </div>
+            </article>
+
+
+            <article class="mobile-fund-card tier-c-card" data-mobile-card data-status="候选" data-subscription-status="暂停申购" data-tier="C" data-code="015299" data-score="41.3">
+              <div class="mobile-card-head">
+                <div class="mobile-card-title">
+                  <strong>华夏</strong>
+                  <span class="code"><span class="data-text">015299</span></span>
+                </div>
+                <div class="mobile-card-rating">
+                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">15</span></span></span>
+                  <span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">41.3</span></span></span>
+                </div>
+              </div>
+              <div class="mobile-card-private">
+                <div class="mobile-position-lines">
+                  <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
+                  <span><em>定投</em><strong>未设置</strong></span>
+                </div>
+                <span class="tag watch mobile-status">候选</span>
+              </div>
+              <div class="mobile-metric-grid">
+                <div><span>近3年</span><strong><span class="data-text">+17.25%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+27.58%</span></strong></div>
+                <div><span>跟踪误差</span><strong><span class="data-text">+2.46%</span></strong></div>
+                <div><span>管理+托管</span><strong><span class="data-text">0.80%/年</span></strong></div>
+                <div><span>规模</span><strong><span class="data-text">3.1亿</span></strong></div>
+                <div><span>买入费率</span><strong><span class="data-text">0.120%</span></strong></div>
+              </div>
+              <div class="mobile-card-foot">
+                <span class="tag bad">暂停申购</span>
+                <span>免赎回 满<span class="data-text">7</span>天</span>
+                <span>代销 <span class="data-text">100元</span></span>
+                <span>直销 <span class="data-text">100元</span></span>
+              </div>
+            </article>
+
+
+            <article class="mobile-fund-card tier-b-card" data-mobile-card data-status="候选" data-subscription-status="暂停申购" data-tier="B" data-code="161130" data-score="64.7">
+              <div class="mobile-card-head">
+                <div class="mobile-card-title">
+                  <strong>易方达</strong>
+                  <span class="code"><span class="data-text">161130</span></span>
+                </div>
+                <div class="mobile-card-rating">
+                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">16</span></span></span>
+                  <span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">64.7</span></span></span>
+                </div>
+              </div>
+              <div class="mobile-card-private">
+                <div class="mobile-position-lines">
+                  <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
+                  <span><em>定投</em><strong>未设置</strong></span>
+                </div>
+                <span class="tag watch mobile-status">候选</span>
+              </div>
+              <div class="mobile-metric-grid">
+                <div><span>近3年</span><strong><span class="data-text">+17.45%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+27.03%</span></strong></div>
+                <div><span>跟踪误差</span><strong><span class="data-text">+1.42%</span></strong></div>
+                <div><span>管理+托管</span><strong><span class="data-text">0.60%/年</span></strong></div>
+                <div><span>规模</span><strong><span class="data-text">15.2亿</span></strong></div>
+                <div><span>买入费率</span><strong><span class="data-text">0.120%</span></strong></div>
+              </div>
+              <div class="mobile-card-foot">
+                <span class="tag bad">暂停申购</span>
+                <span>免赎回 满<span class="data-text">730</span>天</span>
+                <span>代销 <span class="data-text">10元</span></span>
+                <span>直销 <span class="data-text">10元</span></span>
+              </div>
+            </article>
+
       </div>
     </section>
 
@@ -2555,6 +3326,7 @@
       const columnOptions = document.getElementById("column-options");
       const columnReset = document.getElementById("column-reset");
       const portfolioEditor = document.getElementById("portfolio-editor");
+      const mobileFundList = document.getElementById("mobile-fund-list");
       const tableColumns = Array.from(table.querySelectorAll("colgroup col"));
       const allHeaderCells = Array.from(table.querySelectorAll("thead th"));
       const lockedColumnIndexes = new Set([0, 1, 2, 3]);
@@ -2643,6 +3415,26 @@
         if (holdingTotalNode) holdingTotalNode.innerHTML = dataText(formatYuan(holdingTotal));
         if (activeTotalNode) activeTotalNode.innerHTML = `${dataText(formatYuan(activeTotal))} / 期`;
       }
+      function updateMobileCard(code) {
+        if (!mobileFundList) return;
+        const item = portfolioState[code];
+        const card = mobileFundList.querySelector(`[data-mobile-card][data-code="${code}"]`);
+        if (!item || !card) return;
+        const status = currentStatus(item);
+        card.dataset.status = status;
+        const statusNode = card.querySelector(".mobile-status");
+        if (statusNode) {
+          statusNode.className = `tag ${tagClass(status)} mobile-status`;
+          statusNode.textContent = status;
+        }
+        const lines = card.querySelectorAll(".mobile-position-lines strong");
+        if (lines[0]) lines[0].innerHTML = item.holding > 0 ? dataText(formatYuan(item.holding)) : dataText("0元");
+        if (lines[1]) {
+          if (item.active > 0) lines[1].innerHTML = `${dataText(formatYuan(item.active))} / 期`;
+          else if (item.paused > 0) lines[1].innerHTML = `暂停 ${dataText(formatYuan(item.paused))} / 期`;
+          else lines[1].textContent = "未设置";
+        }
+      }
       function updateMainRow(code) {
         const item = portfolioState[code];
         const row = table.querySelector(`tbody tr[data-code="${code}"]`);
@@ -2710,6 +3502,7 @@
       }
       function refreshPortfolioViews() {
         Object.keys(portfolioState).forEach((code) => updateMainRow(code));
+        Object.keys(portfolioState).forEach((code) => updateMobileCard(code));
         updateHoldingRows();
         updateAutoRows();
         updateTitleTotals();
@@ -2886,6 +3679,9 @@
         Array.from(tbody.querySelectorAll("tr:not([hidden])")).forEach((row, index) => {
           const rankCell = row.querySelector(".row-rank");
           if (rankCell) rankCell.textContent = String(index + 1);
+          const mobileCard = mobileFundList ? mobileFundList.querySelector(`[data-mobile-card][data-code="${row.dataset.code}"]`) : null;
+          const mobileRank = mobileCard ? mobileCard.querySelector(".mobile-rank-number") : null;
+          if (mobileRank) mobileRank.innerHTML = dataText(String(index + 1));
         });
       }
       function updateVisibleCount() {
@@ -2984,7 +3780,10 @@
           const statusMatched = matchesStatus(row.dataset.status || "", filters.status);
           const tierMatched = filters.tier === "all" || row.dataset.tier === filters.tier;
           const subscriptionMatched = matchesSubscription(row.dataset.subscriptionStatus || "", filters.subscription);
-          row.hidden = !(statusMatched && tierMatched && subscriptionMatched);
+          const hidden = !(statusMatched && tierMatched && subscriptionMatched);
+          row.hidden = hidden;
+          const mobileCard = mobileFundList ? mobileFundList.querySelector(`[data-mobile-card][data-code="${row.dataset.code}"]`) : null;
+          if (mobileCard) mobileCard.hidden = hidden;
         });
         updateRanks();
         updateVisibleCount();
@@ -3021,6 +3820,12 @@
           return direction === "asc" ? result : -result;
         });
         rows.forEach((row) => tbody.appendChild(row));
+        if (mobileFundList) {
+          rows.forEach((row) => {
+            const card = mobileFundList.querySelector(`[data-mobile-card][data-code="${row.dataset.code}"]`);
+            if (card) mobileFundList.appendChild(card);
+          });
+        }
         applyFilter();
         updateIndicators();
       }

@@ -63,6 +63,8 @@ class PageInspector(HTMLParser):
         self.tracking_panel_ids: set[str] = set()
         self.tab_controls: list[str] = []
         self.portfolio_link_found = False
+        self.mobile_card_count = 0
+        self.mobile_private_count = 0
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         attr = dict(attrs)
@@ -75,6 +77,10 @@ class PageInspector(HTMLParser):
             if element_id.startswith("tracking-tab-"):
                 self.tracking_tab_ids.add(element_id)
         classes = set((attr.get("class") or "").split())
+        if "data-mobile-card" in attr:
+            self.mobile_card_count += 1
+        if "mobile-card-private" in classes:
+            self.mobile_private_count += 1
         if tag == "button" and "tab-button" in classes:
             control = attr.get("aria-controls")
             if control:
@@ -167,6 +173,12 @@ def validate_tabs(path: Path, required_panels: set[str], require_portfolio_link:
         fail(f"{path.name} tracking subpanels mismatch: {sorted(page.tracking_panel_ids)}")
     if len(page.tracking_tab_ids) != len(TRACKING_SUBPANELS):
         fail(f"{path.name} tracking subtab count expected {len(TRACKING_SUBPANELS)}, got {len(page.tracking_tab_ids)}")
+    if page.mobile_card_count != FUND_COUNT:
+        fail(f"{path.name} mobile cards expected {FUND_COUNT}, got {page.mobile_card_count}")
+    if require_portfolio_link and page.mobile_private_count:
+        fail(f"{path.name} public page should not contain private mobile holding blocks")
+    if not require_portfolio_link and page.mobile_private_count != FUND_COUNT:
+        fail(f"{path.name} private mobile holding blocks expected {FUND_COUNT}, got {page.mobile_private_count}")
     forbidden_patterns = [
         r"C:\\ALL_in_H\\",
         r"tracking-file",
