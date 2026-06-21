@@ -680,7 +680,7 @@
     }
     .portfolio-grid {
       display: grid;
-      grid-template-columns: minmax(390px, 0.82fr) minmax(520px, 1.18fr);
+      grid-template-columns: 1fr;
       align-items: start;
       gap: 0;
       border: 1px solid var(--line);
@@ -692,9 +692,6 @@
       border: 0;
       background: var(--panel);
       height: fit-content;
-    }
-    .portfolio-block + .portfolio-block {
-      border-left: 1px solid var(--line);
     }
     .portfolio-block .section-title {
       background: #f7f5ee;
@@ -712,16 +709,12 @@
       width: 100%;
       min-width: 0;
     }
-    .portfolio-table col.record-col { width: 8%; }
-    .portfolio-table col.rating-col { width: 18%; }
-    .holding-table col.holding-fund-col { width: 29%; }
-    .holding-table col.holding-amount-col { width: 22%; }
-    .holding-table col.holding-status-col { width: 23%; }
     .auto-plan-table col.record-col { width: 6%; }
-    .auto-plan-table col.auto-fund-col { width: 24%; }
-    .auto-plan-table col.auto-status-col { width: 18%; }
+    .auto-plan-table col.auto-fund-col { width: 28%; }
+    .auto-plan-table col.rating-col { width: 14%; }
+    .auto-plan-table col.auto-status-col { width: 17%; }
     .auto-plan-table col.auto-amount-col { width: 20%; }
-    .auto-plan-table col.auto-holding-col { width: 17%; }
+    .auto-plan-table col.auto-holding-col { width: 15%; }
     .portfolio-table th,
     .portfolio-table td {
       padding-left: clamp(8px, 0.85vw, 12px);
@@ -1179,14 +1172,6 @@
     .tracking-fund-table col.rating-col { width: 13%; }
     .tracking-fund-table col.amount-col { width: 13%; }
     .tracking-fund-table col.plan-col { width: 15%; }
-    .holding-table th:nth-child(1),
-    .holding-table td:nth-child(1),
-    .holding-table th:nth-child(3),
-    .holding-table td:nth-child(3),
-    .holding-table th:nth-child(4),
-    .holding-table td:nth-child(4),
-    .holding-table th:nth-child(5),
-    .holding-table td:nth-child(5),
     .auto-plan-table th:nth-child(1),
     .auto-plan-table td:nth-child(1),
     .auto-plan-table th:nth-child(3),
@@ -1199,8 +1184,6 @@
     .auto-plan-table td:nth-child(6) {
       text-align: center;
     }
-    .holding-table th:nth-child(2),
-    .holding-table td:nth-child(2),
     .auto-plan-table th:nth-child(2),
     .auto-plan-table td:nth-child(2) {
       white-space: nowrap;
@@ -1531,16 +1514,12 @@
         padding-left: 7px;
         padding-right: 7px;
       }
-      .portfolio-table col.record-col { width: 8%; }
-      .portfolio-table col.rating-col { width: 18%; }
-      .holding-table col.holding-fund-col { width: 30%; }
-      .holding-table col.holding-amount-col { width: 21%; }
-      .holding-table col.holding-status-col { width: 23%; }
       .auto-plan-table col.record-col { width: 7%; }
-      .auto-plan-table col.auto-fund-col { width: 23%; }
+      .auto-plan-table col.auto-fund-col { width: 25%; }
+      .auto-plan-table col.rating-col { width: 16%; }
       .auto-plan-table col.auto-status-col { width: 18%; }
       .auto-plan-table col.auto-amount-col { width: 20%; }
-      .auto-plan-table col.auto-holding-col { width: 16%; }
+      .auto-plan-table col.auto-holding-col { width: 14%; }
       #panel-portfolio .table-wrap,
       #panel-tracking .compact-table-wrap,
       #panel-scoring .scoring-wrap,
@@ -1692,7 +1671,7 @@
           <span class="subtitle-chip">QDII</span>
           <span class="subtitle-chip">长期定投</span>
           <span class="subtitle-chip">CNY</span>
-          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-21 22:09:44</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
+          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-21 23:49:23</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
           <span class="subtitle-meta">来源：东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
         </p>
       </div>
@@ -3412,21 +3391,6 @@
           positionCell.innerHTML = `<div class="position-plan">${holdingLine}${investLine}</div>`;
         }
       }
-      function updateHoldingRows() {
-        document.querySelectorAll(".holding-table tbody tr[data-code]").forEach((row) => {
-          const code = row.dataset.code;
-          const item = portfolioState[code];
-          if (!item) return;
-          const status = currentStatus(item);
-          const holdingCell = row.querySelector('[data-field="holding"]');
-          const statusCell = row.querySelector('[data-field="status"]');
-          if (holdingCell) {
-            holdingCell.dataset.sortValue = String(item.holding);
-            holdingCell.innerHTML = dataText(formatYuan(item.holding));
-          }
-          if (statusCell) statusCell.innerHTML = statusTag(status);
-        });
-      }
       function updateAutoRows() {
         document.querySelectorAll(".auto-plan-table tbody tr[data-code]").forEach((row) => {
           const code = row.dataset.code;
@@ -3451,7 +3415,6 @@
       function refreshPortfolioViews() {
         Object.keys(portfolioState).forEach((code) => updateMainRow(code));
         Object.keys(portfolioState).forEach((code) => updateMobileCard(code));
-        updateHoldingRows();
         updateAutoRows();
         updateTitleTotals();
         sortByHeader(activeIndex, activeDirection);

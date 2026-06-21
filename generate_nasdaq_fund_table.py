@@ -2226,7 +2226,6 @@ def build_html(
     tracking_latest_date = tracking_latest.get("date") or tracking_latest.get("recorded_at") or "-"
     scoring_rows = scoring_rule_rows()
     funds_by_code = {fund.code: fund for fund in funds}
-    holding_rows = holding_record_rows(funds_by_code, cards)
     auto_invest_rows = auto_invest_record_rows(funds_by_code, cards)
     holding_total = sum(HOLDING_AMOUNTS.values())
     active_auto_invest_total = sum(AUTO_INVEST_AMOUNTS.values())
@@ -2933,7 +2932,7 @@ def build_html(
     }}
     .portfolio-grid {{
       display: grid;
-      grid-template-columns: minmax(390px, 0.82fr) minmax(520px, 1.18fr);
+      grid-template-columns: 1fr;
       align-items: start;
       gap: 0;
       border: 1px solid var(--line);
@@ -2945,9 +2944,6 @@ def build_html(
       border: 0;
       background: var(--panel);
       height: fit-content;
-    }}
-    .portfolio-block + .portfolio-block {{
-      border-left: 1px solid var(--line);
     }}
     .portfolio-block .section-title {{
       background: #f7f5ee;
@@ -2965,16 +2961,12 @@ def build_html(
       width: 100%;
       min-width: 0;
     }}
-    .portfolio-table col.record-col {{ width: 8%; }}
-    .portfolio-table col.rating-col {{ width: 18%; }}
-    .holding-table col.holding-fund-col {{ width: 29%; }}
-    .holding-table col.holding-amount-col {{ width: 22%; }}
-    .holding-table col.holding-status-col {{ width: 23%; }}
     .auto-plan-table col.record-col {{ width: 6%; }}
-    .auto-plan-table col.auto-fund-col {{ width: 24%; }}
-    .auto-plan-table col.auto-status-col {{ width: 18%; }}
+    .auto-plan-table col.auto-fund-col {{ width: 28%; }}
+    .auto-plan-table col.rating-col {{ width: 14%; }}
+    .auto-plan-table col.auto-status-col {{ width: 17%; }}
     .auto-plan-table col.auto-amount-col {{ width: 20%; }}
-    .auto-plan-table col.auto-holding-col {{ width: 17%; }}
+    .auto-plan-table col.auto-holding-col {{ width: 15%; }}
     .portfolio-table th,
     .portfolio-table td {{
       padding-left: clamp(8px, 0.85vw, 12px);
@@ -3432,14 +3424,6 @@ def build_html(
     .tracking-fund-table col.rating-col {{ width: 13%; }}
     .tracking-fund-table col.amount-col {{ width: 13%; }}
     .tracking-fund-table col.plan-col {{ width: 15%; }}
-    .holding-table th:nth-child(1),
-    .holding-table td:nth-child(1),
-    .holding-table th:nth-child(3),
-    .holding-table td:nth-child(3),
-    .holding-table th:nth-child(4),
-    .holding-table td:nth-child(4),
-    .holding-table th:nth-child(5),
-    .holding-table td:nth-child(5),
     .auto-plan-table th:nth-child(1),
     .auto-plan-table td:nth-child(1),
     .auto-plan-table th:nth-child(3),
@@ -3452,8 +3436,6 @@ def build_html(
     .auto-plan-table td:nth-child(6) {{
       text-align: center;
     }}
-    .holding-table th:nth-child(2),
-    .holding-table td:nth-child(2),
     .auto-plan-table th:nth-child(2),
     .auto-plan-table td:nth-child(2) {{
       white-space: nowrap;
@@ -3784,16 +3766,12 @@ def build_html(
         padding-left: 7px;
         padding-right: 7px;
       }}
-      .portfolio-table col.record-col {{ width: 8%; }}
-      .portfolio-table col.rating-col {{ width: 18%; }}
-      .holding-table col.holding-fund-col {{ width: 30%; }}
-      .holding-table col.holding-amount-col {{ width: 21%; }}
-      .holding-table col.holding-status-col {{ width: 23%; }}
       .auto-plan-table col.record-col {{ width: 7%; }}
-      .auto-plan-table col.auto-fund-col {{ width: 23%; }}
+      .auto-plan-table col.auto-fund-col {{ width: 25%; }}
+      .auto-plan-table col.rating-col {{ width: 16%; }}
       .auto-plan-table col.auto-status-col {{ width: 18%; }}
       .auto-plan-table col.auto-amount-col {{ width: 20%; }}
-      .auto-plan-table col.auto-holding-col {{ width: 16%; }}
+      .auto-plan-table col.auto-holding-col {{ width: 14%; }}
       #panel-portfolio .table-wrap,
       #panel-tracking .compact-table-wrap,
       #panel-scoring .scoring-wrap,
@@ -4058,23 +4036,7 @@ def build_html(
     <section class="section tab-panel" id="panel-portfolio" role="tabpanel" aria-labelledby="tab-portfolio" hidden>
       <div class="portfolio-grid">
         <div class="portfolio-block">
-          <div class="section-title"><h2>当前持有</h2><span class="title-metric">总额 <strong id="holding-total-value">{fmt_yuan(holding_total)}</strong></span></div>
-          <div class="table-wrap compact-table-wrap">
-            <table class="small-table portfolio-table holding-table">
-              <colgroup>
-                <col class="record-col">
-                <col class="holding-fund-col">
-                <col class="rating-col">
-                <col class="holding-amount-col">
-                <col class="holding-status-col">
-              </colgroup>
-              <thead><tr><th>序号</th><th>基金</th><th>评级</th><th>持有金额</th><th>定投状态</th></tr></thead>
-              <tbody>{holding_rows}</tbody>
-            </table>
-          </div>
-        </div>
-        <div class="portfolio-block">
-          <div class="section-title"><h2>定投计划</h2><span class="title-metric">定投中总额 <strong id="active-auto-total-value">{fmt_yuan(active_auto_invest_total)} / 期</strong></span></div>
+          <div class="section-title"><h2>定投计划</h2><span class="title-metric">当前持有 <strong id="holding-total-value">{fmt_yuan(holding_total)}</strong></span><span class="title-metric">定投中总额 <strong id="active-auto-total-value">{fmt_yuan(active_auto_invest_total)} / 期</strong></span></div>
           <div class="table-wrap compact-table-wrap">
             <table class="small-table portfolio-table auto-plan-table">
               <colgroup>
@@ -4434,21 +4396,6 @@ def build_html(
           positionCell.innerHTML = `<div class="position-plan">${{holdingLine}}${{investLine}}</div>`;
         }}
       }}
-      function updateHoldingRows() {{
-        document.querySelectorAll(".holding-table tbody tr[data-code]").forEach((row) => {{
-          const code = row.dataset.code;
-          const item = portfolioState[code];
-          if (!item) return;
-          const status = currentStatus(item);
-          const holdingCell = row.querySelector('[data-field="holding"]');
-          const statusCell = row.querySelector('[data-field="status"]');
-          if (holdingCell) {{
-            holdingCell.dataset.sortValue = String(item.holding);
-            holdingCell.innerHTML = dataText(formatYuan(item.holding));
-          }}
-          if (statusCell) statusCell.innerHTML = statusTag(status);
-        }});
-      }}
       function updateAutoRows() {{
         document.querySelectorAll(".auto-plan-table tbody tr[data-code]").forEach((row) => {{
           const code = row.dataset.code;
@@ -4473,7 +4420,6 @@ def build_html(
       function refreshPortfolioViews() {{
         Object.keys(portfolioState).forEach((code) => updateMainRow(code));
         Object.keys(portfolioState).forEach((code) => updateMobileCard(code));
-        updateHoldingRows();
         updateAutoRows();
         updateTitleTotals();
         sortByHeader(activeIndex, activeDirection);

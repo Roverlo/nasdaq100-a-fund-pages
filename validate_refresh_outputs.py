@@ -74,6 +74,8 @@ class PageInspector(HTMLParser):
         self.in_subscription_filter = False
         self.subscription_filter_depth = 0
         self.subscription_filter_options: list[str] = []
+        self.holding_table_count = 0
+        self.auto_plan_table_count = 0
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         attr = dict(attrs)
@@ -86,6 +88,10 @@ class PageInspector(HTMLParser):
             if element_id.startswith("tracking-tab-"):
                 self.tracking_tab_ids.add(element_id)
         classes = set((attr.get("class") or "").split())
+        if tag == "table" and "holding-table" in classes:
+            self.holding_table_count += 1
+        if tag == "table" and "auto-plan-table" in classes:
+            self.auto_plan_table_count += 1
         if "data-mobile-card" in attr:
             self.mobile_card_count += 1
             if "data-status" in attr:
@@ -224,6 +230,13 @@ def validate_tabs(path: Path, required_panels: set[str], require_portfolio_link:
         fail(f"{path.name} public page should not contain private mobile status attributes")
     if not require_portfolio_link and page.mobile_private_count != FUND_COUNT:
         fail(f"{path.name} private mobile holding blocks expected {FUND_COUNT}, got {page.mobile_private_count}")
+    if page.holding_table_count:
+        fail(f"{path.name} should not render the removed holding detail table")
+    if require_portfolio_link:
+        if page.auto_plan_table_count:
+            fail(f"{path.name} public page should not contain portfolio auto-plan table")
+    elif page.auto_plan_table_count != 1:
+        fail(f"{path.name} auto-plan table expected 1, got {page.auto_plan_table_count}")
     forbidden_patterns = [
         r"C:\\ALL_in_H\\",
         r"tracking-file",

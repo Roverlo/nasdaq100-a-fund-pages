@@ -680,7 +680,7 @@
     }
     .portfolio-grid {
       display: grid;
-      grid-template-columns: minmax(390px, 0.82fr) minmax(520px, 1.18fr);
+      grid-template-columns: 1fr;
       align-items: start;
       gap: 0;
       border: 1px solid var(--line);
@@ -692,9 +692,6 @@
       border: 0;
       background: var(--panel);
       height: fit-content;
-    }
-    .portfolio-block + .portfolio-block {
-      border-left: 1px solid var(--line);
     }
     .portfolio-block .section-title {
       background: #f7f5ee;
@@ -712,16 +709,12 @@
       width: 100%;
       min-width: 0;
     }
-    .portfolio-table col.record-col { width: 8%; }
-    .portfolio-table col.rating-col { width: 18%; }
-    .holding-table col.holding-fund-col { width: 29%; }
-    .holding-table col.holding-amount-col { width: 22%; }
-    .holding-table col.holding-status-col { width: 23%; }
     .auto-plan-table col.record-col { width: 6%; }
-    .auto-plan-table col.auto-fund-col { width: 24%; }
-    .auto-plan-table col.auto-status-col { width: 18%; }
+    .auto-plan-table col.auto-fund-col { width: 28%; }
+    .auto-plan-table col.rating-col { width: 14%; }
+    .auto-plan-table col.auto-status-col { width: 17%; }
     .auto-plan-table col.auto-amount-col { width: 20%; }
-    .auto-plan-table col.auto-holding-col { width: 17%; }
+    .auto-plan-table col.auto-holding-col { width: 15%; }
     .portfolio-table th,
     .portfolio-table td {
       padding-left: clamp(8px, 0.85vw, 12px);
@@ -1179,14 +1172,6 @@
     .tracking-fund-table col.rating-col { width: 13%; }
     .tracking-fund-table col.amount-col { width: 13%; }
     .tracking-fund-table col.plan-col { width: 15%; }
-    .holding-table th:nth-child(1),
-    .holding-table td:nth-child(1),
-    .holding-table th:nth-child(3),
-    .holding-table td:nth-child(3),
-    .holding-table th:nth-child(4),
-    .holding-table td:nth-child(4),
-    .holding-table th:nth-child(5),
-    .holding-table td:nth-child(5),
     .auto-plan-table th:nth-child(1),
     .auto-plan-table td:nth-child(1),
     .auto-plan-table th:nth-child(3),
@@ -1199,8 +1184,6 @@
     .auto-plan-table td:nth-child(6) {
       text-align: center;
     }
-    .holding-table th:nth-child(2),
-    .holding-table td:nth-child(2),
     .auto-plan-table th:nth-child(2),
     .auto-plan-table td:nth-child(2) {
       white-space: nowrap;
@@ -1531,16 +1514,12 @@
         padding-left: 7px;
         padding-right: 7px;
       }
-      .portfolio-table col.record-col { width: 8%; }
-      .portfolio-table col.rating-col { width: 18%; }
-      .holding-table col.holding-fund-col { width: 30%; }
-      .holding-table col.holding-amount-col { width: 21%; }
-      .holding-table col.holding-status-col { width: 23%; }
       .auto-plan-table col.record-col { width: 7%; }
-      .auto-plan-table col.auto-fund-col { width: 23%; }
+      .auto-plan-table col.auto-fund-col { width: 25%; }
+      .auto-plan-table col.rating-col { width: 16%; }
       .auto-plan-table col.auto-status-col { width: 18%; }
       .auto-plan-table col.auto-amount-col { width: 20%; }
-      .auto-plan-table col.auto-holding-col { width: 16%; }
+      .auto-plan-table col.auto-holding-col { width: 14%; }
       #panel-portfolio .table-wrap,
       #panel-tracking .compact-table-wrap,
       #panel-scoring .scoring-wrap,
@@ -1679,7 +1658,7 @@
           <span class="subtitle-chip">QDII</span>
           <span class="subtitle-chip">长期定投</span>
           <span class="subtitle-chip">CNY</span>
-          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-21 22:09:44</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
+          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-21 23:49:23</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
           <span class="subtitle-meta">来源：东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
         </p>
       </div>
@@ -2840,94 +2819,7 @@
     <section class="section tab-panel" id="panel-portfolio" role="tabpanel" aria-labelledby="tab-portfolio" hidden>
       <div class="portfolio-grid">
         <div class="portfolio-block">
-          <div class="section-title"><h2>当前持有</h2><span class="title-metric">总额 <strong id="holding-total-value"><span class="data-text">560元</span></strong></span></div>
-          <div class="table-wrap compact-table-wrap">
-            <table class="small-table portfolio-table holding-table">
-              <colgroup>
-                <col class="record-col">
-                <col class="holding-fund-col">
-                <col class="rating-col">
-                <col class="holding-amount-col">
-                <col class="holding-status-col">
-              </colgroup>
-              <thead><tr><th>序号</th><th>基金</th><th>评级</th><th>持有金额</th><th>定投状态</th></tr></thead>
-              <tbody>
-            <tr data-code="016452">
-              <td class="num record-index" data-label="序号"><span class="data-text">1</span></td>
-              <td data-label="基金">南方 <span class="data-text">016452</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">61.9</span></span></span></td>
-              <td class="num editable-amount" data-label="持有金额" data-field="holding" data-sort-value="250.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">250元</span></td>
-              <td class="editable-status" data-label="定投状态" data-field="status" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
-            </tr>
-            
-
-            <tr data-code="539001">
-              <td class="num record-index" data-label="序号"><span class="data-text">2</span></td>
-              <td data-label="基金">建信 <span class="data-text">539001</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-d"><strong>D</strong><span><span class="data-text">23.1</span></span></span></td>
-              <td class="num editable-amount" data-label="持有金额" data-field="holding" data-sort-value="100.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">100元</span></td>
-              <td class="editable-status" data-label="定投状态" data-field="status" tabindex="0" role="button" title="点击选择定投状态"><span class="tag paused">暂停定投</span></td>
-            </tr>
-            
-
-            <tr data-code="018966">
-              <td class="num record-index" data-label="序号"><span class="data-text">3</span></td>
-              <td data-label="基金">汇添富 <span class="data-text">018966</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-d"><strong>D</strong><span><span class="data-text">29.1</span></span></span></td>
-              <td class="num editable-amount" data-label="持有金额" data-field="holding" data-sort-value="100.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">100元</span></td>
-              <td class="editable-status" data-label="定投状态" data-field="status" tabindex="0" role="button" title="点击选择定投状态"><span class="tag paused">暂停定投</span></td>
-            </tr>
-            
-
-            <tr data-code="019441">
-              <td class="num record-index" data-label="序号"><span class="data-text">4</span></td>
-              <td data-label="基金">万家 <span class="data-text">019441</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">47.2</span></span></span></td>
-              <td class="num editable-amount" data-label="持有金额" data-field="holding" data-sort-value="50.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">50元</span></td>
-              <td class="editable-status" data-label="定投状态" data-field="status" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
-            </tr>
-            
-
-            <tr data-code="019547">
-              <td class="num record-index" data-label="序号"><span class="data-text">5</span></td>
-              <td data-label="基金">招商 <span class="data-text">019547</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">54.0</span></span></span></td>
-              <td class="num editable-amount" data-label="持有金额" data-field="holding" data-sort-value="20.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">20元</span></td>
-              <td class="editable-status" data-label="定投状态" data-field="status" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
-            </tr>
-            
-
-            <tr data-code="019172">
-              <td class="num record-index" data-label="序号"><span class="data-text">6</span></td>
-              <td data-label="基金">摩根 <span class="data-text">019172</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">48.6</span></span></span></td>
-              <td class="num editable-amount" data-label="持有金额" data-field="holding" data-sort-value="20.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">20元</span></td>
-              <td class="editable-status" data-label="定投状态" data-field="status" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
-            </tr>
-            
-
-            <tr data-code="040046">
-              <td class="num record-index" data-label="序号"><span class="data-text">7</span></td>
-              <td data-label="基金">华安 <span class="data-text">040046</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-s"><strong>S</strong><span><span class="data-text">88.8</span></span></span></td>
-              <td class="num editable-amount" data-label="持有金额" data-field="holding" data-sort-value="10.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">10元</span></td>
-              <td class="editable-status" data-label="定投状态" data-field="status" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
-            </tr>
-            
-
-            <tr data-code="000834">
-              <td class="num record-index" data-label="序号"><span class="data-text">8</span></td>
-              <td data-label="基金">大成 <span class="data-text">000834</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">44.0</span></span></span></td>
-              <td class="num editable-amount" data-label="持有金额" data-field="holding" data-sort-value="10.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">10元</span></td>
-              <td class="editable-status" data-label="定投状态" data-field="status" tabindex="0" role="button" title="点击选择定投状态"><span class="tag paused">暂停定投</span></td>
-            </tr>
-            </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="portfolio-block">
-          <div class="section-title"><h2>定投计划</h2><span class="title-metric">定投中总额 <strong id="active-auto-total-value"><span class="data-text">300元</span> / 期</strong></span></div>
+          <div class="section-title"><h2>定投计划</h2><span class="title-metric">当前持有 <strong id="holding-total-value"><span class="data-text">560元</span></strong></span><span class="title-metric">定投中总额 <strong id="active-auto-total-value"><span class="data-text">300元</span> / 期</strong></span></div>
           <div class="table-wrap compact-table-wrap">
             <table class="small-table portfolio-table auto-plan-table">
               <colgroup>
@@ -3728,21 +3620,6 @@
           positionCell.innerHTML = `<div class="position-plan">${holdingLine}${investLine}</div>`;
         }
       }
-      function updateHoldingRows() {
-        document.querySelectorAll(".holding-table tbody tr[data-code]").forEach((row) => {
-          const code = row.dataset.code;
-          const item = portfolioState[code];
-          if (!item) return;
-          const status = currentStatus(item);
-          const holdingCell = row.querySelector('[data-field="holding"]');
-          const statusCell = row.querySelector('[data-field="status"]');
-          if (holdingCell) {
-            holdingCell.dataset.sortValue = String(item.holding);
-            holdingCell.innerHTML = dataText(formatYuan(item.holding));
-          }
-          if (statusCell) statusCell.innerHTML = statusTag(status);
-        });
-      }
       function updateAutoRows() {
         document.querySelectorAll(".auto-plan-table tbody tr[data-code]").forEach((row) => {
           const code = row.dataset.code;
@@ -3767,7 +3644,6 @@
       function refreshPortfolioViews() {
         Object.keys(portfolioState).forEach((code) => updateMainRow(code));
         Object.keys(portfolioState).forEach((code) => updateMobileCard(code));
-        updateHoldingRows();
         updateAutoRows();
         updateTitleTotals();
         sortByHeader(activeIndex, activeDirection);
