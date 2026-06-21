@@ -63,6 +63,7 @@ python -m py_compile "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts
 - `nasdaq_fund_snapshot.json` 中 `source_health.checks` 应要求基础行情、费率赎回、跟踪误差均为全基金池成功；如果接口不可用导致回退值生成，应让验证失败，不要发布“假刷新”。
 - `portfolio_tracking.json` 应存在，最新记录日期应等于当前北京时间日期；最新记录的评级、评分、持仓金额、定投金额应与 `nasdaq_fund_snapshot.json` 一致；未知的市值、收益、收益率保持 `null` / `--`，不要用基金涨幅伪造个人收益。
 - `data/nasdaq_funds.db` 应存在，`funds`、`fund_daily_snapshots`、`score_snapshots`、`portfolio_records`、`portfolio_positions`、`auto_invest_plans` 应与最新 JSON 口径一致；`transactions` 可以为空但表必须存在。
+- 移动端样式改动后必须专项检查 `数据来源` tab：`source-table` 桌面端第一列有固定宽度，手机端卡片化时要覆盖 `td:first-child { width: auto; }`，并确认代码值如 `019441` 横向单行显示，不要被挤成竖排。
 
 ## SQLite 数据规则
 
@@ -91,6 +92,7 @@ python -m py_compile "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts
 - `长期追踪` tab 布局参考 open-design 的紧凑 artifact/workbench 结构，以及 Ghostfolio、Wealthfolio、Portfolio Performance 的长期组合追踪视角：一行关键指标、资产轨迹图、收益轨迹图、持仓结构条、快照时间轴、基金明细，不放解释性大段文字。未知个人收益数据保持 `null` / `--`，不要用基金涨幅伪造个人收益。
 - GitHub Pages 当前不再需要密钥：`docs/index.html` 是轻量公开页，`docs/portfolio.html` 是公开完整页。不要恢复 Staticrypt 或密码页，除非用户明确要求重新加密。
 - 表格布局尽量基于容器自适应，不要为了单个屏幕写死宽度。
+- 桌面表格列宽规则可能在移动端卡片化后继续作用到单元格；给辅助表新增固定列宽时，必须在移动端 media query 里确认是否需要覆盖，尤其是 `数据来源` 这种 label/value 卡片表。
 - in-app browser 对 `file://` 页面可能禁止自动刷新或评估；遇到浏览器策略阻止时，用 HTML/JSON 结构检查验证，并提示用户手动刷新。
 - in-app browser 对 `http://127.0.0.1:8765/` 可用于自动 reload、DOM 检查和截图验证；容器未启动时先启动 `nasdaq-fund-table` 服务。
 - 如果浏览器评论/标注层开启，自动化点击可能命中 `codex-browser-sidebar-comments-root` 而不是页面按钮。遇到 tab/button 自动点击无效但控制台无报错时，先做 hit-test 或结构检查，必要时让用户关闭评论层后再验证，不要误判为页面脚本坏了。
