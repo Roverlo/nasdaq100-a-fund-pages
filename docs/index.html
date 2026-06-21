@@ -1692,7 +1692,7 @@
           <span class="subtitle-chip">QDII</span>
           <span class="subtitle-chip">长期定投</span>
           <span class="subtitle-chip">CNY</span>
-          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-21 21:21:27</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
+          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-21 21:53:43</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
           <span class="subtitle-meta">来源：东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
         </p>
       </div>
@@ -1715,7 +1715,7 @@
           <div class="filter-control">
             <span class="filter-label">梯队</span>
             <div class="select-menu" id="tier-filter" data-filter-key="tier">
-              <button class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">全部梯队</button>
+              <button class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" data-default-label="全部梯队">全部梯队</button>
               <ul class="select-list" role="listbox" hidden>
                 <li class="select-option" role="option" data-value="all" aria-selected="true">全部梯队</li>
                 <li class="select-option" role="option" data-value="S" aria-selected="false">S 档</li>
@@ -1729,7 +1729,7 @@
           <div class="filter-control">
             <span class="filter-label">申购状态</span>
             <div class="select-menu" id="subscription-filter" data-filter-key="subscription">
-              <button class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">全部申购</button>
+              <button class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" data-default-label="全部申购">全部申购</button>
               <ul class="select-list" role="listbox" hidden>
                 <li class="select-option" role="option" data-value="all" aria-selected="true">全部申购</li>
                 <li class="select-option" role="option" data-value="限大额" aria-selected="false">限大额</li>
@@ -3300,13 +3300,12 @@
         return `<span class="data-text">${value}</span>`;
       }
       function tagClass(status) {
-        if (status === "定投中" || status === "新增定投") return "owned";
+        if (status === "定投中") return "owned";
         if (status === "暂停定投") return "paused";
-        if (status === "已持有") return "info";
         return "watch";
       }
       function statusRank(status) {
-        const order = { "新增定投": 0, "定投中": 1, "暂停定投": 2, "已持有": 3, "候选": 4 };
+        const order = { "定投中": 0, "暂停定投": 1, "候选": 2 };
         return order[status] ?? 9;
       }
       function statusTag(status) {
@@ -3348,7 +3347,6 @@
       function currentStatus(item) {
         if (item.active > 0) return "定投中";
         if (item.paused > 0) return "暂停定投";
-        if (item.holding > 0) return "已持有";
         return "候选";
       }
       function planAmount(item) {
@@ -3565,8 +3563,7 @@
         const item = code ? portfolioState[code] : null;
         if (!item || !portfolioEditor) return;
         const selectedStatus = currentStatus(item);
-        const noPlanStatus = item.holding > 0 ? "已持有" : "候选";
-        const options = ["定投中", "暂停定投", noPlanStatus];
+        const options = ["定投中", "暂停定投", "候选"];
         activeEditorCell = cell;
         portfolioEditor.hidden = false;
         portfolioEditor.innerHTML = `
@@ -3720,7 +3717,6 @@
       }
       function matchesStatus(rowStatus, filterValue) {
         if (filterValue === "all") return true;
-        if (filterValue === "active-investing") return rowStatus === "定投中" || rowStatus === "新增定投";
         return rowStatus === filterValue;
       }
       function matchesSubscription(rowSubscriptionStatus, filterValue) {
@@ -3758,6 +3754,18 @@
           option.setAttribute("aria-selected", option.dataset.value === value ? "true" : "false");
         });
         applyFilter();
+      }
+      function resetFilter(menu) {
+        const key = menu.dataset.filterKey;
+        if (!key || !(key in filters)) return;
+        filters[key] = "all";
+        const button = menu.querySelector(".select-trigger");
+        const defaultLabel = button?.dataset.defaultLabel || menu.querySelector('.select-option[data-value="all"]')?.textContent.trim();
+        if (button && defaultLabel) button.textContent = defaultLabel;
+        closeFilter(menu);
+        menu.querySelectorAll(".select-option").forEach((option) => {
+          option.setAttribute("aria-selected", "false");
+        });
       }
       function sortByHeader(headerIndex, direction) {
         const header = headers[headerIndex];
@@ -3822,8 +3830,7 @@
       if (resetButton) {
         resetButton.addEventListener("click", () => {
           filterMenus.forEach((menu) => {
-            const firstOption = menu.querySelector('.select-option[data-value="all"]');
-            if (firstOption) setFilter(menu, "all", firstOption.textContent.trim());
+            resetFilter(menu);
           });
           activeIndex = 0;
           activeDirection = "desc";

@@ -66,6 +66,9 @@ class PageInspector(HTMLParser):
         self.mobile_card_count = 0
         self.mobile_private_count = 0
         self.mobile_status_attr_count = 0
+        self.in_status_filter = False
+        self.status_filter_depth = 0
+        self.status_filter_options: list[str] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         attr = dict(attrs)
@@ -90,6 +93,14 @@ class PageInspector(HTMLParser):
                 self.tab_controls.append(control)
         if tag == "a" and attr.get("href") == "portfolio.html" and "tab-link" in classes:
             self.portfolio_link_found = True
+        if tag == "div" and element_id == "status-filter":
+            self.in_status_filter = True
+            self.status_filter_depth = 1
+            return
+        if self.in_status_filter:
+            self.status_filter_depth += 1
+            if "select-option" in classes:
+                self.status_filter_options.append(attr.get("data-value") or "")
 
         if tag == "table" and element_id == "main-table":
             self.in_main_table = True
@@ -123,6 +134,10 @@ class PageInspector(HTMLParser):
             self.main_table_depth -= 1
             if self.main_table_depth == 0:
                 self.in_main_table = False
+        if self.in_status_filter:
+            self.status_filter_depth -= 1
+            if self.status_filter_depth == 0:
+                self.in_status_filter = False
 
 
 def fail(message: str) -> None:
@@ -174,6 +189,8 @@ def validate_tabs(path: Path, required_panels: set[str], require_portfolio_link:
         fail(f"{path.name} should link to portfolio.html for the holdings page")
     if page.tracking_panel_ids != TRACKING_SUBPANELS:
         fail(f"{path.name} tracking subpanels mismatch: {sorted(page.tracking_panel_ids)}")
+    if not require_portfolio_link and page.status_filter_options != ["定投中", "暂停定投", "候选"]:
+        fail(f"{path.name} status filter options expected 定投中/暂停定投/候选, got {page.status_filter_options}")
     if len(page.tracking_tab_ids) != len(TRACKING_SUBPANELS):
         fail(f"{path.name} tracking subtab count expected {len(TRACKING_SUBPANELS)}, got {len(page.tracking_tab_ids)}")
     if page.mobile_card_count != FUND_COUNT:
@@ -245,6 +262,8 @@ def validate_snapshot(snapshot: dict) -> None:
     for fund in funds:
         if not isinstance(fund, dict):
             fail("snapshot fund entry must be an object")
+        if fund.get("status") not in {"定投中", "暂停定投", "候选"}:
+            fail(f"snapshot fund {fund.get('code')} has invalid status {fund.get('status')}")
         for key in ("investing_rank", "investing_score", "investing_tier"):
             if fund.get(key) is None:
                 fail(f"snapshot fund {fund.get('code')} missing {key}")

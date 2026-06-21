@@ -95,6 +95,7 @@ python -m py_compile "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts
 - `持仓定投` tab 只保留明细表和标题右侧总额，不放说明文字。
 - `持仓定投` tab 的“当前持有”和“定投计划”明细表都要在 `基金` 后展示 `评级` 列；评级必须复用主表同一套 `score_cards` / `investing_tier` / `investing_score`，不要做持仓专属评分。
 - `持仓定投` tab 支持点击金额和定投状态做浏览器内手动编辑。金额用页面浮层编辑器，状态用自定义浮层菜单，不要用会撑开表格的原生 inline input/select。编辑结果写入 `localStorage` 的 `nasdaqFundPortfolioStateV1`，会即时刷新主表、两张明细表和标题总额，但不会自动写回 `generate_nasdaq_fund_table.py`。
+- 主表和持仓编辑的定投状态只暴露三类：`定投中`、`暂停定投`、`候选`。`候选` 包含未定投基金和已持有但当前无定投计划的基金；不要再引入 `已持有`、`新增定投`、`定投中（含新增）` 作为筛选选项。
 - 如果用户确认浏览器内编辑结果要长期固化，必须把对应值同步回 `HOLDING_AMOUNTS`、`AUTO_INVEST_AMOUNTS`、`PAUSED_AUTO_INVEST_AMOUNTS`，再重新生成 HTML 和快照。
 - `长期追踪` tab 布局参考 open-design 的紧凑 artifact/workbench 结构，以及 Ghostfolio、Wealthfolio、Portfolio Performance 的长期组合追踪视角：一行关键指标、资产轨迹图、收益轨迹图、持仓结构条、快照时间轴、基金明细，不放解释性大段文字。未知个人收益数据保持 `null` / `--`，不要用基金涨幅伪造个人收益。
 - GitHub Pages 当前不再需要密钥：`docs/index.html` 是轻量公开页，`docs/portfolio.html` 是公开完整页。不要恢复 Staticrypt 或密码页，除非用户明确要求重新加密。

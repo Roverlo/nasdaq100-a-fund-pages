@@ -946,36 +946,30 @@ def fund_display_name(fund: Fund) -> str:
 
 def fund_status(code: str) -> str:
     if code in NEW_AUTO_INVESTING_CODES:
-        return "新增定投"
+        return "定投中"
     if code in PAUSED_AUTO_INVESTING_CODES:
         return "暂停定投"
     if code in AUTO_INVESTING_CODES:
         return "定投中"
-    if code in OWNED_CODES:
-        return "已持有"
     return "候选"
 
 
 def fund_status_rank(code: str) -> int:
     status = fund_status(code)
     order = {
-        "新增定投": 0,
-        "定投中": 1,
-        "暂停定投": 2,
-        "已持有": 3,
-        "候选": 4,
+        "定投中": 0,
+        "暂停定投": 1,
+        "候选": 2,
     }
     return order.get(status, 9)
 
 
 def fund_status_class(code: str) -> str:
     status = fund_status(code)
-    if status in {"新增定投", "定投中"}:
+    if status == "定投中":
         return "owned"
     if status == "暂停定投":
         return "paused"
-    if status == "已持有":
-        return "info"
     return "watch"
 
 
@@ -3970,11 +3964,9 @@ def build_html(
           <div class="filter-control">
             <span class="filter-label">定投状态</span>
             <div class="select-menu" id="status-filter" data-filter-key="status">
-              <button class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">全部状态</button>
+              <button class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" data-default-label="定投状态">定投状态</button>
               <ul class="select-list" role="listbox" hidden>
-                <li class="select-option" role="option" data-value="all" aria-selected="true">全部状态</li>
-                <li class="select-option" role="option" data-value="active-investing" aria-selected="false">定投中（含新增）</li>
-                <li class="select-option" role="option" data-value="新增定投" aria-selected="false">新增定投</li>
+                <li class="select-option" role="option" data-value="定投中" aria-selected="false">定投中</li>
                 <li class="select-option" role="option" data-value="暂停定投" aria-selected="false">暂停定投</li>
                 <li class="select-option" role="option" data-value="候选" aria-selected="false">候选</li>
               </ul>
@@ -3983,7 +3975,7 @@ def build_html(
           <div class="filter-control">
             <span class="filter-label">梯队</span>
             <div class="select-menu" id="tier-filter" data-filter-key="tier">
-              <button class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">全部梯队</button>
+              <button class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" data-default-label="全部梯队">全部梯队</button>
               <ul class="select-list" role="listbox" hidden>
                 <li class="select-option" role="option" data-value="all" aria-selected="true">全部梯队</li>
                 <li class="select-option" role="option" data-value="S" aria-selected="false">S 档</li>
@@ -3997,7 +3989,7 @@ def build_html(
           <div class="filter-control">
             <span class="filter-label">申购状态</span>
             <div class="select-menu" id="subscription-filter" data-filter-key="subscription">
-              <button class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">全部申购</button>
+              <button class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" data-default-label="全部申购">全部申购</button>
               <ul class="select-list" role="listbox" hidden>
                 <li class="select-option" role="option" data-value="all" aria-selected="true">全部申购</li>
                 <li class="select-option" role="option" data-value="限大额" aria-selected="false">限大额</li>
@@ -4339,13 +4331,12 @@ def build_html(
         return `<span class="data-text">${{value}}</span>`;
       }}
       function tagClass(status) {{
-        if (status === "定投中" || status === "新增定投") return "owned";
+        if (status === "定投中") return "owned";
         if (status === "暂停定投") return "paused";
-        if (status === "已持有") return "info";
         return "watch";
       }}
       function statusRank(status) {{
-        const order = {{ "新增定投": 0, "定投中": 1, "暂停定投": 2, "已持有": 3, "候选": 4 }};
+        const order = {{ "定投中": 0, "暂停定投": 1, "候选": 2 }};
         return order[status] ?? 9;
       }}
       function statusTag(status) {{
@@ -4387,7 +4378,6 @@ def build_html(
       function currentStatus(item) {{
         if (item.active > 0) return "定投中";
         if (item.paused > 0) return "暂停定投";
-        if (item.holding > 0) return "已持有";
         return "候选";
       }}
       function planAmount(item) {{
@@ -4604,8 +4594,7 @@ def build_html(
         const item = code ? portfolioState[code] : null;
         if (!item || !portfolioEditor) return;
         const selectedStatus = currentStatus(item);
-        const noPlanStatus = item.holding > 0 ? "已持有" : "候选";
-        const options = ["定投中", "暂停定投", noPlanStatus];
+        const options = ["定投中", "暂停定投", "候选"];
         activeEditorCell = cell;
         portfolioEditor.hidden = false;
         portfolioEditor.innerHTML = `
@@ -4759,7 +4748,6 @@ def build_html(
       }}
       function matchesStatus(rowStatus, filterValue) {{
         if (filterValue === "all") return true;
-        if (filterValue === "active-investing") return rowStatus === "定投中" || rowStatus === "新增定投";
         return rowStatus === filterValue;
       }}
       function matchesSubscription(rowSubscriptionStatus, filterValue) {{
@@ -4797,6 +4785,18 @@ def build_html(
           option.setAttribute("aria-selected", option.dataset.value === value ? "true" : "false");
         }});
         applyFilter();
+      }}
+      function resetFilter(menu) {{
+        const key = menu.dataset.filterKey;
+        if (!key || !(key in filters)) return;
+        filters[key] = "all";
+        const button = menu.querySelector(".select-trigger");
+        const defaultLabel = button?.dataset.defaultLabel || menu.querySelector('.select-option[data-value="all"]')?.textContent.trim();
+        if (button && defaultLabel) button.textContent = defaultLabel;
+        closeFilter(menu);
+        menu.querySelectorAll(".select-option").forEach((option) => {{
+          option.setAttribute("aria-selected", "false");
+        }});
       }}
       function sortByHeader(headerIndex, direction) {{
         const header = headers[headerIndex];
@@ -4861,8 +4861,7 @@ def build_html(
       if (resetButton) {{
         resetButton.addEventListener("click", () => {{
           filterMenus.forEach((menu) => {{
-            const firstOption = menu.querySelector('.select-option[data-value="all"]');
-            if (firstOption) setFilter(menu, "all", firstOption.textContent.trim());
+            resetFilter(menu);
           }});
           activeIndex = 0;
           activeDirection = "desc";
