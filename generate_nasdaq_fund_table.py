@@ -2191,6 +2191,7 @@ def build_html(
 ) -> str:
     generated_at = now_beijing().strftime("%Y-%m-%d %H:%M:%S")
     refresh_schedule_text = " / ".join(AUTO_REFRESH_TIMES_BEIJING)
+    page_refresh_check_ms = 5 * 60 * 1000
     rows = main_rows(funds)
     mobile_cards = mobile_fund_cards(funds)
     cards = score_cards(funds)
@@ -2240,6 +2241,8 @@ def build_html(
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="fund-page-generated-at" content="{html.escape(generated_at)}">
+  <meta name="fund-page-refresh-check-ms" content="{page_refresh_check_ms}">
   <title>纳指 100 A 类基金池</title>
   <link rel="icon" href="data:,">
   <style>
@@ -4301,6 +4304,44 @@ def build_html(
   <div id="portfolio-editor" class="portfolio-editor" hidden></div>
   <script>
     (function () {{
+      const pageGeneratedAt = {json.dumps(generated_at, ensure_ascii=False)};
+      const refreshCheckIntervalMs = {page_refresh_check_ms};
+      const refreshCheckMetaName = "fund-page-generated-at";
+      function comparableVersion(value) {{
+        return String(value || "").replace(/[^0-9]/g, "");
+      }}
+      function shouldAutoRefreshPage(nextGeneratedAt) {{
+        const current = comparableVersion(pageGeneratedAt);
+        const next = comparableVersion(nextGeneratedAt);
+        return current && next && next > current;
+      }}
+      async function checkPublishedRefresh() {{
+        if (!window.fetch || !window.DOMParser || location.protocol === "file:") return;
+        try {{
+          const url = new URL(location.href);
+          url.searchParams.set("refresh-check", String(Date.now()));
+          const response = await fetch(url.toString(), {{
+            cache: "no-store",
+            credentials: "same-origin",
+            headers: {{ "Cache-Control": "no-cache" }},
+          }});
+          if (!response.ok) return;
+          const text = await response.text();
+          const doc = new DOMParser().parseFromString(text, "text/html");
+          const nextGeneratedAt = doc.querySelector(`meta[name="${{refreshCheckMetaName}}"]`)?.getAttribute("content") || "";
+          if (shouldAutoRefreshPage(nextGeneratedAt)) {{
+            location.reload();
+          }}
+        }} catch (error) {{}}
+      }}
+      if (refreshCheckIntervalMs > 0 && location.protocol !== "file:") {{
+        window.addEventListener("focus", checkPublishedRefresh);
+        document.addEventListener("visibilitychange", () => {{
+          if (!document.hidden) checkPublishedRefresh();
+        }});
+        window.setTimeout(checkPublishedRefresh, 30 * 1000);
+        window.setInterval(checkPublishedRefresh, refreshCheckIntervalMs);
+      }}
       const initialPortfolioState = {portfolio_state_json};
       const portfolioStorageKey = "nasdaqFundPortfolioStateV1";
       const tabButtons = Array.from(document.querySelectorAll(".tab-button"));

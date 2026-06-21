@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="fund-page-generated-at" content="2026-06-22 01:03:23">
+  <meta name="fund-page-refresh-check-ms" content="300000">
   <title>纳指 100 A 类基金池</title>
   <link rel="icon" href="data:,">
   <style>
@@ -1759,7 +1761,7 @@
           <span class="subtitle-chip">QDII</span>
           <span class="subtitle-chip">长期定投</span>
           <span class="subtitle-chip">CNY</span>
-          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-22 00:45:57</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
+          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-22 01:03:23</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
           <span class="subtitle-meta">来源：东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
         </p>
       </div>
@@ -3329,6 +3331,44 @@
 
   <script>
     (function () {
+      const pageGeneratedAt = "2026-06-22 01:03:23";
+      const refreshCheckIntervalMs = 300000;
+      const refreshCheckMetaName = "fund-page-generated-at";
+      function comparableVersion(value) {
+        return String(value || "").replace(/[^0-9]/g, "");
+      }
+      function shouldAutoRefreshPage(nextGeneratedAt) {
+        const current = comparableVersion(pageGeneratedAt);
+        const next = comparableVersion(nextGeneratedAt);
+        return current && next && next > current;
+      }
+      async function checkPublishedRefresh() {
+        if (!window.fetch || !window.DOMParser || location.protocol === "file:") return;
+        try {
+          const url = new URL(location.href);
+          url.searchParams.set("refresh-check", String(Date.now()));
+          const response = await fetch(url.toString(), {
+            cache: "no-store",
+            credentials: "same-origin",
+            headers: { "Cache-Control": "no-cache" },
+          });
+          if (!response.ok) return;
+          const text = await response.text();
+          const doc = new DOMParser().parseFromString(text, "text/html");
+          const nextGeneratedAt = doc.querySelector(`meta[name="${refreshCheckMetaName}"]`)?.getAttribute("content") || "";
+          if (shouldAutoRefreshPage(nextGeneratedAt)) {
+            location.reload();
+          }
+        } catch (error) {}
+      }
+      if (refreshCheckIntervalMs > 0 && location.protocol !== "file:") {
+        window.addEventListener("focus", checkPublishedRefresh);
+        document.addEventListener("visibilitychange", () => {
+          if (!document.hidden) checkPublishedRefresh();
+        });
+        window.setTimeout(checkPublishedRefresh, 30 * 1000);
+        window.setInterval(checkPublishedRefresh, refreshCheckIntervalMs);
+      }
       const initialPortfolioState = {};
       const portfolioStorageKey = "nasdaqFundPortfolioStateV1";
       const tabButtons = Array.from(document.querySelectorAll(".tab-button"));

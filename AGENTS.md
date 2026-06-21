@@ -89,6 +89,7 @@ python -m py_compile "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts
 - GitHub Actions 工作流：`.github/workflows/refresh.yml`。
 - 每天按北京时间 `08:45`、`16:45`、`23:15` 自动刷新，对应 UTC cron 为 `45 0,8 * * *` 和 `15 15 * * *`。
 - 自动任务必须运行 `python refresh_all.py`，校验通过后再运行 `should_commit_refresh.py` 判断是否存在业务数据变化；只有纯时间戳变化时不提交，避免每天 3 次无意义 commit。
+- 生成页内置发布版本轮询：GitHub Pages 页面每 5 分钟、窗口重新获得焦点、页面重新可见时检查当前 URL 是否已发布新版 HTML。只有检测到新版 `fund-page-generated-at` 大于当前页面时才自动 `location.reload()`，让标题更新时间和所有指标一起更新；不要做只改页面时间、不换业务数据的前端假刷新。
 - 长期追踪的个人收益字段要保留：`market_value`、`cost_basis`、`profit`、`return_rate` 不应被自动刷新覆盖。
 
 ## UI 偏好

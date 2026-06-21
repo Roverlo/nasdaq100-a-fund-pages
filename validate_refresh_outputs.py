@@ -78,10 +78,16 @@ class PageInspector(HTMLParser):
         self.auto_plan_table_count = 0
         self.plan_sort_header_count = 0
         self.mobile_plan_sort_button_count = 0
+        self.generated_at_meta_count = 0
+        self.refresh_check_meta_count = 0
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         attr = dict(attrs)
         element_id = attr.get("id")
+        if tag == "meta" and attr.get("name") == "fund-page-generated-at":
+            self.generated_at_meta_count += 1
+        if tag == "meta" and attr.get("name") == "fund-page-refresh-check-ms":
+            self.refresh_check_meta_count += 1
         if element_id:
             if element_id.startswith("panel-"):
                 self.panel_ids.add(element_id)
@@ -209,6 +215,12 @@ def validate_table(path: Path, expected_columns: int, expected_rows: int) -> Non
 def validate_tabs(path: Path, required_panels: set[str], require_portfolio_link: bool = False) -> None:
     html, page = inspect_html(path)
     is_public_index = require_portfolio_link
+    if page.generated_at_meta_count != 1:
+        fail(f"{path.name} generated-at meta expected 1, got {page.generated_at_meta_count}")
+    if page.refresh_check_meta_count != 1:
+        fail(f"{path.name} refresh-check interval meta expected 1, got {page.refresh_check_meta_count}")
+    if "refresh-check" not in html or "checkPublishedRefresh" not in html:
+        fail(f"{path.name} missing published-page refresh polling script")
     missing = required_panels - page.panel_ids
     if missing:
         fail(f"{path.name} missing panels: {sorted(missing)}")

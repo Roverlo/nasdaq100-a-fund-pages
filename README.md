@@ -119,6 +119,8 @@ GitHub Actions 工作流位于 `.github/workflows/refresh.yml`。它每天按北
 
 `should_commit_refresh.py` 会在自动提交前过滤纯时间戳变化。如果只变了 `generated_at`、`recorded_at` 或页面上的“数据更新”时间，而基金业务数据没有变化，GitHub Actions 会跳过提交，避免每天制造 3 个低价值 commit。
 
+已经打开的 GitHub Pages 页面会每 5 分钟检查一次当前页面是否有新版发布；窗口重新获得焦点时也会检查。检测到新版 `generated_at` 后会自动刷新页面，所以标题里的最近更新时间和主表/追踪指标会一起更新。这个机制依赖 GitHub Actions 完成抓取、提交和 Pages 发布；如果本次只有纯时间戳变化并被提交保护跳过，已打开页面不会为了时间戳单独刷新。
+
 `validate_refresh_outputs.py` 是发布前的结构守门：
 
 - 完整页必须保留主表、持仓定投、长期追踪、梯队评级规则、数据来源；公开首页不应带回私有的持仓定投 tab 或定投状态筛选。
