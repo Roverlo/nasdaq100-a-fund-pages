@@ -2152,8 +2152,9 @@ def mobile_fund_cards(funds: list[Fund]) -> str:
                   <span class="code">{data_text(fund.code)}</span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number">{data_text(index)}</span></span>
-                  <span class="tier-pill {tier_class(tier)}"><strong>{tier}</strong><span>{data_text(f"{score:.1f}")}</span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number">{data_text(index)}</span> 名</span>
+                  <span class="mobile-tier {tier_class(tier)}"><strong>{tier}</strong><span>档</span></span>
+                  <span class="mobile-score">{data_text(f"{score:.1f}")} 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
@@ -3636,16 +3637,63 @@ def build_html(
         align-items: center;
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 6px;
         justify-content: flex-start;
         min-width: 0;
       }}
       .mobile-rank {{
-        color: var(--muted);
+        background: var(--ink);
+        border: 1px solid var(--ink);
+        border-radius: 3px;
+        color: #fffef9;
+        font-family: var(--font-data);
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1;
+        padding: 6px 8px;
+        white-space: nowrap;
+      }}
+      .mobile-tier,
+      .mobile-score {{
+        align-items: center;
+        background: #fffef9;
+        border: 1px solid var(--line-strong);
+        border-radius: 3px;
+        color: var(--ink);
+        display: inline-flex;
         font-family: var(--font-data);
         font-size: 12px;
+        font-weight: 600;
+        gap: 3px;
+        line-height: 1;
+        min-height: 27px;
+        padding: 5px 7px;
+        white-space: nowrap;
       }}
-      .mobile-card-rating .tier-pill {{
+      .mobile-tier strong {{
+        align-items: center;
+        background: var(--accent);
+        border-radius: 2px;
+        color: #fffef9;
+        display: inline-flex;
+        font-size: 12px;
+        height: 18px;
+        justify-content: center;
+        min-width: 18px;
+      }}
+      .mobile-tier.tier-a strong,
+      .mobile-tier.tier-b strong {{
+        background: var(--good);
+      }}
+      .mobile-tier.tier-c strong {{
+        background: var(--warn);
+        color: var(--ink);
+      }}
+      .mobile-tier.tier-d strong {{
+        background: var(--bad);
+      }}
+      .mobile-score {{
+        color: var(--accent-strong);
         flex: 0 0 auto;
       }}
       .mobile-card-private {{

@@ -1400,16 +1400,63 @@
         align-items: center;
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 6px;
         justify-content: flex-start;
         min-width: 0;
       }
       .mobile-rank {
-        color: var(--muted);
+        background: var(--ink);
+        border: 1px solid var(--ink);
+        border-radius: 3px;
+        color: #fffef9;
+        font-family: var(--font-data);
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1;
+        padding: 6px 8px;
+        white-space: nowrap;
+      }
+      .mobile-tier,
+      .mobile-score {
+        align-items: center;
+        background: #fffef9;
+        border: 1px solid var(--line-strong);
+        border-radius: 3px;
+        color: var(--ink);
+        display: inline-flex;
         font-family: var(--font-data);
         font-size: 12px;
+        font-weight: 600;
+        gap: 3px;
+        line-height: 1;
+        min-height: 27px;
+        padding: 5px 7px;
+        white-space: nowrap;
       }
-      .mobile-card-rating .tier-pill {
+      .mobile-tier strong {
+        align-items: center;
+        background: var(--accent);
+        border-radius: 2px;
+        color: #fffef9;
+        display: inline-flex;
+        font-size: 12px;
+        height: 18px;
+        justify-content: center;
+        min-width: 18px;
+      }
+      .mobile-tier.tier-a strong,
+      .mobile-tier.tier-b strong {
+        background: var(--good);
+      }
+      .mobile-tier.tier-c strong {
+        background: var(--warn);
+        color: var(--ink);
+      }
+      .mobile-tier.tier-d strong {
+        background: var(--bad);
+      }
+      .mobile-score {
+        color: var(--accent-strong);
         flex: 0 0 auto;
       }
       .mobile-card-private {
@@ -1699,7 +1746,7 @@
           <span class="subtitle-chip">QDII</span>
           <span class="subtitle-chip">长期定投</span>
           <span class="subtitle-chip">CNY</span>
-          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-22 00:18:52</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
+          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-22 00:45:57</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
           <span class="subtitle-meta">来源：东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
         </p>
       </div>
@@ -2267,8 +2314,9 @@
                   <span class="code"><span class="data-text">019441</span></span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">1</span></span></span>
-                  <span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">47.2</span></span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">1</span></span> 名</span>
+                  <span class="mobile-tier tier-c"><strong>C</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">47.2</span> 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
@@ -2302,8 +2350,9 @@
                   <span class="code"><span class="data-text">040046</span></span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">2</span></span></span>
-                  <span class="tier-pill tier-s"><strong>S</strong><span><span class="data-text">88.8</span></span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">2</span></span> 名</span>
+                  <span class="mobile-tier tier-s"><strong>S</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">88.8</span> 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
@@ -2337,8 +2386,9 @@
                   <span class="code"><span class="data-text">000834</span></span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">3</span></span></span>
-                  <span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">44.0</span></span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">3</span></span> 名</span>
+                  <span class="mobile-tier tier-c"><strong>C</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">44.0</span> 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
@@ -2372,8 +2422,9 @@
                   <span class="code"><span class="data-text">539001</span></span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">4</span></span></span>
-                  <span class="tier-pill tier-d"><strong>D</strong><span><span class="data-text">23.1</span></span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">4</span></span> 名</span>
+                  <span class="mobile-tier tier-d"><strong>D</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">23.1</span> 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
@@ -2407,8 +2458,9 @@
                   <span class="code"><span class="data-text">018966</span></span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">5</span></span></span>
-                  <span class="tier-pill tier-d"><strong>D</strong><span><span class="data-text">29.1</span></span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">5</span></span> 名</span>
+                  <span class="mobile-tier tier-d"><strong>D</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">29.1</span> 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
@@ -2442,8 +2494,9 @@
                   <span class="code"><span class="data-text">016452</span></span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">6</span></span></span>
-                  <span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">61.9</span></span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">6</span></span> 名</span>
+                  <span class="mobile-tier tier-b"><strong>B</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">61.9</span> 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
@@ -2477,8 +2530,9 @@
                   <span class="code"><span class="data-text">270042</span></span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">7</span></span></span>
-                  <span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">70.9</span></span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">7</span></span> 名</span>
+                  <span class="mobile-tier tier-a"><strong>A</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">70.9</span> 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
@@ -2512,8 +2566,9 @@
                   <span class="code"><span class="data-text">019172</span></span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">8</span></span></span>
-                  <span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">48.6</span></span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">8</span></span> 名</span>
+                  <span class="mobile-tier tier-b"><strong>B</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">48.6</span> 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
@@ -2547,8 +2602,9 @@
                   <span class="code"><span class="data-text">019547</span></span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">9</span></span></span>
-                  <span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">54.0</span></span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">9</span></span> 名</span>
+                  <span class="mobile-tier tier-b"><strong>B</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">54.0</span> 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
@@ -2582,8 +2638,9 @@
                   <span class="code"><span class="data-text">019736</span></span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">10</span></span></span>
-                  <span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">42.9</span></span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">10</span></span> 名</span>
+                  <span class="mobile-tier tier-c"><strong>C</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">42.9</span> 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
@@ -2617,8 +2674,9 @@
                   <span class="code"><span class="data-text">019524</span></span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">11</span></span></span>
-                  <span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">56.0</span></span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">11</span></span> 名</span>
+                  <span class="mobile-tier tier-b"><strong>B</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">56.0</span> 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
@@ -2652,8 +2710,9 @@
                   <span class="code"><span class="data-text">018043</span></span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">12</span></span></span>
-                  <span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">65.6</span></span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">12</span></span> 名</span>
+                  <span class="mobile-tier tier-a"><strong>A</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">65.6</span> 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
@@ -2687,8 +2746,9 @@
                   <span class="code"><span class="data-text">016055</span></span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">13</span></span></span>
-                  <span class="tier-pill tier-s"><strong>S</strong><span><span class="data-text">76.3</span></span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">13</span></span> 名</span>
+                  <span class="mobile-tier tier-s"><strong>S</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">76.3</span> 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
@@ -2722,8 +2782,9 @@
                   <span class="code"><span class="data-text">016532</span></span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">14</span></span></span>
-                  <span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">74.8</span></span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">14</span></span> 名</span>
+                  <span class="mobile-tier tier-a"><strong>A</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">74.8</span> 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
@@ -2757,8 +2818,9 @@
                   <span class="code"><span class="data-text">015299</span></span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">15</span></span></span>
-                  <span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">40.9</span></span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">15</span></span> 名</span>
+                  <span class="mobile-tier tier-c"><strong>C</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">40.9</span> 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
@@ -2792,8 +2854,9 @@
                   <span class="code"><span class="data-text">161130</span></span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">16</span></span></span>
-                  <span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">64.5</span></span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">16</span></span> 名</span>
+                  <span class="mobile-tier tier-b"><strong>B</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">64.5</span> 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
@@ -2827,8 +2890,9 @@
                   <span class="code"><span class="data-text">160213</span></span>
                 </div>
                 <div class="mobile-card-rating">
-                  <span class="mobile-rank">#<span class="mobile-rank-number"><span class="data-text">17</span></span></span>
-                  <span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">75.8</span></span></span>
+                  <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">17</span></span> 名</span>
+                  <span class="mobile-tier tier-a"><strong>A</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">75.8</span> 分</span>
                 </div>
               </div>
               <div class="mobile-card-private">
