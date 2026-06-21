@@ -9,6 +9,7 @@ VOLATILE_PATTERNS = [
     (re.compile(r'"generated_at":\s*"[^"]+"'), '"generated_at":"<volatile>"'),
     (re.compile(r'"recorded_at":\s*"[^"]+"'), '"recorded_at":"<volatile>"'),
     (re.compile(r"数据更新：\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}"), "数据更新：<volatile>"),
+    (re.compile(r"最近更新：\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}"), "最近更新：<volatile>"),
 ]
 
 
@@ -17,6 +18,8 @@ def git_changed_files() -> list[str]:
         ["git", "status", "--porcelain"],
         cwd=ROOT,
         text=True,
+        encoding="utf-8",
+        errors="replace",
         capture_output=True,
         check=True,
     )
@@ -36,6 +39,8 @@ def git_show_head(path: str) -> str | None:
         ["git", "show", f"HEAD:{path}"],
         cwd=ROOT,
         text=True,
+        encoding="utf-8",
+        errors="replace",
         capture_output=True,
     )
     if result.returncode != 0:

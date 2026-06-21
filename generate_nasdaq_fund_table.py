@@ -2076,6 +2076,7 @@ def build_html(
     tracking_file: Optional[Path] = None,
 ) -> str:
     generated_at = now_beijing().strftime("%Y-%m-%d %H:%M:%S")
+    refresh_schedule_text = " / ".join(AUTO_REFRESH_TIMES_BEIJING)
     rows = main_rows(funds)
     cards = score_cards(funds)
     if tracking_payload is None:
@@ -3366,7 +3367,8 @@ def build_html(
           <span class="subtitle-chip">QDII</span>
           <span class="subtitle-chip">长期定投</span>
           <span class="subtitle-chip">CNY</span>
-          <span class="subtitle-meta">更新：{data_text(generated_at)} · 东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
+          <span class="subtitle-meta">最近更新：{data_text(generated_at)} · 自动刷新 {data_text(refresh_schedule_text)}</span>
+          <span class="subtitle-meta">来源：东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
         </p>
       </div>
       <div class="header-actions">
