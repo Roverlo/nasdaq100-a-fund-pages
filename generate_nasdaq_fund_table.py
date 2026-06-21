@@ -1748,9 +1748,10 @@ def latest_tracking_record(payload: dict[str, object]) -> dict[str, object]:
 
 def tracking_snapshot_rows(payload: dict[str, object]) -> str:
     rows = []
-    records = tracking_records(payload)
-    recent_records = list(reversed(records[-12:]))
-    for index, record in enumerate(recent_records, start=1):
+    records = list(reversed(tracking_records(payload)))
+    if not records:
+        return '<tr><td colspan="7" class="muted-cell">暂无追踪快照</td></tr>'
+    for index, record in enumerate(records, start=1):
         date = str(record.get("date") or record.get("recorded_at") or "-")
         rows.append(
             f"""
@@ -1762,6 +1763,68 @@ def tracking_snapshot_rows(payload: dict[str, object]) -> str:
               <td class="num">{tracking_number(record.get("market_value"), "元")}</td>
               <td class="num">{tracking_number(record.get("profit"), "元")}</td>
               <td class="num">{tracking_percent(record.get("return_rate"))}</td>
+            </tr>
+            """
+        )
+    return "\n".join(rows)
+
+
+def tracking_record_year(record: dict[str, object]) -> str:
+    label = tracking_date_label(record)
+    match = re.match(r"(\d{4})", label)
+    return match.group(1) if match else "未知"
+
+
+def tracking_record_span_label(payload: dict[str, object]) -> str:
+    records = tracking_records(payload)
+    if not records:
+        return data_text("--")
+    first = tracking_date_label(records[0])
+    latest = tracking_date_label(records[-1])
+    return data_text(first if first == latest else f"{first} 至 {latest}")
+
+
+def tracking_record_year_count(payload: dict[str, object]) -> int:
+    return len({tracking_record_year(record) for record in tracking_records(payload)})
+
+
+def tracking_delta_number(latest: object, first: object, suffix: str = "") -> str:
+    latest_value = tracking_value(latest)
+    first_value = tracking_value(first)
+    if latest_value is None or first_value is None:
+        return '<span class="muted-cell">--</span>'
+    delta = latest_value - first_value
+    sign = "+" if delta > 0 else ""
+    if delta.is_integer():
+        text = f"{sign}{int(delta)}{suffix}"
+    else:
+        text = f"{sign}{delta:.2f}{suffix}"
+    return data_text(text)
+
+
+def tracking_year_summary_rows(payload: dict[str, object]) -> str:
+    records = sorted(tracking_records(payload), key=tracking_date_label)
+    if not records:
+        return '<tr><td colspan="9" class="muted-cell">暂无年度记录</td></tr>'
+    buckets: dict[str, list[dict[str, object]]] = {}
+    for record in records:
+        buckets.setdefault(tracking_record_year(record), []).append(record)
+    rows = []
+    for year, year_records in sorted(buckets.items(), reverse=True):
+        first = year_records[0]
+        latest = year_records[-1]
+        rows.append(
+            f"""
+            <tr>
+              <td class="num">{data_text(year)}</td>
+              <td class="num">{data_text(str(len(year_records)))}</td>
+              <td>{html.escape(tracking_date_label(first))}</td>
+              <td>{html.escape(tracking_date_label(latest))}</td>
+              <td class="num">{tracking_delta_number(latest.get("holding_total"), first.get("holding_total"), "元")}</td>
+              <td class="num">{tracking_number(latest.get("holding_total"), "元")}</td>
+              <td class="num">{tracking_number(latest.get("market_value"), "元")}</td>
+              <td class="num">{tracking_number(latest.get("profit"), "元")}</td>
+              <td class="num">{tracking_percent(latest.get("return_rate"))}</td>
             </tr>
             """
         )
@@ -1900,6 +1963,7 @@ def build_html(
         tracking_payload = {"schema_version": TRACKING_SCHEMA_VERSION, "records": [default_tracking_record(funds, cards)]}
     tracking_file = tracking_file or (DEFAULT_OUTPUT_DIR / TRACKING_FILENAME)
     tracking_snapshot_table_rows = tracking_snapshot_rows(tracking_payload)
+    tracking_year_table_rows = tracking_year_summary_rows(tracking_payload)
     tracking_detail_table_rows = tracking_fund_rows(funds, cards, tracking_payload)
     tracking_visible_count = len(tracking_visible_funds(funds, cards, tracking_payload))
     tracking_asset_chart = tracking_asset_chart_svg(tracking_payload)
@@ -1907,6 +1971,8 @@ def build_html(
     tracking_allocation = tracking_allocation_html(funds, cards, tracking_payload)
     tracking_latest = latest_tracking_record(tracking_payload)
     tracking_count = len(tracking_records(tracking_payload))
+    tracking_year_count = tracking_record_year_count(tracking_payload)
+    tracking_span = tracking_record_span_label(tracking_payload)
     tracking_latest_date = tracking_latest.get("date") or tracking_latest.get("recorded_at") or "-"
     scoring_rows = scoring_rule_rows()
     funds_by_code = {fund.code: fund for fund in funds}
@@ -2817,23 +2883,99 @@ def build_html(
       font-size: 14px;
       font-weight: 600;
     }}
+    .tracking-subtabs {{
+      align-items: center;
+      background: #f7f5ee;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 8px 12px;
+    }}
+    .tracking-subtab {{
+      border: 1px solid transparent;
+      border-radius: 3px;
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      font-family: var(--font-data);
+      font-size: 13px;
+      font-weight: 500;
+      min-height: 32px;
+      padding: 6px 12px;
+      white-space: nowrap;
+    }}
+    .tracking-subtab[aria-selected="true"] {{
+      background: var(--panel);
+      border-color: var(--line);
+      color: var(--ink);
+      box-shadow: 0 1px 8px rgba(20, 20, 19, 0.05);
+    }}
+    .tracking-subtab:focus-visible {{
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }}
+    .tracking-subpanel[hidden] {{ display: none; }}
+    .tracking-overview-grid {{
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      background: var(--panel);
+    }}
+    .tracking-overview-card {{
+      border-bottom: 1px solid var(--line);
+      min-width: 0;
+      padding: 13px 15px;
+    }}
+    .tracking-overview-card + .tracking-overview-card {{
+      border-left: 1px solid var(--line);
+    }}
+    .tracking-overview-card span {{
+      color: var(--muted);
+      display: block;
+      font-family: var(--font-data);
+      font-size: 12px;
+      margin-bottom: 5px;
+      white-space: nowrap;
+    }}
+    .tracking-overview-card strong {{
+      color: var(--ink);
+      display: block;
+      font-family: var(--font-data);
+      font-size: 19px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }}
     .tracking-grid {{
       display: grid;
       grid-template-columns: minmax(330px, 0.76fr) minmax(620px, 1.24fr);
       align-items: start;
-      border-top: 1px solid var(--line);
       background: var(--panel);
     }}
     .tracking-chart-grid {{
       display: grid;
       grid-template-columns: minmax(420px, 1.15fr) minmax(320px, 0.85fr);
-      border-top: 1px solid var(--line);
       background: var(--panel);
+    }}
+    .tracking-single-panel {{
+      background: var(--panel);
+      min-width: 0;
+    }}
+    .tracking-single-panel .tracking-chart-card,
+    .tracking-single-panel .tracking-allocation-card {{
+      border-left: 0;
     }}
     .tracking-chart-stack {{
       display: grid;
       grid-template-columns: 1fr 1fr;
       min-width: 0;
+    }}
+    .tracking-overview-panel .tracking-chart-stack {{
+      border-top: 1px solid var(--line);
     }}
     .tracking-chart-card,
     .tracking-allocation-card {{
@@ -2996,6 +3138,10 @@ def build_html(
     .tracking-history-table col.record-col {{ width: 9%; }}
     .tracking-history-table col.date-col {{ width: 23%; }}
     .tracking-history-table col.amount-col {{ width: 17%; }}
+    .tracking-year-table col.year-col {{ width: 10%; }}
+    .tracking-year-table col.count-col {{ width: 9%; }}
+    .tracking-year-table col.date-col {{ width: 13%; }}
+    .tracking-year-table col.amount-col {{ width: 13%; }}
     .tracking-fund-table col.record-col {{ width: 7%; }}
     .tracking-fund-table col.fund-col-small {{ width: 18%; }}
     .tracking-fund-table col.rating-col {{ width: 13%; }}
@@ -3047,6 +3193,9 @@ def build_html(
       .header-control-bar {{ justify-content: flex-start; width: 100%; }}
       h1 {{ font-size: 30px; }}
       .portfolio-grid {{ grid-template-columns: 1fr; }}
+      .tracking-overview-grid {{ grid-template-columns: repeat(2, minmax(150px, 1fr)); }}
+      .tracking-overview-card:nth-child(odd) {{ border-left: 0; }}
+      .tracking-overview-card:nth-child(n+3) {{ border-top: 0; }}
       .tracking-chart-grid {{ grid-template-columns: 1fr; }}
       .tracking-chart-stack {{ grid-template-columns: 1fr; }}
       .tracking-grid {{ grid-template-columns: 1fr; }}
@@ -3073,6 +3222,8 @@ def build_html(
       th, td, .sort-button {{ padding: 8px 9px; }}
       .fund-cell {{ min-width: 180px; }}
       .rule-line {{ grid-template-columns: 1fr; gap: 2px; }}
+      .tracking-overview-grid {{ grid-template-columns: 1fr; }}
+      .tracking-overview-card + .tracking-overview-card {{ border-left: 0; }}
       .portfolio-table {{ min-width: 0; font-size: 12px; }}
       .portfolio-table th,
       .portfolio-table td {{
@@ -3280,8 +3431,36 @@ def build_html(
           <span class="tracking-metric">暂停 <strong>{fmt_yuan(paused_auto_invest_total)} / 期</strong></span>
         </div>
       </div>
-      <div class="tracking-chart-grid">
-        <div class="tracking-chart-stack">
+      <div class="tracking-subtabs" role="tablist" aria-label="长期追踪视图">
+        <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-overview" aria-controls="tracking-panel-overview" aria-selected="true">总览</button>
+        <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-trend" aria-controls="tracking-panel-trend" aria-selected="false">趋势</button>
+        <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-years" aria-controls="tracking-panel-years" aria-selected="false">年度</button>
+        <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-allocation" aria-controls="tracking-panel-allocation" aria-selected="false">结构</button>
+        <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-funds" aria-controls="tracking-panel-funds" aria-selected="false">明细</button>
+        <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-snapshots" aria-controls="tracking-panel-snapshots" aria-selected="false">快照</button>
+      </div>
+      <div class="tracking-subpanel" id="tracking-panel-overview" role="tabpanel" aria-labelledby="tracking-tab-overview">
+        <div class="tracking-overview-panel">
+          <div class="tracking-overview-grid">
+            <div class="tracking-overview-card"><span>追踪区间</span><strong>{tracking_span}</strong></div>
+            <div class="tracking-overview-card"><span>历史快照</span><strong>{data_text(tracking_count)} 条</strong></div>
+            <div class="tracking-overview-card"><span>覆盖年份</span><strong>{data_text(tracking_year_count)} 年</strong></div>
+            <div class="tracking-overview-card"><span>当前基线</span><strong>{data_text(tracking_visible_count)} 支</strong></div>
+          </div>
+          <div class="tracking-chart-stack">
+            <div class="tracking-chart-card">
+              <div class="section-title"><h2>资产轨迹</h2><span class="title-metric">持有记录 / 市值</span></div>
+              <div class="chart-frame">{tracking_asset_chart}</div>
+            </div>
+            <div class="tracking-chart-card">
+              <div class="section-title"><h2>收益轨迹</h2><span class="title-metric">收益 / 收益率</span></div>
+              <div class="chart-frame">{tracking_return_chart}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tracking-subpanel" id="tracking-panel-trend" role="tabpanel" aria-labelledby="tracking-tab-trend" hidden>
+        <div class="tracking-chart-stack tracking-wide-stack">
           <div class="tracking-chart-card">
             <div class="section-title"><h2>资产轨迹</h2><span class="title-metric">持有记录 / 市值</span></div>
             <div class="chart-frame">{tracking_asset_chart}</div>
@@ -3291,47 +3470,81 @@ def build_html(
             <div class="chart-frame">{tracking_return_chart}</div>
           </div>
         </div>
-        <div class="tracking-allocation-card">
-          <div class="section-title"><h2>持仓结构</h2><span class="title-metric">按当前持有金额</span></div>
-          <div class="allocation-list">{tracking_allocation}</div>
-        </div>
       </div>
-      <div class="tracking-grid">
-        <div class="tracking-block">
-          <div class="section-title"><h2>追踪快照</h2><span class="title-metric">保留最近 <strong>12</strong> 条</span></div>
-          <div class="table-wrap compact-table-wrap">
-            <table class="small-table tracking-table tracking-history-table">
-              <colgroup>
-                <col class="record-col">
-                <col class="date-col">
-                <col class="amount-col">
-                <col class="amount-col">
-                <col class="amount-col">
-                <col class="amount-col">
-                <col class="amount-col">
-              </colgroup>
-              <thead><tr><th>序号</th><th>日期</th><th>持有</th><th>定投中</th><th>市值</th><th>收益</th><th>收益率</th></tr></thead>
-              <tbody>{tracking_snapshot_table_rows}</tbody>
-            </table>
+      <div class="tracking-subpanel" id="tracking-panel-years" role="tabpanel" aria-labelledby="tracking-tab-years" hidden>
+        <div class="tracking-single-panel">
+          <div class="tracking-block">
+            <div class="section-title"><h2>年度复盘</h2><span class="title-metric">按年份聚合所有快照</span></div>
+            <div class="table-wrap compact-table-wrap">
+              <table class="small-table tracking-table tracking-year-table">
+                <colgroup>
+                  <col class="year-col">
+                  <col class="count-col">
+                  <col class="date-col">
+                  <col class="date-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                </colgroup>
+                <thead><tr><th>年份</th><th>记录</th><th>首条</th><th>末条</th><th>持有变化</th><th>期末持有</th><th>期末市值</th><th>期末收益</th><th>收益率</th></tr></thead>
+                <tbody>{tracking_year_table_rows}</tbody>
+              </table>
+            </div>
           </div>
         </div>
-        <div class="tracking-block">
-          <div class="section-title"><h2>基金追踪</h2><span class="title-metric">当前基线 <strong>{data_text(tracking_visible_count)}</strong> 支</span></div>
-          <div class="table-wrap compact-table-wrap">
-            <table class="small-table tracking-table tracking-fund-table">
-              <colgroup>
-                <col class="record-col">
-                <col class="fund-col-small">
-                <col class="rating-col">
-                <col class="amount-col">
-                <col class="plan-col">
-                <col class="amount-col">
-                <col class="amount-col">
-                <col class="amount-col">
-              </colgroup>
-              <thead><tr><th>序号</th><th>基金</th><th>评级</th><th>持有</th><th>定投</th><th>市值</th><th>收益</th><th>收益率</th></tr></thead>
-              <tbody>{tracking_detail_table_rows}</tbody>
-            </table>
+      </div>
+      <div class="tracking-subpanel" id="tracking-panel-allocation" role="tabpanel" aria-labelledby="tracking-tab-allocation" hidden>
+        <div class="tracking-single-panel">
+          <div class="tracking-allocation-card">
+            <div class="section-title"><h2>持仓结构</h2><span class="title-metric">按当前持有金额</span></div>
+            <div class="allocation-list">{tracking_allocation}</div>
+          </div>
+        </div>
+      </div>
+      <div class="tracking-subpanel" id="tracking-panel-funds" role="tabpanel" aria-labelledby="tracking-tab-funds" hidden>
+        <div class="tracking-single-panel">
+          <div class="tracking-block">
+            <div class="section-title"><h2>基金追踪</h2><span class="title-metric">当前基线 <strong>{data_text(tracking_visible_count)}</strong> 支</span></div>
+            <div class="table-wrap compact-table-wrap">
+              <table class="small-table tracking-table tracking-fund-table">
+                <colgroup>
+                  <col class="record-col">
+                  <col class="fund-col-small">
+                  <col class="rating-col">
+                  <col class="amount-col">
+                  <col class="plan-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                </colgroup>
+                <thead><tr><th>序号</th><th>基金</th><th>评级</th><th>持有</th><th>定投</th><th>市值</th><th>收益</th><th>收益率</th></tr></thead>
+                <tbody>{tracking_detail_table_rows}</tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tracking-subpanel" id="tracking-panel-snapshots" role="tabpanel" aria-labelledby="tracking-tab-snapshots" hidden>
+        <div class="tracking-single-panel">
+          <div class="tracking-block">
+            <div class="section-title"><h2>追踪快照</h2><span class="title-metric">累计 <strong>{data_text(tracking_count)}</strong> 条</span></div>
+            <div class="table-wrap compact-table-wrap">
+              <table class="small-table tracking-table tracking-history-table">
+                <colgroup>
+                  <col class="record-col">
+                  <col class="date-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                </colgroup>
+                <thead><tr><th>序号</th><th>日期</th><th>持有</th><th>定投中</th><th>市值</th><th>收益</th><th>收益率</th></tr></thead>
+                <tbody>{tracking_snapshot_table_rows}</tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -3381,6 +3594,17 @@ def build_html(
           const targetPanel = button.getAttribute("aria-controls");
           tabButtons.forEach((item) => item.setAttribute("aria-selected", item.getAttribute("aria-controls") === targetPanel ? "true" : "false"));
           tabPanels.forEach((panel) => {{
+            panel.hidden = panel.id !== targetPanel;
+          }});
+        }});
+      }});
+      const trackingSubtabs = Array.from(document.querySelectorAll(".tracking-subtab"));
+      const trackingSubpanels = Array.from(document.querySelectorAll(".tracking-subpanel"));
+      trackingSubtabs.forEach((button) => {{
+        button.addEventListener("click", () => {{
+          const targetPanel = button.getAttribute("aria-controls");
+          trackingSubtabs.forEach((item) => item.setAttribute("aria-selected", item === button ? "true" : "false"));
+          trackingSubpanels.forEach((panel) => {{
             panel.hidden = panel.id !== targetPanel;
           }});
         }});

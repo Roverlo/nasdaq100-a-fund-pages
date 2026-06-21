@@ -882,23 +882,99 @@
       font-size: 14px;
       font-weight: 600;
     }
+    .tracking-subtabs {
+      align-items: center;
+      background: #f7f5ee;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 8px 12px;
+    }
+    .tracking-subtab {
+      border: 1px solid transparent;
+      border-radius: 3px;
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      font-family: var(--font-data);
+      font-size: 13px;
+      font-weight: 500;
+      min-height: 32px;
+      padding: 6px 12px;
+      white-space: nowrap;
+    }
+    .tracking-subtab[aria-selected="true"] {
+      background: var(--panel);
+      border-color: var(--line);
+      color: var(--ink);
+      box-shadow: 0 1px 8px rgba(20, 20, 19, 0.05);
+    }
+    .tracking-subtab:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .tracking-subpanel[hidden] { display: none; }
+    .tracking-overview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      background: var(--panel);
+    }
+    .tracking-overview-card {
+      border-bottom: 1px solid var(--line);
+      min-width: 0;
+      padding: 13px 15px;
+    }
+    .tracking-overview-card + .tracking-overview-card {
+      border-left: 1px solid var(--line);
+    }
+    .tracking-overview-card span {
+      color: var(--muted);
+      display: block;
+      font-family: var(--font-data);
+      font-size: 12px;
+      margin-bottom: 5px;
+      white-space: nowrap;
+    }
+    .tracking-overview-card strong {
+      color: var(--ink);
+      display: block;
+      font-family: var(--font-data);
+      font-size: 19px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
     .tracking-grid {
       display: grid;
       grid-template-columns: minmax(330px, 0.76fr) minmax(620px, 1.24fr);
       align-items: start;
-      border-top: 1px solid var(--line);
       background: var(--panel);
     }
     .tracking-chart-grid {
       display: grid;
       grid-template-columns: minmax(420px, 1.15fr) minmax(320px, 0.85fr);
-      border-top: 1px solid var(--line);
       background: var(--panel);
+    }
+    .tracking-single-panel {
+      background: var(--panel);
+      min-width: 0;
+    }
+    .tracking-single-panel .tracking-chart-card,
+    .tracking-single-panel .tracking-allocation-card {
+      border-left: 0;
     }
     .tracking-chart-stack {
       display: grid;
       grid-template-columns: 1fr 1fr;
       min-width: 0;
+    }
+    .tracking-overview-panel .tracking-chart-stack {
+      border-top: 1px solid var(--line);
     }
     .tracking-chart-card,
     .tracking-allocation-card {
@@ -1061,6 +1137,10 @@
     .tracking-history-table col.record-col { width: 9%; }
     .tracking-history-table col.date-col { width: 23%; }
     .tracking-history-table col.amount-col { width: 17%; }
+    .tracking-year-table col.year-col { width: 10%; }
+    .tracking-year-table col.count-col { width: 9%; }
+    .tracking-year-table col.date-col { width: 13%; }
+    .tracking-year-table col.amount-col { width: 13%; }
     .tracking-fund-table col.record-col { width: 7%; }
     .tracking-fund-table col.fund-col-small { width: 18%; }
     .tracking-fund-table col.rating-col { width: 13%; }
@@ -1112,6 +1192,9 @@
       .header-control-bar { justify-content: flex-start; width: 100%; }
       h1 { font-size: 30px; }
       .portfolio-grid { grid-template-columns: 1fr; }
+      .tracking-overview-grid { grid-template-columns: repeat(2, minmax(150px, 1fr)); }
+      .tracking-overview-card:nth-child(odd) { border-left: 0; }
+      .tracking-overview-card:nth-child(n+3) { border-top: 0; }
       .tracking-chart-grid { grid-template-columns: 1fr; }
       .tracking-chart-stack { grid-template-columns: 1fr; }
       .tracking-grid { grid-template-columns: 1fr; }
@@ -1138,6 +1221,8 @@
       th, td, .sort-button { padding: 8px 9px; }
       .fund-cell { min-width: 180px; }
       .rule-line { grid-template-columns: 1fr; gap: 2px; }
+      .tracking-overview-grid { grid-template-columns: 1fr; }
+      .tracking-overview-card + .tracking-overview-card { border-left: 0; }
       .portfolio-table { min-width: 0; font-size: 12px; }
       .portfolio-table th,
       .portfolio-table td {
@@ -1170,7 +1255,7 @@
           <span class="subtitle-chip">QDII</span>
           <span class="subtitle-chip">长期定投</span>
           <span class="subtitle-chip">CNY</span>
-          <span class="subtitle-meta">更新：<span class="data-text">2026-06-21 03:22:56</span> · 东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
+          <span class="subtitle-meta">更新：<span class="data-text">2026-06-21 10:57:58</span> · 东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
         </p>
       </div>
       <div class="header-actions">
@@ -1956,8 +2041,51 @@
           <span class="tracking-metric">暂停 <strong><span class="data-text">220元</span> / 期</strong></span>
         </div>
       </div>
-      <div class="tracking-chart-grid">
-        <div class="tracking-chart-stack">
+      <div class="tracking-subtabs" role="tablist" aria-label="长期追踪视图">
+        <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-overview" aria-controls="tracking-panel-overview" aria-selected="true">总览</button>
+        <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-trend" aria-controls="tracking-panel-trend" aria-selected="false">趋势</button>
+        <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-years" aria-controls="tracking-panel-years" aria-selected="false">年度</button>
+        <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-allocation" aria-controls="tracking-panel-allocation" aria-selected="false">结构</button>
+        <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-funds" aria-controls="tracking-panel-funds" aria-selected="false">明细</button>
+        <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-snapshots" aria-controls="tracking-panel-snapshots" aria-selected="false">快照</button>
+      </div>
+      <div class="tracking-subpanel" id="tracking-panel-overview" role="tabpanel" aria-labelledby="tracking-tab-overview">
+        <div class="tracking-overview-panel">
+          <div class="tracking-overview-grid">
+            <div class="tracking-overview-card"><span>追踪区间</span><strong><span class="data-text">2026-06-21</span></strong></div>
+            <div class="tracking-overview-card"><span>历史快照</span><strong><span class="data-text">1</span> 条</strong></div>
+            <div class="tracking-overview-card"><span>覆盖年份</span><strong><span class="data-text">1</span> 年</strong></div>
+            <div class="tracking-overview-card"><span>当前基线</span><strong><span class="data-text">11</span> 支</strong></div>
+          </div>
+          <div class="tracking-chart-stack">
+            <div class="tracking-chart-card">
+              <div class="section-title"><h2>资产轨迹</h2><span class="title-metric">持有记录 / 市值</span></div>
+              <div class="chart-frame">
+    <svg class="tracking-chart-svg" viewBox="0 0 640 220" role="img" aria-label="持有记录">
+      <rect class="chart-bg" x="0" y="0" width="640" height="220" />
+      <line class="chart-grid" x1="46" y1="18.00" x2="622" y2="18.00" /><text class="chart-axis" x="38" y="22.00" text-anchor="end">604.8</text><line class="chart-grid" x1="46" y1="103.00" x2="622" y2="103.00" /><text class="chart-axis" x="38" y="107.00" text-anchor="end">560</text><line class="chart-grid" x1="46" y1="188.00" x2="622" y2="188.00" /><text class="chart-axis" x="38" y="192.00" text-anchor="end">515.2</text>
+      <foreignObject x="46" y="0" width="576" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="chart-legend"><span class="chart-legend-item"><i class="legend-dot legend-dot-1"></i>持有记录</span></div></foreignObject>
+      <path class="chart-series chart-series-1" d="M 334.00 103.00" /><circle class="chart-point chart-point-1" cx="334.00" cy="103.00" r="3.2" />
+      <text class="chart-axis" x="46" y="211" text-anchor="start">2026-06-21</text>
+      <text class="chart-axis" x="622" y="211" text-anchor="end">2026-06-21</text>
+    </svg>
+    </div>
+            </div>
+            <div class="tracking-chart-card">
+              <div class="section-title"><h2>收益轨迹</h2><span class="title-metric">收益 / 收益率</span></div>
+              <div class="chart-frame">
+        <svg class="tracking-chart-svg" viewBox="0 0 640 220" role="img" aria-label="等待收益记录">
+          <rect class="chart-bg" x="0" y="0" width="640" height="220" />
+          <line class="chart-grid" x1="46" y1="103.00" x2="622" y2="103.00" />
+          <text class="chart-empty" x="320.00" y="110.00" text-anchor="middle">等待收益记录</text>
+        </svg>
+        </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tracking-subpanel" id="tracking-panel-trend" role="tabpanel" aria-labelledby="tracking-tab-trend" hidden>
+        <div class="tracking-chart-stack tracking-wide-stack">
           <div class="tracking-chart-card">
             <div class="section-title"><h2>资产轨迹</h2><span class="title-metric">持有记录 / 市值</span></div>
             <div class="chart-frame">
@@ -1982,9 +2110,48 @@
         </div>
           </div>
         </div>
-        <div class="tracking-allocation-card">
-          <div class="section-title"><h2>持仓结构</h2><span class="title-metric">按当前持有金额</span></div>
-          <div class="allocation-list">
+      </div>
+      <div class="tracking-subpanel" id="tracking-panel-years" role="tabpanel" aria-labelledby="tracking-tab-years" hidden>
+        <div class="tracking-single-panel">
+          <div class="tracking-block">
+            <div class="section-title"><h2>年度复盘</h2><span class="title-metric">按年份聚合所有快照</span></div>
+            <div class="table-wrap compact-table-wrap">
+              <table class="small-table tracking-table tracking-year-table">
+                <colgroup>
+                  <col class="year-col">
+                  <col class="count-col">
+                  <col class="date-col">
+                  <col class="date-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                </colgroup>
+                <thead><tr><th>年份</th><th>记录</th><th>首条</th><th>末条</th><th>持有变化</th><th>期末持有</th><th>期末市值</th><th>期末收益</th><th>收益率</th></tr></thead>
+                <tbody>
+            <tr>
+              <td class="num"><span class="data-text">2026</span></td>
+              <td class="num"><span class="data-text">1</span></td>
+              <td>2026-06-21</td>
+              <td>2026-06-21</td>
+              <td class="num"><span class="data-text">0元</span></td>
+              <td class="num"><span class="data-text">560元</span></td>
+              <td class="num"><span class="muted-cell">--</span></td>
+              <td class="num"><span class="muted-cell">--</span></td>
+              <td class="num"><span class="muted-cell">--</span></td>
+            </tr>
+            </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tracking-subpanel" id="tracking-panel-allocation" role="tabpanel" aria-labelledby="tracking-tab-allocation" hidden>
+        <div class="tracking-single-panel">
+          <div class="tracking-allocation-card">
+            <div class="section-title"><h2>持仓结构</h2><span class="title-metric">按当前持有金额</span></div>
+            <div class="allocation-list">
             <div class="allocation-row">
               <div class="allocation-head">
                 <span>南方 <span class="data-text">016452</span></span>
@@ -2056,53 +2223,27 @@
               <div class="allocation-track"><span class="tier-c" style="width: 1.79%"></span></div>
             </div>
             </div>
-        </div>
-      </div>
-      <div class="tracking-grid">
-        <div class="tracking-block">
-          <div class="section-title"><h2>追踪快照</h2><span class="title-metric">保留最近 <strong>12</strong> 条</span></div>
-          <div class="table-wrap compact-table-wrap">
-            <table class="small-table tracking-table tracking-history-table">
-              <colgroup>
-                <col class="record-col">
-                <col class="date-col">
-                <col class="amount-col">
-                <col class="amount-col">
-                <col class="amount-col">
-                <col class="amount-col">
-                <col class="amount-col">
-              </colgroup>
-              <thead><tr><th>序号</th><th>日期</th><th>持有</th><th>定投中</th><th>市值</th><th>收益</th><th>收益率</th></tr></thead>
-              <tbody>
-            <tr>
-              <td class="num record-index"><span class="data-text">1</span></td>
-              <td>2026-06-21</td>
-              <td class="num"><span class="data-text">560元</span></td>
-              <td class="num"><span class="data-text">300元/期</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-              <td class="num"><span class="muted-cell">--</span></td>
-            </tr>
-            </tbody>
-            </table>
           </div>
         </div>
-        <div class="tracking-block">
-          <div class="section-title"><h2>基金追踪</h2><span class="title-metric">当前基线 <strong><span class="data-text">11</span></strong> 支</span></div>
-          <div class="table-wrap compact-table-wrap">
-            <table class="small-table tracking-table tracking-fund-table">
-              <colgroup>
-                <col class="record-col">
-                <col class="fund-col-small">
-                <col class="rating-col">
-                <col class="amount-col">
-                <col class="plan-col">
-                <col class="amount-col">
-                <col class="amount-col">
-                <col class="amount-col">
-              </colgroup>
-              <thead><tr><th>序号</th><th>基金</th><th>评级</th><th>持有</th><th>定投</th><th>市值</th><th>收益</th><th>收益率</th></tr></thead>
-              <tbody>
+      </div>
+      <div class="tracking-subpanel" id="tracking-panel-funds" role="tabpanel" aria-labelledby="tracking-tab-funds" hidden>
+        <div class="tracking-single-panel">
+          <div class="tracking-block">
+            <div class="section-title"><h2>基金追踪</h2><span class="title-metric">当前基线 <strong><span class="data-text">11</span></strong> 支</span></div>
+            <div class="table-wrap compact-table-wrap">
+              <table class="small-table tracking-table tracking-fund-table">
+                <colgroup>
+                  <col class="record-col">
+                  <col class="fund-col-small">
+                  <col class="rating-col">
+                  <col class="amount-col">
+                  <col class="plan-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                </colgroup>
+                <thead><tr><th>序号</th><th>基金</th><th>评级</th><th>持有</th><th>定投</th><th>市值</th><th>收益</th><th>收益率</th></tr></thead>
+                <tbody>
             <tr data-code="016452">
               <td class="num record-index"><span class="data-text">1</span></td>
               <td>南方 <span class="data-text">016452</span></td>
@@ -2234,7 +2375,40 @@
               <td class="num"><span class="muted-cell">--</span></td>
             </tr>
             </tbody>
-            </table>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tracking-subpanel" id="tracking-panel-snapshots" role="tabpanel" aria-labelledby="tracking-tab-snapshots" hidden>
+        <div class="tracking-single-panel">
+          <div class="tracking-block">
+            <div class="section-title"><h2>追踪快照</h2><span class="title-metric">累计 <strong><span class="data-text">1</span></strong> 条</span></div>
+            <div class="table-wrap compact-table-wrap">
+              <table class="small-table tracking-table tracking-history-table">
+                <colgroup>
+                  <col class="record-col">
+                  <col class="date-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
+                </colgroup>
+                <thead><tr><th>序号</th><th>日期</th><th>持有</th><th>定投中</th><th>市值</th><th>收益</th><th>收益率</th></tr></thead>
+                <tbody>
+            <tr>
+              <td class="num record-index"><span class="data-text">1</span></td>
+              <td>2026-06-21</td>
+              <td class="num"><span class="data-text">560元</span></td>
+              <td class="num"><span class="data-text">300元/期</span></td>
+              <td class="num"><span class="muted-cell">--</span></td>
+              <td class="num"><span class="muted-cell">--</span></td>
+              <td class="num"><span class="muted-cell">--</span></td>
+            </tr>
+            </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -2361,6 +2535,17 @@
           const targetPanel = button.getAttribute("aria-controls");
           tabButtons.forEach((item) => item.setAttribute("aria-selected", item.getAttribute("aria-controls") === targetPanel ? "true" : "false"));
           tabPanels.forEach((panel) => {
+            panel.hidden = panel.id !== targetPanel;
+          });
+        });
+      });
+      const trackingSubtabs = Array.from(document.querySelectorAll(".tracking-subtab"));
+      const trackingSubpanels = Array.from(document.querySelectorAll(".tracking-subpanel"));
+      trackingSubtabs.forEach((button) => {
+        button.addEventListener("click", () => {
+          const targetPanel = button.getAttribute("aria-controls");
+          trackingSubtabs.forEach((item) => item.setAttribute("aria-selected", item === button ? "true" : "false"));
+          trackingSubpanels.forEach((panel) => {
             panel.hidden = panel.id !== targetPanel;
           });
         });

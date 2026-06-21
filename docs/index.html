@@ -882,23 +882,99 @@
       font-size: 14px;
       font-weight: 600;
     }
+    .tracking-subtabs {
+      align-items: center;
+      background: #f7f5ee;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 8px 12px;
+    }
+    .tracking-subtab {
+      border: 1px solid transparent;
+      border-radius: 3px;
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      font-family: var(--font-data);
+      font-size: 13px;
+      font-weight: 500;
+      min-height: 32px;
+      padding: 6px 12px;
+      white-space: nowrap;
+    }
+    .tracking-subtab[aria-selected="true"] {
+      background: var(--panel);
+      border-color: var(--line);
+      color: var(--ink);
+      box-shadow: 0 1px 8px rgba(20, 20, 19, 0.05);
+    }
+    .tracking-subtab:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .tracking-subpanel[hidden] { display: none; }
+    .tracking-overview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      background: var(--panel);
+    }
+    .tracking-overview-card {
+      border-bottom: 1px solid var(--line);
+      min-width: 0;
+      padding: 13px 15px;
+    }
+    .tracking-overview-card + .tracking-overview-card {
+      border-left: 1px solid var(--line);
+    }
+    .tracking-overview-card span {
+      color: var(--muted);
+      display: block;
+      font-family: var(--font-data);
+      font-size: 12px;
+      margin-bottom: 5px;
+      white-space: nowrap;
+    }
+    .tracking-overview-card strong {
+      color: var(--ink);
+      display: block;
+      font-family: var(--font-data);
+      font-size: 19px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
     .tracking-grid {
       display: grid;
       grid-template-columns: minmax(330px, 0.76fr) minmax(620px, 1.24fr);
       align-items: start;
-      border-top: 1px solid var(--line);
       background: var(--panel);
     }
     .tracking-chart-grid {
       display: grid;
       grid-template-columns: minmax(420px, 1.15fr) minmax(320px, 0.85fr);
-      border-top: 1px solid var(--line);
       background: var(--panel);
+    }
+    .tracking-single-panel {
+      background: var(--panel);
+      min-width: 0;
+    }
+    .tracking-single-panel .tracking-chart-card,
+    .tracking-single-panel .tracking-allocation-card {
+      border-left: 0;
     }
     .tracking-chart-stack {
       display: grid;
       grid-template-columns: 1fr 1fr;
       min-width: 0;
+    }
+    .tracking-overview-panel .tracking-chart-stack {
+      border-top: 1px solid var(--line);
     }
     .tracking-chart-card,
     .tracking-allocation-card {
@@ -1061,6 +1137,10 @@
     .tracking-history-table col.record-col { width: 9%; }
     .tracking-history-table col.date-col { width: 23%; }
     .tracking-history-table col.amount-col { width: 17%; }
+    .tracking-year-table col.year-col { width: 10%; }
+    .tracking-year-table col.count-col { width: 9%; }
+    .tracking-year-table col.date-col { width: 13%; }
+    .tracking-year-table col.amount-col { width: 13%; }
     .tracking-fund-table col.record-col { width: 7%; }
     .tracking-fund-table col.fund-col-small { width: 18%; }
     .tracking-fund-table col.rating-col { width: 13%; }
@@ -1112,6 +1192,9 @@
       .header-control-bar { justify-content: flex-start; width: 100%; }
       h1 { font-size: 30px; }
       .portfolio-grid { grid-template-columns: 1fr; }
+      .tracking-overview-grid { grid-template-columns: repeat(2, minmax(150px, 1fr)); }
+      .tracking-overview-card:nth-child(odd) { border-left: 0; }
+      .tracking-overview-card:nth-child(n+3) { border-top: 0; }
       .tracking-chart-grid { grid-template-columns: 1fr; }
       .tracking-chart-stack { grid-template-columns: 1fr; }
       .tracking-grid { grid-template-columns: 1fr; }
@@ -1138,6 +1221,8 @@
       th, td, .sort-button { padding: 8px 9px; }
       .fund-cell { min-width: 180px; }
       .rule-line { grid-template-columns: 1fr; gap: 2px; }
+      .tracking-overview-grid { grid-template-columns: 1fr; }
+      .tracking-overview-card + .tracking-overview-card { border-left: 0; }
       .portfolio-table { min-width: 0; font-size: 12px; }
       .portfolio-table th,
       .portfolio-table td {
@@ -1183,7 +1268,7 @@
           <span class="subtitle-chip">QDII</span>
           <span class="subtitle-chip">长期定投</span>
           <span class="subtitle-chip">CNY</span>
-          <span class="subtitle-meta">更新：<span class="data-text">2026-06-21 03:22:56</span> · 东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
+          <span class="subtitle-meta">更新：<span class="data-text">2026-06-21 10:57:58</span> · 东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
         </p>
       </div>
       <div class="header-actions">
