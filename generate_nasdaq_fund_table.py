@@ -2935,6 +2935,35 @@ def build_html(
       padding-top: 13px;
       padding-bottom: 13px;
     }}
+    .mobile-plan-sortbar {{
+      display: none;
+    }}
+    .mobile-plan-sort-button {{
+      align-items: center;
+      background: transparent;
+      border: 0;
+      border-radius: 3px;
+      color: var(--ink-soft);
+      cursor: pointer;
+      display: inline-flex;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      gap: 4px;
+      justify-content: center;
+      min-height: 34px;
+      padding: 7px 8px;
+      white-space: nowrap;
+    }}
+    .mobile-plan-sort-button.is-active {{
+      background: var(--panel);
+      color: var(--ink);
+      box-shadow: inset 0 0 0 1px var(--line);
+    }}
+    .mobile-plan-sort-button:focus-visible {{
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }}
     .compact-table-wrap {{
       max-height: none;
       min-height: 0;
@@ -3744,6 +3773,18 @@ def build_html(
         padding-right: 11px;
       }}
       .tracking-overview-card + .tracking-overview-card {{ border-left: 0; }}
+      .mobile-plan-sortbar {{
+        background: #f7f5ee;
+        border-bottom: 1px solid var(--line);
+        display: grid;
+        gap: 6px;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        padding: 8px;
+      }}
+      .mobile-plan-sort-button {{
+        min-width: 0;
+        width: 100%;
+      }}
       .portfolio-table {{ min-width: 0; font-size: 12px; }}
       .portfolio-table th,
       .portfolio-table td {{
@@ -4021,6 +4062,12 @@ def build_html(
       <div class="portfolio-grid">
         <div class="portfolio-block">
           <div class="section-title"><h2>定投计划</h2><span class="title-metric">当前持有 <strong id="holding-total-value">{fmt_yuan(holding_total)}</strong></span><span class="title-metric">定投中总额 <strong id="active-auto-total-value">{fmt_yuan(active_auto_invest_total)} / 期</strong></span></div>
+          <div class="mobile-plan-sortbar" aria-label="定投计划排序">
+            <button type="button" class="mobile-plan-sort-button" data-plan-column-index="2" data-sort-type="number">评级<span class="sort-indicator"></span></button>
+            <button type="button" class="mobile-plan-sort-button" data-plan-column-index="3" data-sort-type="number">状态<span class="sort-indicator"></span></button>
+            <button type="button" class="mobile-plan-sort-button" data-plan-column-index="4" data-sort-type="number">金额<span class="sort-indicator"></span></button>
+            <button type="button" class="mobile-plan-sort-button" data-plan-column-index="5" data-sort-type="number">持有<span class="sort-indicator"></span></button>
+          </div>
           <div class="table-wrap compact-table-wrap">
             <table class="small-table portfolio-table auto-plan-table">
               <colgroup>
@@ -4577,6 +4624,15 @@ def build_html(
           indicator.textContent = header === activePlanHeader ? (direction === "asc" ? "↑" : "↓") : "↕";
         }});
       }}
+      function updatePlanSortControls(planControls, activePlanHeader, direction) {{
+        const activeIndex = activePlanHeader?.dataset.planColumnIndex || "";
+        planControls.forEach((control) => {{
+          const isActive = control.dataset.planColumnIndex === activeIndex;
+          const indicator = control.querySelector(".sort-indicator");
+          control.classList.toggle("is-active", isActive);
+          if (indicator) indicator.textContent = isActive ? (direction === "asc" ? "↑" : "↓") : "↕";
+        }});
+      }}
       function updatePlanRowIndexes(planBody) {{
         Array.from(planBody.querySelectorAll("tr")).forEach((row, index) => {{
           const indexCell = row.querySelector(".record-index");
@@ -4820,18 +4876,30 @@ def build_html(
       }}
       document.querySelectorAll(".portfolio-table").forEach((portfolioTable) => {{
         const planHeaders = Array.from(portfolioTable.querySelectorAll("th.sortable[data-plan-column-index]"));
+        const planControls = Array.from(portfolioTable.closest(".portfolio-block")?.querySelectorAll(".mobile-plan-sort-button[data-plan-column-index]") || []);
         let activePlanHeader = null;
         let activePlanDirection = "desc";
+        const applyPlanSort = (header) => {{
+          activePlanDirection = activePlanHeader === header && activePlanDirection === "desc" ? "asc" : "desc";
+          activePlanHeader = header;
+          sortPlanTable(portfolioTable, header, activePlanDirection);
+          updatePlanSortIndicators(planHeaders, activePlanHeader, activePlanDirection);
+          updatePlanSortControls(planControls, activePlanHeader, activePlanDirection);
+        }};
         planHeaders.forEach((header) => {{
           const indicator = header.querySelector(".sort-indicator");
           if (indicator) indicator.textContent = "↕";
           const button = header.querySelector(".sort-button");
           if (!button) return;
           button.addEventListener("click", () => {{
-            activePlanDirection = activePlanHeader === header && activePlanDirection === "desc" ? "asc" : "desc";
-            activePlanHeader = header;
-            sortPlanTable(portfolioTable, header, activePlanDirection);
-            updatePlanSortIndicators(planHeaders, activePlanHeader, activePlanDirection);
+            applyPlanSort(header);
+          }});
+        }});
+        updatePlanSortControls(planControls, activePlanHeader, activePlanDirection);
+        planControls.forEach((control) => {{
+          control.addEventListener("click", () => {{
+            const header = planHeaders.find((item) => item.dataset.planColumnIndex === control.dataset.planColumnIndex);
+            if (header) applyPlanSort(header);
           }});
         }});
         portfolioTable.addEventListener("click", (event) => {{
