@@ -190,6 +190,23 @@ def validate_snapshot(snapshot: dict) -> None:
     expected_weights = {rule["key"]: rule["weight"] for rule in generator.SCORING_RULES}
     if weights != expected_weights:
         fail("snapshot scoring weights do not match generator.SCORING_RULES")
+    source_health = snapshot.get("source_health")
+    if not isinstance(source_health, dict):
+        fail("snapshot missing source_health")
+    checks = source_health.get("checks")
+    if not isinstance(checks, dict):
+        fail("snapshot source_health.checks must be an object")
+    for key in ("base_data", "fee_data", "tracking_error"):
+        check = checks.get(key)
+        if not isinstance(check, dict):
+            fail(f"snapshot source_health missing {key}")
+        success_count = check.get("success_count")
+        required = check.get("required_success_count")
+        if success_count != required or success_count != FUND_COUNT:
+            fail(
+                f"source health {key} expected {FUND_COUNT}/{FUND_COUNT}, "
+                f"got {success_count}/{required}; failed={check.get('failed_codes')}"
+            )
     if snapshot.get("holding_plan", {}).get("holding_total") != sum(generator.HOLDING_AMOUNTS.values()):
         fail("snapshot holding total mismatch")
     if snapshot.get("auto_invest_plan", {}).get("active_total") != sum(generator.AUTO_INVEST_AMOUNTS.values()):

@@ -47,7 +47,7 @@ Copy-Item -LiteralPath "C:\ALL_in_H\纳指记录\generate_nasdaq_fund_table.py" 
 python -m py_compile "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts\generate_nasdaq_fund_table.py"
 ```
 
-`refresh_all.py` 会编译生成器、抓取并生成主表、更新 `portfolio_tracking.json` 当天记录、准备 GitHub Pages 的 `docs/`、运行 `validate_refresh_outputs.py`。不要跳过这个入口后只手动生成 HTML。
+`refresh_all.py` 会编译生成器、抓取并生成主表、更新 `portfolio_tracking.json` 当天记录、准备 GitHub Pages 的 `docs/`、编译提交判断脚本、运行 `validate_refresh_outputs.py`。不要跳过这个入口后只手动生成 HTML。
 
 再做结构检查：
 
@@ -55,13 +55,14 @@ python -m py_compile "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts
 - 当前主表应为 `18` 列、`16` 行，除非基金池有意变更。
 - `nasdaq_fund_snapshot.json` 中 `auto_invest_plan.active_total` 应匹配页面定投中总额。
 - `holding_plan.holding_total` 应匹配页面当前持有总额。
+- `nasdaq_fund_snapshot.json` 中 `source_health.checks` 应要求基础行情、费率赎回、跟踪误差均为 `16/16` 成功；如果接口不可用导致回退值生成，应让验证失败，不要发布“假刷新”。
 - `portfolio_tracking.json` 应存在，最新记录日期应等于当前北京时间日期；最新记录的评级、评分、持仓金额、定投金额应与 `nasdaq_fund_snapshot.json` 一致；未知的市值、收益、收益率保持 `null` / `--`，不要用基金涨幅伪造个人收益。
 
 ## 自动刷新
 
 - GitHub Actions 工作流：`.github/workflows/refresh.yml`。
 - 每天按北京时间 `08:45`、`16:45`、`23:15` 自动刷新，对应 UTC cron 为 `45 0,8 * * *` 和 `15 15 * * *`。
-- 自动任务必须运行 `python refresh_all.py`，校验通过后才提交生成产物并推送。
+- 自动任务必须运行 `python refresh_all.py`，校验通过后再运行 `should_commit_refresh.py` 判断是否存在业务数据变化；只有纯时间戳变化时不提交，避免每天 3 次无意义 commit。
 - 长期追踪的个人收益字段要保留：`market_value`、`cost_basis`、`profit`、`return_rate` 不应被自动刷新覆盖。
 
 ## UI 偏好

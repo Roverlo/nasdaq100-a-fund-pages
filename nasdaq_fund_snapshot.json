@@ -1,5 +1,28 @@
 {
-  "generated_at": "2026-06-21T14:07:13+08:00",
+  "generated_at": "2026-06-21T14:14:58+08:00",
+  "source_health": {
+    "fund_count": 16,
+    "checks": {
+      "base_data": {
+        "label": "基础行情/限额/规模",
+        "success_count": 16,
+        "required_success_count": 16,
+        "failed_codes": []
+      },
+      "fee_data": {
+        "label": "费率/赎回",
+        "success_count": 16,
+        "required_success_count": 16,
+        "failed_codes": []
+      },
+      "tracking_error": {
+        "label": "跟踪误差",
+        "success_count": 16,
+        "required_success_count": 16,
+        "failed_codes": []
+      }
+    }
+  },
   "scoring_model": {
     "method": "return-priority model for the current A-share watchlist; return metrics carry 55%, tracking error and base fee carry 35%, fund size carries 6%, transaction frictions carry 4%; subscription status and purchase limits are execution filters only and do not affect tier scores; lower-is-better metrics are reverse normalized; fund size uses log10 before normalization",
     "tier_method": "S/A/B/C/D relative percentile buckets within the current watchlist",

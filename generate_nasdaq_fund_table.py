@@ -1827,6 +1827,44 @@ def latest_tracking_record(payload: dict[str, object]) -> dict[str, object]:
     return records[-1]
 
 
+def build_source_health(funds: list[Fund]) -> dict[str, object]:
+    checks = {
+        "base_data": {
+            "label": "基础行情/限额/规模",
+            "success_marker": "基础行情/限额/规模: 东方财富移动接口",
+        },
+        "fee_data": {
+            "label": "费率/赎回",
+            "success_marker": "费率/赎回: 天天基金基金费率页",
+        },
+        "tracking_error": {
+            "label": "跟踪误差",
+            "success_marker": "跟踪误差: 天天基金特色数据页",
+        },
+    }
+    payload: dict[str, object] = {
+        "fund_count": len(funds),
+        "checks": {},
+    }
+    check_results: dict[str, dict[str, object]] = {}
+    for key, config in checks.items():
+        marker = str(config["success_marker"])
+        failed_codes = [
+            fund.code
+            for fund in funds
+            if marker not in fund.source_notes
+        ]
+        success_count = len(funds) - len(failed_codes)
+        check_results[key] = {
+            "label": config["label"],
+            "success_count": success_count,
+            "required_success_count": len(funds),
+            "failed_codes": failed_codes,
+        }
+    payload["checks"] = check_results
+    return payload
+
+
 def tracking_snapshot_rows(payload: dict[str, object]) -> str:
     rows = []
     records = list(reversed(tracking_records(payload)))
@@ -4264,6 +4302,7 @@ def write_snapshot(
     tracking_latest = latest_tracking_record(tracking_payload or {})
     payload = {
         "generated_at": now_beijing().isoformat(timespec="seconds"),
+        "source_health": build_source_health(funds),
         "scoring_model": {
             "method": "return-priority model for the current A-share watchlist; return metrics carry 55%, tracking error and base fee carry 35%, fund size carries 6%, transaction frictions carry 4%; subscription status and purchase limits are execution filters only and do not affect tier scores; lower-is-better metrics are reverse normalized; fund size uses log10 before normalization",
             "tier_method": "S/A/B/C/D relative percentile buckets within the current watchlist",
