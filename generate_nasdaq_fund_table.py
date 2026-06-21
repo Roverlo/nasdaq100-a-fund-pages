@@ -3467,7 +3467,7 @@ def build_html(
       .visible-count {{
         order: 2;
         width: 100%;
-        text-align: right;
+        text-align: left;
       }}
       #panel-main > .table-wrap {{
         display: none;
@@ -3526,11 +3526,9 @@ def build_html(
         flex: 0 0 auto;
       }}
       .mobile-card-private {{
-        align-items: center;
         border-top: 1px solid var(--line);
         display: grid;
         gap: 7px;
-        grid-template-columns: minmax(0, 1fr) auto;
         padding-top: 9px;
       }}
       .mobile-position-lines {{
