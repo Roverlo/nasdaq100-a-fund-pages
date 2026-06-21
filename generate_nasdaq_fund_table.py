@@ -3844,6 +3844,12 @@ def build_html(
         justify-self: start;
         min-width: 0;
       }}
+      #panel-sources .source-table td:first-child {{
+        width: auto;
+      }}
+      #panel-sources .source-table td:first-child .data-text {{
+        white-space: nowrap;
+      }}
       #panel-sources .small-table td:nth-child(2),
       #panel-scoring .scoring-table td:nth-child(5) {{
         align-items: start;
