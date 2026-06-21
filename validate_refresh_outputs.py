@@ -270,6 +270,15 @@ def validate_tracking(snapshot: dict, tracking: dict) -> None:
         fail("tracking latest active_auto_invest_total mismatch")
     if latest.get("paused_auto_invest_total") != snapshot.get("auto_invest_plan", {}).get("paused_total"):
         fail("tracking latest paused_auto_invest_total mismatch")
+    auto_plan = snapshot.get("auto_invest_plan", {})
+    if latest.get("auto_invest_frequency") != auto_plan.get("frequency"):
+        fail("tracking latest auto_invest_frequency mismatch")
+    if latest.get("next_debit_date") != auto_plan.get("next_debit_date"):
+        fail("tracking latest next_debit_date mismatch")
+    if latest.get("next_debit_business_date") != auto_plan.get("next_debit_business_date"):
+        fail("tracking latest next_debit_business_date mismatch")
+    if latest.get("cashflow_policy") != auto_plan.get("cashflow_policy"):
+        fail("tracking latest cashflow_policy mismatch")
     funds = latest.get("funds")
     if not isinstance(funds, dict):
         fail("latest tracking funds must be an object")
@@ -353,6 +362,27 @@ def validate_database(snapshot: dict, tracking: dict) -> None:
         actual_totals = (row[0], row[1], row[2])
         if actual_totals != expected_totals:
             fail(f"SQLite portfolio totals expected {expected_totals}, got {actual_totals}")
+        plan_row = conn.execute(
+            """
+            SELECT frequency, next_debit_date, next_debit_business_date
+            FROM auto_invest_plans
+            WHERE record_date = ? AND amount > 0
+            ORDER BY amount DESC, code
+            LIMIT 1
+            """,
+            (latest_record_date,),
+        ).fetchone()
+        if plan_row is None:
+            fail("SQLite missing latest active/paused auto-invest plan row")
+        latest_tracking = tracking.get("records", [])[-1]
+        expected_plan = (
+            latest_tracking.get("auto_invest_frequency"),
+            latest_tracking.get("next_debit_date"),
+            latest_tracking.get("next_debit_business_date"),
+        )
+        actual_plan = (plan_row[0], plan_row[1], plan_row[2])
+        if actual_plan != expected_plan:
+            fail(f"SQLite auto-invest dates expected {expected_plan}, got {actual_plan}")
         view_count = conn.execute("SELECT COUNT(*) FROM v_latest_fund_scores").fetchone()[0]
         if view_count != expected_fund_count:
             fail(f"SQLite v_latest_fund_scores expected {expected_fund_count}, got {view_count}")

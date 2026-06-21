@@ -74,6 +74,7 @@ python -m py_compile "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts
 - 当前数据库是长期查询和学习层，不替代生成器常量、主表快照和追踪 JSON 的源头地位。
 - 个人真实收益字段仍按用户截图或手工输入维护；不要从基金阶段涨幅推导 `market_value`、`cost_basis`、`profit`、`return_rate`。
 - `auto_invest_plans` 存的是计划层信息，包含原始 `next_debit_date` 和按中国内地基金业务日调整后的 `next_debit_business_date`。它不代表已成交，也不能直接改变 `portfolio_records.holding_total`。
+- `portfolio_tracking.json` 的每条日记录也要保存当时的 `auto_invest_frequency`、`next_debit_date`、`next_debit_business_date` 和 `cashflow_policy`；SQLite 同步应优先使用该日记录里的值，不能用当前快照覆盖历史日期口径。
 - `transactions` 只记录已确认事实流水，例如实际买入、卖出、分红、费用。未来如果接自动现金流，先生成待确认事件，确认扣款/成交后才写入 `transactions` 并更新持仓/成本口径。
 - `sync_sqlite_db.py` 对 `generated_at`、`recorded_at` 做低噪声处理：同一天业务数据没变时，不应仅因时间戳导致 SQLite 文件变化，避免 GitHub Actions 每天 3 次无意义提交。
 - 要学习数据库或排查数据时，优先用 `data/examples.sql` 和这些视图：`v_latest_fund_scores`、`v_portfolio_latest_positions`、`v_monthly_portfolio_summary`、`v_active_auto_invest_latest`。

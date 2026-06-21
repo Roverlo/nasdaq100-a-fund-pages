@@ -199,7 +199,7 @@ C:\ALL_in_H\纳指记录\data\examples.sql
 
 当前基线只包含已知的持仓金额和定投计划；真实市值、累计收益、收益率需要以后按支付宝/账户截图或手动记录写入 `portfolio_tracking.json`。未知值保持 `null`，页面显示为 `--`，图表也不会伪造趋势，不要用基金阶段涨幅替代个人实际收益。
 
-长期追踪里，`active_auto_invest_total` 只表示当日仍在执行的计划定投额度。它可以帮助判断未来现金流压力，但不会自动滚入 `holding_total`。后续如果实现交易流水，推荐流程是：定投计划生成预计事件，实际扣款/确认成交后再写入 `transactions`，然后由确认流水或用户截图更新持仓和成本。
+长期追踪里，`active_auto_invest_total` 只表示当日仍在执行的计划定投额度。它可以帮助判断未来现金流压力，但不会自动滚入 `holding_total`。每条 `portfolio_tracking.json` 日记录都要保存当时的 `auto_invest_frequency`、`next_debit_date`、`next_debit_business_date` 和 `cashflow_policy`，方便几年后还原当时口径。后续如果实现交易流水，推荐流程是：定投计划生成预计事件，实际扣款/确认成交后再写入 `transactions`，然后由确认流水或用户截图更新持仓和成本。
 
 发布 GitHub Pages 时：
 

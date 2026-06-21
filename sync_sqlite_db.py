@@ -276,6 +276,9 @@ def sync_tracking(conn: sqlite3.Connection, tracking: dict[str, Any], snapshot: 
         if not date_key:
             raise SystemExit(f"tracking record missing date: {record}")
         latest_date = date_key
+        record_frequency = record.get("auto_invest_frequency") or frequency
+        record_next_debit_date = record.get("next_debit_date") or next_debit_date
+        record_next_debit_business_date = record.get("next_debit_business_date") or next_debit_business_date
         upsert_if_changed(
             conn,
             "portfolio_records",
@@ -333,9 +336,9 @@ def sync_tracking(conn: sqlite3.Connection, tracking: dict[str, Any], snapshot: 
                     "amount": amount,
                     "active_amount": active_amount,
                     "paused_amount": paused_amount,
-                    "frequency": frequency,
-                    "next_debit_date": next_debit_date,
-                    "next_debit_business_date": next_debit_business_date,
+                    "frequency": record_frequency,
+                    "next_debit_date": record_next_debit_date,
+                    "next_debit_business_date": record_next_debit_business_date,
                 },
             )
     return latest_date

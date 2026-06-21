@@ -3,10 +3,15 @@
   "records": [
     {
       "date": "2026-06-21",
-      "recorded_at": "2026-06-21T21:16:39+08:00",
+      "recorded_at": "2026-06-21T21:21:27+08:00",
       "holding_total": 560,
       "active_auto_invest_total": 300,
       "paused_auto_invest_total": 220,
+      "auto_invest_frequency": "日定投",
+      "next_debit_date": "2026-06-22",
+      "next_debit_business_date": "2026-06-22",
+      "next_debit_date_source": "user_snapshot",
+      "cashflow_policy": "定投金额是计划现金流，不自动计入当前持仓总额；只有账户截图、手动确认或交易流水中的已确认成交，才更新持仓、成本、市值和收益。",
       "market_value": null,
       "cost_basis": null,
       "profit": null,
