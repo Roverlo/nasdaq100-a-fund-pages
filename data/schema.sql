@@ -74,6 +74,23 @@ CREATE TABLE IF NOT EXISTS score_snapshots (
   FOREIGN KEY (code) REFERENCES funds(code)
 );
 
+CREATE TABLE IF NOT EXISTS execution_alerts (
+  detected_at TEXT NOT NULL,
+  snapshot_date TEXT NOT NULL,
+  code TEXT NOT NULL,
+  alert_type TEXT NOT NULL,
+  direction TEXT NOT NULL,
+  label TEXT,
+  previous_value REAL,
+  current_value REAL,
+  previous_text TEXT,
+  current_text TEXT,
+  retained INTEGER NOT NULL DEFAULT 0,
+  retention_hours INTEGER,
+  PRIMARY KEY (detected_at, code, alert_type),
+  FOREIGN KEY (code) REFERENCES funds(code)
+);
+
 CREATE TABLE IF NOT EXISTS portfolio_records (
   record_date TEXT PRIMARY KEY,
   recorded_at TEXT,
@@ -161,6 +178,23 @@ JOIN score_snapshots s
 JOIN funds f ON f.code = d.code
 WHERE d.snapshot_date = (SELECT snapshot_date FROM v_latest_snapshot_date)
 ORDER BY s.investing_rank;
+
+CREATE VIEW IF NOT EXISTS v_recent_execution_alerts AS
+SELECT
+  e.detected_at,
+  e.snapshot_date,
+  f.code,
+  f.display_name,
+  f.name,
+  e.alert_type,
+  e.direction,
+  e.label,
+  e.previous_text,
+  e.current_text,
+  e.retained
+FROM execution_alerts e
+JOIN funds f ON f.code = e.code
+ORDER BY e.detected_at DESC, f.code, e.alert_type;
 
 CREATE VIEW IF NOT EXISTS v_latest_portfolio_date AS
 SELECT MAX(record_date) AS record_date

@@ -18,8 +18,8 @@
 - `纳指基金支付宝对比表.html`：生成产物，浏览器直接打开查看。
 - `nasdaq_fund_snapshot.json`：本次抓取和计算快照，用于核对字段、评分、持仓和定投总额。
 - `portfolio_tracking.json`：长期追踪记录，用于跨天、跨周、跨月保存持仓、市值、收益和收益率。生成脚本应按北京时间做“同日更新、跨日追加”：每天 3 次自动刷新只更新当天记录，第二天才追加新记录。页面应把它渲染成图表化追踪面板，而不只是表格。
-- `data/nasdaq_funds.db`：SQLite 长期数据层，用于十年级别的结构化查询和学习；它由 `sync_sqlite_db.py` 从 `nasdaq_fund_snapshot.json` 与 `portfolio_tracking.json` 同步生成，不要手工改库后忘记回写源数据。
-- `data/schema.sql`：SQLite 表和视图定义。改数据库结构时优先改这里，再让 `sync_sqlite_db.py` 应用。
+- `data/nasdaq_funds.db`：SQLite 长期数据层，用于十年级别的结构化查询和学习；它由 `sync_sqlite_db.py` 从 `nasdaq_fund_snapshot.json` 与 `portfolio_tracking.json` 同步生成，包含 `execution_alerts` 表用于追溯申购状态/限额变化，不要手工改库后忘记回写源数据。
+- `data/schema.sql`：SQLite 表和视图定义。改数据库结构时优先改这里，再让 `sync_sqlite_db.py` 应用；执行信息变化视图是 `v_recent_execution_alerts`。
 - `data/examples.sql`：学习和排查用 SQL 示例。
 - `sync_sqlite_db.py`：数据库同步脚本，完整刷新入口会自动调用。
 - `direct_limits.json`：人工或 AI 从基金公司公告核实后的直销限额覆盖表。
@@ -43,6 +43,8 @@
 - `管理+托管` 只等于管理费率 + 托管费率。销售服务费单独展示，不并入主排序列。
 - 梯队评级是当前基金池内相对排序，不是收益预测。当前权重为：近3年收益 35%、近1年收益 20%、跟踪误差 20%、管理+托管 15%、基金规模 6%、买入费率 2%、赎回灵活性 2%。
 - `申购状态`、`代销限额`、`直销限额` 只作为筛选和交易执行信息，不参与梯队评级；不能因为暂停申购或限额低直接拉低基金质量评分。
+- 每次完整刷新都要读取上一版 `nasdaq_fund_snapshot.json`，用本次抓取结果生成 `execution_alerts`。东方财富接口字段 `SGZT`、`daily_limit`、规模和收益属于每天 3 次自动刷新范围；直销限额只有在 `direct_limits.json` 或脚本回退值变化时才会触发对比，不要声称已自动核验基金公司公告。
+- 执行信息提示保留 72 小时：限额上调在 `持仓 / 定投` 金额上显示绿色 `++`，限额下调显示红色 `--`；`暂停申购 -> 允许申购` 显示绿色恢复申购，`允许申购 -> 暂停申购` 显示红色暂停申购。用户手动/计划层面的 `暂停定投` 必须用黄色，和基金平台 `暂停申购` 的红色区分开。
 - 直销限额变化频繁，重要比较前要重新查基金公司公告或官方披露。
 
 ## 验证流程
@@ -90,6 +92,7 @@ python -m py_compile "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts
 - 每天按北京时间 `08:45`、`16:45`、`23:15` 自动刷新，对应 UTC cron 为 `45 0,8 * * *` 和 `15 15 * * *`。
 - 自动任务必须运行 `python refresh_all.py`，校验通过后再运行 `should_commit_refresh.py` 判断是否存在业务数据变化；只有纯时间戳变化时不提交，避免每天 3 次无意义 commit。
 - 生成页内置发布版本轮询：GitHub Pages 页面每 5 分钟、窗口重新获得焦点、页面重新可见时检查当前 URL 是否已发布新版 HTML。只有检测到新版 `fund-page-generated-at` 大于当前页面时才自动 `location.reload()`，让标题更新时间和所有指标一起更新；不要做只改页面时间、不换业务数据的前端假刷新。
+- 自动刷新产生的申购状态/限额变化要写入 `nasdaq_fund_snapshot.json.execution_alerts`，同步渲染到完整页和公开页，并同步进 SQLite `execution_alerts`；`validate_refresh_outputs.py` 应继续校验该结构，防止快照和页面提示脱节。
 - 长期追踪的个人收益字段要保留：`market_value`、`cost_basis`、`profit`、`return_rate` 不应被自动刷新覆盖。
 
 ## UI 偏好

@@ -20,6 +20,11 @@ PUBLIC_MAIN_COLUMNS = 16
 FUND_COUNT = len(generator.FUND_CODES)
 EXPECTED_STATUS_OPTIONS = ["定投中", "暂停定投", "候选"]
 EXPECTED_SUBSCRIPTION_OPTIONS = ["允许申购", "暂停申购"]
+EXPECTED_ALERT_DIRECTIONS = {
+    "subscription": {"", "opened", "paused"},
+    "agency_limit": {"", "up", "down"},
+    "direct_limit": {"", "up", "down"},
+}
 TRACKING_SUBPANELS = {
     "tracking-panel-overview",
     "tracking-panel-trend",
@@ -321,16 +326,47 @@ def validate_snapshot(snapshot: dict) -> None:
         fail("snapshot holding cashflow policy mismatch")
     if holding_plan.get("holding_total") == sum(generator.HOLDING_AMOUNTS.values()) + sum(generator.AUTO_INVEST_AMOUNTS.values()):
         fail("holding total appears to include scheduled auto-invest cashflow")
+    monitor = snapshot.get("execution_monitor")
+    if not isinstance(monitor, dict):
+        fail("snapshot missing execution_monitor")
+    if monitor.get("refresh_times_beijing") != list(generator.AUTO_REFRESH_TIMES_BEIJING):
+        fail("snapshot execution monitor refresh times mismatch")
+    if monitor.get("alert_retention_hours") != generator.EXECUTION_ALERT_RETENTION_HOURS:
+        fail("snapshot execution monitor retention mismatch")
+    alerts = snapshot.get("execution_alerts")
+    if not isinstance(alerts, dict):
+        fail("snapshot execution_alerts must be an object")
+    if set(alerts) - set(codes):
+        fail("snapshot execution_alerts contains unknown fund code")
     for fund in funds:
         if not isinstance(fund, dict):
             fail("snapshot fund entry must be an object")
+        code = fund.get("code")
         if fund.get("status") not in set(EXPECTED_STATUS_OPTIONS):
-            fail(f"snapshot fund {fund.get('code')} has invalid status {fund.get('status')}")
+            fail(f"snapshot fund {code} has invalid status {fund.get('status')}")
         if fund.get("subscription_status") not in set(EXPECTED_SUBSCRIPTION_OPTIONS):
-            fail(f"snapshot fund {fund.get('code')} has invalid subscription_status {fund.get('subscription_status')}")
+            fail(f"snapshot fund {code} has invalid subscription_status {fund.get('subscription_status')}")
         for key in ("investing_rank", "investing_score", "investing_tier"):
             if fund.get(key) is None:
-                fail(f"snapshot fund {fund.get('code')} missing {key}")
+                fail(f"snapshot fund {code} missing {key}")
+        fund_alert = fund.get("execution_alert")
+        if fund_alert is None:
+            fail(f"snapshot fund {code} missing execution_alert")
+        if not isinstance(fund_alert, dict):
+            fail(f"snapshot fund {code} execution_alert must be an object")
+        if fund_alert != alerts.get(code, {}):
+            fail(f"snapshot fund {code} execution_alert does not match top-level execution_alerts")
+        if fund_alert:
+            summary = fund_alert.get("summary")
+            if not isinstance(summary, list):
+                fail(f"snapshot fund {code} execution alert summary must be a list")
+            for key, allowed in EXPECTED_ALERT_DIRECTIONS.items():
+                item = fund_alert.get(key)
+                if not isinstance(item, dict):
+                    fail(f"snapshot fund {code} execution alert missing {key}")
+                direction = item.get("direction", "")
+                if direction not in allowed:
+                    fail(f"snapshot fund {code} execution alert {key} has invalid direction {direction}")
 
 
 def validate_tracking(snapshot: dict, tracking: dict) -> None:
@@ -400,6 +436,7 @@ def validate_database(snapshot: dict, tracking: dict) -> None:
         "portfolio_records",
         "portfolio_positions",
         "auto_invest_plans",
+        "execution_alerts",
         "transactions",
     }
     with sqlite3.connect(DATABASE) as conn:
@@ -412,6 +449,14 @@ def validate_database(snapshot: dict, tracking: dict) -> None:
         missing = expected_tables - existing_tables
         if missing:
             fail(f"SQLite database missing tables: {sorted(missing)}")
+        existing_views = {
+            row[0]
+            for row in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type = 'view'"
+            )
+        }
+        if "v_recent_execution_alerts" not in existing_views:
+            fail("SQLite database missing v_recent_execution_alerts view")
         fund_count = conn.execute("SELECT COUNT(*) FROM funds").fetchone()[0]
         if fund_count != expected_fund_count:
             fail(f"SQLite funds expected {expected_fund_count}, got {fund_count}")
@@ -469,6 +514,20 @@ def validate_database(snapshot: dict, tracking: dict) -> None:
         view_count = conn.execute("SELECT COUNT(*) FROM v_latest_fund_scores").fetchone()[0]
         if view_count != expected_fund_count:
             fail(f"SQLite v_latest_fund_scores expected {expected_fund_count}, got {view_count}")
+        expected_alert_rows = 0
+        for alert in snapshot.get("execution_alerts", {}).values():
+            if not isinstance(alert, dict):
+                continue
+            for key in ("subscription", "agency_limit", "direct_limit"):
+                item = alert.get(key)
+                if isinstance(item, dict) and item.get("direction"):
+                    expected_alert_rows += 1
+        actual_alert_rows = conn.execute("SELECT COUNT(*) FROM execution_alerts").fetchone()[0]
+        if actual_alert_rows != expected_alert_rows:
+            fail(f"SQLite execution_alerts expected {expected_alert_rows}, got {actual_alert_rows}")
+        view_alert_rows = conn.execute("SELECT COUNT(*) FROM v_recent_execution_alerts").fetchone()[0]
+        if view_alert_rows != expected_alert_rows:
+            fail(f"SQLite v_recent_execution_alerts expected {expected_alert_rows}, got {view_alert_rows}")
 
 
 def main() -> int:

@@ -19,6 +19,7 @@ TRACKING_SCHEMA_VERSION = 1
 BEIJING_TZ = timezone(timedelta(hours=8), name="Asia/Shanghai")
 AUTO_REFRESH_TIMES_BEIJING = ("08:45", "16:45", "23:15")
 PERSONAL_TRACKING_FIELDS = ("market_value", "cost_basis", "profit", "return_rate")
+EXECUTION_ALERT_RETENTION_HOURS = 72
 
 
 def now_beijing() -> datetime:
@@ -924,11 +925,13 @@ def subscription_status_class(status: str) -> str:
 def normalize_limit_text(value: Optional[float]) -> str:
     if value is None:
         return "未抓到"
-    if value >= 10000 and value % 10000 == 0:
-        return data_text(f"{int(value)}元")
-    if value.is_integer():
-        return data_text(f"{int(value)}元")
-    return data_text(f"{value:g}元")
+    return data_text(format_yuan_plain(value))
+
+
+def format_yuan_plain(value: float) -> str:
+    if float(value).is_integer():
+        return f"{int(value)}元"
+    return f"{value:g}元"
 
 
 def fund_display_name(fund: Fund) -> str:
@@ -990,6 +993,231 @@ def agency_sort_value(fund: Fund) -> str:
     if fund.agency_limit_label == "无":
         return "-1"
     return sort_value(None)
+
+
+def agency_limit_plain(fund: Fund) -> str:
+    if fund.agency_limit_label:
+        return fund.agency_limit_label
+    if fund.daily_limit is None:
+        return "未抓到"
+    return format_yuan_plain(fund.daily_limit)
+
+
+def direct_limit_plain(fund: Fund) -> str:
+    if fund.direct_limit is None:
+        return "未抓到"
+    return format_yuan_plain(fund.direct_limit)
+
+
+def load_previous_snapshot(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8-sig"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def parse_beijing_datetime(value: object) -> Optional[datetime]:
+    if not value:
+        return None
+    text = str(value)
+    try:
+        parsed = datetime.fromisoformat(text)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=BEIJING_TZ)
+    return parsed.astimezone(BEIJING_TZ)
+
+
+def optional_number(value: object) -> Optional[float]:
+    if value is None:
+        return None
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    if not math.isfinite(number):
+        return None
+    return number
+
+
+def same_optional_number(left: object, right: object) -> bool:
+    left_number = optional_number(left)
+    right_number = optional_number(right)
+    if left_number is None or right_number is None:
+        return left_number is None and right_number is None
+    return abs(left_number - right_number) < 0.000001
+
+
+def limit_change_direction(previous: object, current: object) -> str:
+    previous_number = optional_number(previous)
+    current_number = optional_number(current)
+    if previous_number is None or current_number is None or same_optional_number(previous_number, current_number):
+        return ""
+    return "up" if current_number > previous_number else "down"
+
+
+def subscription_change_direction(previous: object, current: object) -> str:
+    if previous == "暂停申购" and current == "允许申购":
+        return "opened"
+    if previous == "允许申购" and current == "暂停申购":
+        return "paused"
+    return ""
+
+
+def execution_change_label(kind: str, direction: str) -> str:
+    labels = {
+        ("subscription", "opened"): "恢复申购",
+        ("subscription", "paused"): "暂停申购",
+        ("agency_limit", "up"): "代销上调",
+        ("agency_limit", "down"): "代销下调",
+        ("direct_limit", "up"): "直销上调",
+        ("direct_limit", "down"): "直销下调",
+    }
+    return labels.get((kind, direction), "")
+
+
+def build_limit_alert(
+    kind: str,
+    previous_value: object,
+    current_value: object,
+    previous_text: str,
+    current_text: str,
+) -> dict[str, object]:
+    direction = limit_change_direction(previous_value, current_value)
+    return {
+        "direction": direction,
+        "previous": optional_number(previous_value),
+        "current": optional_number(current_value),
+        "previous_text": previous_text,
+        "current_text": current_text,
+        "label": execution_change_label(kind, direction) if direction else "",
+    }
+
+
+def snapshot_limit_text(item: dict, value_key: str, label_key: str = "") -> str:
+    if label_key:
+        label = item.get(label_key)
+        if label:
+            return str(label)
+    number = optional_number(item.get(value_key))
+    return "未抓到" if number is None else format_yuan_plain(number)
+
+
+def build_subscription_alert(previous_status: object, current_status: str) -> dict[str, object]:
+    previous = str(previous_status or "")
+    direction = subscription_change_direction(previous, current_status)
+    return {
+        "direction": direction,
+        "previous": previous,
+        "current": current_status,
+        "label": execution_change_label("subscription", direction) if direction else "",
+    }
+
+
+def alert_has_change(alert: dict[str, object]) -> bool:
+    for key in ("subscription", "agency_limit", "direct_limit"):
+        item = alert.get(key)
+        if isinstance(item, dict) and item.get("direction"):
+            return True
+    return False
+
+
+def alert_matches_current(alert: dict[str, object], fund: Fund) -> bool:
+    checked = 0
+    subscription = alert.get("subscription")
+    if isinstance(subscription, dict) and subscription.get("direction"):
+        checked += 1
+        if subscription.get("current") != fund.subscription_status:
+            return False
+    agency_limit = alert.get("agency_limit")
+    if isinstance(agency_limit, dict) and agency_limit.get("direction"):
+        checked += 1
+        if not same_optional_number(agency_limit.get("current"), fund.daily_limit):
+            return False
+    direct_limit = alert.get("direct_limit")
+    if isinstance(direct_limit, dict) and direct_limit.get("direction"):
+        checked += 1
+        if not same_optional_number(direct_limit.get("current"), fund.direct_limit):
+            return False
+    return checked > 0
+
+
+def retained_execution_alert(
+    previous_alert: object,
+    fund: Fund,
+    current_time: datetime,
+) -> Optional[dict[str, object]]:
+    if not isinstance(previous_alert, dict) or not alert_matches_current(previous_alert, fund):
+        return None
+    detected_at = parse_beijing_datetime(previous_alert.get("detected_at"))
+    if detected_at is None:
+        return None
+    age_seconds = (current_time - detected_at).total_seconds()
+    if age_seconds < 0 or age_seconds > EXECUTION_ALERT_RETENTION_HOURS * 3600:
+        return None
+    return dict(previous_alert)
+
+
+def build_execution_alerts(funds: list[Fund], previous_snapshot: dict) -> dict[str, dict[str, object]]:
+    previous_funds = {
+        str(item.get("code")): item
+        for item in previous_snapshot.get("funds", [])
+        if isinstance(item, dict) and item.get("code")
+    }
+    previous_alerts = previous_snapshot.get("execution_alerts")
+    if not isinstance(previous_alerts, dict):
+        previous_alerts = previous_snapshot.get("change_alerts")
+    if not isinstance(previous_alerts, dict):
+        previous_alerts = {}
+    previous_generated_at = previous_snapshot.get("generated_at") or ""
+    detected_at = now_beijing()
+    alerts: dict[str, dict[str, object]] = {}
+    for fund in funds:
+        previous = previous_funds.get(fund.code)
+        alert: dict[str, object]
+        if previous:
+            subscription = build_subscription_alert(previous.get("subscription_status"), fund.subscription_status)
+            agency_limit = build_limit_alert(
+                "agency_limit",
+                previous.get("daily_limit"),
+                fund.daily_limit,
+                snapshot_limit_text(previous, "daily_limit", "agency_limit_label"),
+                agency_limit_plain(fund),
+            )
+            direct_limit = build_limit_alert(
+                "direct_limit",
+                previous.get("direct_limit"),
+                fund.direct_limit,
+                snapshot_limit_text(previous, "direct_limit"),
+                direct_limit_plain(fund),
+            )
+            summary = [
+                item.get("label")
+                for item in (subscription, agency_limit, direct_limit)
+                if isinstance(item, dict) and item.get("direction") and item.get("label")
+            ]
+            alert = {
+                "code": fund.code,
+                "detected_at": detected_at.isoformat(timespec="seconds"),
+                "previous_generated_at": previous_generated_at,
+                "retention_hours": EXECUTION_ALERT_RETENTION_HOURS,
+                "retained_until": (detected_at + timedelta(hours=EXECUTION_ALERT_RETENTION_HOURS)).isoformat(timespec="seconds"),
+                "summary": summary,
+                "subscription": subscription,
+                "agency_limit": agency_limit,
+                "direct_limit": direct_limit,
+            }
+            if alert_has_change(alert):
+                alerts[fund.code] = alert
+                continue
+        retained = retained_execution_alert(previous_alerts.get(fund.code), fund, detected_at)
+        if retained:
+            alerts[fund.code] = retained
+    return alerts
 
 
 def first_json_object(text: str) -> dict:
@@ -1282,27 +1510,100 @@ def fmt_yuan(value: float) -> str:
     return data_text(f"{value:.2f}元")
 
 
+def amount_with_execution_delta(amount: float, direction: str) -> str:
+    text = format_yuan_plain(amount)
+    if direction not in {"up", "down"}:
+        return data_text(text)
+    suffix = "++" if direction == "up" else "--"
+    klass = "change-up" if direction == "up" else "change-down"
+    return f'<span class="data-text {klass}">{html.escape(text + suffix)}</span>'
+
+
+def execution_badge(label: str, direction: str) -> str:
+    if not label or direction not in {"up", "down", "opened", "paused"}:
+        return ""
+    klass = {
+        "up": "change-up",
+        "opened": "change-up",
+        "down": "change-down",
+        "paused": "change-down",
+    }[direction]
+    return f'<span class="change-badge {klass}">{html.escape(label)}</span>'
+
+
+def execution_alert_for(alerts: Optional[dict[str, dict[str, object]]], code: str) -> dict[str, object]:
+    if not alerts:
+        return {}
+    alert = alerts.get(code)
+    return alert if isinstance(alert, dict) else {}
+
+
+def alert_item(alert: dict[str, object], key: str) -> dict[str, object]:
+    item = alert.get(key)
+    return item if isinstance(item, dict) else {}
+
+
+def alert_direction(alert: dict[str, object], key: str) -> str:
+    value = alert_item(alert, key).get("direction")
+    return str(value) if value else ""
+
+
+def alert_label(alert: dict[str, object], key: str) -> str:
+    value = alert_item(alert, key).get("label")
+    return str(value) if value else ""
+
+
+def best_limit_direction(alert: dict[str, object]) -> str:
+    return alert_direction(alert, "agency_limit") or alert_direction(alert, "direct_limit")
+
+
+def limit_badge_html(alert: dict[str, object], key: str) -> str:
+    return execution_badge(alert_label(alert, key), alert_direction(alert, key))
+
+
+def subscription_status_html(fund: Fund, alert: Optional[dict[str, object]] = None) -> str:
+    alert = alert or {}
+    badge = execution_badge(alert_label(alert, "subscription"), alert_direction(alert, "subscription"))
+    return f'<span class="tag {subscription_status_class(fund.subscription_status)}">{html.escape(fund.subscription_status)}</span>{badge}'
+
+
+def agency_limit_html(fund: Fund, alert: Optional[dict[str, object]] = None) -> str:
+    alert = alert or {}
+    badge = limit_badge_html(alert, "agency_limit")
+    return f'<span class="tag {tag_class(fund.daily_limit, "limit")}">{agency_limit_text(fund)}</span>{badge}'
+
+
+def direct_limit_html(fund: Fund, alert: Optional[dict[str, object]] = None) -> str:
+    alert = alert or {}
+    badge = limit_badge_html(alert, "direct_limit")
+    return f'<span class="tag {tag_class(fund.direct_limit, "limit")}">{normalize_limit_text(fund.direct_limit)}</span>{badge}'
+
+
 def fund_amount_sort_key(funds_by_code: dict[str, Fund], item: tuple[str, float]) -> tuple[float, str]:
     code, amount = item
     label = fund_display_name(funds_by_code[code]) if code in funds_by_code else code
     return (-amount, label)
 
 
-def position_plan_html(code: str) -> str:
+def position_plan_html(code: str, alerts: Optional[dict[str, dict[str, object]]] = None) -> str:
+    alert = execution_alert_for(alerts, code)
     holding_amount = HOLDING_AMOUNTS.get(code, 0)
     active_amount = AUTO_INVEST_AMOUNTS.get(code, 0)
     paused_amount = PAUSED_AUTO_INVEST_AMOUNTS.get(code, 0)
+    limit_direction = best_limit_direction(alert)
+    subscription_direction = alert_direction(alert, "subscription")
+    subscription_badge = execution_badge(alert_label(alert, "subscription"), subscription_direction)
     holding = (
-        f'<span class="position-line"><em>持有</em><strong>{fmt_yuan(holding_amount)}</strong></span>'
+        f'<span class="position-line"><em>持有</em><strong>{amount_with_execution_delta(holding_amount, limit_direction)}</strong></span>'
         if holding_amount
         else '<span class="position-line muted-line"><em>持有</em><strong>0元</strong></span>'
     )
     if active_amount:
-        invest = f'<span class="position-line"><em>定投</em><strong>{fmt_yuan(active_amount)} / 期</strong></span>'
+        invest = f'<span class="position-line"><em>定投</em><strong>{amount_with_execution_delta(active_amount, limit_direction)} / 期</strong>{subscription_badge}</span>'
     elif paused_amount:
-        invest = f'<span class="position-line paused-line"><em>暂停</em><strong>{fmt_yuan(paused_amount)} / 期</strong></span>'
+        invest = f'<span class="position-line paused-line"><em>暂停</em><strong>{amount_with_execution_delta(paused_amount, limit_direction)} / 期</strong>{subscription_badge}</span>'
     else:
-        invest = '<span class="position-line muted-line"><em>定投</em><strong>未设置</strong></span>'
+        invest = f'<span class="position-line muted-line"><em>定投</em><strong>未设置</strong>{subscription_badge}</span>'
     return f'<div class="position-plan">{holding}{invest}</div>'
 
 
@@ -2077,10 +2378,11 @@ def tracking_path_html(path: Path) -> str:
     return html.escape(str(path))
 
 
-def main_rows(funds: list[Fund]) -> str:
+def main_rows(funds: list[Fund], execution_alerts: Optional[dict[str, dict[str, object]]] = None) -> str:
     rows = []
     cards = score_cards(funds)
     for index, fund in enumerate(funds, 1):
+        alert = execution_alert_for(execution_alerts, fund.code)
         base_fee = fund.base_annual_fee_rate
         status = fund_status(fund.code)
         status_class = fund_status_class(fund.code)
@@ -2103,7 +2405,7 @@ def main_rows(funds: list[Fund]) -> str:
                   <span class="code">{data_text(fund.code)}</span>
                 </div>
               </td>
-              <td data-sort-value="{plan_sort_value:.6f}">{position_plan_html(fund.code)}</td>
+              <td data-sort-value="{plan_sort_value:.6f}">{position_plan_html(fund.code, execution_alerts)}</td>
               <td class="num" data-sort-value="{sort_value(fund.three_year)}">{fmt_percent(fund.three_year)}</td>
               <td class="num" data-sort-value="{sort_value(fund.one_year)}">{fmt_percent(fund.one_year)}</td>
               <td data-sort-value="{sort_value(fund.tracking_error)}">{tracking_error_html(fund)}</td>
@@ -2111,9 +2413,9 @@ def main_rows(funds: list[Fund]) -> str:
               <td class="num" data-sort-value="{sort_value(fund.fund_size_billion)}">{fmt_size_billion(fund.fund_size_billion)}</td>
               <td class="num" data-sort-value="{sort_value(fund.buy_rate)}">{fmt_buy_rate(fund.buy_rate)}</td>
               <td data-sort-value="{sort_value(fund.free_after_days)}"><span class="tag {tag_class(fund.free_after_days, 'free_days')}">满{data_text(fund.free_after_days) if fund.free_after_days is not None else '未知'}天</span></td>
-              <td class="num" data-sort-value="{subscription_status_rank(fund.subscription_status)}"><span class="tag {subscription_status_class(fund.subscription_status)}">{html.escape(fund.subscription_status)}</span></td>
-              <td class="num" data-sort-value="{agency_sort_value(fund)}"><span class="tag {tag_class(fund.daily_limit, 'limit')}">{agency_limit_text(fund)}</span></td>
-              <td class="num" data-sort-value="{sort_value(fund.direct_limit)}"><span class="tag {tag_class(fund.direct_limit, 'limit')}">{normalize_limit_text(fund.direct_limit)}</span></td>
+              <td class="num" data-sort-value="{subscription_status_rank(fund.subscription_status)}">{subscription_status_html(fund, alert)}</td>
+              <td class="num" data-sort-value="{agency_sort_value(fund)}">{agency_limit_html(fund, alert)}</td>
+              <td class="num" data-sort-value="{sort_value(fund.direct_limit)}">{direct_limit_html(fund, alert)}</td>
               <td data-sort-value="{sort_value(fund.sales_fee)}">{fee_project_html(fund)}</td>
               <td data-sort-value="{sort_value(fund.free_after_days)}">{rule_html(fund.redemption_rules)}</td>
               <td class="num" data-sort-value="{sort_value(fund.day_change, 0)}">{fmt_percent(fund.day_change)}</td>
@@ -2124,10 +2426,13 @@ def main_rows(funds: list[Fund]) -> str:
     return "\n".join(row.rstrip() for row in rows)
 
 
-def mobile_fund_cards(funds: list[Fund]) -> str:
+def mobile_fund_cards(funds: list[Fund], execution_alerts: Optional[dict[str, dict[str, object]]] = None) -> str:
     cards = score_cards(funds)
     items = []
     for index, fund in enumerate(funds, 1):
+        alert = execution_alert_for(execution_alerts, fund.code)
+        limit_direction = best_limit_direction(alert)
+        subscription_badge = execution_badge(alert_label(alert, "subscription"), alert_direction(alert, "subscription"))
         card = cards[fund.code]
         tier = str(card["tier"])
         score = float(card["score"])
@@ -2137,12 +2442,16 @@ def mobile_fund_cards(funds: list[Fund]) -> str:
         holding_amount = HOLDING_AMOUNTS.get(fund.code, 0)
         active_amount = AUTO_INVEST_AMOUNTS.get(fund.code, 0)
         paused_amount = PAUSED_AUTO_INVEST_AMOUNTS.get(fund.code, 0)
+        holding_value = amount_with_execution_delta(holding_amount, limit_direction) if holding_amount else data_text("0元")
         if active_amount:
-            plan_text = f"{fmt_yuan(active_amount)} / 期"
+            plan_text = f"{amount_with_execution_delta(active_amount, limit_direction)} / 期"
+            invest_extra = subscription_badge
         elif paused_amount:
-            plan_text = f"暂停 {fmt_yuan(paused_amount)} / 期"
+            plan_text = f"{amount_with_execution_delta(paused_amount, limit_direction)} / 期"
+            invest_extra = subscription_badge
         else:
             plan_text = "未设置"
+            invest_extra = subscription_badge
         items.append(
             f"""
             <article class="mobile-fund-card tier-{tier.lower()}-card" data-mobile-card data-status="{html.escape(status)}" data-subscription-status="{html.escape(fund.subscription_status)}" data-tier="{tier}" data-code="{fund.code}" data-score="{score:.1f}">
@@ -2159,8 +2468,8 @@ def mobile_fund_cards(funds: list[Fund]) -> str:
               </div>
               <div class="mobile-card-private">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong>{fmt_yuan(holding_amount) if holding_amount else data_text("0元")}</strong></span>
-                  <span><em>定投</em><strong>{plan_text}</strong></span>
+                  <span><em>持有</em><strong>{holding_value}</strong></span>
+                  <span><em>{'暂停' if paused_amount and not active_amount else '定投'}</em><strong>{plan_text}</strong>{invest_extra}</span>
                 </div>
                 <span class="tag {status_class} mobile-status">{html.escape(status)}</span>
               </div>
@@ -2173,10 +2482,10 @@ def mobile_fund_cards(funds: list[Fund]) -> str:
                 <div><span>买入费率</span><strong>{fmt_buy_rate(fund.buy_rate)}</strong></div>
               </div>
               <div class="mobile-card-foot">
-                <span class="tag {subscription_status_class(fund.subscription_status)}">{html.escape(fund.subscription_status)}</span>
+                {subscription_status_html(fund, alert)}
                 <span>免赎回 满{data_text(fund.free_after_days) if fund.free_after_days is not None else '未知'}天</span>
-                <span>代销 {agency_limit_text(fund)}</span>
-                <span>直销 {normalize_limit_text(fund.direct_limit)}</span>
+                <span>代销 {agency_limit_text(fund)}{limit_badge_html(alert, "agency_limit")}</span>
+                <span>直销 {normalize_limit_text(fund.direct_limit)}{limit_badge_html(alert, "direct_limit")}</span>
               </div>
             </article>
             """
@@ -2188,12 +2497,14 @@ def build_html(
     funds: list[Fund],
     tracking_payload: Optional[dict[str, object]] = None,
     tracking_file: Optional[Path] = None,
+    execution_alerts: Optional[dict[str, dict[str, object]]] = None,
 ) -> str:
     generated_at = now_beijing().strftime("%Y-%m-%d %H:%M:%S")
     refresh_schedule_text = " / ".join(AUTO_REFRESH_TIMES_BEIJING)
     page_refresh_check_ms = 5 * 60 * 1000
-    rows = main_rows(funds)
-    mobile_cards = mobile_fund_cards(funds)
+    execution_alerts = execution_alerts or {}
+    rows = main_rows(funds, execution_alerts)
+    mobile_cards = mobile_fund_cards(funds, execution_alerts)
     cards = score_cards(funds)
     if tracking_payload is None:
         tracking_payload = {"schema_version": TRACKING_SCHEMA_VERSION, "records": [default_tracking_record(funds, cards)]}
@@ -2228,6 +2539,7 @@ def build_html(
         },
         ensure_ascii=False,
     )
+    execution_alerts_json = json.dumps(execution_alerts, ensure_ascii=False)
     sources = []
     for fund in funds:
         source_text = "；".join([*fund.source_notes, fund.direct_limit_source])
@@ -2781,8 +3093,23 @@ def build_html(
       font-family: var(--font-data);
       font-variant-numeric: tabular-nums;
     }}
-    .position-line.paused-line strong {{ color: var(--bad); }}
+    .position-line.paused-line strong {{ color: var(--warn); }}
     .position-line.muted-line strong {{ color: var(--muted); }}
+    .change-up {{ color: var(--good) !important; }}
+    .change-down {{ color: var(--bad) !important; }}
+    .change-badge {{
+      align-items: center;
+      border-radius: 3px;
+      display: inline-flex;
+      font-family: var(--font-data);
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.2;
+      padding: 1px 4px;
+      white-space: nowrap;
+    }}
+    .change-badge.change-up {{ background: var(--soft-green); color: var(--good) !important; }}
+    .change-badge.change-down {{ background: var(--soft-red); color: var(--bad) !important; }}
     .tag {{
       display: inline-flex;
       align-items: center;
@@ -2793,8 +3120,8 @@ def build_html(
       white-space: nowrap;
     }}
     .tag.good, .tag.owned {{ color: var(--good); background: var(--soft-green); }}
-    .tag.warn {{ color: var(--warn); background: var(--soft-orange); }}
-    .tag.bad, .tag.paused {{ color: var(--bad); background: var(--soft-red); }}
+    .tag.warn, .tag.paused {{ color: var(--warn); background: var(--soft-orange); }}
+    .tag.bad {{ color: var(--bad); background: var(--soft-red); }}
     .tag.info, .tag.watch {{ color: var(--accent); background: var(--soft-blue); }}
     .tier-pill {{
       align-items: center;
@@ -4343,6 +4670,7 @@ def build_html(
         window.setInterval(checkPublishedRefresh, refreshCheckIntervalMs);
       }}
       const initialPortfolioState = {portfolio_state_json};
+      const fundExecutionAlerts = {execution_alerts_json};
       const portfolioStorageKey = "nasdaqFundPortfolioStateV1";
       const tabButtons = Array.from(document.querySelectorAll(".tab-button"));
       const tabPanels = Array.from(document.querySelectorAll(".tab-panel"));
@@ -4400,6 +4728,34 @@ def build_html(
       }}
       function dataText(value) {{
         return `<span class="data-text">${{value}}</span>`;
+      }}
+      function alertItem(code, key) {{
+        const alert = fundExecutionAlerts?.[code];
+        const item = alert?.[key];
+        return item && typeof item === "object" ? item : {{}};
+      }}
+      function alertDirection(code, key) {{
+        return alertItem(code, key).direction || "";
+      }}
+      function alertLabel(code, key) {{
+        return alertItem(code, key).label || "";
+      }}
+      function bestLimitDirection(code) {{
+        return alertDirection(code, "agency_limit") || alertDirection(code, "direct_limit");
+      }}
+      function changeBadge(label, direction) {{
+        if (!label || !["up", "down", "opened", "paused"].includes(direction)) return "";
+        const klass = direction === "up" || direction === "opened" ? "change-up" : "change-down";
+        return `<span class="change-badge ${{klass}}">${{label}}</span>`;
+      }}
+      function subscriptionChangeBadge(code) {{
+        return changeBadge(alertLabel(code, "subscription"), alertDirection(code, "subscription"));
+      }}
+      function formatAmountWithDelta(value, direction) {{
+        const amount = formatYuan(value);
+        if (direction === "up") return `<span class="data-text change-up">${{amount}}++</span>`;
+        if (direction === "down") return `<span class="data-text change-down">${{amount}}--</span>`;
+        return dataText(amount);
       }}
       function tagClass(status) {{
         if (status === "定投中") return "owned";
@@ -4472,6 +4828,8 @@ def build_html(
         const item = portfolioState[code];
         const card = mobileFundList.querySelector(`[data-mobile-card][data-code="${{code}}"]`);
         if (!item || !card) return;
+        const limitDirection = bestLimitDirection(code);
+        const subscriptionBadge = subscriptionChangeBadge(code);
         const status = currentStatus(item);
         card.dataset.status = status;
         const statusNode = card.querySelector(".mobile-status");
@@ -4480,11 +4838,19 @@ def build_html(
           statusNode.textContent = status;
         }}
         const lines = card.querySelectorAll(".mobile-position-lines strong");
-        if (lines[0]) lines[0].innerHTML = item.holding > 0 ? dataText(formatYuan(item.holding)) : dataText("0元");
+        if (lines[0]) lines[0].innerHTML = item.holding > 0 ? formatAmountWithDelta(item.holding, limitDirection) : dataText("0元");
         if (lines[1]) {{
-          if (item.active > 0) lines[1].innerHTML = `${{dataText(formatYuan(item.active))}} / 期`;
-          else if (item.paused > 0) lines[1].innerHTML = `暂停 ${{dataText(formatYuan(item.paused))}} / 期`;
+          if (item.active > 0) lines[1].innerHTML = `${{formatAmountWithDelta(item.active, limitDirection)}} / 期`;
+          else if (item.paused > 0) lines[1].innerHTML = `${{formatAmountWithDelta(item.paused, limitDirection)}} / 期`;
           else lines[1].textContent = "未设置";
+        }}
+        const investLine = lines[1]?.closest("span");
+        if (investLine) {{
+          const existingBadge = investLine.querySelector(".change-badge");
+          if (existingBadge) existingBadge.remove();
+          if (subscriptionBadge) investLine.insertAdjacentHTML("beforeend", subscriptionBadge);
+          const label = investLine.querySelector("em");
+          if (label) label.textContent = item.paused > 0 && item.active <= 0 ? "暂停" : "定投";
         }}
       }}
       function updateMainRow(code) {{
@@ -4503,16 +4869,18 @@ def build_html(
         }}
         const positionCell = row.children[3];
         if (positionCell) {{
+          const limitDirection = bestLimitDirection(code);
+          const subscriptionBadge = subscriptionChangeBadge(code);
           const positionSort = item.holding * 1000000 + item.active * 1000 + item.paused;
           positionCell.dataset.sortValue = String(positionSort);
           const holdingLine = item.holding > 0
-            ? `<span class="position-line"><em>持有</em><strong>${{dataText(formatYuan(item.holding))}}</strong></span>`
+            ? `<span class="position-line"><em>持有</em><strong>${{formatAmountWithDelta(item.holding, limitDirection)}}</strong></span>`
             : `<span class="position-line muted-line"><em>持有</em><strong>0元</strong></span>`;
           const investLine = item.active > 0
-            ? `<span class="position-line"><em>定投</em><strong>${{dataText(formatYuan(item.active))}} / 期</strong></span>`
+            ? `<span class="position-line"><em>定投</em><strong>${{formatAmountWithDelta(item.active, limitDirection)}} / 期</strong>${{subscriptionBadge}}</span>`
             : item.paused > 0
-              ? `<span class="position-line paused-line"><em>暂停</em><strong>${{dataText(formatYuan(item.paused))}} / 期</strong></span>`
-              : `<span class="position-line muted-line"><em>定投</em><strong>未设置</strong></span>`;
+              ? `<span class="position-line paused-line"><em>暂停</em><strong>${{formatAmountWithDelta(item.paused, limitDirection)}} / 期</strong>${{subscriptionBadge}}</span>`
+              : `<span class="position-line muted-line"><em>定投</em><strong>未设置</strong>${{subscriptionBadge}}</span>`;
           positionCell.innerHTML = `<div class="position-plan">${{holdingLine}}${{investLine}}</div>`;
         }}
       }}
@@ -5037,12 +5405,30 @@ def write_snapshot(
     funds: list[Fund],
     output_json: Path,
     tracking_payload: Optional[dict[str, object]] = None,
+    execution_alerts: Optional[dict[str, dict[str, object]]] = None,
 ) -> None:
     cards = score_cards(funds)
     tracking_latest = latest_tracking_record(tracking_payload or {})
+    execution_alerts = execution_alerts or {}
     payload = {
         "generated_at": now_beijing().isoformat(timespec="seconds"),
         "source_health": build_source_health(funds),
+        "execution_monitor": {
+            "refresh_times_beijing": list(AUTO_REFRESH_TIMES_BEIJING),
+            "automatic_fields": [
+                "subscription_status",
+                "subscription_status_raw",
+                "daily_limit",
+                "fund_size_billion",
+            ],
+            "manual_or_override_fields": [
+                "direct_limit",
+            ],
+            "alert_retention_hours": EXECUTION_ALERT_RETENTION_HOURS,
+            "alert_policy": "Compare current refresh against the previous snapshot; keep unchanged alerts for a short window so opened pages can still show recent buyability or limit moves. Subscription status and limits remain execution information and do not affect tier scores.",
+        },
+        "execution_alerts": execution_alerts,
+        "change_alerts": execution_alerts,
         "scoring_model": {
             "method": "return-priority model for the current A-share watchlist; return metrics carry 55%, tracking error and base fee carry 35%, fund size carries 6%, transaction frictions carry 4%; subscription status and purchase limits are execution filters only and do not affect tier scores; lower-is-better metrics are reverse normalized; fund size uses log10 before normalization",
             "tier_method": "S/A/B/C/D relative percentile buckets within the current watchlist",
@@ -5103,6 +5489,7 @@ def write_snapshot(
                 "daily_limit": f.daily_limit,
                 "agency_limit_label": f.agency_limit_label,
                 "direct_limit": f.direct_limit,
+                "execution_alert": execution_alerts.get(f.code, {}),
                 "buy_rate": f.buy_rate,
                 "management_fee": f.management_fee,
                 "custody_fee": f.custody_fee,
@@ -5197,6 +5584,7 @@ def run() -> int:
         if args.direct_limits_json
         else output_dir / "direct_limits.json"
     )
+    previous_snapshot = load_previous_snapshot(output_json)
     if direct_limits_path.exists():
         direct_limit_overrides = load_direct_limit_overrides(direct_limits_path)
         print(f"loaded direct limits from {direct_limits_path}")
@@ -5209,9 +5597,10 @@ def run() -> int:
         funds.append(fetch_fund(code, direct_limit_overrides))
 
     cards = score_cards(funds)
+    execution_alerts = build_execution_alerts(funds, previous_snapshot)
     tracking_payload = ensure_tracking_payload(tracking_json, funds, cards)
-    output_html.write_text(build_html(funds, tracking_payload, tracking_json), encoding="utf-8")
-    write_snapshot(funds, output_json, tracking_payload)
+    output_html.write_text(build_html(funds, tracking_payload, tracking_json, execution_alerts), encoding="utf-8")
+    write_snapshot(funds, output_json, tracking_payload, execution_alerts)
     print(f"wrote {output_html}")
     print(f"wrote {output_json}")
     print(f"wrote {tracking_json}")

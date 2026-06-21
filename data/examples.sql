@@ -70,3 +70,14 @@ FROM v_active_auto_invest_latest;
 -- 6. Transaction table is for confirmed trades only; scheduled auto-invest plans do not change holding_total by themselves.
 -- INSERT INTO transactions (trade_date, code, transaction_type, amount, shares, nav, fee, source, note)
 -- VALUES ('2026-06-21', '040046', 'buy', 10, NULL, NULL, 0, '支付宝', '日定投');
+
+-- 7. Recent buyability and limit changes.
+SELECT
+  detected_at,
+  display_name,
+  code,
+  label,
+  previous_text,
+  current_text
+FROM v_recent_execution_alerts
+ORDER BY detected_at DESC, code, alert_type;

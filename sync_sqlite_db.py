@@ -102,6 +102,7 @@ def apply_schema(conn: sqlite3.Connection) -> None:
     if not SCHEMA.exists():
         raise SystemExit(f"missing schema file: {SCHEMA}")
     for view in (
+        "v_recent_execution_alerts",
         "v_active_auto_invest_latest",
         "v_monthly_portfolio_summary",
         "v_portfolio_latest_positions",
@@ -117,6 +118,12 @@ def apply_schema(conn: sqlite3.Connection) -> None:
         "schema_migrations",
         ["version"],
         {"version": 1, "name": "initial fund snapshot and portfolio schema"},
+    )
+    upsert_if_changed(
+        conn,
+        "schema_migrations",
+        ["version"],
+        {"version": 2, "name": "execution alerts for subscription and limit changes"},
     )
 
 
@@ -258,7 +265,44 @@ def sync_snapshot(conn: sqlite3.Connection, snapshot: dict[str, Any], tracking: 
                 "investing_rank": fund.get("investing_rank"),
             },
         )
+    sync_execution_alerts(conn, snapshot, date_key)
     return date_key
+
+
+def sync_execution_alerts(conn: sqlite3.Connection, snapshot: dict[str, Any], date_key: str) -> None:
+    alerts = snapshot.get("execution_alerts")
+    if not isinstance(alerts, dict):
+        return
+    for code, alert in alerts.items():
+        if not isinstance(alert, dict):
+            continue
+        detected_at = str(alert.get("detected_at") or snapshot.get("generated_at") or "")
+        if not detected_at:
+            continue
+        retention_hours = alert.get("retention_hours")
+        for alert_type in ("subscription", "agency_limit", "direct_limit"):
+            item = alert.get(alert_type)
+            if not isinstance(item, dict) or not item.get("direction"):
+                continue
+            upsert_if_changed(
+                conn,
+                "execution_alerts",
+                ["detected_at", "code", "alert_type"],
+                {
+                    "detected_at": detected_at,
+                    "snapshot_date": date_key,
+                    "code": str(code),
+                    "alert_type": alert_type,
+                    "direction": item.get("direction"),
+                    "label": item.get("label") or "",
+                    "previous_value": item.get("previous"),
+                    "current_value": item.get("current"),
+                    "previous_text": item.get("previous_text") or item.get("previous") or "",
+                    "current_text": item.get("current_text") or item.get("current") or "",
+                    "retained": 0,
+                    "retention_hours": retention_hours,
+                },
+            )
 
 
 def sync_tracking(conn: sqlite3.Connection, tracking: dict[str, Any], snapshot: dict[str, Any]) -> str:

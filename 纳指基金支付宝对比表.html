@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="fund-page-generated-at" content="2026-06-22 01:03:23">
+  <meta name="fund-page-generated-at" content="2026-06-22 03:26:35">
   <meta name="fund-page-refresh-check-ms" content="300000">
   <title>纳指 100 A 类基金池</title>
   <link rel="icon" href="data:,">
@@ -543,8 +543,23 @@
       font-family: var(--font-data);
       font-variant-numeric: tabular-nums;
     }
-    .position-line.paused-line strong { color: var(--bad); }
+    .position-line.paused-line strong { color: var(--warn); }
     .position-line.muted-line strong { color: var(--muted); }
+    .change-up { color: var(--good) !important; }
+    .change-down { color: var(--bad) !important; }
+    .change-badge {
+      align-items: center;
+      border-radius: 3px;
+      display: inline-flex;
+      font-family: var(--font-data);
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.2;
+      padding: 1px 4px;
+      white-space: nowrap;
+    }
+    .change-badge.change-up { background: var(--soft-green); color: var(--good) !important; }
+    .change-badge.change-down { background: var(--soft-red); color: var(--bad) !important; }
     .tag {
       display: inline-flex;
       align-items: center;
@@ -555,8 +570,8 @@
       white-space: nowrap;
     }
     .tag.good, .tag.owned { color: var(--good); background: var(--soft-green); }
-    .tag.warn { color: var(--warn); background: var(--soft-orange); }
-    .tag.bad, .tag.paused { color: var(--bad); background: var(--soft-red); }
+    .tag.warn, .tag.paused { color: var(--warn); background: var(--soft-orange); }
+    .tag.bad { color: var(--bad); background: var(--soft-red); }
     .tag.info, .tag.watch { color: var(--accent); background: var(--soft-blue); }
     .tier-pill {
       align-items: center;
@@ -1748,7 +1763,7 @@
           <span class="subtitle-chip">QDII</span>
           <span class="subtitle-chip">长期定投</span>
           <span class="subtitle-chip">CNY</span>
-          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-22 01:03:23</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
+          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-22 03:26:35</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
           <span class="subtitle-meta">来源：东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
         </p>
       </div>
@@ -2396,7 +2411,7 @@
               <div class="mobile-card-private">
                 <div class="mobile-position-lines">
                   <span><em>持有</em><strong><span class="data-text">10元</span></strong></span>
-                  <span><em>定投</em><strong>暂停 <span class="data-text">10元</span> / 期</strong></span>
+                  <span><em>暂停</em><strong><span class="data-text">10元</span> / 期</strong></span>
                 </div>
                 <span class="tag paused mobile-status">暂停定投</span>
               </div>
@@ -2432,7 +2447,7 @@
               <div class="mobile-card-private">
                 <div class="mobile-position-lines">
                   <span><em>持有</em><strong><span class="data-text">100元</span></strong></span>
-                  <span><em>定投</em><strong>暂停 <span class="data-text">100元</span> / 期</strong></span>
+                  <span><em>暂停</em><strong><span class="data-text">100元</span> / 期</strong></span>
                 </div>
                 <span class="tag paused mobile-status">暂停定投</span>
               </div>
@@ -2468,7 +2483,7 @@
               <div class="mobile-card-private">
                 <div class="mobile-position-lines">
                   <span><em>持有</em><strong><span class="data-text">100元</span></strong></span>
-                  <span><em>定投</em><strong>暂停 <span class="data-text">100元</span> / 期</strong></span>
+                  <span><em>暂停</em><strong><span class="data-text">100元</span> / 期</strong></span>
                 </div>
                 <span class="tag paused mobile-status">暂停定投</span>
               </div>
@@ -2648,7 +2663,7 @@
               <div class="mobile-card-private">
                 <div class="mobile-position-lines">
                   <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
-                  <span><em>定投</em><strong>暂停 <span class="data-text">10元</span> / 期</strong></span>
+                  <span><em>暂停</em><strong><span class="data-text">10元</span> / 期</strong></span>
                 </div>
                 <span class="tag paused mobile-status">暂停定投</span>
               </div>
@@ -3566,7 +3581,7 @@
   <div id="portfolio-editor" class="portfolio-editor" hidden></div>
   <script>
     (function () {
-      const pageGeneratedAt = "2026-06-22 01:03:23";
+      const pageGeneratedAt = "2026-06-22 03:26:35";
       const refreshCheckIntervalMs = 300000;
       const refreshCheckMetaName = "fund-page-generated-at";
       function comparableVersion(value) {
@@ -3605,6 +3620,7 @@
         window.setInterval(checkPublishedRefresh, refreshCheckIntervalMs);
       }
       const initialPortfolioState = {"019441": {"label": "万家", "holding": 50, "active": 200, "paused": 0}, "040046": {"label": "华安", "holding": 10, "active": 10, "paused": 0}, "000834": {"label": "大成", "holding": 10, "active": 0, "paused": 10}, "539001": {"label": "建信", "holding": 100, "active": 0, "paused": 100}, "018966": {"label": "汇添富", "holding": 100, "active": 0, "paused": 100}, "016452": {"label": "南方", "holding": 250, "active": 50, "paused": 0}, "270042": {"label": "广发", "holding": 0, "active": 10, "paused": 0}, "019172": {"label": "摩根", "holding": 20, "active": 10, "paused": 0}, "019547": {"label": "招商", "holding": 20, "active": 10, "paused": 0}, "019736": {"label": "宝盈", "holding": 0, "active": 0, "paused": 10}, "019524": {"label": "华泰柏瑞", "holding": 0, "active": 10, "paused": 0}, "018043": {"label": "天弘", "holding": 0, "active": 0, "paused": 0}, "016055": {"label": "博时", "holding": 0, "active": 0, "paused": 0}, "016532": {"label": "嘉实", "holding": 0, "active": 0, "paused": 0}, "015299": {"label": "华夏", "holding": 0, "active": 0, "paused": 0}, "161130": {"label": "易方达", "holding": 0, "active": 0, "paused": 0}, "160213": {"label": "国泰", "holding": 0, "active": 0, "paused": 0}};
+      const fundExecutionAlerts = {};
       const portfolioStorageKey = "nasdaqFundPortfolioStateV1";
       const tabButtons = Array.from(document.querySelectorAll(".tab-button"));
       const tabPanels = Array.from(document.querySelectorAll(".tab-panel"));
@@ -3662,6 +3678,34 @@
       }
       function dataText(value) {
         return `<span class="data-text">${value}</span>`;
+      }
+      function alertItem(code, key) {
+        const alert = fundExecutionAlerts?.[code];
+        const item = alert?.[key];
+        return item && typeof item === "object" ? item : {};
+      }
+      function alertDirection(code, key) {
+        return alertItem(code, key).direction || "";
+      }
+      function alertLabel(code, key) {
+        return alertItem(code, key).label || "";
+      }
+      function bestLimitDirection(code) {
+        return alertDirection(code, "agency_limit") || alertDirection(code, "direct_limit");
+      }
+      function changeBadge(label, direction) {
+        if (!label || !["up", "down", "opened", "paused"].includes(direction)) return "";
+        const klass = direction === "up" || direction === "opened" ? "change-up" : "change-down";
+        return `<span class="change-badge ${klass}">${label}</span>`;
+      }
+      function subscriptionChangeBadge(code) {
+        return changeBadge(alertLabel(code, "subscription"), alertDirection(code, "subscription"));
+      }
+      function formatAmountWithDelta(value, direction) {
+        const amount = formatYuan(value);
+        if (direction === "up") return `<span class="data-text change-up">${amount}++</span>`;
+        if (direction === "down") return `<span class="data-text change-down">${amount}--</span>`;
+        return dataText(amount);
       }
       function tagClass(status) {
         if (status === "定投中") return "owned";
@@ -3734,6 +3778,8 @@
         const item = portfolioState[code];
         const card = mobileFundList.querySelector(`[data-mobile-card][data-code="${code}"]`);
         if (!item || !card) return;
+        const limitDirection = bestLimitDirection(code);
+        const subscriptionBadge = subscriptionChangeBadge(code);
         const status = currentStatus(item);
         card.dataset.status = status;
         const statusNode = card.querySelector(".mobile-status");
@@ -3742,11 +3788,19 @@
           statusNode.textContent = status;
         }
         const lines = card.querySelectorAll(".mobile-position-lines strong");
-        if (lines[0]) lines[0].innerHTML = item.holding > 0 ? dataText(formatYuan(item.holding)) : dataText("0元");
+        if (lines[0]) lines[0].innerHTML = item.holding > 0 ? formatAmountWithDelta(item.holding, limitDirection) : dataText("0元");
         if (lines[1]) {
-          if (item.active > 0) lines[1].innerHTML = `${dataText(formatYuan(item.active))} / 期`;
-          else if (item.paused > 0) lines[1].innerHTML = `暂停 ${dataText(formatYuan(item.paused))} / 期`;
+          if (item.active > 0) lines[1].innerHTML = `${formatAmountWithDelta(item.active, limitDirection)} / 期`;
+          else if (item.paused > 0) lines[1].innerHTML = `${formatAmountWithDelta(item.paused, limitDirection)} / 期`;
           else lines[1].textContent = "未设置";
+        }
+        const investLine = lines[1]?.closest("span");
+        if (investLine) {
+          const existingBadge = investLine.querySelector(".change-badge");
+          if (existingBadge) existingBadge.remove();
+          if (subscriptionBadge) investLine.insertAdjacentHTML("beforeend", subscriptionBadge);
+          const label = investLine.querySelector("em");
+          if (label) label.textContent = item.paused > 0 && item.active <= 0 ? "暂停" : "定投";
         }
       }
       function updateMainRow(code) {
@@ -3765,16 +3819,18 @@
         }
         const positionCell = row.children[3];
         if (positionCell) {
+          const limitDirection = bestLimitDirection(code);
+          const subscriptionBadge = subscriptionChangeBadge(code);
           const positionSort = item.holding * 1000000 + item.active * 1000 + item.paused;
           positionCell.dataset.sortValue = String(positionSort);
           const holdingLine = item.holding > 0
-            ? `<span class="position-line"><em>持有</em><strong>${dataText(formatYuan(item.holding))}</strong></span>`
+            ? `<span class="position-line"><em>持有</em><strong>${formatAmountWithDelta(item.holding, limitDirection)}</strong></span>`
             : `<span class="position-line muted-line"><em>持有</em><strong>0元</strong></span>`;
           const investLine = item.active > 0
-            ? `<span class="position-line"><em>定投</em><strong>${dataText(formatYuan(item.active))} / 期</strong></span>`
+            ? `<span class="position-line"><em>定投</em><strong>${formatAmountWithDelta(item.active, limitDirection)} / 期</strong>${subscriptionBadge}</span>`
             : item.paused > 0
-              ? `<span class="position-line paused-line"><em>暂停</em><strong>${dataText(formatYuan(item.paused))} / 期</strong></span>`
-              : `<span class="position-line muted-line"><em>定投</em><strong>未设置</strong></span>`;
+              ? `<span class="position-line paused-line"><em>暂停</em><strong>${formatAmountWithDelta(item.paused, limitDirection)} / 期</strong>${subscriptionBadge}</span>`
+              : `<span class="position-line muted-line"><em>定投</em><strong>未设置</strong>${subscriptionBadge}</span>`;
           positionCell.innerHTML = `<div class="position-plan">${holdingLine}${investLine}</div>`;
         }
       }
