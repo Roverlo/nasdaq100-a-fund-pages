@@ -111,6 +111,7 @@ CREATE TABLE IF NOT EXISTS auto_invest_plans (
   paused_amount REAL NOT NULL DEFAULT 0,
   frequency TEXT,
   next_debit_date TEXT,
+  next_debit_business_date TEXT,
   PRIMARY KEY (record_date, code),
   FOREIGN KEY (record_date) REFERENCES portfolio_records(record_date) ON DELETE CASCADE,
   FOREIGN KEY (code) REFERENCES funds(code)
@@ -181,7 +182,8 @@ SELECT
   a.status AS auto_invest_status,
   a.amount AS auto_invest_amount,
   a.frequency,
-  a.next_debit_date
+  a.next_debit_date,
+  a.next_debit_business_date
 FROM portfolio_positions p
 JOIN funds f ON f.code = p.code
 LEFT JOIN auto_invest_plans a
@@ -214,6 +216,7 @@ SELECT
   a.amount,
   a.frequency,
   a.next_debit_date,
+  a.next_debit_business_date,
   p.holding_amount,
   p.rating,
   p.score

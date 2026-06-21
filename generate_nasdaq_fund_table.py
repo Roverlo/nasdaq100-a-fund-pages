@@ -6,7 +6,7 @@ import sys
 import argparse
 import time
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional
 from urllib.error import URLError
@@ -23,6 +23,61 @@ PERSONAL_TRACKING_FIELDS = ("market_value", "cost_basis", "profit", "return_rate
 
 def now_beijing() -> datetime:
     return datetime.now(BEIJING_TZ)
+
+
+def date_span(start: date, end: date) -> tuple[date, ...]:
+    days = (end - start).days
+    return tuple(start + timedelta(days=offset) for offset in range(days + 1))
+
+
+CHINA_MAINLAND_FUND_HOLIDAYS_2026 = frozenset(
+    (
+        *date_span(date(2026, 1, 1), date(2026, 1, 3)),
+        *date_span(date(2026, 2, 15), date(2026, 2, 23)),
+        *date_span(date(2026, 4, 4), date(2026, 4, 6)),
+        *date_span(date(2026, 5, 1), date(2026, 5, 5)),
+        *date_span(date(2026, 6, 19), date(2026, 6, 21)),
+        *date_span(date(2026, 9, 25), date(2026, 9, 27)),
+        *date_span(date(2026, 10, 1), date(2026, 10, 7)),
+    )
+)
+
+
+CHINA_MAINLAND_FUND_HOLIDAYS_BY_YEAR = {
+    2026: CHINA_MAINLAND_FUND_HOLIDAYS_2026,
+}
+
+
+AUTO_INVEST_CALENDAR_SOURCE_URL = (
+    "https://big5.www.gov.cn/gate/big5/www.gov.cn/gongbao/2025/issue_12406/202511/content_7048922.html"
+)
+AUTO_INVEST_CALENDAR_POLICY = (
+    "预计扣款日按中国内地公募基金业务日估算：排除周末和国务院办公厅公布的2026年法定节假日；"
+    "QDII基金仍可能受海外市场休市、基金公司暂停申购、额度和平台扣款状态影响，支付宝/基金公司订单页为最终事实。"
+)
+AUTO_INVEST_CASHFLOW_POLICY = (
+    "定投金额是计划现金流，不自动计入当前持仓总额；只有账户截图、手动确认或交易流水中的已确认成交，才更新持仓、成本、市值和收益。"
+)
+
+
+def is_mainland_fund_business_day(day: date) -> bool:
+    return day.weekday() < 5 and day not in CHINA_MAINLAND_FUND_HOLIDAYS_BY_YEAR.get(day.year, frozenset())
+
+
+def next_mainland_fund_business_day(day: date) -> date:
+    candidate = day
+    for _ in range(370):
+        if is_mainland_fund_business_day(candidate):
+            return candidate
+        candidate += timedelta(days=1)
+    raise ValueError(f"cannot resolve mainland fund business day after {day.isoformat()}")
+
+
+def parse_iso_date(value: str) -> Optional[date]:
+    try:
+        return date.fromisoformat(value)
+    except ValueError:
+        return None
 
 
 FUND_CODES = [
@@ -135,6 +190,15 @@ PAUSED_AUTO_INVEST_AMOUNTS = {
 
 AUTO_INVEST_FREQUENCY = "日定投"
 AUTO_INVEST_NEXT_DEBIT_DATE = "2026-06-22"
+AUTO_INVEST_NEXT_DEBIT_BASE_DATE = AUTO_INVEST_NEXT_DEBIT_DATE
+AUTO_INVEST_NEXT_DEBIT_SOURCE = "user_snapshot"
+
+parsed_auto_invest_next_debit_date = parse_iso_date(AUTO_INVEST_NEXT_DEBIT_DATE)
+AUTO_INVEST_NEXT_DEBIT_BUSINESS_DATE = (
+    next_mainland_fund_business_day(parsed_auto_invest_next_debit_date).isoformat()
+    if parsed_auto_invest_next_debit_date is not None
+    else AUTO_INVEST_NEXT_DEBIT_DATE
+)
 
 
 AGENCY_LIMIT_LABELS = {
@@ -4862,6 +4926,13 @@ def write_snapshot(
         "auto_invest_plan": {
             "frequency": AUTO_INVEST_FREQUENCY,
             "next_debit_date": AUTO_INVEST_NEXT_DEBIT_DATE,
+            "next_debit_business_date": AUTO_INVEST_NEXT_DEBIT_BUSINESS_DATE,
+            "next_debit_base_date": AUTO_INVEST_NEXT_DEBIT_BASE_DATE,
+            "next_debit_date_source": AUTO_INVEST_NEXT_DEBIT_SOURCE,
+            "calendar_policy": AUTO_INVEST_CALENDAR_POLICY,
+            "calendar_source_url": AUTO_INVEST_CALENDAR_SOURCE_URL,
+            "cashflow_policy": AUTO_INVEST_CASHFLOW_POLICY,
+            "holding_total_update_policy": "scheduled_auto_invest_amounts_do_not_change_holding_total_until_confirmed_transaction_or_user_snapshot",
             "active_total": sum(AUTO_INVEST_AMOUNTS.values()),
             "paused_total": sum(PAUSED_AUTO_INVEST_AMOUNTS.values()),
             "active_amounts": AUTO_INVEST_AMOUNTS,
@@ -4871,6 +4942,8 @@ def write_snapshot(
             "holding_total": sum(HOLDING_AMOUNTS.values()),
             "holding_count": sum(1 for amount in HOLDING_AMOUNTS.values() if amount > 0),
             "holding_amounts": HOLDING_AMOUNTS,
+            "holding_total_source": "confirmed_user_snapshot_or_manual_generator_constants",
+            "cashflow_policy": AUTO_INVEST_CASHFLOW_POLICY,
             "active_without_holding": sorted(set(AUTO_INVEST_AMOUNTS) - set(HOLDING_AMOUNTS)),
             "holding_but_paused": sorted(set(HOLDING_AMOUNTS) & set(PAUSED_AUTO_INVEST_AMOUNTS)),
         },
@@ -4881,6 +4954,8 @@ def write_snapshot(
             "latest_date": tracking_latest.get("date") or tracking_latest.get("recorded_at"),
             "refresh_policy": "GitHub Actions refreshes the main data three times per Beijing day; portfolio_tracking.json upserts today's record and appends only when the Beijing date changes.",
             "refresh_times_beijing": list(AUTO_REFRESH_TIMES_BEIJING),
+            "cashflow_policy": AUTO_INVEST_CASHFLOW_POLICY,
+            "planned_vs_confirmed_policy": "auto_invest_plans are scheduled cashflows; transactions table is reserved for confirmed buy/sell/dividend/fee records that can update actual holding and cost basis.",
             "note": "Long-term holding and return records are stored in portfolio_tracking.json; generated HTML reads the saved records but does not invent market value or profit.",
         },
         "funds": [

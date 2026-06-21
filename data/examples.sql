@@ -25,7 +25,8 @@ SELECT
   auto_invest_status,
   auto_invest_amount,
   frequency,
-  next_debit_date
+  next_debit_date,
+  next_debit_business_date
 FROM v_portfolio_latest_positions
 WHERE holding_amount > 0 OR auto_invest_amount > 0;
 
@@ -59,11 +60,13 @@ SELECT
   display_name,
   code,
   amount,
+  frequency,
+  next_debit_business_date,
   holding_amount,
   rating,
   score
 FROM v_active_auto_invest_latest;
 
--- 6. Transaction table is ready for future manual records.
+-- 6. Transaction table is for confirmed trades only; scheduled auto-invest plans do not change holding_total by themselves.
 -- INSERT INTO transactions (trade_date, code, transaction_type, amount, shares, nav, fee, source, note)
 -- VALUES ('2026-06-21', '040046', 'buy', 10, NULL, NULL, 0, '支付宝', '日定投');

@@ -101,13 +101,29 @@ def upsert_if_changed(
 def apply_schema(conn: sqlite3.Connection) -> None:
     if not SCHEMA.exists():
         raise SystemExit(f"missing schema file: {SCHEMA}")
+    for view in (
+        "v_active_auto_invest_latest",
+        "v_monthly_portfolio_summary",
+        "v_portfolio_latest_positions",
+        "v_latest_portfolio_date",
+        "v_latest_fund_scores",
+        "v_latest_snapshot_date",
+    ):
+        conn.execute(f"DROP VIEW IF EXISTS {view}")
     conn.executescript(SCHEMA.read_text(encoding="utf-8"))
+    ensure_column(conn, "auto_invest_plans", "next_debit_business_date", "TEXT")
     upsert_if_changed(
         conn,
         "schema_migrations",
         ["version"],
         {"version": 1, "name": "initial fund snapshot and portfolio schema"},
     )
+
+
+def ensure_column(conn: sqlite3.Connection, table: str, column: str, column_type: str) -> None:
+    columns = {row["name"] for row in conn.execute(f"PRAGMA table_info({table})")}
+    if column not in columns:
+        conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {column_type}")
 
 
 def display_name(name: str) -> str:
@@ -253,6 +269,7 @@ def sync_tracking(conn: sqlite3.Connection, tracking: dict[str, Any], snapshot: 
     plan = snapshot.get("auto_invest_plan") if isinstance(snapshot.get("auto_invest_plan"), dict) else {}
     frequency = plan.get("frequency")
     next_debit_date = plan.get("next_debit_date")
+    next_debit_business_date = plan.get("next_debit_business_date")
     latest_date = ""
     for record in records:
         date_key = record_date(record)
@@ -318,6 +335,7 @@ def sync_tracking(conn: sqlite3.Connection, tracking: dict[str, Any], snapshot: 
                     "paused_amount": paused_amount,
                     "frequency": frequency,
                     "next_debit_date": next_debit_date,
+                    "next_debit_business_date": next_debit_business_date,
                 },
             )
     return latest_date

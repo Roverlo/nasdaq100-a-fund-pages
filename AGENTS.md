@@ -33,6 +33,8 @@
 - 当前暂停定投金额：汇添富 `018966=100`，建信 `539001=100`，大成 `000834=10`，宝盈 `019736=10`，合计 `220/期`。
 - 国泰纳斯达克100 `160213` 已加入基金池；当前持仓 `0`、定投 `0`，不加入持仓/定投明细，主表通过申购状态和限额列展示其限购/暂停申购状态。
 - 定投频率当前记录为 `日定投`，下次扣款日当前记录为 `2026-06-22`。这类信息来自用户截图或口述，变化后优先按用户最新说明更新。
+- 定投计划金额是计划现金流，不自动计入当前持仓。`holding_total` 只能来自用户截图、手动确认、生成器持仓常量或未来已确认交易流水，不能把 `AUTO_INVEST_AMOUNTS` 直接加进去。
+- 下次定投日要区分平台显示日期和预计基金业务日。脚本里的 `AUTO_INVEST_NEXT_DEBIT_BUSINESS_DATE` 应按中国内地公募基金业务日估算，排除周末和国务院办公厅公布的 2026 年法定节假日；QDII 还可能受海外市场休市、暂停申购、额度和平台扣款状态影响，最终以支付宝/基金公司订单页为准。
 
 ## 数据和评分
 
@@ -60,6 +62,8 @@ python -m py_compile "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts
 - 当前主表应为 `18` 列、`17` 行，除非基金池有意变更。
 - `nasdaq_fund_snapshot.json` 中 `auto_invest_plan.active_total` 应匹配页面定投中总额。
 - `holding_plan.holding_total` 应匹配页面当前持有总额。
+- `auto_invest_plan.cashflow_policy` 与 `holding_plan.cashflow_policy` 必须说明定投计划不自动计入持仓；`holding_plan.holding_total` 不应等于当前持仓加定投中总额。
+- `auto_invest_plan.next_debit_business_date` 应与生成器按中国内地基金业务日计算出的日期一致。
 - `nasdaq_fund_snapshot.json` 中 `source_health.checks` 应要求基础行情、费率赎回、跟踪误差均为全基金池成功；如果接口不可用导致回退值生成，应让验证失败，不要发布“假刷新”。
 - `portfolio_tracking.json` 应存在，最新记录日期应等于当前北京时间日期；最新记录的评级、评分、持仓金额、定投金额应与 `nasdaq_fund_snapshot.json` 一致；未知的市值、收益、收益率保持 `null` / `--`，不要用基金涨幅伪造个人收益。
 - `data/nasdaq_funds.db` 应存在，`funds`、`fund_daily_snapshots`、`score_snapshots`、`portfolio_records`、`portfolio_positions`、`auto_invest_plans` 应与最新 JSON 口径一致；`transactions` 可以为空但表必须存在。
@@ -69,6 +73,8 @@ python -m py_compile "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts
 
 - 当前数据库是长期查询和学习层，不替代生成器常量、主表快照和追踪 JSON 的源头地位。
 - 个人真实收益字段仍按用户截图或手工输入维护；不要从基金阶段涨幅推导 `market_value`、`cost_basis`、`profit`、`return_rate`。
+- `auto_invest_plans` 存的是计划层信息，包含原始 `next_debit_date` 和按中国内地基金业务日调整后的 `next_debit_business_date`。它不代表已成交，也不能直接改变 `portfolio_records.holding_total`。
+- `transactions` 只记录已确认事实流水，例如实际买入、卖出、分红、费用。未来如果接自动现金流，先生成待确认事件，确认扣款/成交后才写入 `transactions` 并更新持仓/成本口径。
 - `sync_sqlite_db.py` 对 `generated_at`、`recorded_at` 做低噪声处理：同一天业务数据没变时，不应仅因时间戳导致 SQLite 文件变化，避免 GitHub Actions 每天 3 次无意义提交。
 - 要学习数据库或排查数据时，优先用 `data/examples.sql` 和这些视图：`v_latest_fund_scores`、`v_portfolio_latest_positions`、`v_monthly_portfolio_summary`、`v_active_auto_invest_latest`。
 - 如果以后要记录真实买卖流水，写入 `transactions`；但交易流水一旦作为事实数据使用，也要在 README 或专门记录文件中说明来源口径。

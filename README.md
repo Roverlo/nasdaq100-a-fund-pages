@@ -10,6 +10,7 @@
 - 当前持有：8 支，合计 `560元`。
 - 定投中：7 支，合计 `300元 / 期`。
 - 暂停定投：4 支，合计 `220元 / 期`。
+- 定投计划是计划现金流，不自动计入当前持仓；只有账户截图、手动确认或交易流水中的已确认成交才更新持仓、成本、市值和收益。
 - 页面 tab：主表、持仓定投、长期追踪、梯队评级规则、数据来源。
 - `持仓定投` 页的两张明细表都显示 `评级` 列，评级与主表使用同一套梯队评分结果。
 - 主表列顺序按决策优先级排列：排名、定投梯队、基金 / 代码、持仓 / 定投、近3年、近1年、跟踪误差、管理+托管、规模、买入费率、免赎回费门槛、申购状态、代销限额、直销限额、费率项目、卖出规则、日涨跌、定投状态。
@@ -137,8 +138,8 @@ python "C:\ALL_in_H\纳指记录\sync_sqlite_db.py"
 - `score_snapshots`：每天每只基金的评级、分数、排名。
 - `portfolio_records`：每天组合级持仓、定投、市值、收益。
 - `portfolio_positions`：每天每只基金的持仓、市值、收益和评级。
-- `auto_invest_plans`：每天每只基金的定投状态、金额、频率和下次扣款日。
-- `transactions`：预留的交易流水表，后续可记录买入、卖出、分红、费用等明细。
+- `auto_invest_plans`：每天每只基金的定投状态、金额、频率、原始下次扣款日和按中国内地基金业务日调整后的预计扣款日。
+- `transactions`：预留的交易流水表，后续可记录已确认买入、卖出、分红、费用等明细；计划定投本身不要直接写成已成交流水。
 
 常用视图：
 
@@ -160,19 +161,23 @@ C:\ALL_in_H\纳指记录\data\examples.sql
 - `HOLDING_AMOUNTS`：当前持有金额。
 - `AUTO_INVEST_AMOUNTS`：进行中定投金额。
 - `PAUSED_AUTO_INVEST_AMOUNTS`：暂停定投金额。
-- `AUTO_INVEST_FREQUENCY` 和 `AUTO_INVEST_NEXT_DEBIT_DATE`：定投频率和下次扣款日。
+- `AUTO_INVEST_FREQUENCY` 和 `AUTO_INVEST_NEXT_DEBIT_DATE`：定投频率和用户/平台显示的下次扣款日。
 
 当前口径：
 
 - 持有合计：`560元`。
 - 定投中合计：`300元 / 期`，其中万家 `019441=200元 / 期`。
 - 暂停定投合计：`220元 / 期`。
+- `AUTO_INVEST_NEXT_DEBIT_BUSINESS_DATE` 由脚本按中国内地公募基金业务日估算，会排除周末和国务院办公厅公布的 2026 年法定节假日。QDII 还可能受海外市场休市、基金公司暂停申购、额度和平台扣款状态影响，最终仍以支付宝/基金公司订单页为准。
+- 定投金额是“下一次计划现金流”，不是“当前已持仓金额”。不要把 `300元 / 期` 自动加进 `holding_plan.holding_total` 或 `portfolio_records.holding_total`；只有确认扣款/成交后，才通过用户截图、手动修改常量或未来 `transactions` 流水更新持仓。
 
 改完后重新生成 HTML，并检查 `nasdaq_fund_snapshot.json` 中：
 
 - `holding_plan.holding_total`
 - `auto_invest_plan.active_total`
 - `auto_invest_plan.paused_total`
+- `auto_invest_plan.next_debit_business_date`
+- `auto_invest_plan.cashflow_policy`
 
 ## 浏览器内手动编辑
 
@@ -193,6 +198,8 @@ C:\ALL_in_H\纳指记录\data\examples.sql
 生成脚本会维护长期记录，但不会一天追加 3 条重复快照：同一个北京时间日期内刷新时，只更新当天记录；当北京时间日期变化时，才追加新记录。自动更新字段包括评级、评分、持仓金额、进行中定投和暂停定投；真实市值、成本、收益、收益率等个人字段会被保留，不会被刷新覆盖。
 
 当前基线只包含已知的持仓金额和定投计划；真实市值、累计收益、收益率需要以后按支付宝/账户截图或手动记录写入 `portfolio_tracking.json`。未知值保持 `null`，页面显示为 `--`，图表也不会伪造趋势，不要用基金阶段涨幅替代个人实际收益。
+
+长期追踪里，`active_auto_invest_total` 只表示当日仍在执行的计划定投额度。它可以帮助判断未来现金流压力，但不会自动滚入 `holding_total`。后续如果实现交易流水，推荐流程是：定投计划生成预计事件，实际扣款/确认成交后再写入 `transactions`，然后由确认流水或用户截图更新持仓和成本。
 
 发布 GitHub Pages 时：
 

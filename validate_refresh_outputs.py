@@ -232,6 +232,16 @@ def validate_snapshot(snapshot: dict) -> None:
         fail("snapshot active auto-invest total mismatch")
     if snapshot.get("auto_invest_plan", {}).get("paused_total") != sum(generator.PAUSED_AUTO_INVEST_AMOUNTS.values()):
         fail("snapshot paused auto-invest total mismatch")
+    auto_plan = snapshot.get("auto_invest_plan", {})
+    holding_plan = snapshot.get("holding_plan", {})
+    if auto_plan.get("next_debit_business_date") != generator.AUTO_INVEST_NEXT_DEBIT_BUSINESS_DATE:
+        fail("snapshot next debit business date mismatch")
+    if auto_plan.get("cashflow_policy") != generator.AUTO_INVEST_CASHFLOW_POLICY:
+        fail("snapshot auto-invest cashflow policy mismatch")
+    if holding_plan.get("cashflow_policy") != generator.AUTO_INVEST_CASHFLOW_POLICY:
+        fail("snapshot holding cashflow policy mismatch")
+    if holding_plan.get("holding_total") == sum(generator.HOLDING_AMOUNTS.values()) + sum(generator.AUTO_INVEST_AMOUNTS.values()):
+        fail("holding total appears to include scheduled auto-invest cashflow")
     for fund in funds:
         if not isinstance(fund, dict):
             fail("snapshot fund entry must be an object")
