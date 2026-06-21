@@ -902,29 +902,20 @@ def normalize_subscription_status(status: str) -> str:
         return "未抓到"
     if "暂停申购" in status:
         return "暂停申购"
-    if "限大额" in status or "限制大额" in status:
-        return "限大额"
-    if "开放申购" in status:
-        return "开放申购"
-    text = re.sub(r"[（(].*?[）)]", "", status).strip()
-    return text or status
+    return "允许申购"
 
 
 def subscription_status_rank(status: str) -> int:
-    if status == "开放申购":
+    if status == "允许申购":
         return 0
-    if status == "限大额":
-        return 1
     if status == "暂停申购":
-        return 2
+        return 1
     return 9
 
 
 def subscription_status_class(status: str) -> str:
-    if status == "开放申购":
+    if status == "允许申购":
         return "good"
-    if status == "限大额":
-        return "warn"
     if status == "暂停申购":
         return "bad"
     return "info"
@@ -3989,12 +3980,10 @@ def build_html(
           <div class="filter-control">
             <span class="filter-label">申购状态</span>
             <div class="select-menu" id="subscription-filter" data-filter-key="subscription">
-              <button class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" data-default-label="全部申购">全部申购</button>
+              <button class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" data-default-label="申购状态">申购状态</button>
               <ul class="select-list" role="listbox" hidden>
-                <li class="select-option" role="option" data-value="all" aria-selected="true">全部申购</li>
-                <li class="select-option" role="option" data-value="限大额" aria-selected="false">限大额</li>
+                <li class="select-option" role="option" data-value="允许申购" aria-selected="false">允许申购</li>
                 <li class="select-option" role="option" data-value="暂停申购" aria-selected="false">暂停申购</li>
-                <li class="select-option" role="option" data-value="开放申购" aria-selected="false">开放申购</li>
               </ul>
             </div>
           </div>
