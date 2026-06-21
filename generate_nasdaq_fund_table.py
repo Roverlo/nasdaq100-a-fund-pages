@@ -42,6 +42,7 @@ FUND_CODES = [
     "016532",
     "015299",
     "161130",
+    "160213",
 ]
 
 
@@ -62,6 +63,7 @@ FUND_DISPLAY_LABELS = {
     "016532": "嘉实",
     "015299": "华夏",
     "161130": "易方达",
+    "160213": "国泰",
 }
 
 
@@ -634,6 +636,19 @@ FALLBACK = {
         "redemption_rules": [("<7天", 1.50), ("≥7天", 0.00)],
         "free_after_days": 7,
     },
+    "160213": {
+        "name": "国泰纳斯达克100指数(QDII)",
+        "daily_limit": 100,
+        "direct_limit": 100,
+        "buy_rate": 0.15,
+        "management_fee": 0.80,
+        "custody_fee": 0.25,
+        "sales_fee": 0.00,
+        "one_year": 28.78,
+        "day_change": -1.01,
+        "redemption_rules": [("<7天", 1.50), ("≥7天", 0.00)],
+        "free_after_days": 7,
+    },
 }
 
 
@@ -670,6 +685,7 @@ FALLBACK_THREE_YEAR = {
     "016532": 17.81,
     "015299": 17.25,
     "161130": 17.45,
+    "160213": 18.05,
 }
 
 
@@ -2067,7 +2083,7 @@ def main_rows(funds: list[Fund]) -> str:
             </tr>
             """
         )
-    return "\n".join(rows)
+    return "\n".join(row.rstrip() for row in rows)
 
 
 def mobile_fund_cards(funds: list[Fund]) -> str:
