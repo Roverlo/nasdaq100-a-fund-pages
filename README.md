@@ -119,6 +119,13 @@ GitHub Actions 工作流位于 `.github/workflows/refresh.yml`。它每天按北
 
 `should_commit_refresh.py` 会在自动提交前过滤纯时间戳变化。如果只变了 `generated_at`、`recorded_at` 或页面上的“数据更新”时间，而基金业务数据没有变化，GitHub Actions 会跳过提交，避免每天制造 3 个低价值 commit。
 
+`validate_refresh_outputs.py` 是发布前的结构守门：
+
+- 完整页必须保留主表、持仓定投、长期追踪、梯队评级规则、数据来源；公开首页不应带回私有的持仓定投 tab 或定投状态筛选。
+- 完整页的定投状态筛选只能是 `定投中`、`暂停定投`、`候选`；公开首页没有定投状态筛选。
+- 完整页和公开首页的申购状态筛选都只能是 `允许申购`、`暂停申购`。
+- 快照中的每只基金也必须落在上述规范状态内，原始接口文案只保存在 `subscription_status_raw`。
+
 ## SQLite 数据层
 
 第四阶段已经接入 SQLite。当前定位是：`nasdaq_fund_snapshot.json` 和 `portfolio_tracking.json` 继续作为静态页面生成输入，`data/nasdaq_funds.db` 作为长期结构化查询、学习数据库和未来扩展交易流水的存储层。
@@ -186,7 +193,7 @@ C:\ALL_in_H\纳指记录\data\examples.sql
 `持仓定投` tab 支持直接点击编辑：
 
 - 点击金额：打开页面浮层金额编辑器，回车或点确定后更新。
-- 点击定投状态：打开自定义状态菜单，选择 `定投中`、`暂停定投` 或无定投状态。
+- 点击定投状态：打开自定义状态菜单，选择 `定投中`、`暂停定投` 或 `候选`；`候选` 就是没有进行中/暂停计划时的观察状态。
 - 页面会即时更新主表的 `持仓 / 定投` 列、两张明细表和标题总额。
 
 这些手动修改保存在当前浏览器的 `localStorage`，键名是 `nasdaqFundPortfolioStateV1`。刷新页面仍会保留，但重新换浏览器或清空站点数据会丢失。

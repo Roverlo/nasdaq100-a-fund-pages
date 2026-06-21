@@ -18,6 +18,8 @@ DATABASE = ROOT / "data" / "nasdaq_funds.db"
 FULL_MAIN_COLUMNS = 18
 PUBLIC_MAIN_COLUMNS = 16
 FUND_COUNT = len(generator.FUND_CODES)
+EXPECTED_STATUS_OPTIONS = ["定投中", "暂停定投", "候选"]
+EXPECTED_SUBSCRIPTION_OPTIONS = ["允许申购", "暂停申购"]
 TRACKING_SUBPANELS = {
     "tracking-panel-overview",
     "tracking-panel-trend",
@@ -194,6 +196,7 @@ def validate_table(path: Path, expected_columns: int, expected_rows: int) -> Non
 
 def validate_tabs(path: Path, required_panels: set[str], require_portfolio_link: bool = False) -> None:
     html, page = inspect_html(path)
+    is_public_index = require_portfolio_link
     missing = required_panels - page.panel_ids
     if missing:
         fail(f"{path.name} missing panels: {sorted(missing)}")
@@ -204,9 +207,12 @@ def validate_tabs(path: Path, required_panels: set[str], require_portfolio_link:
         fail(f"{path.name} should link to portfolio.html for the holdings page")
     if page.tracking_panel_ids != TRACKING_SUBPANELS:
         fail(f"{path.name} tracking subpanels mismatch: {sorted(page.tracking_panel_ids)}")
-    if not require_portfolio_link and page.status_filter_options != ["定投中", "暂停定投", "候选"]:
+    if is_public_index:
+        if page.status_filter_options:
+            fail(f"{path.name} public page should not contain private status filter options: {page.status_filter_options}")
+    elif page.status_filter_options != EXPECTED_STATUS_OPTIONS:
         fail(f"{path.name} status filter options expected 定投中/暂停定投/候选, got {page.status_filter_options}")
-    if not require_portfolio_link and page.subscription_filter_options != ["允许申购", "暂停申购"]:
+    if page.subscription_filter_options != EXPECTED_SUBSCRIPTION_OPTIONS:
         fail(f"{path.name} subscription filter options expected 允许申购/暂停申购, got {page.subscription_filter_options}")
     if len(page.tracking_tab_ids) != len(TRACKING_SUBPANELS):
         fail(f"{path.name} tracking subtab count expected {len(TRACKING_SUBPANELS)}, got {len(page.tracking_tab_ids)}")
@@ -279,9 +285,9 @@ def validate_snapshot(snapshot: dict) -> None:
     for fund in funds:
         if not isinstance(fund, dict):
             fail("snapshot fund entry must be an object")
-        if fund.get("status") not in {"定投中", "暂停定投", "候选"}:
+        if fund.get("status") not in set(EXPECTED_STATUS_OPTIONS):
             fail(f"snapshot fund {fund.get('code')} has invalid status {fund.get('status')}")
-        if fund.get("subscription_status") not in {"允许申购", "暂停申购"}:
+        if fund.get("subscription_status") not in set(EXPECTED_SUBSCRIPTION_OPTIONS):
             fail(f"snapshot fund {fund.get('code')} has invalid subscription_status {fund.get('subscription_status')}")
         for key in ("investing_rank", "investing_score", "investing_tier"):
             if fund.get(key) is None:

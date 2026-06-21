@@ -66,6 +66,9 @@ python -m py_compile "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts
 - `auto_invest_plan.cashflow_policy` 与 `holding_plan.cashflow_policy` 必须说明定投计划不自动计入持仓；`holding_plan.holding_total` 不应等于当前持仓加定投中总额。
 - `auto_invest_plan.next_debit_business_date` 应与生成器按中国内地基金业务日计算出的日期一致。
 - `nasdaq_fund_snapshot.json` 中 `source_health.checks` 应要求基础行情、费率赎回、跟踪误差均为全基金池成功；如果接口不可用导致回退值生成，应让验证失败，不要发布“假刷新”。
+- 完整页的定投状态筛选必须只有 `定投中`、`暂停定投`、`候选`；公开首页不应重新带回定投状态筛选或持仓定投明细。
+- 完整页和公开首页的申购状态筛选都必须只有 `允许申购`、`暂停申购`；如果未来 `prepare_github_pages.py` 重排公开页，也要继续保留这个二分类校验。
+- `nasdaq_fund_snapshot.json` 每只基金的 `status` 必须落在 `定投中`、`暂停定投`、`候选`，`subscription_status` 必须落在 `允许申购`、`暂停申购`；原始接口文案只允许进入 `subscription_status_raw`。
 - `portfolio_tracking.json` 应存在，最新记录日期应等于当前北京时间日期；最新记录的评级、评分、持仓金额、定投金额应与 `nasdaq_fund_snapshot.json` 一致；未知的市值、收益、收益率保持 `null` / `--`，不要用基金涨幅伪造个人收益。
 - `data/nasdaq_funds.db` 应存在，`funds`、`fund_daily_snapshots`、`score_snapshots`、`portfolio_records`、`portfolio_positions`、`auto_invest_plans` 应与最新 JSON 口径一致；`transactions` 可以为空但表必须存在。
 - 移动端样式改动后必须专项检查 `数据来源` tab：`source-table` 桌面端第一列有固定宽度，手机端卡片化时要覆盖 `td:first-child { width: auto; }`，并确认代码值如 `019441` 横向单行显示，不要被挤成竖排。
