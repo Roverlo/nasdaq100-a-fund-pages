@@ -9,7 +9,7 @@
 - 修改页面时改 `generate_nasdaq_fund_table.py`，不要直接改生成后的 `纳指基金支付宝对比表.html`，否则下次刷新数据会丢失改动。
 - 每次改完生成脚本后，同步到 skill 脚本：
   `Copy-Item -LiteralPath "C:\ALL_in_H\纳指记录\generate_nasdaq_fund_table.py" -Destination "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts\generate_nasdaq_fund_table.py" -Force`
-- 当前目录有 `.git` 文件夹，但 `git rev-parse --is-inside-work-tree` 报 `not a git repository`。在修复或重新初始化 Git 之前，不要声称已提交或推送。
+- 当前目录是有效 Git 仓库，远端为 `https://github.com/Roverlo/nasdaq100-a-fund-pages.git`。每次代码更新后按用户规则提交并推送；推送直连失败时，用本机代理 `127.0.0.1:10808` 临时配置 Git 命令。
 - 调试页面优先使用本地容器预览，不要再依赖 `file://`：`docker compose up -d` 后访问 `http://127.0.0.1:8765/`。Compose 使用本机已有的 `python:3.11-slim-bookworm` 镜像，通过 bind mount 暴露当前目录，`serve_static.py` 将根路径映射到生成 HTML 并禁用缓存，重新生成 HTML 后刷新浏览器即可看到更新。
 
 ## 核心文件
@@ -17,7 +17,7 @@
 - `generate_nasdaq_fund_table.py`：唯一应编辑的生成脚本，含基金池、持仓、定投、评分、样式和交互。
 - `纳指基金支付宝对比表.html`：生成产物，浏览器直接打开查看。
 - `nasdaq_fund_snapshot.json`：本次抓取和计算快照，用于核对字段、评分、持仓和定投总额。
-- `portfolio_tracking.json`：长期追踪记录，用于跨天、跨周、跨月保存持仓、市值、收益和收益率。生成脚本只在文件不存在或无记录时写入初始基线，不要每次刷新自动追加重复记录。页面应把它渲染成图表化追踪面板，而不只是表格。
+- `portfolio_tracking.json`：长期追踪记录，用于跨天、跨周、跨月保存持仓、市值、收益和收益率。生成脚本应按北京时间做“同日更新、跨日追加”：每天 3 次自动刷新只更新当天记录，第二天才追加新记录。页面应把它渲染成图表化追踪面板，而不只是表格。
 - `direct_limits.json`：人工或 AI 从基金公司公告核实后的直销限额覆盖表。
 - `direct_limit_candidates.json`：候选公告列表，不等于已核实直销限额。
 
@@ -42,11 +42,12 @@
 改动后至少执行：
 
 ```powershell
-python -m py_compile "C:\ALL_in_H\纳指记录\generate_nasdaq_fund_table.py"
-python "C:\ALL_in_H\纳指记录\generate_nasdaq_fund_table.py" --output-dir "C:\ALL_in_H\纳指记录"
+python "C:\ALL_in_H\纳指记录\refresh_all.py"
 Copy-Item -LiteralPath "C:\ALL_in_H\纳指记录\generate_nasdaq_fund_table.py" -Destination "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts\generate_nasdaq_fund_table.py" -Force
 python -m py_compile "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts\generate_nasdaq_fund_table.py"
 ```
+
+`refresh_all.py` 会编译生成器、抓取并生成主表、更新 `portfolio_tracking.json` 当天记录、准备 GitHub Pages 的 `docs/`、运行 `validate_refresh_outputs.py`。不要跳过这个入口后只手动生成 HTML。
 
 再做结构检查：
 
@@ -54,7 +55,14 @@ python -m py_compile "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts
 - 当前主表应为 `18` 列、`16` 行，除非基金池有意变更。
 - `nasdaq_fund_snapshot.json` 中 `auto_invest_plan.active_total` 应匹配页面定投中总额。
 - `holding_plan.holding_total` 应匹配页面当前持有总额。
-- `portfolio_tracking.json` 应存在，且 `长期追踪` tab 能读取最近记录；未知的市值、收益、收益率保持 `null` / `--`，不要用基金涨幅伪造个人收益。
+- `portfolio_tracking.json` 应存在，最新记录日期应等于当前北京时间日期；最新记录的评级、评分、持仓金额、定投金额应与 `nasdaq_fund_snapshot.json` 一致；未知的市值、收益、收益率保持 `null` / `--`，不要用基金涨幅伪造个人收益。
+
+## 自动刷新
+
+- GitHub Actions 工作流：`.github/workflows/refresh.yml`。
+- 每天按北京时间 `08:45`、`16:45`、`23:15` 自动刷新，对应 UTC cron 为 `45 0,8 * * *` 和 `15 15 * * *`。
+- 自动任务必须运行 `python refresh_all.py`，校验通过后才提交生成产物并推送。
+- 长期追踪的个人收益字段要保留：`market_value`、`cost_basis`、`profit`、`return_rate` 不应被自动刷新覆盖。
 
 ## UI 偏好
 

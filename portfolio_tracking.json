@@ -3,7 +3,7 @@
   "records": [
     {
       "date": "2026-06-21",
-      "recorded_at": "2026-06-21T02:22:05",
+      "recorded_at": "2026-06-21T14:07:13+08:00",
       "holding_total": 560,
       "active_auto_invest_total": 300,
       "paused_auto_invest_total": 220,
@@ -205,7 +205,7 @@
           "return_rate": null
         }
       },
-      "note": "初始追踪记录"
+      "note": "当日自动刷新"
     }
   ]
 }

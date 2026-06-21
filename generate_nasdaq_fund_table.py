@@ -6,7 +6,7 @@ import sys
 import argparse
 import time
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional
 from urllib.error import URLError
@@ -16,6 +16,13 @@ from urllib.request import Request, urlopen
 DEFAULT_OUTPUT_DIR = Path(__file__).resolve().parent
 TRACKING_FILENAME = "portfolio_tracking.json"
 TRACKING_SCHEMA_VERSION = 1
+BEIJING_TZ = timezone(timedelta(hours=8), name="Asia/Shanghai")
+AUTO_REFRESH_TIMES_BEIJING = ("08:45", "16:45", "23:15")
+PERSONAL_TRACKING_FIELDS = ("market_value", "cost_basis", "profit", "return_rate")
+
+
+def now_beijing() -> datetime:
+    return datetime.now(BEIJING_TZ)
 
 
 FUND_CODES = [
@@ -1677,7 +1684,7 @@ def default_tracking_funds(funds: list[Fund], cards: dict[str, dict[str, object]
 
 
 def default_tracking_record(funds: list[Fund], cards: dict[str, dict[str, object]]) -> dict[str, object]:
-    now = datetime.now()
+    now = now_beijing()
     return {
         "date": now.strftime("%Y-%m-%d"),
         "recorded_at": now.isoformat(timespec="seconds"),
@@ -1689,8 +1696,70 @@ def default_tracking_record(funds: list[Fund], cards: dict[str, dict[str, object
         "profit": None,
         "return_rate": None,
         "funds": default_tracking_funds(funds, cards),
-        "note": "初始追踪记录",
+        "note": "自动刷新基线",
     }
+
+
+def merge_tracking_fund_record(existing: object, fresh: dict[str, object]) -> dict[str, object]:
+    merged = dict(fresh)
+    if isinstance(existing, dict):
+        for field in PERSONAL_TRACKING_FIELDS:
+            if existing.get(field) is not None:
+                merged[field] = existing.get(field)
+    return merged
+
+
+def merge_tracking_record(existing: dict[str, object], fresh: dict[str, object]) -> dict[str, object]:
+    merged = dict(fresh)
+    for field in PERSONAL_TRACKING_FIELDS:
+        if existing.get(field) is not None:
+            merged[field] = existing.get(field)
+    existing_funds = existing.get("funds") if isinstance(existing.get("funds"), dict) else {}
+    fresh_funds = fresh.get("funds") if isinstance(fresh.get("funds"), dict) else {}
+    merged_funds: dict[str, dict[str, object]] = {}
+    for code, fresh_item in fresh_funds.items():
+        if not isinstance(fresh_item, dict):
+            continue
+        existing_item = existing_funds.get(code) if isinstance(existing_funds, dict) else None
+        merged_funds[code] = merge_tracking_fund_record(existing_item, fresh_item)
+    if isinstance(existing_funds, dict):
+        for code, existing_item in existing_funds.items():
+            if code not in merged_funds and isinstance(existing_item, dict):
+                merged_funds[code] = existing_item
+    merged["funds"] = merged_funds
+    existing_note = existing.get("note")
+    if isinstance(existing_note, str) and existing_note.strip() and existing_note != "初始追踪记录":
+        merged["note"] = existing_note
+    else:
+        merged["note"] = "当日自动刷新"
+    return merged
+
+
+def tracking_record_date(record: object) -> str:
+    if not isinstance(record, dict):
+        return ""
+    value = record.get("date") or record.get("recorded_at")
+    if not value:
+        return ""
+    return str(value)[:10]
+
+
+def normalize_tracking_records(records: object) -> list[dict[str, object]]:
+    if not isinstance(records, list):
+        return []
+    normalized: list[dict[str, object]] = []
+    seen: dict[str, int] = {}
+    for record in records:
+        if not isinstance(record, dict):
+            continue
+        date_key = tracking_record_date(record)
+        if date_key and date_key in seen:
+            normalized[seen[date_key]] = merge_tracking_record(normalized[seen[date_key]], record)
+        else:
+            if date_key:
+                seen[date_key] = len(normalized)
+            normalized.append(record)
+    return sorted(normalized, key=lambda item: tracking_record_date(item) or str(item.get("recorded_at") or ""))
 
 
 def ensure_tracking_payload(path: Path, funds: list[Fund], cards: dict[str, dict[str, object]]) -> dict[str, object]:
@@ -1704,11 +1773,21 @@ def ensure_tracking_payload(path: Path, funds: list[Fund], cards: dict[str, dict
 
     if not isinstance(payload, dict):
         payload = {}
-    records = payload.get("records")
-    if not isinstance(records, list):
-        records = []
+    records = normalize_tracking_records(payload.get("records"))
+    fresh = default_tracking_record(funds, cards)
+    today = str(fresh["date"])
     if not records:
-        records = [default_tracking_record(funds, cards)]
+        records = [fresh]
+    else:
+        updated = False
+        for index, record in enumerate(records):
+            if tracking_record_date(record) == today:
+                records[index] = merge_tracking_record(record, fresh)
+                updated = True
+                break
+        if not updated:
+            records.append(fresh)
+        records = normalize_tracking_records(records)
     payload = {
         "schema_version": TRACKING_SCHEMA_VERSION,
         "records": records,
@@ -1726,9 +1805,11 @@ def load_tracking_payload(path: Path, funds: list[Fund], cards: dict[str, dict[s
         return {"schema_version": TRACKING_SCHEMA_VERSION, "records": [default_tracking_record(funds, cards)]}
     if not isinstance(payload, dict):
         return {"schema_version": TRACKING_SCHEMA_VERSION, "records": [default_tracking_record(funds, cards)]}
-    records = payload.get("records")
-    if not isinstance(records, list) or not records:
+    records = normalize_tracking_records(payload.get("records"))
+    if not records:
         payload["records"] = [default_tracking_record(funds, cards)]
+    else:
+        payload["records"] = records
     return payload
 
 
@@ -1956,7 +2037,7 @@ def build_html(
     tracking_payload: Optional[dict[str, object]] = None,
     tracking_file: Optional[Path] = None,
 ) -> str:
-    generated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    generated_at = now_beijing().strftime("%Y-%m-%d %H:%M:%S")
     rows = main_rows(funds)
     cards = score_cards(funds)
     if tracking_payload is None:
@@ -4182,7 +4263,7 @@ def write_snapshot(
     cards = score_cards(funds)
     tracking_latest = latest_tracking_record(tracking_payload or {})
     payload = {
-        "generated_at": datetime.now().isoformat(timespec="seconds"),
+        "generated_at": now_beijing().isoformat(timespec="seconds"),
         "scoring_model": {
             "method": "return-priority model for the current A-share watchlist; return metrics carry 55%, tracking error and base fee carry 35%, fund size carries 6%, transaction frictions carry 4%; subscription status and purchase limits are execution filters only and do not affect tier scores; lower-is-better metrics are reverse normalized; fund size uses log10 before normalization",
             "tier_method": "S/A/B/C/D relative percentile buckets within the current watchlist",
@@ -4209,6 +4290,8 @@ def write_snapshot(
             "file": TRACKING_FILENAME,
             "record_count": len(tracking_records(tracking_payload or {})),
             "latest_date": tracking_latest.get("date") or tracking_latest.get("recorded_at"),
+            "refresh_policy": "GitHub Actions refreshes the main data three times per Beijing day; portfolio_tracking.json upserts today's record and appends only when the Beijing date changes.",
+            "refresh_times_beijing": list(AUTO_REFRESH_TIMES_BEIJING),
             "note": "Long-term holding and return records are stored in portfolio_tracking.json; generated HTML reads the saved records but does not invent market value or profit.",
         },
         "funds": [
@@ -4256,7 +4339,7 @@ def write_snapshot(
 
 def write_direct_limit_candidates(output_json: Path) -> None:
     payload = {
-        "generated_at": datetime.now().isoformat(timespec="seconds"),
+        "generated_at": now_beijing().isoformat(timespec="seconds"),
         "note": "Candidate limit announcements only. Use Codex/web/PDF reading to extract current direct-sale limits into direct_limits.json.",
         "funds": {},
     }

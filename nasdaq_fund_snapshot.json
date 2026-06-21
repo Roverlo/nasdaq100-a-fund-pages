@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-21T13:38:54",
+  "generated_at": "2026-06-21T14:07:13+08:00",
   "scoring_model": {
     "method": "return-priority model for the current A-share watchlist; return metrics carry 55%, tracking error and base fee carry 35%, fund size carries 6%, transaction frictions carry 4%; subscription status and purchase limits are execution filters only and do not affect tier scores; lower-is-better metrics are reverse normalized; fund size uses log10 before normalization",
     "tier_method": "S/A/B/C/D relative percentile buckets within the current watchlist",
@@ -120,6 +120,12 @@
     "file": "portfolio_tracking.json",
     "record_count": 1,
     "latest_date": "2026-06-21",
+    "refresh_policy": "GitHub Actions refreshes the main data three times per Beijing day; portfolio_tracking.json upserts today's record and appends only when the Beijing date changes.",
+    "refresh_times_beijing": [
+      "08:45",
+      "16:45",
+      "23:15"
+    ],
     "note": "Long-term holding and return records are stored in portfolio_tracking.json; generated HTML reads the saved records but does not invent market value or profit."
   },
   "funds": [

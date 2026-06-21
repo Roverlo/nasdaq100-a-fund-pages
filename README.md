@@ -29,8 +29,18 @@
 在 PowerShell 中运行：
 
 ```powershell
+python "C:\ALL_in_H\纳指记录\refresh_all.py"
+```
+
+`refresh_all.py` 是本地和 GitHub Actions 共用的完整刷新入口，会依次执行：编译生成器、抓取并生成主表、更新长期追踪当日记录、准备 `docs/` 发布页、运行结构一致性校验。
+
+如需单独调试生成器：
+
+```powershell
 python -m py_compile "C:\ALL_in_H\纳指记录\generate_nasdaq_fund_table.py"
 python "C:\ALL_in_H\纳指记录\generate_nasdaq_fund_table.py" --output-dir "C:\ALL_in_H\纳指记录"
+python "C:\ALL_in_H\纳指记录\prepare_github_pages.py"
+python "C:\ALL_in_H\纳指记录\validate_refresh_outputs.py"
 ```
 
 同步到本地 skill：
@@ -89,6 +99,16 @@ python "C:\ALL_in_H\纳指记录\prepare_github_pages.py"
 - `docs/index.html`：公开版基金池页面，保留 `长期追踪` 图表；移除 `持仓 / 定投`、`定投状态`、`持仓定投` 明细和可编辑控件。
 - `docs/portfolio.html`：公开完整页面，包含主表、持仓定投、长期追踪、梯队评级规则和数据来源，不再需要密钥。
 
+## 自动刷新
+
+GitHub Actions 工作流位于 `.github/workflows/refresh.yml`。它每天按北京时间刷新 3 次：
+
+- `08:45`：覆盖国内基金接口和公告的早间更新。
+- `16:45`：覆盖国内交易日白天更新后的状态、限额和规模变化。
+- `23:15`：覆盖晚间公告、QDII/海外市场相关数据更新窗口。
+
+每次自动任务都会运行 `python refresh_all.py`。校验通过后才会提交并推送变更；如果主表、快照、长期追踪或发布页之间不一致，任务会失败，不会静默发布半更新页面。
+
 ## 修改持仓和定投
 
 在 `generate_nasdaq_fund_table.py` 顶部维护这些常量：
@@ -126,7 +146,7 @@ python "C:\ALL_in_H\纳指记录\prepare_github_pages.py"
 
 `长期追踪` tab 读取 `portfolio_tracking.json`，展示资产轨迹、收益轨迹、持仓结构、追踪快照和基金级明细。设计参考 `nexu-io/open-design` 的单页 artifact / dashboard 思路，以及 Ghostfolio、Wealthfolio、Portfolio Performance 这类投资追踪工具的长期组合视角。
 
-生成脚本只在文件不存在或没有记录时写入一条初始基线，不会每次刷新自动追加，避免长期记录里堆积重复快照。
+生成脚本会维护长期记录，但不会一天追加 3 条重复快照：同一个北京时间日期内刷新时，只更新当天记录；当北京时间日期变化时，才追加新记录。自动更新字段包括评级、评分、持仓金额、进行中定投和暂停定投；真实市值、成本、收益、收益率等个人字段会被保留，不会被刷新覆盖。
 
 当前基线只包含已知的持仓金额和定投计划；真实市值、累计收益、收益率需要以后按支付宝/账户截图或手动记录写入 `portfolio_tracking.json`。未知值保持 `null`，页面显示为 `--`，图表也不会伪造趋势，不要用基金阶段涨幅替代个人实际收益。
 
@@ -151,6 +171,10 @@ python "C:\ALL_in_H\纳指记录\prepare_github_pages.py"
 
 ## Git 状态
 
-本目录当前不是有效 Git 仓库。虽然有 `.git` 文件夹，但 `git rev-parse --is-inside-work-tree` 返回 `fatal: not a git repository`。
+本目录当前是有效 Git 仓库，远端为：
 
-因此当前维护是本地文件更新；如需提交和推送，需要先修复或重新初始化 Git。
+```text
+https://github.com/Roverlo/nasdaq100-a-fund-pages.git
+```
+
+如果 GitHub 推送直连失败，可按 `AGENTS.md` 里的代理说明临时加 `-c http.proxy=http://127.0.0.1:10808 -c https.proxy=http://127.0.0.1:10808`。

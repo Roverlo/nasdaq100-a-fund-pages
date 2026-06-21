@@ -1,0 +1,42 @@
+name: Refresh fund pages
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Beijing time: 08:45, 16:45, 23:15.
+    - cron: "45 0,8 * * *"
+    - cron: "15 15 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-fund-pages
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Refresh generated data and pages
+        run: python refresh_all.py
+
+      - name: Commit refreshed outputs
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Automated fund data refresh"
+          git push
