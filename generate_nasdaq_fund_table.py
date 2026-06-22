@@ -2892,6 +2892,9 @@ def build_html(
     .mobile-fund-list {{
       display: none;
     }}
+    .mobile-main-sortbar {{
+      display: none;
+    }}
     table {{ width: max-content; border-collapse: separate; border-spacing: 0; min-width: 1970px; font-size: 13px; }}
     #main-table {{
       border-collapse: separate;
@@ -3269,6 +3272,7 @@ def build_html(
     .mobile-plan-sortbar {{
       display: none;
     }}
+    .mobile-main-sort-button,
     .mobile-plan-sort-button {{
       align-items: center;
       background: transparent;
@@ -3286,11 +3290,13 @@ def build_html(
       padding: 7px 8px;
       white-space: nowrap;
     }}
+    .mobile-main-sort-button.is-active,
     .mobile-plan-sort-button.is-active {{
       background: var(--panel);
       color: var(--ink);
       box-shadow: inset 0 0 0 1px var(--line);
     }}
+    .mobile-main-sort-button:focus-visible,
     .mobile-plan-sort-button:focus-visible {{
       outline: 2px solid var(--accent);
       outline-offset: 2px;
@@ -3926,6 +3932,22 @@ def build_html(
       #panel-main > .table-wrap {{
         display: none;
       }}
+      .mobile-main-sortbar {{
+        background: #f7f5ee;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        padding: 8px;
+        scrollbar-width: none;
+      }}
+      .mobile-main-sortbar::-webkit-scrollbar {{
+        display: none;
+      }}
+      .mobile-main-sort-button {{
+        flex: 0 0 auto;
+        min-width: 74px;
+      }}
       .mobile-fund-list {{
         background: var(--panel);
         display: grid;
@@ -4431,6 +4453,24 @@ def build_html(
           </tbody>
         </table>
       </div>
+      <div class="mobile-main-sortbar" aria-label="主表排序">
+        <button type="button" class="mobile-main-sort-button" data-column-index="1" data-sort-type="number">梯队<span class="sort-indicator"></span></button>
+        <button type="button" class="mobile-main-sort-button" data-column-index="2" data-sort-type="text">基金<span class="sort-indicator"></span></button>
+        <button type="button" class="mobile-main-sort-button" data-column-index="3" data-sort-type="number">持仓/定投<span class="sort-indicator"></span></button>
+        <button type="button" class="mobile-main-sort-button" data-column-index="4" data-sort-type="number">近3年<span class="sort-indicator"></span></button>
+        <button type="button" class="mobile-main-sort-button" data-column-index="5" data-sort-type="number">近1年<span class="sort-indicator"></span></button>
+        <button type="button" class="mobile-main-sort-button" data-column-index="6" data-sort-type="number">跟踪误差<span class="sort-indicator"></span></button>
+        <button type="button" class="mobile-main-sort-button" data-column-index="7" data-sort-type="number">管理+托管<span class="sort-indicator"></span></button>
+        <button type="button" class="mobile-main-sort-button" data-column-index="8" data-sort-type="number">规模<span class="sort-indicator"></span></button>
+        <button type="button" class="mobile-main-sort-button" data-column-index="9" data-sort-type="number">买入费率<span class="sort-indicator"></span></button>
+        <button type="button" class="mobile-main-sort-button" data-column-index="10" data-sort-type="number">免赎回<span class="sort-indicator"></span></button>
+        <button type="button" class="mobile-main-sort-button" data-column-index="11" data-sort-type="number">申购状态<span class="sort-indicator"></span></button>
+        <button type="button" class="mobile-main-sort-button" data-column-index="12" data-sort-type="number">代销限额<span class="sort-indicator"></span></button>
+        <button type="button" class="mobile-main-sort-button" data-column-index="13" data-sort-type="number">直销限额<span class="sort-indicator"></span></button>
+        <button type="button" class="mobile-main-sort-button" data-column-index="15" data-sort-type="number">卖出规则<span class="sort-indicator"></span></button>
+        <button type="button" class="mobile-main-sort-button" data-column-index="16" data-sort-type="number">日涨跌<span class="sort-indicator"></span></button>
+        <button type="button" class="mobile-main-sort-button" data-column-index="17" data-sort-type="number">定投状态<span class="sort-indicator"></span></button>
+      </div>
       <div class="mobile-fund-list" id="mobile-fund-list" aria-label="手机基金列表">
 {mobile_cards}
       </div>
@@ -4697,6 +4737,7 @@ def build_html(
       const table = document.getElementById("main-table");
       if (!table) return;
       const headers = Array.from(table.querySelectorAll("th.sortable"));
+      const mobileSortControls = Array.from(document.querySelectorAll(".mobile-main-sort-button[data-column-index]"));
       const tbody = table.querySelector("tbody");
       const filters = {{ status: "all", tier: "all", subscription: "all" }};
       const filterMenus = Array.from(document.querySelectorAll(".select-menu[data-filter-key]"));
@@ -5117,6 +5158,22 @@ def build_html(
           if (!indicator) return;
           indicator.textContent = index === activeIndex ? (activeDirection === "asc" ? "↑" : "↓") : "↕";
         }});
+        updateMainSortControls();
+      }}
+      function sortableHeaderForColumnIndex(columnIndex) {{
+        return headers.find((header) => header.dataset.columnIndex === String(columnIndex));
+      }}
+      function updateMainSortControls() {{
+        const activeHeader = headers[activeIndex];
+        mobileSortControls.forEach((control) => {{
+          const header = sortableHeaderForColumnIndex(control.dataset.columnIndex);
+          control.hidden = !header;
+          if (!header) return;
+          const isActive = header === activeHeader;
+          const indicator = control.querySelector(".sort-indicator");
+          control.classList.toggle("is-active", isActive);
+          if (indicator) indicator.textContent = isActive ? (activeDirection === "asc" ? "↑" : "↓") : "↕";
+        }});
       }}
       function updateRanks() {{
         Array.from(tbody.querySelectorAll("tr:not([hidden])")).forEach((row, index) => {{
@@ -5385,6 +5442,16 @@ def build_html(
         const button = header.querySelector(".sort-button");
         if (!button) return;
         button.addEventListener("click", () => {{
+          activeDirection = activeIndex === index && activeDirection === "asc" ? "desc" : "asc";
+          activeIndex = index;
+          sortByHeader(activeIndex, activeDirection);
+        }});
+      }});
+      mobileSortControls.forEach((control) => {{
+        control.addEventListener("click", () => {{
+          const header = sortableHeaderForColumnIndex(control.dataset.columnIndex);
+          if (!header) return;
+          const index = headers.indexOf(header);
           activeDirection = activeIndex === index && activeDirection === "asc" ? "desc" : "asc";
           activeIndex = index;
           sortByHeader(activeIndex, activeDirection);

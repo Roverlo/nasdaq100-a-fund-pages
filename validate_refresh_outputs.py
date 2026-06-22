@@ -20,6 +20,8 @@ PUBLIC_MAIN_COLUMNS = 16
 FUND_COUNT = len(generator.FUND_CODES)
 EXPECTED_STATUS_OPTIONS = ["定投中", "暂停定投", "候选"]
 EXPECTED_SUBSCRIPTION_OPTIONS = ["允许申购", "暂停申购"]
+FULL_SORT_COLUMN_INDEXES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17]
+PUBLIC_SORT_COLUMN_INDEXES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15]
 EXPECTED_ALERT_DIRECTIONS = {
     "subscription": {"", "opened", "paused"},
     "agency_limit": {"", "up", "down"},
@@ -81,6 +83,8 @@ class PageInspector(HTMLParser):
         self.subscription_filter_options: list[str] = []
         self.holding_table_count = 0
         self.auto_plan_table_count = 0
+        self.main_sort_column_indexes: list[int] = []
+        self.mobile_main_sort_column_indexes: list[int] = []
         self.plan_sort_header_count = 0
         self.mobile_plan_sort_button_count = 0
         self.generated_at_meta_count = 0
@@ -105,6 +109,14 @@ class PageInspector(HTMLParser):
             self.holding_table_count += 1
         if tag == "table" and "auto-plan-table" in classes:
             self.auto_plan_table_count += 1
+        if tag == "th" and "sortable" in classes and "data-column-index" in attr:
+            column_index = parse_int(attr.get("data-column-index"))
+            if column_index is not None:
+                self.main_sort_column_indexes.append(column_index)
+        if tag == "button" and "mobile-main-sort-button" in classes and "data-column-index" in attr:
+            column_index = parse_int(attr.get("data-column-index"))
+            if column_index is not None:
+                self.mobile_main_sort_column_indexes.append(column_index)
         if tag == "th" and "sortable" in classes and "data-plan-column-index" in attr:
             self.plan_sort_header_count += 1
         if tag == "button" and "mobile-plan-sort-button" in classes and "data-plan-column-index" in attr:
@@ -184,6 +196,15 @@ def fail(message: str) -> None:
     raise AssertionError(message)
 
 
+def parse_int(value: str | None) -> int | None:
+    if value is None:
+        return None
+    try:
+        return int(value)
+    except ValueError:
+        return None
+
+
 def load_json(path: Path) -> dict:
     try:
         payload = json.loads(path.read_text(encoding="utf-8-sig"))
@@ -247,6 +268,11 @@ def validate_tabs(path: Path, required_panels: set[str], require_portfolio_link:
         fail(f"{path.name} tracking subtab count expected {len(TRACKING_SUBPANELS)}, got {len(page.tracking_tab_ids)}")
     if page.mobile_card_count != FUND_COUNT:
         fail(f"{path.name} mobile cards expected {FUND_COUNT}, got {page.mobile_card_count}")
+    expected_sort_indexes = PUBLIC_SORT_COLUMN_INDEXES if is_public_index else FULL_SORT_COLUMN_INDEXES
+    if page.main_sort_column_indexes != expected_sort_indexes:
+        fail(f"{path.name} main sortable columns expected {expected_sort_indexes}, got {page.main_sort_column_indexes}")
+    if page.mobile_main_sort_column_indexes != expected_sort_indexes:
+        fail(f"{path.name} mobile main sort buttons expected {expected_sort_indexes}, got {page.mobile_main_sort_column_indexes}")
     if require_portfolio_link and page.mobile_private_count:
         fail(f"{path.name} public page should not contain private mobile holding blocks")
     if require_portfolio_link and page.mobile_status_attr_count:

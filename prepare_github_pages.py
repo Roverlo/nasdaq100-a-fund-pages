@@ -13,6 +13,7 @@ DOCS_DIR = ROOT / "docs"
 class PublicPageFilter(HTMLParser):
     VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
     PRIVATE_ATTRS = {"data-status", "data-holding-amount", "data-auto-invest-amount", "data-paused-auto-invest-amount"}
+    PRIVATE_COLUMN_INDEXES = {3, 17}
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=False)
@@ -46,6 +47,14 @@ class PublicPageFilter(HTMLParser):
         if "mobile-card-private" in set((attrs_dict.get("class") or "").split()):
             self.skip_depth = 1
             return
+        classes = set((attrs_dict.get("class") or "").split())
+        if tag == "button" and "mobile-main-sort-button" in classes:
+            column_index = self.parse_column_index(attrs_dict.get("data-column-index"))
+            if column_index in self.PRIVATE_COLUMN_INDEXES:
+                self.skip_depth = 1
+                return
+            attrs = self.remap_column_index_attr(attrs)
+            attrs_dict = dict(attrs)
         if "data-mobile-card" in attrs_dict:
             attrs = [(name, value) for name, value in attrs if name != "data-status"]
         if tag == "table" and attrs_dict.get("id") == "main-table":
@@ -69,6 +78,7 @@ class PublicPageFilter(HTMLParser):
             self.in_head = True
         if self.in_main_table:
             attrs = [(name, value) for name, value in attrs if name not in self.PRIVATE_ATTRS]
+            attrs = self.remap_column_index_attr(attrs)
         self.output.append(self.render_starttag(tag, attrs))
 
     def handle_startendtag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
@@ -78,6 +88,10 @@ class PublicPageFilter(HTMLParser):
 
     def handle_endtag(self, tag: str) -> None:
         if self.skip_depth:
+            if self.in_main_table and self.skip_depth == 1 and tag in {"th", "td"}:
+                self.main_table_depth -= 1
+                if self.main_table_depth == 0:
+                    self.in_main_table = False
             self.skip_depth -= 1
             return
         if self.in_main_table:
@@ -139,6 +153,30 @@ class PublicPageFilter(HTMLParser):
             .replace("<", "&lt;")
             .replace(">", "&gt;")
         )
+
+    @classmethod
+    def public_column_index(cls, index: int) -> int:
+        return index - sum(1 for private_index in cls.PRIVATE_COLUMN_INDEXES if private_index < index)
+
+    @staticmethod
+    def parse_column_index(value: str | None) -> int | None:
+        if value is None:
+            return None
+        try:
+            return int(value)
+        except ValueError:
+            return None
+
+    @classmethod
+    def remap_column_index_attr(cls, attrs: list[tuple[str, str | None]]) -> list[tuple[str, str | None]]:
+        result: list[tuple[str, str | None]] = []
+        for name, value in attrs:
+            if name == "data-column-index":
+                column_index = cls.parse_column_index(value)
+                if column_index is not None:
+                    value = str(cls.public_column_index(column_index))
+            result.append((name, value))
+        return result
 
     def get_html(self) -> str:
         return "".join(self.output)
