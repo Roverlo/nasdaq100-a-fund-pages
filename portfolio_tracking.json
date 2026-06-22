@@ -277,7 +277,7 @@
     },
     {
       "date": "2026-06-23",
-      "recorded_at": "2026-06-23T00:55:30+08:00",
+      "recorded_at": "2026-06-23T02:54:02+08:00",
       "holding_total": 560,
       "active_auto_invest_total": 320,
       "paused_auto_invest_total": 0,
@@ -399,7 +399,7 @@
         "019172": {
           "name": "摩根",
           "rating": "C",
-          "score": 43.8,
+          "score": 43.7,
           "holding_amount": 20,
           "active_auto_invest_amount": 10,
           "paused_auto_invest_amount": 0,
@@ -444,7 +444,7 @@
         "019524": {
           "name": "华泰柏瑞",
           "rating": "B",
-          "score": 51.9,
+          "score": 51.8,
           "holding_amount": 0,
           "active_auto_invest_amount": 10,
           "paused_auto_invest_amount": 0,
@@ -519,7 +519,7 @@
         "161130": {
           "name": "易方达",
           "rating": "B",
-          "score": 61.9,
+          "score": 61.8,
           "holding_amount": 0,
           "active_auto_invest_amount": 0,
           "paused_auto_invest_amount": 0,
