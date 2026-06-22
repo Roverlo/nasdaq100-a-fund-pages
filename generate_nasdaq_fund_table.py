@@ -208,6 +208,15 @@ AGENCY_LIMIT_LABELS = {
 }
 
 
+AGENCY_LIMIT_OVERRIDES = {
+    "019441": {
+        "limit": 50,
+        "source_note": "用户 2026-06-22 反馈的支付宝/代销交易页当前限额",
+        "channel_note": "覆盖东方财富移动接口仍显示的单日投资上限10000元；代销/实际交易入口优先。",
+    },
+}
+
+
 DIRECT_LIMIT_ANNOUNCEMENT_KEYWORDS = ("大额申购", "限制申购", "申购金额限制", "业务限制金额", "限制金额", "限购")
 
 
@@ -1369,6 +1378,15 @@ def fetch_fund(code: str, direct_limit_overrides: dict[str, dict]) -> Fund:
         notes.append("基础行情/限额/规模: 东方财富移动接口")
     except (URLError, TimeoutError, json.JSONDecodeError, OSError) as exc:
         notes.append(f"基础行情/限额/规模: 回退截图校准值 ({exc.__class__.__name__})")
+
+    agency_override = AGENCY_LIMIT_OVERRIDES.get(code)
+    if agency_override:
+        limit_value = number_or_none(agency_override.get("limit"))
+        if limit_value is not None:
+            values["daily_limit"] = limit_value
+            source_note = agency_override.get("source_note") or "手动校准代销限额"
+            channel_note = agency_override.get("channel_note") or ""
+            notes.append("代销限额校准: " + "；".join(part for part in (source_note, channel_note) if part))
 
     try:
         fee_page = fetch_text(f"https://fundf10.eastmoney.com/jjfl_{code}.html", encoding="utf-8")
@@ -5489,8 +5507,10 @@ def write_snapshot(
                 "fund_size_billion",
             ],
             "manual_or_override_fields": [
+                "daily_limit via AGENCY_LIMIT_OVERRIDES",
                 "direct_limit",
             ],
+            "agency_limit_overrides": AGENCY_LIMIT_OVERRIDES,
             "alert_retention_hours": EXECUTION_ALERT_RETENTION_HOURS,
             "alert_policy": "Compare current refresh against the previous snapshot; keep unchanged alerts for a short window so opened pages can still show recent buyability or limit moves. Subscription status and limits remain execution information and do not affect tier scores.",
         },

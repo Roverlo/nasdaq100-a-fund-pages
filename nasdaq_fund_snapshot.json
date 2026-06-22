@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-22T19:50:56+08:00",
+  "generated_at": "2026-06-22T20:00:17+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -36,13 +36,87 @@
       "fund_size_billion"
     ],
     "manual_or_override_fields": [
+      "daily_limit via AGENCY_LIMIT_OVERRIDES",
       "direct_limit"
     ],
+    "agency_limit_overrides": {
+      "019441": {
+        "limit": 50,
+        "source_note": "用户 2026-06-22 反馈的支付宝/代销交易页当前限额",
+        "channel_note": "覆盖东方财富移动接口仍显示的单日投资上限10000元；代销/实际交易入口优先。"
+      }
+    },
     "alert_retention_hours": 72,
     "alert_policy": "Compare current refresh against the previous snapshot; keep unchanged alerts for a short window so opened pages can still show recent buyability or limit moves. Subscription status and limits remain execution information and do not affect tier scores."
   },
-  "execution_alerts": {},
-  "change_alerts": {},
+  "execution_alerts": {
+    "019441": {
+      "code": "019441",
+      "detected_at": "2026-06-22T20:00:17+08:00",
+      "previous_generated_at": "2026-06-22T19:50:56+08:00",
+      "retention_hours": 72,
+      "retained_until": "2026-06-25T20:00:17+08:00",
+      "summary": [
+        "代销下调"
+      ],
+      "subscription": {
+        "direction": "",
+        "previous": "允许申购",
+        "current": "允许申购",
+        "label": ""
+      },
+      "agency_limit": {
+        "direction": "down",
+        "previous": 10000.0,
+        "current": 50.0,
+        "previous_text": "10000元",
+        "current_text": "50元",
+        "label": "代销下调"
+      },
+      "direct_limit": {
+        "direction": "",
+        "previous": 10000.0,
+        "current": 10000.0,
+        "previous_text": "10000元",
+        "current_text": "10000元",
+        "label": ""
+      }
+    }
+  },
+  "change_alerts": {
+    "019441": {
+      "code": "019441",
+      "detected_at": "2026-06-22T20:00:17+08:00",
+      "previous_generated_at": "2026-06-22T19:50:56+08:00",
+      "retention_hours": 72,
+      "retained_until": "2026-06-25T20:00:17+08:00",
+      "summary": [
+        "代销下调"
+      ],
+      "subscription": {
+        "direction": "",
+        "previous": "允许申购",
+        "current": "允许申购",
+        "label": ""
+      },
+      "agency_limit": {
+        "direction": "down",
+        "previous": 10000.0,
+        "current": 50.0,
+        "previous_text": "10000元",
+        "current_text": "50元",
+        "label": "代销下调"
+      },
+      "direct_limit": {
+        "direction": "",
+        "previous": 10000.0,
+        "current": 10000.0,
+        "previous_text": "10000元",
+        "current_text": "10000元",
+        "label": ""
+      }
+    }
+  },
   "scoring_model": {
     "method": "return-priority model for the current A-share watchlist; return metrics carry 55%, tracking error and base fee carry 35%, fund size carries 6%, transaction frictions carry 4%; subscription status and purchase limits are execution filters only and do not affect tier scores; lower-is-better metrics are reverse normalized; fund size uses log10 before normalization",
     "tier_method": "S/A/B/C/D relative percentile buckets within the current watchlist",
@@ -198,10 +272,41 @@
       "subscription_status": "允许申购",
       "subscription_status_raw": "限大额(单日投资上限10000元)",
       "fund_size_billion": 4.38,
-      "daily_limit": 10000.0,
+      "daily_limit": 50.0,
       "agency_limit_label": "",
       "direct_limit": 10000.0,
-      "execution_alert": {},
+      "execution_alert": {
+        "code": "019441",
+        "detected_at": "2026-06-22T20:00:17+08:00",
+        "previous_generated_at": "2026-06-22T19:50:56+08:00",
+        "retention_hours": 72,
+        "retained_until": "2026-06-25T20:00:17+08:00",
+        "summary": [
+          "代销下调"
+        ],
+        "subscription": {
+          "direction": "",
+          "previous": "允许申购",
+          "current": "允许申购",
+          "label": ""
+        },
+        "agency_limit": {
+          "direction": "down",
+          "previous": 10000.0,
+          "current": 50.0,
+          "previous_text": "10000元",
+          "current_text": "50元",
+          "label": "代销下调"
+        },
+        "direct_limit": {
+          "direction": "",
+          "previous": 10000.0,
+          "current": 10000.0,
+          "previous_text": "10000元",
+          "current_text": "10000元",
+          "label": ""
+        }
+      },
       "buy_rate": 0.1,
       "management_fee": 0.5,
       "custody_fee": 0.15,
@@ -232,6 +337,7 @@
       ],
       "source_notes": [
         "基础行情/限额/规模: 东方财富移动接口",
+        "代销限额校准: 用户 2026-06-22 反馈的支付宝/代销交易页当前限额；覆盖东方财富移动接口仍显示的单日投资上限10000元；代销/实际交易入口优先。",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
       ],

@@ -359,6 +359,8 @@ def validate_snapshot(snapshot: dict) -> None:
         fail("snapshot execution monitor refresh times mismatch")
     if monitor.get("alert_retention_hours") != generator.EXECUTION_ALERT_RETENTION_HOURS:
         fail("snapshot execution monitor retention mismatch")
+    if monitor.get("agency_limit_overrides") != generator.AGENCY_LIMIT_OVERRIDES:
+        fail("snapshot agency limit overrides mismatch")
     alerts = snapshot.get("execution_alerts")
     if not isinstance(alerts, dict):
         fail("snapshot execution_alerts must be an object")
@@ -372,6 +374,14 @@ def validate_snapshot(snapshot: dict) -> None:
             fail(f"snapshot fund {code} has invalid status {fund.get('status')}")
         if fund.get("subscription_status") not in set(EXPECTED_SUBSCRIPTION_OPTIONS):
             fail(f"snapshot fund {code} has invalid subscription_status {fund.get('subscription_status')}")
+        agency_override = generator.AGENCY_LIMIT_OVERRIDES.get(str(code))
+        if agency_override:
+            expected_limit = generator.number_or_none(agency_override.get("limit"))
+            if fund.get("daily_limit") != expected_limit:
+                fail(f"snapshot fund {code} agency limit override expected {expected_limit}, got {fund.get('daily_limit')}")
+            notes = fund.get("source_notes")
+            if not isinstance(notes, list) or not any("代销限额校准" in str(note) for note in notes):
+                fail(f"snapshot fund {code} agency limit override missing source note")
         for key in ("investing_rank", "investing_score", "investing_tier"):
             if fund.get(key) is None:
                 fail(f"snapshot fund {code} missing {key}")
