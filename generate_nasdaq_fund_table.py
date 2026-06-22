@@ -158,6 +158,7 @@ AUTO_INVESTING_CODES = {
     "018966",
     "019736",
     "000834",
+    "539001",
 }
 
 
@@ -166,7 +167,6 @@ NEW_AUTO_INVESTING_CODES = {
 
 
 PAUSED_AUTO_INVESTING_CODES = {
-    "539001",
 }
 
 
@@ -181,18 +181,18 @@ AUTO_INVEST_AMOUNTS = {
     "018966": 100,
     "019736": 10,
     "000834": 10,
+    "539001": 50,
 }
 
 
 PAUSED_AUTO_INVEST_AMOUNTS = {
-    "539001": 100,
 }
 
 
 AUTO_INVEST_SCREENSHOT_SUMMARY = {
-    "source": "user Alipay screenshots 2026-06-22 23:22/23:23",
-    "active_count": 10,
-    "paused_count": 2,
+    "source": "user Alipay screenshots 2026-06-22 23:22/23:23 plus user update 2026-06-23",
+    "active_count": 11,
+    "paused_count": 1,
     "confirmed_active_codes": [
         "270042",
         "019524",
@@ -204,9 +204,10 @@ AUTO_INVEST_SCREENSHOT_SUMMARY = {
         "000834",
         "019441",
         "019736",
+        "539001",
     ],
-    "confirmed_paused_codes": ["539001"],
-    "note": "Paused tab count is visible, but its full detail list was not provided; only confirmed paused codes are stored as paused amounts.",
+    "confirmed_paused_codes": [],
+    "note": "The 2026-06-22 paused tab count was visible but not fully expanded. Jianxin 539001 was later confirmed by the user on 2026-06-23 as restarted at 50 yuan per day, so no paused fund amount is stored until a paused-detail page is provided.",
 }
 
 
@@ -1832,7 +1833,7 @@ def scoring_rule_rows() -> str:
             </tr>
             """
         )
-    return "\n".join(rows)
+    return "\n".join(row.rstrip() for row in rows)
 
 
 def fund_record_name(funds_by_code: dict[str, Fund], code: str) -> str:
@@ -1906,7 +1907,7 @@ def auto_invest_record_rows(funds_by_code: dict[str, Fund], cards: dict[str, dic
             </tr>
             """
         )
-    return "\n".join(rows)
+    return "\n".join(row.rstrip() for row in rows)
 
 
 def tracking_number(value: object, suffix: str = "") -> str:

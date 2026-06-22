@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-23T00:07:39+08:00",
+  "generated_at": "2026-06-23T00:55:30+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -134,8 +134,8 @@
     "calendar_source_url": "https://big5.www.gov.cn/gate/big5/www.gov.cn/gongbao/2025/issue_12406/202511/content_7048922.html",
     "cashflow_policy": "定投金额是计划现金流，不自动计入当前持仓总额；只有账户截图、手动确认或交易流水中的已确认成交，才更新持仓、成本、市值和收益。",
     "holding_total_update_policy": "scheduled_auto_invest_amounts_do_not_change_holding_total_until_confirmed_transaction_or_user_snapshot",
-    "active_total": 270,
-    "paused_total": 100,
+    "active_total": 320,
+    "paused_total": 0,
     "active_amounts": {
       "040046": 10,
       "019441": 50,
@@ -146,15 +146,14 @@
       "019524": 10,
       "018966": 100,
       "019736": 10,
-      "000834": 10
+      "000834": 10,
+      "539001": 50
     },
-    "paused_amounts": {
-      "539001": 100
-    },
+    "paused_amounts": {},
     "screenshot_summary": {
-      "source": "user Alipay screenshots 2026-06-22 23:22/23:23",
-      "active_count": 10,
-      "paused_count": 2,
+      "source": "user Alipay screenshots 2026-06-22 23:22/23:23 plus user update 2026-06-23",
+      "active_count": 11,
+      "paused_count": 1,
       "confirmed_active_codes": [
         "270042",
         "019524",
@@ -165,12 +164,11 @@
         "018966",
         "000834",
         "019441",
-        "019736"
-      ],
-      "confirmed_paused_codes": [
+        "019736",
         "539001"
       ],
-      "note": "Paused tab count is visible, but its full detail list was not provided; only confirmed paused codes are stored as paused amounts."
+      "confirmed_paused_codes": [],
+      "note": "The 2026-06-22 paused tab count was visible but not fully expanded. Jianxin 539001 was later confirmed by the user on 2026-06-23 as restarted at 50 yuan per day, so no paused fund amount is stored until a paused-detail page is provided."
     },
     "plan_page_stats": {
       "270042": {
@@ -246,9 +244,7 @@
       "019736",
       "270042"
     ],
-    "holding_but_paused": [
-      "539001"
-    ]
+    "holding_but_paused": []
   },
   "tracking_plan": {
     "schema_version": 1,
@@ -441,10 +437,10 @@
     {
       "code": "539001",
       "name": "建信纳斯达克100指数(QDII)A人民币",
-      "status": "暂停定投",
+      "status": "定投中",
       "holding_amount": 100,
-      "auto_invest_amount": 0,
-      "paused_auto_invest_amount": 100,
+      "auto_invest_amount": 50,
+      "paused_auto_invest_amount": 0,
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "D",
