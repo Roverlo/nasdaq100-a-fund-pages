@@ -583,19 +583,33 @@ def validate_database(snapshot: dict, tracking: dict) -> None:
         if view_count != expected_fund_count:
             fail(f"SQLite v_latest_fund_scores expected {expected_fund_count}, got {view_count}")
         expected_alert_rows = 0
-        for alert in snapshot.get("execution_alerts", {}).values():
+        expected_alert_keys = []
+        for code, alert in snapshot.get("execution_alerts", {}).items():
             if not isinstance(alert, dict):
                 continue
+            detected_at = str(alert.get("detected_at") or snapshot.get("generated_at") or "")
             for key in ("subscription", "agency_limit", "direct_limit"):
                 item = alert.get(key)
                 if isinstance(item, dict) and item.get("direction"):
                     expected_alert_rows += 1
+                    expected_alert_keys.append((detected_at, str(code), key))
         actual_alert_rows = conn.execute("SELECT COUNT(*) FROM execution_alerts").fetchone()[0]
-        if actual_alert_rows != expected_alert_rows:
-            fail(f"SQLite execution_alerts expected {expected_alert_rows}, got {actual_alert_rows}")
+        if actual_alert_rows < expected_alert_rows:
+            fail(f"SQLite execution_alerts expected at least {expected_alert_rows}, got {actual_alert_rows}")
+        for detected_at, code, alert_type in expected_alert_keys:
+            row = conn.execute(
+                """
+                SELECT 1
+                FROM execution_alerts
+                WHERE detected_at = ? AND code = ? AND alert_type = ?
+                """,
+                (detected_at, code, alert_type),
+            ).fetchone()
+            if row is None:
+                fail(f"SQLite execution_alerts missing current alert {detected_at} {code} {alert_type}")
         view_alert_rows = conn.execute("SELECT COUNT(*) FROM v_recent_execution_alerts").fetchone()[0]
-        if view_alert_rows != expected_alert_rows:
-            fail(f"SQLite v_recent_execution_alerts expected {expected_alert_rows}, got {view_alert_rows}")
+        if view_alert_rows < expected_alert_rows:
+            fail(f"SQLite v_recent_execution_alerts expected at least {expected_alert_rows}, got {view_alert_rows}")
 
 
 def main() -> int:

@@ -18,7 +18,7 @@
 - `纳指基金支付宝对比表.html`：生成产物，浏览器直接打开查看。
 - `nasdaq_fund_snapshot.json`：本次抓取和计算快照，用于核对字段、评分、持仓和定投总额。
 - `portfolio_tracking.json`：长期追踪记录，用于跨天、跨周、跨月保存持仓、市值、收益和收益率。生成脚本应按北京时间做“同日更新、跨日追加”：每天 3 次自动刷新只更新当天记录，第二天才追加新记录。页面应把它渲染成图表化追踪面板，而不只是表格。
-- `data/nasdaq_funds.db`：SQLite 长期数据层，用于十年级别的结构化查询和学习；它由 `sync_sqlite_db.py` 从 `nasdaq_fund_snapshot.json` 与 `portfolio_tracking.json` 同步生成，包含 `execution_alerts` 表用于追溯申购状态/限额变化，不要手工改库后忘记回写源数据。
+- `data/nasdaq_funds.db`：SQLite 长期数据层，用于十年级别的结构化查询和学习；它由 `sync_sqlite_db.py` 从 `nasdaq_fund_snapshot.json` 与 `portfolio_tracking.json` 同步生成，包含 `execution_alerts` 表用于追溯申购状态/限额变化，不要手工改库后忘记回写源数据。`execution_alerts` 是历史事件表，不应为了匹配当前 72 小时页面提示而整表清空。
 - `data/schema.sql`：SQLite 表和视图定义。改数据库结构时优先改这里，再让 `sync_sqlite_db.py` 应用；执行信息变化视图是 `v_recent_execution_alerts`。
 - `data/examples.sql`：学习和排查用 SQL 示例。
 - `sync_sqlite_db.py`：数据库同步脚本，完整刷新入口会自动调用。
@@ -95,6 +95,7 @@ python -m py_compile "C:\Users\胡文雨\.codex\skills\nasdaq-fund-table\scripts
 - 自动任务必须运行 `python refresh_all.py`，校验通过后再运行 `should_commit_refresh.py` 判断是否存在业务数据变化；只有纯时间戳变化时不提交，避免每天 3 次无意义 commit。
 - 生成页内置发布版本轮询：GitHub Pages 页面每 5 分钟、窗口重新获得焦点、页面重新可见时检查当前 URL 是否已发布新版 HTML。只有检测到新版 `fund-page-generated-at` 大于当前页面时才自动 `location.reload()`，让标题更新时间和所有指标一起更新；不要做只改页面时间、不换业务数据的前端假刷新。
 - 自动刷新产生的申购状态/限额变化要写入 `nasdaq_fund_snapshot.json.execution_alerts`，同步渲染到完整页和公开页，并同步进 SQLite `execution_alerts`；`validate_refresh_outputs.py` 应继续校验该结构，防止快照和页面提示脱节。
+- `nasdaq_fund_snapshot.json.execution_alerts` 和页面角标只保留短窗口提醒；SQLite `execution_alerts` 要追加/幂等更新已发现事件，用 `detected_at + code + alert_type` 去重，保留历史追溯记录。
 - 长期追踪的个人收益字段要保留：`market_value`、`cost_basis`、`profit`、`return_rate` 不应被自动刷新覆盖。
 
 ## UI 偏好

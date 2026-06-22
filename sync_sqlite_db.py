@@ -279,13 +279,13 @@ def sync_execution_alerts(conn: sqlite3.Connection, snapshot: dict[str, Any], da
     alerts = snapshot.get("execution_alerts")
     if not isinstance(alerts, dict):
         return
-    conn.execute("DELETE FROM execution_alerts")
     for code, alert in alerts.items():
         if not isinstance(alert, dict):
             continue
         detected_at = str(alert.get("detected_at") or snapshot.get("generated_at") or "")
         if not detected_at:
             continue
+        detected_date = detected_at[:10] if len(detected_at) >= 10 else date_key
         retention_hours = alert.get("retention_hours")
         for alert_type in ("subscription", "agency_limit", "direct_limit"):
             item = alert.get(alert_type)
@@ -297,7 +297,7 @@ def sync_execution_alerts(conn: sqlite3.Connection, snapshot: dict[str, Any], da
                 ["detected_at", "code", "alert_type"],
                 {
                     "detected_at": detected_at,
-                    "snapshot_date": date_key,
+                    "snapshot_date": detected_date,
                     "code": str(code),
                     "alert_type": alert_type,
                     "direction": item.get("direction"),
