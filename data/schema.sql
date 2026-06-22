@@ -42,8 +42,11 @@ CREATE TABLE IF NOT EXISTS fund_daily_snapshots (
   fund_size_billion REAL,
   daily_limit REAL,
   agency_limit_label TEXT,
+  agency_limit_source TEXT,
+  agency_limit_confidence TEXT,
   direct_limit REAL,
   direct_limit_source TEXT,
+  direct_limit_confidence TEXT,
   buy_rate REAL,
   management_fee REAL,
   custody_fee REAL,
@@ -171,7 +174,9 @@ SELECT
   d.free_after_days,
   d.subscription_status,
   d.daily_limit,
-  d.direct_limit
+  d.agency_limit_confidence,
+  d.direct_limit,
+  d.direct_limit_confidence
 FROM fund_daily_snapshots d
 JOIN score_snapshots s
   ON s.snapshot_date = d.snapshot_date AND s.code = d.code

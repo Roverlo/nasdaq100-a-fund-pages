@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-22T22:22:10+08:00",
+  "generated_at": "2026-06-22T23:49:48+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -43,80 +43,16 @@
       "019441": {
         "limit": 50,
         "source_note": "用户 2026-06-22 反馈的支付宝/代销交易页当前限额",
+        "source_url": "",
+        "confidence": "user_trading_page_verified",
         "channel_note": "覆盖东方财富移动接口仍显示的单日投资上限10000元；代销/实际交易入口优先。"
       }
     },
     "alert_retention_hours": 72,
     "alert_policy": "Compare current refresh against the previous snapshot; keep unchanged alerts for a short window so opened pages can still show recent buyability or limit moves. Subscription status and limits remain execution information and do not affect tier scores."
   },
-  "execution_alerts": {
-    "019441": {
-      "code": "019441",
-      "detected_at": "2026-06-22T20:00:17+08:00",
-      "previous_generated_at": "2026-06-22T19:50:56+08:00",
-      "retention_hours": 72,
-      "retained_until": "2026-06-25T20:00:17+08:00",
-      "summary": [
-        "代销下调"
-      ],
-      "subscription": {
-        "direction": "",
-        "previous": "允许申购",
-        "current": "允许申购",
-        "label": ""
-      },
-      "agency_limit": {
-        "direction": "down",
-        "previous": 10000.0,
-        "current": 50.0,
-        "previous_text": "10000元",
-        "current_text": "50元",
-        "label": "代销下调"
-      },
-      "direct_limit": {
-        "direction": "",
-        "previous": 10000.0,
-        "current": 10000.0,
-        "previous_text": "10000元",
-        "current_text": "10000元",
-        "label": ""
-      }
-    }
-  },
-  "change_alerts": {
-    "019441": {
-      "code": "019441",
-      "detected_at": "2026-06-22T20:00:17+08:00",
-      "previous_generated_at": "2026-06-22T19:50:56+08:00",
-      "retention_hours": 72,
-      "retained_until": "2026-06-25T20:00:17+08:00",
-      "summary": [
-        "代销下调"
-      ],
-      "subscription": {
-        "direction": "",
-        "previous": "允许申购",
-        "current": "允许申购",
-        "label": ""
-      },
-      "agency_limit": {
-        "direction": "down",
-        "previous": 10000.0,
-        "current": 50.0,
-        "previous_text": "10000元",
-        "current_text": "50元",
-        "label": "代销下调"
-      },
-      "direct_limit": {
-        "direction": "",
-        "previous": 10000.0,
-        "current": 10000.0,
-        "previous_text": "10000元",
-        "current_text": "10000元",
-        "label": ""
-      }
-    }
-  },
+  "execution_alerts": {},
+  "change_alerts": {},
   "scoring_model": {
     "method": "return-priority model for the current A-share watchlist; return metrics carry 55%, tracking error and base fee carry 35%, fund size carries 6%, transaction frictions carry 4%; subscription status and purchase limits are execution filters only and do not affect tier scores; lower-is-better metrics are reverse normalized; fund size uses log10 before normalization",
     "tier_method": "S/A/B/C/D relative percentile buckets within the current watchlist",
@@ -190,31 +126,105 @@
   },
   "auto_invest_plan": {
     "frequency": "日定投",
-    "next_debit_date": "2026-06-22",
-    "next_debit_business_date": "2026-06-22",
-    "next_debit_base_date": "2026-06-22",
+    "next_debit_date": "2026-06-23",
+    "next_debit_business_date": "2026-06-23",
+    "next_debit_base_date": "2026-06-23",
     "next_debit_date_source": "user_snapshot",
     "calendar_policy": "预计扣款日按中国内地公募基金业务日估算：排除周末和国务院办公厅公布的2026年法定节假日；QDII基金仍可能受海外市场休市、基金公司暂停申购、额度和平台扣款状态影响，支付宝/基金公司订单页为最终事实。",
     "calendar_source_url": "https://big5.www.gov.cn/gate/big5/www.gov.cn/gongbao/2025/issue_12406/202511/content_7048922.html",
     "cashflow_policy": "定投金额是计划现金流，不自动计入当前持仓总额；只有账户截图、手动确认或交易流水中的已确认成交，才更新持仓、成本、市值和收益。",
     "holding_total_update_policy": "scheduled_auto_invest_amounts_do_not_change_holding_total_until_confirmed_transaction_or_user_snapshot",
-    "active_total": 300,
-    "paused_total": 220,
+    "active_total": 270,
+    "paused_total": 100,
     "active_amounts": {
       "040046": 10,
-      "019441": 200,
+      "019441": 50,
       "016452": 50,
       "270042": 10,
       "019172": 10,
       "019547": 10,
-      "019524": 10
+      "019524": 10,
+      "018966": 100,
+      "019736": 10,
+      "000834": 10
     },
     "paused_amounts": {
-      "018966": 100,
-      "539001": 100,
-      "000834": 10,
-      "019736": 10
-    }
+      "539001": 100
+    },
+    "screenshot_summary": {
+      "source": "user Alipay screenshots 2026-06-22 23:22/23:23",
+      "active_count": 10,
+      "paused_count": 2,
+      "confirmed_active_codes": [
+        "270042",
+        "019524",
+        "040046",
+        "016452",
+        "019172",
+        "019547",
+        "018966",
+        "000834",
+        "019441",
+        "019736"
+      ],
+      "confirmed_paused_codes": [
+        "539001"
+      ],
+      "note": "Paused tab count is visible, but its full detail list was not provided; only confirmed paused codes are stored as paused amounts."
+    },
+    "plan_page_stats": {
+      "270042": {
+        "cumulative_amount": 10,
+        "periods": 1,
+        "source": "user Alipay screenshot 2026-06-22 23:22"
+      },
+      "019524": {
+        "cumulative_amount": 10,
+        "periods": 1,
+        "source": "user Alipay screenshot 2026-06-22 23:22"
+      },
+      "040046": {
+        "cumulative_amount": 10,
+        "periods": 1,
+        "source": "user Alipay screenshot 2026-06-22 23:22"
+      },
+      "016452": {
+        "cumulative_amount": 100,
+        "periods": 2,
+        "source": "user Alipay screenshot 2026-06-22 23:22"
+      },
+      "019172": {
+        "cumulative_amount": 20,
+        "periods": 2,
+        "source": "user Alipay screenshot 2026-06-22 23:22"
+      },
+      "019547": {
+        "cumulative_amount": 20,
+        "periods": 2,
+        "source": "user Alipay screenshot 2026-06-22 23:22"
+      },
+      "018966": {
+        "cumulative_amount": 0,
+        "periods": 0,
+        "source": "user Alipay screenshot 2026-06-22 23:22"
+      },
+      "000834": {
+        "cumulative_amount": 0,
+        "periods": 0,
+        "source": "user Alipay screenshot 2026-06-22 23:23"
+      },
+      "019441": {
+        "cumulative_amount": 0,
+        "periods": 0,
+        "source": "user Alipay screenshot 2026-06-22 23:23"
+      },
+      "019736": {
+        "cumulative_amount": 0,
+        "periods": 0,
+        "source": "user Alipay screenshot 2026-06-22 23:23"
+      }
+    },
+    "plan_page_stats_policy": "Alipay auto-invest page cumulative amount and periods are plan-page facts; they do not update actual holding_total or personal return fields."
   },
   "holding_plan": {
     "holding_total": 560,
@@ -233,18 +243,17 @@
     "cashflow_policy": "定投金额是计划现金流，不自动计入当前持仓总额；只有账户截图、手动确认或交易流水中的已确认成交，才更新持仓、成本、市值和收益。",
     "active_without_holding": [
       "019524",
+      "019736",
       "270042"
     ],
     "holding_but_paused": [
-      "000834",
-      "018966",
       "539001"
     ]
   },
   "tracking_plan": {
     "schema_version": 1,
     "file": "portfolio_tracking.json",
-    "record_count": 2,
+    "record_count": 1,
     "latest_date": "2026-06-22",
     "refresh_policy": "GitHub Actions refreshes the main data three times per Beijing day; portfolio_tracking.json upserts today's record and appends only when the Beijing date changes.",
     "refresh_times_beijing": [
@@ -262,7 +271,7 @@
       "name": "万家纳斯达克100指数发起式(QDII)A",
       "status": "定投中",
       "holding_amount": 50,
-      "auto_invest_amount": 200,
+      "auto_invest_amount": 50,
       "paused_auto_invest_amount": 0,
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
@@ -274,39 +283,12 @@
       "fund_size_billion": 4.38,
       "daily_limit": 50.0,
       "agency_limit_label": "",
+      "agency_limit_source": "代销限额: 用户 2026-06-22 反馈的支付宝/代销交易页当前限额；覆盖东方财富移动接口仍显示的单日投资上限10000元；代销/实际交易入口优先。",
+      "agency_limit_confidence": "user_trading_page_verified",
       "direct_limit": 10000.0,
-      "execution_alert": {
-        "code": "019441",
-        "detected_at": "2026-06-22T20:00:17+08:00",
-        "previous_generated_at": "2026-06-22T19:50:56+08:00",
-        "retention_hours": 72,
-        "retained_until": "2026-06-25T20:00:17+08:00",
-        "summary": [
-          "代销下调"
-        ],
-        "subscription": {
-          "direction": "",
-          "previous": "允许申购",
-          "current": "允许申购",
-          "label": ""
-        },
-        "agency_limit": {
-          "direction": "down",
-          "previous": 10000.0,
-          "current": 50.0,
-          "previous_text": "10000元",
-          "current_text": "50元",
-          "label": "代销下调"
-        },
-        "direct_limit": {
-          "direction": "",
-          "previous": 10000.0,
-          "current": 10000.0,
-          "previous_text": "10000元",
-          "current_text": "10000元",
-          "label": ""
-        }
-      },
+      "direct_limit_source": "直销限额: 万家基金公告正文，A/C单日单个基金账户单笔或多笔申购含定投累计金额限制；生效日/公告日: 2026-06-22；公告未区分直销/代销；A类、C类分别计算；同时设置13.5亿元总规模上限。；https://pdf.dfcfw.com/pdf/H2_AN202606191823686344_1.pdf",
+      "direct_limit_confidence": "official_disclosure_mirror",
+      "execution_alert": {},
       "buy_rate": 0.1,
       "management_fee": 0.5,
       "custody_fee": 0.15,
@@ -340,8 +322,7 @@
         "代销限额校准: 用户 2026-06-22 反馈的支付宝/代销交易页当前限额；覆盖东方财富移动接口仍显示的单日投资上限10000元；代销/实际交易入口优先。",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
-      ],
-      "direct_limit_source": "直销限额: 万家基金公告正文，A/C单日单个基金账户单笔或多笔申购含定投累计金额限制；生效日/公告日: 2026-06-22；公告未区分直销/代销；A类、C类分别计算；同时设置13.5亿元总规模上限。；https://pdf.dfcfw.com/pdf/H2_AN202606191823686344_1.pdf"
+      ]
     },
     {
       "code": "040046",
@@ -360,7 +341,11 @@
       "fund_size_billion": 47.03,
       "daily_limit": 10.0,
       "agency_limit_label": "",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限10元)",
+      "agency_limit_confidence": "third_party_api",
       "direct_limit": 1000.0,
+      "direct_limit_source": "直销限额: 华安基金公告PDF，直销机构单日每个基金账户累计申购/定投限额；生效日/公告日: 2025-12-05；公告明确普通渠道每类人民币份额10元，直销机构1000元。；https://pdf.dfcfw.com/pdf/H2_AN202512041793575251_1.pdf",
+      "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {},
       "buy_rate": 0.12,
       "management_fee": 0.6,
@@ -390,16 +375,15 @@
         "基础行情/限额/规模: 东方财富移动接口",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
-      ],
-      "direct_limit_source": "直销限额: 华安基金公告PDF，直销机构单日每个基金账户累计申购/定投限额；生效日/公告日: 2025-12-05；公告明确普通渠道每类人民币份额10元，直销机构1000元。；https://pdf.dfcfw.com/pdf/H2_AN202512041793575251_1.pdf"
+      ]
     },
     {
       "code": "000834",
       "name": "大成纳斯达克100ETF联接(QDII)A",
-      "status": "暂停定投",
+      "status": "定投中",
       "holding_amount": 10,
-      "auto_invest_amount": 0,
-      "paused_auto_invest_amount": 10,
+      "auto_invest_amount": 10,
+      "paused_auto_invest_amount": 0,
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "B",
@@ -410,7 +394,11 @@
       "fund_size_billion": 34.53,
       "daily_limit": 10.0,
       "agency_limit_label": "",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限10元)",
+      "agency_limit_confidence": "third_party_api",
       "direct_limit": 100.0,
+      "direct_limit_source": "直销限额: 大成基金公告PDF，直销渠道单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-06-04；公告明确直销渠道100元，代销机构10元。；https://pdf.dfcfw.com/pdf/H2_AN202606031823188725_1.pdf",
+      "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {},
       "buy_rate": 0.12,
       "management_fee": 0.8,
@@ -448,8 +436,7 @@
         "基础行情/限额/规模: 东方财富移动接口",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
-      ],
-      "direct_limit_source": "直销限额: 大成基金公告PDF，直销渠道单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-06-04；公告明确直销渠道100元，代销机构10元。；https://pdf.dfcfw.com/pdf/H2_AN202606031823188725_1.pdf"
+      ]
     },
     {
       "code": "539001",
@@ -468,7 +455,11 @@
       "fund_size_billion": 16.24,
       "daily_limit": 100.0,
       "agency_limit_label": "",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限100元)",
+      "agency_limit_confidence": "third_party_api",
       "direct_limit": 100.0,
+      "direct_limit_source": "直销限额: 建信基金公告PDF，人民币份额单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-02-27；公告未区分直销/代销；按人民币A/C/D份额统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202602261820057584_1.pdf",
+      "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {},
       "buy_rate": 0.12,
       "management_fee": 0.8,
@@ -506,16 +497,15 @@
         "基础行情/限额/规模: 东方财富移动接口",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
-      ],
-      "direct_limit_source": "直销限额: 建信基金公告PDF，人民币份额单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-02-27；公告未区分直销/代销；按人民币A/C/D份额统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202602261820057584_1.pdf"
+      ]
     },
     {
       "code": "018966",
       "name": "汇添富纳斯达克100ETF发起式联接(QDII)人民币A",
-      "status": "暂停定投",
+      "status": "定投中",
       "holding_amount": 100,
-      "auto_invest_amount": 0,
-      "paused_auto_invest_amount": 100,
+      "auto_invest_amount": 100,
+      "paused_auto_invest_amount": 0,
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "D",
@@ -526,7 +516,11 @@
       "fund_size_billion": 10.35,
       "daily_limit": 100.0,
       "agency_limit_label": "",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限100元)",
+      "agency_limit_confidence": "third_party_api",
       "direct_limit": 100.0,
+      "direct_limit_source": "直销限额: 汇添富基金公告PDF，人民币A/C/E单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-04-17；公告未区分直销/代销，按本基金人民币A/C/E统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202604171821282012_1.pdf",
+      "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {},
       "buy_rate": 0.12,
       "management_fee": 0.5,
@@ -556,8 +550,7 @@
         "基础行情/限额/规模: 东方财富移动接口",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
-      ],
-      "direct_limit_source": "直销限额: 汇添富基金公告PDF，人民币A/C/E单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-04-17；公告未区分直销/代销，按本基金人民币A/C/E统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202604171821282012_1.pdf"
+      ]
     },
     {
       "code": "016452",
@@ -576,7 +569,11 @@
       "fund_size_billion": 31.11,
       "daily_limit": 50.0,
       "agency_limit_label": "",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限50元)",
+      "agency_limit_confidence": "third_party_api",
       "direct_limit": 50.0,
+      "direct_limit_source": "直销限额: 南方基金官网产品状态及限额接口，A类大额申购/定投/转换转入限额；生效日/公告日: 2026-06-18；官网产品状态接口未区分直销/代销；按南方基金官网A类当前限额记录。；https://www.nffund.com/new/transaction-guide/product-status-and-limits.html",
+      "direct_limit_confidence": "fund_company_status_page",
       "execution_alert": {},
       "buy_rate": 0.12,
       "management_fee": 0.5,
@@ -606,8 +603,7 @@
         "基础行情/限额/规模: 东方财富移动接口",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
-      ],
-      "direct_limit_source": "直销限额: 南方基金官网产品状态及限额接口，A类大额申购/定投/转换转入限额；生效日/公告日: 2026-06-18；官网产品状态接口未区分直销/代销；按南方基金官网A类当前限额记录。；https://www.nffund.com/new/transaction-guide/product-status-and-limits.html"
+      ]
     },
     {
       "code": "270042",
@@ -626,7 +622,11 @@
       "fund_size_billion": 97.16,
       "daily_limit": 10.0,
       "agency_limit_label": "",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限10元)",
+      "agency_limit_confidence": "third_party_api",
       "direct_limit": 10.0,
+      "direct_limit_source": "直销限额: 广发基金公告正文，人民币A/C/F份额单日单个基金账户申购含定投/不定投/转换转入业务限额；生效日/公告日: 2025-10-31；公告未区分直销/代销；投资者通过多家销售渠道的多笔申请累计计算；人民币A类270042当前限额10元。；https://pdf.dfcfw.com/pdf/H2_AN202510301771709226_1.pdf",
+      "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {},
       "buy_rate": 0.13,
       "management_fee": 0.8,
@@ -664,8 +664,7 @@
         "基础行情/限额/规模: 东方财富移动接口",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
-      ],
-      "direct_limit_source": "直销限额: 东方财富移动接口及截图汇总表，人民币A当前代销/直销限购口径；生效日/公告日: 2026-06-19；未抓到近期单独大额限购公告；按公开接口代销10元和截图直销10元记录。；https://fundf10.eastmoney.com/jjfl_270042.html"
+      ]
     },
     {
       "code": "019172",
@@ -684,7 +683,11 @@
       "fund_size_billion": 21.78,
       "daily_limit": 10.0,
       "agency_limit_label": "",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限10元)",
+      "agency_limit_confidence": "third_party_api",
       "direct_limit": 10.0,
+      "direct_limit_source": "直销限额: 摩根基金公告正文，人民币A/C单日申购/定投/转换转入累计限额；生效日/公告日: 2026-06-11；公告未区分直销/代销，按人民币份额统一限制记录；该公告比2026-04-27的100元公告更新。；https://pdf.dfcfw.com/pdf/H2_AN202606101823421439_1.pdf",
+      "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {},
       "buy_rate": 0.12,
       "management_fee": 0.5,
@@ -714,8 +717,7 @@
         "基础行情/限额/规模: 东方财富移动接口",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
-      ],
-      "direct_limit_source": "直销限额: 摩根基金公告正文，人民币A/C单日申购/定投/转换转入累计限额；生效日/公告日: 2026-06-11；公告未区分直销/代销，按人民币份额统一限制记录；该公告比2026-04-27的100元公告更新。；https://pdf.dfcfw.com/pdf/H2_AN202606101823421439_1.pdf"
+      ]
     },
     {
       "code": "019547",
@@ -734,7 +736,11 @@
       "fund_size_billion": 16.52,
       "daily_limit": 10.0,
       "agency_limit_label": "",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限10元)",
+      "agency_limit_confidence": "third_party_api",
       "direct_limit": 10.0,
+      "direct_limit_source": "直销限额: 招商基金公告PDF，A/C单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-06-10；公告未区分直销/代销，按本基金A/C统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202606091823377663_1.pdf",
+      "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {},
       "buy_rate": 0.12,
       "management_fee": 0.5,
@@ -764,16 +770,15 @@
         "基础行情/限额/规模: 东方财富移动接口",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
-      ],
-      "direct_limit_source": "直销限额: 招商基金公告PDF，A/C单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-06-10；公告未区分直销/代销，按本基金A/C统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202606091823377663_1.pdf"
+      ]
     },
     {
       "code": "019736",
       "name": "宝盈纳斯达克100指数发起(QDII)A人民币",
-      "status": "暂停定投",
+      "status": "定投中",
       "holding_amount": 0,
-      "auto_invest_amount": 0,
-      "paused_auto_invest_amount": 10,
+      "auto_invest_amount": 10,
+      "paused_auto_invest_amount": 0,
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "C",
@@ -784,7 +789,11 @@
       "fund_size_billion": 5.68,
       "daily_limit": 10.0,
       "agency_limit_label": "",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限10元)",
+      "agency_limit_confidence": "third_party_api",
       "direct_limit": 10.0,
+      "direct_limit_source": "直销限额: 宝盈基金公告正文，A/C人民币份额申购含定投限制金额；生效日/公告日: 2026-06-11；公告未区分直销/代销；A/C均为10元。；https://pdf.dfcfw.com/pdf/H2_AN202606101823409504_1.pdf",
+      "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {},
       "buy_rate": 0.12,
       "management_fee": 0.5,
@@ -814,8 +823,7 @@
         "基础行情/限额/规模: 东方财富移动接口",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
-      ],
-      "direct_limit_source": "直销限额: 宝盈基金公告正文，A/C人民币份额申购含定投限制金额；生效日/公告日: 2026-06-11；公告未区分直销/代销；A/C均为10元。；https://pdf.dfcfw.com/pdf/H2_AN202606101823409504_1.pdf"
+      ]
     },
     {
       "code": "019524",
@@ -834,7 +842,11 @@
       "fund_size_billion": 7.02,
       "daily_limit": 10.0,
       "agency_limit_label": "",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限10元)",
+      "agency_limit_confidence": "third_party_api",
       "direct_limit": 10.0,
+      "direct_limit_source": "直销限额: 华泰柏瑞基金公告正文，A/C/I份额申购含定投限制金额；生效日/公告日: 2026-04-23；公告未区分直销/代销；A/C/I份额合并计算10元。；https://pdf.dfcfw.com/pdf/H2_AN202604231821470346_1.pdf",
+      "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {},
       "buy_rate": 0.12,
       "management_fee": 0.5,
@@ -868,8 +880,7 @@
         "基础行情/限额/规模: 东方财富移动接口",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
-      ],
-      "direct_limit_source": "直销限额: 华泰柏瑞基金公告正文，A/C/I份额申购含定投限制金额；生效日/公告日: 2026-04-23；公告未区分直销/代销；A/C/I份额合并计算10元。；https://pdf.dfcfw.com/pdf/H2_AN202604231821470346_1.pdf"
+      ]
     },
     {
       "code": "018043",
@@ -888,7 +899,11 @@
       "fund_size_billion": 21.86,
       "daily_limit": 100.0,
       "agency_limit_label": "",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购(单日投资上限100元)",
+      "agency_limit_confidence": "third_party_api",
       "direct_limit": 100.0,
+      "direct_limit_source": "直销限额: 天弘基金公告正文，A/C/D单日单个基金账户申购含定投累计限额；生效日/公告日: 2026-04-08；公告未区分直销/代销；A类018043、C类018044、D类022525均为100元。；https://pdf.dfcfw.com/pdf/H2_AN202604071821036124_1.pdf",
+      "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {},
       "buy_rate": 0.1,
       "management_fee": 0.5,
@@ -926,8 +941,7 @@
         "基础行情/限额/规模: 东方财富移动接口",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
-      ],
-      "direct_limit_source": "直销限额: 天弘基金公告正文，A/C/D单日单个基金账户申购含定投累计限额；生效日/公告日: 2026-04-08；公告未区分直销/代销；A类018043、C类018044、D类022525均为100元。；https://pdf.dfcfw.com/pdf/H2_AN202604071821036124_1.pdf"
+      ]
     },
     {
       "code": "016055",
@@ -946,7 +960,11 @@
       "fund_size_billion": 13.01,
       "daily_limit": 100.0,
       "agency_limit_label": "",
-      "direct_limit": 100,
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购(单日投资上限100元)",
+      "agency_limit_confidence": "third_party_api",
+      "direct_limit": null,
+      "direct_limit_source": "直销限额: 博时基金公告正文，A/C类份额自2025-09-29起暂停申购、转换转入、定期定额投资业务；生效日/公告日: 2025-09-29；后续2025-11月100元公告限制的是I类024237，不适用于A人民币016055；A类暂停期间直销交易限额待恢复申购后重新核验。；https://pdf.dfcfw.com/pdf/H2_AN202509271751405684_1.pdf",
+      "direct_limit_confidence": "fallback_unverified",
       "execution_alert": {},
       "buy_rate": 0.1,
       "management_fee": 0.5,
@@ -976,8 +994,7 @@
         "基础行情/限额/规模: 东方财富移动接口",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
-      ],
-      "direct_limit_source": "直销限额: 脚本内置回退值，待基金公司直销公告核验"
+      ]
     },
     {
       "code": "016532",
@@ -996,7 +1013,11 @@
       "fund_size_billion": 18.86,
       "daily_limit": 100.0,
       "agency_limit_label": "",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购(单日投资上限100元)",
+      "agency_limit_confidence": "third_party_api",
       "direct_limit": 1000.0,
+      "direct_limit_source": "直销限额: 嘉实基金公告正文，直销销售机构A人民币单日单个基金账户申购含定投累计限额；生效日/公告日: 2025-11-11；公告明确直销A/C/I人民币各1000元，非直销A/C/I人民币各100元；表内代销限额仍按公开平台接口100元。；https://pdf.dfcfw.com/pdf/H2_AN202511111779112505_1.pdf",
+      "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {},
       "buy_rate": 0.1,
       "management_fee": 0.5,
@@ -1030,8 +1051,7 @@
         "基础行情/限额/规模: 东方财富移动接口",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
-      ],
-      "direct_limit_source": "直销限额: 嘉实基金公告正文，直销销售机构A人民币单日单个基金账户申购含定投累计限额；生效日/公告日: 2025-11-11；公告明确直销A/C/I人民币各1000元，非直销A/C/I人民币各100元；表内代销限额仍按公开平台接口100元。；https://pdf.dfcfw.com/pdf/H2_AN202511111779112505_1.pdf"
+      ]
     },
     {
       "code": "015299",
@@ -1050,7 +1070,11 @@
       "fund_size_billion": 3.15,
       "daily_limit": 100.0,
       "agency_limit_label": "",
-      "direct_limit": 100,
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购(单日投资上限100元)",
+      "agency_limit_confidence": "third_party_api",
+      "direct_limit": 100.0,
+      "direct_limit_source": "直销限额: 华夏基金公告正文，基金管理人直销机构单日累计申购含定投上限；生效日/公告日: 2025-11-17；公告明确直销机构A人民币/C各100元，代销机构A人民币/C也为100元；2025-11-24起本基金暂停申购及定投，当前能否下单以申购状态/交易页为准。；https://pdf.dfcfw.com/pdf/H2_AN202511151781620266_1.pdf",
+      "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {},
       "buy_rate": 0.12,
       "management_fee": 0.6,
@@ -1080,8 +1104,7 @@
         "基础行情/限额/规模: 东方财富移动接口",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
-      ],
-      "direct_limit_source": "直销限额: 脚本内置回退值，待基金公司直销公告核验"
+      ]
     },
     {
       "code": "161130",
@@ -1100,7 +1123,11 @@
       "fund_size_billion": 15.17,
       "daily_limit": 10.0,
       "agency_limit_label": "",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购(单日投资上限10元)",
+      "agency_limit_confidence": "third_party_api",
       "direct_limit": 10.0,
+      "direct_limit_source": "直销限额: 易方达基金公告正文，A人民币份额在全部销售机构单日单个基金账户申购含定投累计限额；生效日/公告日: 2025-11-04；公告明确人民币A/C份额在全部销售机构累计申购限额均为10元。；https://pdf.dfcfw.com/pdf/H2_AN202511031774389358_1.pdf",
+      "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {},
       "buy_rate": 0.12,
       "management_fee": 0.5,
@@ -1138,8 +1165,7 @@
         "基础行情/限额/规模: 东方财富移动接口",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
-      ],
-      "direct_limit_source": "直销限额: 易方达基金公告正文，A人民币份额在全部销售机构单日单个基金账户申购含定投累计限额；生效日/公告日: 2025-11-04；公告明确人民币A/C份额在全部销售机构累计申购限额均为10元。；https://pdf.dfcfw.com/pdf/H2_AN202511031774389358_1.pdf"
+      ]
     },
     {
       "code": "160213",
@@ -1158,7 +1184,11 @@
       "fund_size_billion": 16.36,
       "daily_limit": 100.0,
       "agency_limit_label": "",
-      "direct_limit": 100,
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购(单日投资上限100元)",
+      "agency_limit_confidence": "third_party_api",
+      "direct_limit": 100.0,
+      "direct_limit_source": "直销限额: 国泰基金公告正文，单日每个基金账户累计申购及定投业务金额限制；生效日/公告日: 2026-05-26；公告未区分直销/代销；当前东方财富接口显示暂停申购，能否下单以交易页为准。；https://pdf.dfcfw.com/pdf/H2_AN202605261822869261_1.pdf",
+      "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {},
       "buy_rate": 0.15,
       "management_fee": 0.8,
@@ -1196,8 +1226,7 @@
         "基础行情/限额/规模: 东方财富移动接口",
         "费率/赎回: 天天基金基金费率页",
         "跟踪误差: 天天基金特色数据页"
-      ],
-      "direct_limit_source": "直销限额: 脚本内置回退值，待基金公司直销公告核验"
+      ]
     }
   ]
 }

@@ -113,10 +113,11 @@
   },
   "270042": {
     "limit": 10,
-    "source_note": "东方财富移动接口及截图汇总表，人民币A当前代销/直销限购口径",
-    "source_url": "https://fundf10.eastmoney.com/jjfl_270042.html",
-    "effective_date": "2026-06-19",
-    "channel_note": "未抓到近期单独大额限购公告；按公开接口代销10元和截图直销10元记录。"
+    "source_note": "广发基金公告正文，人民币A/C/F份额单日单个基金账户申购含定投/不定投/转换转入业务限额",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202510301771709226_1.pdf",
+    "effective_date": "2025-10-31",
+    "confidence": "official_disclosure_mirror",
+    "channel_note": "公告未区分直销/代销；投资者通过多家销售渠道的多笔申请累计计算；人民币A类270042当前限额10元。"
   },
   "006479": {
     "limit": 10,
@@ -208,5 +209,29 @@
     "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202511031774389358_1.pdf",
     "effective_date": "2025-11-04",
     "channel_note": "公告明确人民币A/C份额在全部销售机构累计申购限额均为10元。"
+  },
+  "015299": {
+    "limit": 100,
+    "source_note": "华夏基金公告正文，基金管理人直销机构单日累计申购含定投上限",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202511151781620266_1.pdf",
+    "effective_date": "2025-11-17",
+    "confidence": "official_disclosure_mirror",
+    "channel_note": "公告明确直销机构A人民币/C各100元，代销机构A人民币/C也为100元；2025-11-24起本基金暂停申购及定投，当前能否下单以申购状态/交易页为准。"
+  },
+  "160213": {
+    "limit": 100,
+    "source_note": "国泰基金公告正文，单日每个基金账户累计申购及定投业务金额限制",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202605261822869261_1.pdf",
+    "effective_date": "2026-05-26",
+    "confidence": "official_disclosure_mirror",
+    "channel_note": "公告未区分直销/代销；当前东方财富接口显示暂停申购，能否下单以交易页为准。"
+  },
+  "016055": {
+    "limit": null,
+    "source_note": "博时基金公告正文，A/C类份额自2025-09-29起暂停申购、转换转入、定期定额投资业务",
+    "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202509271751405684_1.pdf",
+    "effective_date": "2025-09-29",
+    "confidence": "fallback_unverified",
+    "channel_note": "后续2025-11月100元公告限制的是I类024237，不适用于A人民币016055；A类暂停期间直销交易限额待恢复申购后重新核验。"
   }
 }

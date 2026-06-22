@@ -155,6 +155,9 @@ AUTO_INVESTING_CODES = {
     "270042",
     "019547",
     "019524",
+    "018966",
+    "019736",
+    "000834",
 }
 
 
@@ -163,34 +166,66 @@ NEW_AUTO_INVESTING_CODES = {
 
 
 PAUSED_AUTO_INVESTING_CODES = {
-    "018966",
     "539001",
-    "000834",
-    "019736",
 }
 
 
 AUTO_INVEST_AMOUNTS = {
     "040046": 10,
-    "019441": 200,
+    "019441": 50,
     "016452": 50,
     "270042": 10,
     "019172": 10,
     "019547": 10,
     "019524": 10,
+    "018966": 100,
+    "019736": 10,
+    "000834": 10,
 }
 
 
 PAUSED_AUTO_INVEST_AMOUNTS = {
-    "018966": 100,
     "539001": 100,
-    "000834": 10,
-    "019736": 10,
+}
+
+
+AUTO_INVEST_SCREENSHOT_SUMMARY = {
+    "source": "user Alipay screenshots 2026-06-22 23:22/23:23",
+    "active_count": 10,
+    "paused_count": 2,
+    "confirmed_active_codes": [
+        "270042",
+        "019524",
+        "040046",
+        "016452",
+        "019172",
+        "019547",
+        "018966",
+        "000834",
+        "019441",
+        "019736",
+    ],
+    "confirmed_paused_codes": ["539001"],
+    "note": "Paused tab count is visible, but its full detail list was not provided; only confirmed paused codes are stored as paused amounts.",
+}
+
+
+AUTO_INVEST_PLAN_PAGE_STATS = {
+    "270042": {"cumulative_amount": 10, "periods": 1, "source": "user Alipay screenshot 2026-06-22 23:22"},
+    "019524": {"cumulative_amount": 10, "periods": 1, "source": "user Alipay screenshot 2026-06-22 23:22"},
+    "040046": {"cumulative_amount": 10, "periods": 1, "source": "user Alipay screenshot 2026-06-22 23:22"},
+    "016452": {"cumulative_amount": 100, "periods": 2, "source": "user Alipay screenshot 2026-06-22 23:22"},
+    "019172": {"cumulative_amount": 20, "periods": 2, "source": "user Alipay screenshot 2026-06-22 23:22"},
+    "019547": {"cumulative_amount": 20, "periods": 2, "source": "user Alipay screenshot 2026-06-22 23:22"},
+    "018966": {"cumulative_amount": 0, "periods": 0, "source": "user Alipay screenshot 2026-06-22 23:22"},
+    "000834": {"cumulative_amount": 0, "periods": 0, "source": "user Alipay screenshot 2026-06-22 23:23"},
+    "019441": {"cumulative_amount": 0, "periods": 0, "source": "user Alipay screenshot 2026-06-22 23:23"},
+    "019736": {"cumulative_amount": 0, "periods": 0, "source": "user Alipay screenshot 2026-06-22 23:23"},
 }
 
 
 AUTO_INVEST_FREQUENCY = "日定投"
-AUTO_INVEST_NEXT_DEBIT_DATE = "2026-06-22"
+AUTO_INVEST_NEXT_DEBIT_DATE = "2026-06-23"
 AUTO_INVEST_NEXT_DEBIT_BASE_DATE = AUTO_INVEST_NEXT_DEBIT_DATE
 AUTO_INVEST_NEXT_DEBIT_SOURCE = "user_snapshot"
 
@@ -212,9 +247,26 @@ AGENCY_LIMIT_OVERRIDES = {
     "019441": {
         "limit": 50,
         "source_note": "用户 2026-06-22 反馈的支付宝/代销交易页当前限额",
+        "source_url": "",
+        "confidence": "user_trading_page_verified",
         "channel_note": "覆盖东方财富移动接口仍显示的单日投资上限10000元；代销/实际交易入口优先。",
     },
 }
+
+
+SOURCE_CONFIDENCE_LABELS = {
+    "trading_page_verified": "交易页核验",
+    "user_trading_page_verified": "用户交易页核验",
+    "fund_company_disclosure": "基金公司公告",
+    "fund_company_status_page": "基金公司状态页",
+    "official_disclosure_mirror": "公告镜像",
+    "third_party_api": "第三方接口",
+    "third_party_or_screenshot": "第三方/截图",
+    "fallback_unverified": "待核验",
+}
+
+
+UNVERIFIED_DIRECT_LIMIT_SOURCE = "直销限额: 脚本内置回退值，待基金公司直销公告核验"
 
 
 DIRECT_LIMIT_ANNOUNCEMENT_KEYWORDS = ("大额申购", "限制申购", "申购金额限制", "业务限制金额", "限制金额", "限购")
@@ -772,7 +824,11 @@ class Fund:
     fund_size_billion: Optional[float]
     daily_limit: Optional[float]
     agency_limit_label: str
+    agency_limit_source: str
+    agency_limit_confidence: str
     direct_limit: Optional[float]
+    direct_limit_source: str
+    direct_limit_confidence: str
     buy_rate: Optional[float]
     management_fee: Optional[float]
     custody_fee: Optional[float]
@@ -787,7 +843,6 @@ class Fund:
     redemption_rules: list[tuple[str, float]]
     free_after_days: Optional[int]
     source_notes: list[str]
-    direct_limit_source: str
 
     @property
     def operation_fee(self) -> Optional[float]:
@@ -1332,6 +1387,31 @@ def direct_limit_source_text(override: dict) -> str:
     return "直销限额: " + "；".join(parts)
 
 
+def direct_limit_confidence(override: Optional[dict]) -> str:
+    if not override:
+        return "fallback_unverified"
+    explicit = str(override.get("confidence") or "").strip()
+    if explicit:
+        return explicit
+    source_note = str(override.get("source_note") or "")
+    source_url = str(override.get("source_url") or "")
+    if "交易页" in source_note or "用户截图" in source_note:
+        return "trading_page_verified"
+    if "截图" in source_note:
+        return "third_party_or_screenshot"
+    if "东方财富移动接口" in source_note:
+        return "third_party_api"
+    if "官网产品状态" in source_note or "产品状态" in source_note:
+        return "fund_company_status_page"
+    if "基金公告" in source_note or "公告正文" in source_note or "公告PDF" in source_note or "pdf.dfcfw.com" in source_url:
+        return "official_disclosure_mirror"
+    return "fallback_unverified"
+
+
+def source_confidence_label(confidence: str) -> str:
+    return SOURCE_CONFIDENCE_LABELS.get(confidence, confidence or "待核验")
+
+
 def fetch_fund(code: str, direct_limit_overrides: dict[str, dict]) -> Fund:
     fallback = FALLBACK[code]
     notes: list[str] = []
@@ -1344,17 +1424,19 @@ def fetch_fund(code: str, direct_limit_overrides: dict[str, dict]) -> Fund:
     values["tracking_error"] = None
     values["tracking_avg_error"] = None
     values["tracking_error_date"] = ""
-    direct_limit_source = "直销限额: 脚本内置回退值，待基金公司直销公告核验"
+    agency_limit_source = "代销限额: 脚本回退值，待接口刷新"
+    agency_limit_confidence = "fallback_unverified"
+    direct_limit_source = UNVERIFIED_DIRECT_LIMIT_SOURCE
+    direct_confidence = "fallback_unverified"
 
     override = direct_limit_overrides.get(code)
     if override:
         if not isinstance(override, dict):
             override = {"limit": override, "source_note": "Codex/联网查询校准"}
-        limit_value = override.get("limit")
-        parsed_limit = number_or_none(limit_value)
-        if parsed_limit is not None:
-            values["direct_limit"] = parsed_limit
-            direct_limit_source = direct_limit_source_text(override)
+        if "limit" in override:
+            values["direct_limit"] = number_or_none(override.get("limit"))
+        direct_limit_source = direct_limit_source_text(override)
+        direct_confidence = direct_limit_confidence(override)
 
     try:
         base_url = (
@@ -1371,6 +1453,8 @@ def fetch_fund(code: str, direct_limit_overrides: dict[str, dict]) -> Fund:
         if endnav is not None:
             values["fund_size_billion"] = round(endnav / 100000000, 2)
         values["daily_limit"] = parse_limit(sgzt) or values["daily_limit"]
+        agency_limit_source = f"代销限额: 东方财富移动接口 SGZT={sgzt or '未给出'}"
+        agency_limit_confidence = "third_party_api"
         values["buy_rate"] = number_or_none(data.get("RATE")) or values["buy_rate"]
         values["one_year"] = number_or_none(data.get("SYL_1N")) or values["one_year"]
         values["three_year"] = number_or_none(data.get("SYL_3Y")) or values.get("three_year")
@@ -1385,8 +1469,11 @@ def fetch_fund(code: str, direct_limit_overrides: dict[str, dict]) -> Fund:
         if limit_value is not None:
             values["daily_limit"] = limit_value
             source_note = agency_override.get("source_note") or "手动校准代销限额"
+            source_url = agency_override.get("source_url") or ""
             channel_note = agency_override.get("channel_note") or ""
             notes.append("代销限额校准: " + "；".join(part for part in (source_note, channel_note) if part))
+            agency_limit_source = "代销限额: " + "；".join(part for part in (source_note, channel_note, source_url) if part)
+            agency_limit_confidence = str(agency_override.get("confidence") or "user_trading_page_verified")
 
     try:
         fee_page = fetch_text(f"https://fundf10.eastmoney.com/jjfl_{code}.html", encoding="utf-8")
@@ -1423,7 +1510,11 @@ def fetch_fund(code: str, direct_limit_overrides: dict[str, dict]) -> Fund:
         fund_size_billion=values["fund_size_billion"],
         daily_limit=values["daily_limit"],
         agency_limit_label=values.get("agency_limit_label") or AGENCY_LIMIT_LABELS.get(code, ""),
+        agency_limit_source=agency_limit_source,
+        agency_limit_confidence=agency_limit_confidence,
         direct_limit=values["direct_limit"],
+        direct_limit_source=direct_limit_source,
+        direct_limit_confidence=direct_confidence,
         buy_rate=values["buy_rate"],
         management_fee=values["management_fee"],
         custody_fee=values["custody_fee"],
@@ -1438,7 +1529,6 @@ def fetch_fund(code: str, direct_limit_overrides: dict[str, dict]) -> Fund:
         redemption_rules=values["redemption_rules"],
         free_after_days=values["free_after_days"],
         source_notes=notes,
-        direct_limit_source=direct_limit_source,
     )
 
 
@@ -1594,7 +1684,8 @@ def agency_limit_html(fund: Fund, alert: Optional[dict[str, object]] = None) -> 
 def direct_limit_html(fund: Fund, alert: Optional[dict[str, object]] = None) -> str:
     alert = alert or {}
     badge = limit_badge_html(alert, "direct_limit")
-    return f'<span class="tag {tag_class(fund.direct_limit, "limit")}">{normalize_limit_text(fund.direct_limit)}</span>{badge}'
+    confidence = source_confidence_label(fund.direct_limit_confidence)
+    return f'<span class="tag {tag_class(fund.direct_limit, "limit")}" title="{html.escape(confidence)}">{normalize_limit_text(fund.direct_limit)}</span>{badge}'
 
 
 def fund_amount_sort_key(funds_by_code: dict[str, Fund], item: tuple[str, float]) -> tuple[float, str]:
@@ -1760,6 +1851,27 @@ def fund_record_rating(cards: dict[str, dict[str, object]], code: str) -> str:
     return f'<span class="tier-pill portfolio-tier {tier_class(tier)}"><strong>{tier}</strong><span>{data_text(f"{score:.1f}")}</span></span>'
 
 
+def auto_invest_plan_page_stat(code: str, key: str) -> Optional[float]:
+    item = AUTO_INVEST_PLAN_PAGE_STATS.get(code)
+    if not isinstance(item, dict):
+        return None
+    return number_or_none(item.get(key))
+
+
+def auto_invest_periods_text(code: str) -> str:
+    value = auto_invest_plan_page_stat(code, "periods")
+    if value is None:
+        return '<span class="muted-cell">--</span>'
+    return data_text(str(int(value)) if value.is_integer() else f"{value:g}")
+
+
+def auto_invest_cumulative_text(code: str) -> str:
+    value = auto_invest_plan_page_stat(code, "cumulative_amount")
+    if value is None:
+        return '<span class="muted-cell">--</span>'
+    return fmt_yuan(value)
+
+
 def auto_invest_record_rows(funds_by_code: dict[str, Fund], cards: dict[str, dict[str, object]]) -> str:
     rows = []
     merged_codes = sorted(
@@ -1778,6 +1890,8 @@ def auto_invest_record_rows(funds_by_code: dict[str, Fund], cards: dict[str, dic
         status_rank = 0 if active_amount else 1
         amount = active_amount or paused_amount
         score = float(cards.get(code, {}).get("score", 0))
+        cumulative = auto_invest_plan_page_stat(code, "cumulative_amount")
+        periods = auto_invest_plan_page_stat(code, "periods")
         rows.append(
             f"""
             <tr data-code="{html.escape(code)}">
@@ -1786,6 +1900,8 @@ def auto_invest_record_rows(funds_by_code: dict[str, Fund], cards: dict[str, dic
               <td class="num" data-label="评级" data-sort-value="{score:.6f}">{fund_record_rating(cards, code)}</td>
               <td class="editable-status" data-label="状态" data-field="status" data-sort-value="{status_rank}" tabindex="0" role="button" title="点击选择定投状态"><span class="tag {fund_status_class(code)}">{status}</span></td>
               <td class="num editable-amount" data-label="金额" data-field="plan_amount" data-sort-value="{amount:.6f}" tabindex="0" role="button" title="点击修改定投金额">{fmt_yuan(amount)} / 期</td>
+              <td class="num" data-label="累计定投" data-sort-value="{sort_value(cumulative, -1)}">{auto_invest_cumulative_text(code)}</td>
+              <td class="num" data-label="已投期数" data-sort-value="{sort_value(periods, -1)}">{auto_invest_periods_text(code)}</td>
               <td class="num editable-amount" data-label="当前持有" data-field="holding" data-sort-value="{holding_amount:.6f}" tabindex="0" role="button" title="点击修改持有金额">{fmt_yuan(holding_amount)}</td>
             </tr>
             """
@@ -2043,6 +2159,13 @@ def default_tracking_funds(funds: list[Fund], cards: dict[str, dict[str, object]
             "holding_amount": HOLDING_AMOUNTS.get(code, 0),
             "active_auto_invest_amount": AUTO_INVEST_AMOUNTS.get(code, 0),
             "paused_auto_invest_amount": PAUSED_AUTO_INVEST_AMOUNTS.get(code, 0),
+            "auto_invest_cumulative_amount": auto_invest_plan_page_stat(code, "cumulative_amount"),
+            "auto_invest_periods": auto_invest_plan_page_stat(code, "periods"),
+            "auto_invest_plan_page_source": (
+                AUTO_INVEST_PLAN_PAGE_STATS.get(code, {}).get("source")
+                if isinstance(AUTO_INVEST_PLAN_PAGE_STATS.get(code), dict)
+                else None
+            ),
             "market_value": None,
             "cost_basis": None,
             "profit": None,
@@ -2560,7 +2683,13 @@ def build_html(
     execution_alerts_json = json.dumps(execution_alerts, ensure_ascii=False)
     sources = []
     for fund in funds:
-        source_text = "；".join([*fund.source_notes, fund.direct_limit_source])
+        source_text = "；".join(
+            [
+                *fund.source_notes,
+                f"{fund.agency_limit_source}（{source_confidence_label(fund.agency_limit_confidence)}）",
+                f"{fund.direct_limit_source}（{source_confidence_label(fund.direct_limit_confidence)}）",
+            ]
+        )
         sources.append(
             f'<tr><td data-label="代码">{data_text(fund.code)}</td><td data-label="来源状态">{html.escape(source_text)}</td></tr>'
         )
@@ -4502,7 +4631,9 @@ def build_html(
             <button type="button" class="mobile-plan-sort-button" data-plan-column-index="2" data-sort-type="number">评级<span class="sort-indicator"></span></button>
             <button type="button" class="mobile-plan-sort-button" data-plan-column-index="3" data-sort-type="number">状态<span class="sort-indicator"></span></button>
             <button type="button" class="mobile-plan-sort-button" data-plan-column-index="4" data-sort-type="number">金额<span class="sort-indicator"></span></button>
-            <button type="button" class="mobile-plan-sort-button" data-plan-column-index="5" data-sort-type="number">持有<span class="sort-indicator"></span></button>
+            <button type="button" class="mobile-plan-sort-button" data-plan-column-index="5" data-sort-type="number">累计<span class="sort-indicator"></span></button>
+            <button type="button" class="mobile-plan-sort-button" data-plan-column-index="6" data-sort-type="number">期数<span class="sort-indicator"></span></button>
+            <button type="button" class="mobile-plan-sort-button" data-plan-column-index="7" data-sort-type="number">持有<span class="sort-indicator"></span></button>
           </div>
           <div class="table-wrap compact-table-wrap">
             <table class="small-table portfolio-table auto-plan-table">
@@ -4512,9 +4643,11 @@ def build_html(
                 <col class="rating-col">
                 <col class="auto-status-col">
                 <col class="auto-amount-col">
+                <col class="auto-cumulative-col">
+                <col class="auto-periods-col">
                 <col class="auto-holding-col">
               </colgroup>
-              <thead><tr><th>序号</th><th>基金</th><th class="sortable" data-plan-column-index="2" data-sort-type="number"><button type="button" class="sort-button">评级<span class="sort-indicator"></span></button></th><th class="sortable" data-plan-column-index="3" data-sort-type="number"><button type="button" class="sort-button">状态<span class="sort-indicator"></span></button></th><th class="sortable" data-plan-column-index="4" data-sort-type="number"><button type="button" class="sort-button">金额<span class="sort-indicator"></span></button></th><th class="sortable" data-plan-column-index="5" data-sort-type="number"><button type="button" class="sort-button">当前持有<span class="sort-indicator"></span></button></th></tr></thead>
+              <thead><tr><th>序号</th><th>基金</th><th class="sortable" data-plan-column-index="2" data-sort-type="number"><button type="button" class="sort-button">评级<span class="sort-indicator"></span></button></th><th class="sortable" data-plan-column-index="3" data-sort-type="number"><button type="button" class="sort-button">状态<span class="sort-indicator"></span></button></th><th class="sortable" data-plan-column-index="4" data-sort-type="number"><button type="button" class="sort-button">金额<span class="sort-indicator"></span></button></th><th class="sortable" data-plan-column-index="5" data-sort-type="number"><button type="button" class="sort-button">累计定投<span class="sort-indicator"></span></button></th><th class="sortable" data-plan-column-index="6" data-sort-type="number"><button type="button" class="sort-button">已投期数<span class="sort-indicator"></span></button></th><th class="sortable" data-plan-column-index="7" data-sort-type="number"><button type="button" class="sort-button">当前持有<span class="sort-indicator"></span></button></th></tr></thead>
               <tbody>{auto_invest_rows}</tbody>
             </table>
           </div>
@@ -5536,6 +5669,9 @@ def write_snapshot(
             "paused_total": sum(PAUSED_AUTO_INVEST_AMOUNTS.values()),
             "active_amounts": AUTO_INVEST_AMOUNTS,
             "paused_amounts": PAUSED_AUTO_INVEST_AMOUNTS,
+            "screenshot_summary": AUTO_INVEST_SCREENSHOT_SUMMARY,
+            "plan_page_stats": AUTO_INVEST_PLAN_PAGE_STATS,
+            "plan_page_stats_policy": "Alipay auto-invest page cumulative amount and periods are plan-page facts; they do not update actual holding_total or personal return fields.",
         },
         "holding_plan": {
             "holding_total": sum(HOLDING_AMOUNTS.values()),
@@ -5575,7 +5711,11 @@ def write_snapshot(
                 "fund_size_billion": f.fund_size_billion,
                 "daily_limit": f.daily_limit,
                 "agency_limit_label": f.agency_limit_label,
+                "agency_limit_source": f.agency_limit_source,
+                "agency_limit_confidence": f.agency_limit_confidence,
                 "direct_limit": f.direct_limit,
+                "direct_limit_source": f.direct_limit_source,
+                "direct_limit_confidence": f.direct_limit_confidence,
                 "execution_alert": execution_alerts.get(f.code, {}),
                 "buy_rate": f.buy_rate,
                 "management_fee": f.management_fee,
@@ -5593,7 +5733,6 @@ def write_snapshot(
                 "free_after_days": f.free_after_days,
                 "redemption_rules": f.redemption_rules,
                 "source_notes": f.source_notes,
-                "direct_limit_source": f.direct_limit_source,
             }
             for f in funds
         ],

@@ -27,6 +27,16 @@ EXPECTED_ALERT_DIRECTIONS = {
     "agency_limit": {"", "up", "down"},
     "direct_limit": {"", "up", "down"},
 }
+EXPECTED_LIMIT_CONFIDENCES = {
+    "trading_page_verified",
+    "user_trading_page_verified",
+    "fund_company_disclosure",
+    "fund_company_status_page",
+    "official_disclosure_mirror",
+    "third_party_api",
+    "third_party_or_screenshot",
+    "fallback_unverified",
+}
 TRACKING_SUBPANELS = {
     "tracking-panel-overview",
     "tracking-panel-trend",
@@ -290,10 +300,10 @@ def validate_tabs(path: Path, required_panels: set[str], require_portfolio_link:
             fail(f"{path.name} public page should not contain portfolio mobile sort buttons")
     elif page.auto_plan_table_count != 1:
         fail(f"{path.name} auto-plan table expected 1, got {page.auto_plan_table_count}")
-    elif page.plan_sort_header_count != 4:
-        fail(f"{path.name} auto-plan sortable headers expected 4, got {page.plan_sort_header_count}")
-    elif page.mobile_plan_sort_button_count != 4:
-        fail(f"{path.name} mobile auto-plan sort buttons expected 4, got {page.mobile_plan_sort_button_count}")
+    elif page.plan_sort_header_count != 6:
+        fail(f"{path.name} auto-plan sortable headers expected 6, got {page.plan_sort_header_count}")
+    elif page.mobile_plan_sort_button_count != 6:
+        fail(f"{path.name} mobile auto-plan sort buttons expected 6, got {page.mobile_plan_sort_button_count}")
     forbidden_patterns = [
         r"C:\\ALL_in_H\\",
         r"tracking-file",
@@ -348,6 +358,10 @@ def validate_snapshot(snapshot: dict) -> None:
         fail("snapshot next debit business date mismatch")
     if auto_plan.get("cashflow_policy") != generator.AUTO_INVEST_CASHFLOW_POLICY:
         fail("snapshot auto-invest cashflow policy mismatch")
+    if auto_plan.get("screenshot_summary") != generator.AUTO_INVEST_SCREENSHOT_SUMMARY:
+        fail("snapshot auto-invest screenshot summary mismatch")
+    if auto_plan.get("plan_page_stats") != generator.AUTO_INVEST_PLAN_PAGE_STATS:
+        fail("snapshot auto-invest plan page stats mismatch")
     if holding_plan.get("cashflow_policy") != generator.AUTO_INVEST_CASHFLOW_POLICY:
         fail("snapshot holding cashflow policy mismatch")
     if holding_plan.get("holding_total") == sum(generator.HOLDING_AMOUNTS.values()) + sum(generator.AUTO_INVEST_AMOUNTS.values()):
@@ -374,6 +388,20 @@ def validate_snapshot(snapshot: dict) -> None:
             fail(f"snapshot fund {code} has invalid status {fund.get('status')}")
         if fund.get("subscription_status") not in set(EXPECTED_SUBSCRIPTION_OPTIONS):
             fail(f"snapshot fund {code} has invalid subscription_status {fund.get('subscription_status')}")
+        agency_confidence = fund.get("agency_limit_confidence")
+        direct_confidence = fund.get("direct_limit_confidence")
+        if agency_confidence not in EXPECTED_LIMIT_CONFIDENCES:
+            fail(f"snapshot fund {code} has invalid agency_limit_confidence {agency_confidence}")
+        if direct_confidence not in EXPECTED_LIMIT_CONFIDENCES:
+            fail(f"snapshot fund {code} has invalid direct_limit_confidence {direct_confidence}")
+        if not fund.get("agency_limit_source"):
+            fail(f"snapshot fund {code} missing agency_limit_source")
+        if not fund.get("direct_limit_source"):
+            fail(f"snapshot fund {code} missing direct_limit_source")
+        if "脚本内置回退值" in str(fund.get("direct_limit_source")):
+            fail(f"snapshot fund {code} still uses script fallback direct limit")
+        if direct_confidence == "fallback_unverified" and fund.get("direct_limit") is not None:
+            fail(f"snapshot fund {code} has numeric direct_limit with fallback_unverified confidence")
         agency_override = generator.AGENCY_LIMIT_OVERRIDES.get(str(code))
         if agency_override:
             expected_limit = generator.number_or_none(agency_override.get("limit"))
@@ -451,6 +479,10 @@ def validate_tracking(snapshot: dict, tracking: dict) -> None:
             "active_auto_invest_amount": snapshot_fund.get("auto_invest_amount"),
             "paused_auto_invest_amount": snapshot_fund.get("paused_auto_invest_amount"),
         }
+        plan_stats = generator.AUTO_INVEST_PLAN_PAGE_STATS.get(code, {})
+        if isinstance(plan_stats, dict):
+            checks["auto_invest_cumulative_amount"] = generator.number_or_none(plan_stats.get("cumulative_amount"))
+            checks["auto_invest_periods"] = generator.number_or_none(plan_stats.get("periods"))
         for key, expected in checks.items():
             if tracking_fund.get(key) != expected:
                 fail(f"tracking fund {code} {key} expected {expected}, got {tracking_fund.get(key)}")

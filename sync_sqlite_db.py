@@ -113,6 +113,9 @@ def apply_schema(conn: sqlite3.Connection) -> None:
         conn.execute(f"DROP VIEW IF EXISTS {view}")
     conn.executescript(SCHEMA.read_text(encoding="utf-8"))
     ensure_column(conn, "auto_invest_plans", "next_debit_business_date", "TEXT")
+    ensure_column(conn, "fund_daily_snapshots", "agency_limit_source", "TEXT")
+    ensure_column(conn, "fund_daily_snapshots", "agency_limit_confidence", "TEXT")
+    ensure_column(conn, "fund_daily_snapshots", "direct_limit_confidence", "TEXT")
     upsert_if_changed(
         conn,
         "schema_migrations",
@@ -233,8 +236,11 @@ def sync_snapshot(conn: sqlite3.Connection, snapshot: dict[str, Any], tracking: 
                 "fund_size_billion": fund.get("fund_size_billion"),
                 "daily_limit": fund.get("daily_limit"),
                 "agency_limit_label": fund.get("agency_limit_label"),
+                "agency_limit_source": fund.get("agency_limit_source"),
+                "agency_limit_confidence": fund.get("agency_limit_confidence"),
                 "direct_limit": fund.get("direct_limit"),
                 "direct_limit_source": fund.get("direct_limit_source"),
+                "direct_limit_confidence": fund.get("direct_limit_confidence"),
                 "buy_rate": fund.get("buy_rate"),
                 "management_fee": fund.get("management_fee"),
                 "custody_fee": fund.get("custody_fee"),
@@ -273,6 +279,7 @@ def sync_execution_alerts(conn: sqlite3.Connection, snapshot: dict[str, Any], da
     alerts = snapshot.get("execution_alerts")
     if not isinstance(alerts, dict):
         return
+    conn.execute("DELETE FROM execution_alerts")
     for code, alert in alerts.items():
         if not isinstance(alert, dict):
             continue
