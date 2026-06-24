@@ -20,6 +20,8 @@ SELECT
   display_name,
   code,
   holding_amount,
+  projected_auto_invest_addition,
+  projected_holding_amount,
   rating,
   score,
   auto_invest_status,
@@ -38,6 +40,8 @@ SELECT
   latest_record_date,
   avg_holding_total,
   avg_active_auto_invest_total,
+  avg_projected_auto_invest_addition_total,
+  avg_projected_holding_total,
   avg_market_value,
   avg_profit,
   avg_return_rate
@@ -63,6 +67,8 @@ SELECT
   frequency,
   next_debit_business_date,
   holding_amount,
+  projected_auto_invest_addition,
+  projected_holding_amount,
   rating,
   score
 FROM v_active_auto_invest_latest;

@@ -57,7 +57,7 @@ AUTO_INVEST_CALENDAR_POLICY = (
     "QDII基金仍可能受海外市场休市、基金公司暂停申购、额度和平台扣款状态影响，支付宝/基金公司订单页为最终事实。"
 )
 AUTO_INVEST_CASHFLOW_POLICY = (
-    "定投金额是计划现金流，不自动计入当前持仓总额；只有账户截图、手动确认或交易流水中的已确认成交，才更新持仓、成本、市值和收益。"
+    "定投金额会按基金业务日生成预计投入和预计持仓基线，但不覆盖确认持仓总额；只有账户截图、手动确认或交易流水中的已确认成交，才更新确认持仓、成本、市值和收益。"
 )
 
 
@@ -72,6 +72,18 @@ def next_mainland_fund_business_day(day: date) -> date:
             return candidate
         candidate += timedelta(days=1)
     raise ValueError(f"cannot resolve mainland fund business day after {day.isoformat()}")
+
+
+def mainland_fund_business_days_between(start: date, end: date) -> int:
+    if end < start:
+        return 0
+    count = 0
+    candidate = start
+    while candidate <= end:
+        if is_mainland_fund_business_day(candidate):
+            count += 1
+        candidate += timedelta(days=1)
+    return count
 
 
 def parse_iso_date(value: str) -> Optional[date]:
@@ -192,7 +204,7 @@ PAUSED_AUTO_INVEST_AMOUNTS = {
 AUTO_INVEST_SCREENSHOT_SUMMARY = {
     "source": "user Alipay screenshots 2026-06-22 23:22/23:23 plus user update 2026-06-23",
     "active_count": 11,
-    "paused_count": 1,
+    "paused_count": 0,
     "confirmed_active_codes": [
         "270042",
         "019524",
@@ -236,6 +248,53 @@ AUTO_INVEST_NEXT_DEBIT_BUSINESS_DATE = (
     if parsed_auto_invest_next_debit_date is not None
     else AUTO_INVEST_NEXT_DEBIT_DATE
 )
+parsed_auto_invest_next_debit_business_date = parse_iso_date(AUTO_INVEST_NEXT_DEBIT_BUSINESS_DATE)
+
+
+def projected_auto_invest_periods_until(target_day: Optional[date] = None) -> int:
+    if AUTO_INVEST_FREQUENCY != "日定投" or parsed_auto_invest_next_debit_business_date is None:
+        return 0
+    target_day = target_day or now_beijing().date()
+    return mainland_fund_business_days_between(parsed_auto_invest_next_debit_business_date, target_day)
+
+
+def projected_auto_invest_additions(target_day: Optional[date] = None) -> dict[str, float]:
+    periods = projected_auto_invest_periods_until(target_day)
+    if periods <= 0:
+        return {code: 0 for code in FUND_CODES}
+    return {
+        code: AUTO_INVEST_AMOUNTS.get(code, 0) * periods
+        for code in FUND_CODES
+    }
+
+
+def projected_auto_invest_addition_total(target_day: Optional[date] = None) -> float:
+    return sum(projected_auto_invest_additions(target_day).values())
+
+
+def projected_holding_amount(code: str, target_day: Optional[date] = None) -> float:
+    additions = projected_auto_invest_additions(target_day)
+    return HOLDING_AMOUNTS.get(code, 0) + additions.get(code, 0)
+
+
+def projected_holding_total(target_day: Optional[date] = None) -> float:
+    return sum(HOLDING_AMOUNTS.values()) + projected_auto_invest_addition_total(target_day)
+
+
+def projected_auto_invest_plan(target_day: Optional[date] = None) -> dict[str, object]:
+    target_day = target_day or now_beijing().date()
+    periods = projected_auto_invest_periods_until(target_day)
+    additions = projected_auto_invest_additions(target_day)
+    return {
+        "calculation_date": target_day.isoformat(),
+        "periods": periods,
+        "period_start_date": AUTO_INVEST_NEXT_DEBIT_BUSINESS_DATE,
+        "period_source": AUTO_INVEST_NEXT_DEBIT_SOURCE,
+        "addition_total": sum(additions.values()),
+        "projected_holding_total": sum(HOLDING_AMOUNTS.values()) + sum(additions.values()),
+        "additions": additions,
+        "policy": AUTO_INVEST_CASHFLOW_POLICY,
+    }
 
 
 AGENCY_LIMIT_LABELS = {
@@ -1700,6 +1759,7 @@ def position_plan_html(code: str, alerts: Optional[dict[str, dict[str, object]]]
     holding_amount = HOLDING_AMOUNTS.get(code, 0)
     active_amount = AUTO_INVEST_AMOUNTS.get(code, 0)
     paused_amount = PAUSED_AUTO_INVEST_AMOUNTS.get(code, 0)
+    projected_addition = projected_auto_invest_additions().get(code, 0)
     limit_direction = best_limit_direction(alert)
     subscription_direction = alert_direction(alert, "subscription")
     subscription_badge = execution_badge(alert_label(alert, "subscription"), subscription_direction)
@@ -1714,7 +1774,12 @@ def position_plan_html(code: str, alerts: Optional[dict[str, dict[str, object]]]
         invest = f'<span class="position-line paused-line"><em>暂停</em><strong>{amount_with_execution_delta(paused_amount, limit_direction)} / 期</strong>{subscription_badge}</span>'
     else:
         invest = f'<span class="position-line muted-line"><em>定投</em><strong>未设置</strong>{subscription_badge}</span>'
-    return f'<div class="position-plan">{holding}{invest}</div>'
+    projection = (
+        f'<span class="position-line projected-line"><em>预计</em><strong>+{format_yuan_plain(projected_addition)}</strong></span>'
+        if projected_addition
+        else ""
+    )
+    return f'<div class="position-plan">{holding}{invest}{projection}</div>'
 
 
 def sort_value(value: Optional[float], default: float = 999999) -> str:
@@ -2086,7 +2151,8 @@ def tracking_asset_chart_svg(payload: dict[str, object]) -> str:
     return tracking_line_chart_svg(
         records,
         [
-            {"key": "holding_total", "label": "持有记录"},
+            {"key": "holding_total", "label": "确认持仓"},
+            {"key": "projected_holding_total", "label": "预计持仓"},
             {"key": "market_value", "label": "市值"},
         ],
         "等待更多资产记录",
@@ -2123,7 +2189,9 @@ def tracking_allocation_html(
         item = tracked_funds.get(fund.code) if isinstance(tracked_funds, dict) else None
         if not isinstance(item, dict):
             item = {}
-        amount = tracking_float(item.get("holding_amount", HOLDING_AMOUNTS.get(fund.code, 0)))
+        amount = tracking_float(
+            item.get("projected_holding_amount", item.get("holding_amount", HOLDING_AMOUNTS.get(fund.code, 0)))
+        )
         if amount <= 0:
             continue
         items.append((fund.code, amount))
@@ -2145,21 +2213,30 @@ def tracking_allocation_html(
             </div>
             """
         )
-    return "\n".join(rows)
+    return "\n".join(line.rstrip() for line in "\n".join(rows).splitlines())
 
 
-def default_tracking_funds(funds: list[Fund], cards: dict[str, dict[str, object]]) -> dict[str, dict[str, object]]:
+def default_tracking_funds(
+    funds: list[Fund],
+    cards: dict[str, dict[str, object]],
+    target_day: Optional[date] = None,
+) -> dict[str, dict[str, object]]:
     items: dict[str, dict[str, object]] = {}
+    projected_additions = projected_auto_invest_additions(target_day)
     for fund in funds:
         code = fund.code
         card = cards.get(code, {})
+        holding_amount = HOLDING_AMOUNTS.get(code, 0)
+        projected_addition = projected_additions.get(code, 0)
         items[code] = {
             "name": fund_display_name(fund),
             "rating": card.get("tier"),
             "score": card.get("score"),
-            "holding_amount": HOLDING_AMOUNTS.get(code, 0),
+            "holding_amount": holding_amount,
             "active_auto_invest_amount": AUTO_INVEST_AMOUNTS.get(code, 0),
             "paused_auto_invest_amount": PAUSED_AUTO_INVEST_AMOUNTS.get(code, 0),
+            "projected_auto_invest_addition": projected_addition,
+            "projected_holding_amount": holding_amount + projected_addition,
             "auto_invest_cumulative_amount": auto_invest_plan_page_stat(code, "cumulative_amount"),
             "auto_invest_periods": auto_invest_plan_page_stat(code, "periods"),
             "auto_invest_plan_page_source": (
@@ -2177,12 +2254,17 @@ def default_tracking_funds(funds: list[Fund], cards: dict[str, dict[str, object]
 
 def default_tracking_record(funds: list[Fund], cards: dict[str, dict[str, object]]) -> dict[str, object]:
     now = now_beijing()
+    target_day = now.date()
+    projection = projected_auto_invest_plan(target_day)
     return {
         "date": now.strftime("%Y-%m-%d"),
         "recorded_at": now.isoformat(timespec="seconds"),
         "holding_total": sum(HOLDING_AMOUNTS.values()),
         "active_auto_invest_total": sum(AUTO_INVEST_AMOUNTS.values()),
         "paused_auto_invest_total": sum(PAUSED_AUTO_INVEST_AMOUNTS.values()),
+        "projected_auto_invest_periods": projection["periods"],
+        "projected_auto_invest_addition_total": projection["addition_total"],
+        "projected_holding_total": projection["projected_holding_total"],
         "auto_invest_frequency": AUTO_INVEST_FREQUENCY,
         "next_debit_date": AUTO_INVEST_NEXT_DEBIT_DATE,
         "next_debit_business_date": AUTO_INVEST_NEXT_DEBIT_BUSINESS_DATE,
@@ -2192,9 +2274,34 @@ def default_tracking_record(funds: list[Fund], cards: dict[str, dict[str, object
         "cost_basis": None,
         "profit": None,
         "return_rate": None,
-        "funds": default_tracking_funds(funds, cards),
+        "funds": default_tracking_funds(funds, cards, target_day),
         "note": "自动刷新基线",
     }
+
+
+def enrich_tracking_record_projection(record: dict[str, object]) -> dict[str, object]:
+    date_key = tracking_record_date(record)
+    target_day = parse_iso_date(date_key) if date_key else None
+    periods = projected_auto_invest_periods_until(target_day)
+    funds = record.get("funds")
+    projected_addition_total = 0.0
+    if isinstance(funds, dict):
+        for item in funds.values():
+            if not isinstance(item, dict):
+                continue
+            holding_amount = tracking_float(item.get("holding_amount"))
+            active_amount = tracking_float(item.get("active_auto_invest_amount"))
+            projected_addition = active_amount * periods
+            item["projected_auto_invest_addition"] = projected_addition
+            item["projected_holding_amount"] = holding_amount + projected_addition
+            projected_addition_total += projected_addition
+    else:
+        projected_addition_total = tracking_float(record.get("active_auto_invest_total")) * periods
+    holding_total = tracking_float(record.get("holding_total"))
+    record["projected_auto_invest_periods"] = periods
+    record["projected_auto_invest_addition_total"] = projected_addition_total
+    record["projected_holding_total"] = holding_total + projected_addition_total
+    return record
 
 
 def merge_tracking_fund_record(existing: object, fresh: dict[str, object]) -> dict[str, object]:
@@ -2229,7 +2336,7 @@ def merge_tracking_record(existing: dict[str, object], fresh: dict[str, object])
         merged["note"] = existing_note
     else:
         merged["note"] = "当日自动刷新"
-    return merged
+    return enrich_tracking_record_projection(merged)
 
 
 def tracking_record_date(record: object) -> str:
@@ -2255,7 +2362,7 @@ def normalize_tracking_records(records: object) -> list[dict[str, object]]:
         else:
             if date_key:
                 seen[date_key] = len(normalized)
-            normalized.append(record)
+            normalized.append(enrich_tracking_record_projection(record))
     return sorted(normalized, key=lambda item: tracking_record_date(item) or str(item.get("recorded_at") or ""))
 
 
@@ -2366,7 +2473,7 @@ def tracking_snapshot_rows(payload: dict[str, object]) -> str:
     rows = []
     records = list(reversed(tracking_records(payload)))
     if not records:
-        return '<tr><td colspan="7" class="muted-cell">暂无追踪快照</td></tr>'
+        return '<tr><td colspan="9" class="muted-cell">暂无追踪快照</td></tr>'
     for index, record in enumerate(records, start=1):
         date = str(record.get("date") or record.get("recorded_at") or "-")
         rows.append(
@@ -2374,7 +2481,9 @@ def tracking_snapshot_rows(payload: dict[str, object]) -> str:
             <tr>
               <td class="num record-index" data-label="序号">{data_text(str(index))}</td>
               <td data-label="日期">{html.escape(date)}</td>
-              <td class="num" data-label="持有">{tracking_number(record.get("holding_total"), "元")}</td>
+              <td class="num" data-label="确认持仓">{tracking_number(record.get("holding_total"), "元")}</td>
+              <td class="num" data-label="预计投入">{tracking_number(record.get("projected_auto_invest_addition_total"), "元")}</td>
+              <td class="num" data-label="预计持仓">{tracking_number(record.get("projected_holding_total"), "元")}</td>
               <td class="num" data-label="定投中">{tracking_number(record.get("active_auto_invest_total"), "元/期")}</td>
               <td class="num" data-label="市值">{tracking_number(record.get("market_value"), "元")}</td>
               <td class="num" data-label="收益">{tracking_number(record.get("profit"), "元")}</td>
@@ -2421,7 +2530,7 @@ def tracking_delta_number(latest: object, first: object, suffix: str = "") -> st
 def tracking_year_summary_rows(payload: dict[str, object]) -> str:
     records = sorted(tracking_records(payload), key=tracking_date_label)
     if not records:
-        return '<tr><td colspan="9" class="muted-cell">暂无年度记录</td></tr>'
+        return '<tr><td colspan="10" class="muted-cell">暂无年度记录</td></tr>'
     buckets: dict[str, list[dict[str, object]]] = {}
     for record in records:
         buckets.setdefault(tracking_record_year(record), []).append(record)
@@ -2436,8 +2545,9 @@ def tracking_year_summary_rows(payload: dict[str, object]) -> str:
               <td class="num" data-label="记录">{data_text(str(len(year_records)))}</td>
               <td data-label="首条">{html.escape(tracking_date_label(first))}</td>
               <td data-label="末条">{html.escape(tracking_date_label(latest))}</td>
-              <td class="num" data-label="持有变化">{tracking_delta_number(latest.get("holding_total"), first.get("holding_total"), "元")}</td>
-              <td class="num" data-label="期末持有">{tracking_number(latest.get("holding_total"), "元")}</td>
+              <td class="num" data-label="确认变化">{tracking_delta_number(latest.get("holding_total"), first.get("holding_total"), "元")}</td>
+              <td class="num" data-label="预计投入">{tracking_number(latest.get("projected_auto_invest_addition_total"), "元")}</td>
+              <td class="num" data-label="期末预计">{tracking_number(latest.get("projected_holding_total"), "元")}</td>
               <td class="num" data-label="期末市值">{tracking_number(latest.get("market_value"), "元")}</td>
               <td class="num" data-label="期末收益">{tracking_number(latest.get("profit"), "元")}</td>
               <td class="num" data-label="收益率">{tracking_percent(latest.get("return_rate"))}</td>
@@ -2460,10 +2570,11 @@ def tracking_visible_funds(
         if not isinstance(item, dict):
             item = {}
         holding_amount = tracking_float(item.get("holding_amount", HOLDING_AMOUNTS.get(fund.code, 0)))
+        projected_holding_amount = tracking_float(item.get("projected_holding_amount", holding_amount))
         active_amount = tracking_float(item.get("active_auto_invest_amount", AUTO_INVEST_AMOUNTS.get(fund.code, 0)))
         paused_amount = tracking_float(item.get("paused_auto_invest_amount", PAUSED_AUTO_INVEST_AMOUNTS.get(fund.code, 0)))
         has_return_record = any(item.get(key) is not None for key in ("market_value", "cost_basis", "profit", "return_rate"))
-        if holding_amount > 0 or active_amount > 0 or paused_amount > 0 or has_return_record:
+        if projected_holding_amount > 0 or holding_amount > 0 or active_amount > 0 or paused_amount > 0 or has_return_record:
             visible.append(fund)
     return sorted(
         visible,
@@ -2490,6 +2601,7 @@ def tracking_fund_rows(
         if not isinstance(item, dict):
             item = {}
         holding_amount = item.get("holding_amount", HOLDING_AMOUNTS.get(fund.code, 0))
+        projected_holding_amount = item.get("projected_holding_amount", holding_amount)
         active_amount = item.get("active_auto_invest_amount", AUTO_INVEST_AMOUNTS.get(fund.code, 0))
         paused_amount = item.get("paused_auto_invest_amount", PAUSED_AUTO_INVEST_AMOUNTS.get(fund.code, 0))
         active_number = tracking_float(active_amount)
@@ -2505,7 +2617,8 @@ def tracking_fund_rows(
               <td class="num record-index" data-label="序号">{data_text(str(index))}</td>
               <td data-label="基金">{fund_record_name(funds_by_code, fund.code)}</td>
               <td class="num" data-label="评级">{fund_record_rating(cards, fund.code)}</td>
-              <td class="num" data-label="持有">{tracking_number(holding_amount, "元")}</td>
+              <td class="num" data-label="确认持有">{tracking_number(holding_amount, "元")}</td>
+              <td class="num" data-label="预计持有">{tracking_number(projected_holding_amount, "元")}</td>
               <td class="num" data-label="定投">{data_text(plan_text)}</td>
               <td class="num" data-label="市值">{tracking_number(item.get("market_value"), "元")}</td>
               <td class="num" data-label="收益">{tracking_number(item.get("profit"), "元")}</td>
@@ -2535,10 +2648,11 @@ def main_rows(funds: list[Fund], execution_alerts: Optional[dict[str, dict[str, 
         holding_amount = HOLDING_AMOUNTS.get(fund.code, 0)
         active_amount = AUTO_INVEST_AMOUNTS.get(fund.code, 0)
         paused_amount = PAUSED_AUTO_INVEST_AMOUNTS.get(fund.code, 0)
+        projected_addition = projected_auto_invest_additions().get(fund.code, 0)
         plan_sort_value = holding_amount * 1000000 + active_amount * 1000 + paused_amount
         rows.append(
             f"""
-            <tr class="tier-row tier-{tier.lower()}-row" data-status="{html.escape(status)}" data-subscription-status="{html.escape(fund.subscription_status)}" data-tier="{tier}" data-code="{fund.code}" data-fund-label="{html.escape(fund_display_name(fund))}" data-score="{score:.1f}" data-holding-amount="{holding_amount:.2f}" data-auto-invest-amount="{active_amount:.2f}" data-paused-auto-invest-amount="{paused_amount:.2f}" data-agency-limit="{sort_value(fund.daily_limit, -1)}" data-direct-limit="{sort_value(fund.direct_limit, -1)}" data-agency-limit-text="{html.escape(strip_tags(agency_limit_text(fund)))}" data-direct-limit-text="{html.escape(strip_tags(normalize_limit_text(fund.direct_limit)))}">
+            <tr class="tier-row tier-{tier.lower()}-row" data-status="{html.escape(status)}" data-subscription-status="{html.escape(fund.subscription_status)}" data-tier="{tier}" data-code="{fund.code}" data-fund-label="{html.escape(fund_display_name(fund))}" data-score="{score:.1f}" data-holding-amount="{holding_amount:.2f}" data-auto-invest-amount="{active_amount:.2f}" data-paused-auto-invest-amount="{paused_amount:.2f}" data-projected-auto-invest-addition="{projected_addition:.2f}" data-agency-limit="{sort_value(fund.daily_limit, -1)}" data-direct-limit="{sort_value(fund.direct_limit, -1)}" data-agency-limit-text="{html.escape(strip_tags(agency_limit_text(fund)))}" data-direct-limit-text="{html.escape(strip_tags(normalize_limit_text(fund.direct_limit)))}">
               <td class="num row-rank">{data_text(index)}</td>
               <td class="num" data-sort-value="{1000 - rank}"><span class="tier-pill {tier_class(tier)}"><strong>{tier}</strong><span>{data_text(f"{score:.1f}")}</span></span></td>
               <td class="fund-cell" data-sort-value="{html.escape(fund.name)} {fund.code}">
@@ -2584,7 +2698,9 @@ def mobile_fund_cards(funds: list[Fund], execution_alerts: Optional[dict[str, di
         holding_amount = HOLDING_AMOUNTS.get(fund.code, 0)
         active_amount = AUTO_INVEST_AMOUNTS.get(fund.code, 0)
         paused_amount = PAUSED_AUTO_INVEST_AMOUNTS.get(fund.code, 0)
+        projected_addition = projected_auto_invest_additions().get(fund.code, 0)
         holding_value = amount_with_execution_delta(holding_amount, limit_direction) if holding_amount else data_text("0元")
+        projected_text = f"+{format_yuan_plain(projected_addition)}" if projected_addition else "0元"
         if active_amount:
             plan_text = f"{amount_with_execution_delta(active_amount, limit_direction)} / 期"
             invest_extra = subscription_badge
@@ -2612,6 +2728,7 @@ def mobile_fund_cards(funds: list[Fund], execution_alerts: Optional[dict[str, di
                 <div class="mobile-position-lines">
                   <span><em>持有</em><strong>{holding_value}</strong></span>
                   <span><em>{'暂停' if paused_amount and not active_amount else '定投'}</em><strong>{plan_text}</strong>{invest_extra}</span>
+                  <span><em>预计</em><strong>{data_text(projected_text)}</strong></span>
                 </div>
                 <span class="tag {status_class} mobile-status">{html.escape(status)}</span>
               </div>
@@ -2667,6 +2784,15 @@ def build_html(
     funds_by_code = {fund.code: fund for fund in funds}
     auto_invest_rows = auto_invest_record_rows(funds_by_code, cards)
     holding_total = sum(HOLDING_AMOUNTS.values())
+    projected_periods = int(tracking_float(tracking_latest.get("projected_auto_invest_periods")))
+    projected_addition_total = tracking_float(tracking_latest.get("projected_auto_invest_addition_total"))
+    projected_total = tracking_float(tracking_latest.get("projected_holding_total"))
+    if not projected_periods:
+        projected_periods = projected_auto_invest_periods_until()
+    if not projected_addition_total:
+        projected_addition_total = projected_auto_invest_addition_total()
+    if not projected_total:
+        projected_total = projected_holding_total()
     active_auto_invest_total = sum(AUTO_INVEST_AMOUNTS.values())
     paused_auto_invest_total = sum(PAUSED_AUTO_INVEST_AMOUNTS.values())
     portfolio_state_json = json.dumps(
@@ -3245,6 +3371,7 @@ def build_html(
       font-variant-numeric: tabular-nums;
     }}
     .position-line.paused-line strong {{ color: var(--warn); }}
+    .position-line.projected-line strong {{ color: var(--accent); }}
     .position-line.muted-line strong {{ color: var(--muted); }}
     .change-up {{ color: var(--good) !important; }}
     .change-down {{ color: var(--bad) !important; }}
@@ -3691,7 +3818,7 @@ def build_html(
     .tracking-subpanel[hidden] {{ display: none; }}
     .tracking-overview-grid {{
       display: grid;
-      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       background: var(--panel);
     }}
     .tracking-overview-card {{
@@ -3801,12 +3928,14 @@ def build_html(
     }}
     .chart-series-1 {{ stroke: var(--accent); }}
     .chart-series-2 {{ stroke: var(--good); }}
+    .chart-series-3 {{ stroke: var(--warn); }}
     .chart-point {{
       stroke: var(--panel);
       stroke-width: 2;
     }}
     .chart-point-1 {{ fill: var(--accent); }}
     .chart-point-2 {{ fill: var(--good); }}
+    .chart-point-3 {{ fill: var(--warn); }}
     .chart-legend {{
       align-items: center;
       display: flex;
@@ -3830,6 +3959,7 @@ def build_html(
     }}
     .legend-dot-1 {{ background: var(--accent); }}
     .legend-dot-2 {{ background: var(--good); }}
+    .legend-dot-3 {{ background: var(--warn); }}
     .allocation-list {{
       display: grid;
       gap: 10px;
@@ -4627,7 +4757,7 @@ def build_html(
     <section class="section tab-panel" id="panel-portfolio" role="tabpanel" aria-labelledby="tab-portfolio" hidden>
       <div class="portfolio-grid">
         <div class="portfolio-block">
-          <div class="section-title"><h2>定投计划</h2><span class="title-metric">当前持有 <strong id="holding-total-value">{fmt_yuan(holding_total)}</strong></span><span class="title-metric">定投中总额 <strong id="active-auto-total-value">{fmt_yuan(active_auto_invest_total)} / 期</strong></span></div>
+          <div class="section-title"><h2>定投计划</h2><span class="title-metric">确认持仓 <strong id="holding-total-value">{fmt_yuan(holding_total)}</strong></span><span class="title-metric">预计持仓 <strong id="projected-holding-total-value">{fmt_yuan(projected_total)}</strong></span><span class="title-metric">已推算 <strong>{data_text(projected_periods)} 期</strong></span><span class="title-metric">定投中总额 <strong id="active-auto-total-value">{fmt_yuan(active_auto_invest_total)} / 期</strong></span></div>
           <div class="mobile-plan-sortbar" aria-label="定投计划排序">
             <button type="button" class="mobile-plan-sort-button" data-plan-column-index="2" data-sort-type="number">评级<span class="sort-indicator"></span></button>
             <button type="button" class="mobile-plan-sort-button" data-plan-column-index="3" data-sort-type="number">状态<span class="sort-indicator"></span></button>
@@ -4664,7 +4794,9 @@ def build_html(
         <div class="tracking-metrics">
           <span class="tracking-metric">最近记录 <strong>{data_text(tracking_latest_date)}</strong></span>
           <span class="tracking-metric">记录数 <strong>{data_text(tracking_count)}</strong></span>
-          <span class="tracking-metric">当前持有 <strong>{fmt_yuan(holding_total)}</strong></span>
+          <span class="tracking-metric">确认持仓 <strong>{fmt_yuan(holding_total)}</strong></span>
+          <span class="tracking-metric">预计投入 <strong>{fmt_yuan(projected_addition_total)}</strong></span>
+          <span class="tracking-metric">预计持仓 <strong>{fmt_yuan(projected_total)}</strong></span>
           <span class="tracking-metric">定投中 <strong>{fmt_yuan(active_auto_invest_total)} / 期</strong></span>
           <span class="tracking-metric">暂停 <strong>{fmt_yuan(paused_auto_invest_total)} / 期</strong></span>
         </div>
@@ -4683,11 +4815,14 @@ def build_html(
             <div class="tracking-overview-card"><span>追踪区间</span><strong>{tracking_span}</strong></div>
             <div class="tracking-overview-card"><span>历史快照</span><strong>{data_text(tracking_count)} 条</strong></div>
             <div class="tracking-overview-card"><span>覆盖年份</span><strong>{data_text(tracking_year_count)} 年</strong></div>
+            <div class="tracking-overview-card"><span>已推算定投</span><strong>{data_text(projected_periods)} 期</strong></div>
+            <div class="tracking-overview-card"><span>预计投入</span><strong>{fmt_yuan(projected_addition_total)}</strong></div>
+            <div class="tracking-overview-card"><span>预计持仓</span><strong>{fmt_yuan(projected_total)}</strong></div>
             <div class="tracking-overview-card"><span>当前基线</span><strong>{data_text(tracking_visible_count)} 支</strong></div>
           </div>
           <div class="tracking-chart-stack">
             <div class="tracking-chart-card">
-              <div class="section-title"><h2>资产轨迹</h2><span class="title-metric">持有记录 / 市值</span></div>
+              <div class="section-title"><h2>资产轨迹</h2><span class="title-metric">确认持仓 / 预计持仓 / 市值</span></div>
               <div class="chart-frame">{tracking_asset_chart}</div>
             </div>
             <div class="tracking-chart-card">
@@ -4700,7 +4835,7 @@ def build_html(
       <div class="tracking-subpanel" id="tracking-panel-trend" role="tabpanel" aria-labelledby="tracking-tab-trend" hidden>
         <div class="tracking-chart-stack tracking-wide-stack">
           <div class="tracking-chart-card">
-            <div class="section-title"><h2>资产轨迹</h2><span class="title-metric">持有记录 / 市值</span></div>
+            <div class="section-title"><h2>资产轨迹</h2><span class="title-metric">确认持仓 / 预计持仓 / 市值</span></div>
             <div class="chart-frame">{tracking_asset_chart}</div>
           </div>
           <div class="tracking-chart-card">
@@ -4726,7 +4861,7 @@ def build_html(
                   <col class="amount-col">
                   <col class="amount-col">
                 </colgroup>
-                <thead><tr><th>年份</th><th>记录</th><th>首条</th><th>末条</th><th>持有变化</th><th>期末持有</th><th>期末市值</th><th>期末收益</th><th>收益率</th></tr></thead>
+                <thead><tr><th>年份</th><th>记录</th><th>首条</th><th>末条</th><th>确认变化</th><th>预计投入</th><th>期末预计</th><th>期末市值</th><th>期末收益</th><th>收益率</th></tr></thead>
                 <tbody>{tracking_year_table_rows}</tbody>
               </table>
             </div>
@@ -4736,7 +4871,7 @@ def build_html(
       <div class="tracking-subpanel" id="tracking-panel-allocation" role="tabpanel" aria-labelledby="tracking-tab-allocation" hidden>
         <div class="tracking-single-panel">
           <div class="tracking-allocation-card">
-            <div class="section-title"><h2>持仓结构</h2><span class="title-metric">按当前持有金额</span></div>
+            <div class="section-title"><h2>持仓结构</h2><span class="title-metric">按预计持仓金额</span></div>
             <div class="allocation-list">{tracking_allocation}</div>
           </div>
         </div>
@@ -4752,12 +4887,13 @@ def build_html(
                   <col class="fund-col-small">
                   <col class="rating-col">
                   <col class="amount-col">
+                  <col class="amount-col">
                   <col class="plan-col">
                   <col class="amount-col">
                   <col class="amount-col">
                   <col class="amount-col">
                 </colgroup>
-                <thead><tr><th>序号</th><th>基金</th><th>评级</th><th>持有</th><th>定投</th><th>市值</th><th>收益</th><th>收益率</th></tr></thead>
+                <thead><tr><th>序号</th><th>基金</th><th>评级</th><th>确认持有</th><th>预计持有</th><th>定投</th><th>市值</th><th>收益</th><th>收益率</th></tr></thead>
                 <tbody>{tracking_detail_table_rows}</tbody>
               </table>
             </div>
@@ -4778,8 +4914,10 @@ def build_html(
                   <col class="amount-col">
                   <col class="amount-col">
                   <col class="amount-col">
+                  <col class="amount-col">
+                  <col class="amount-col">
                 </colgroup>
-                <thead><tr><th>序号</th><th>日期</th><th>持有</th><th>定投中</th><th>市值</th><th>收益</th><th>收益率</th></tr></thead>
+                <thead><tr><th>序号</th><th>日期</th><th>确认持仓</th><th>预计投入</th><th>预计持仓</th><th>定投中</th><th>市值</th><th>收益</th><th>收益率</th></tr></thead>
                 <tbody>{tracking_snapshot_table_rows}</tbody>
               </table>
             </div>
@@ -5003,6 +5141,10 @@ def build_html(
       function planAmount(item) {{
         return item.active > 0 ? item.active : item.paused;
       }}
+      const projectedAutoInvestPeriods = {projected_periods};
+      function projectedAddition(item) {{
+        return Math.max(0, normalizeAmount(item.active) * projectedAutoInvestPeriods);
+      }}
       function planText(item) {{
         if (item.active > 0) return `定投中 · ${{formatYuan(item.active)}} / 期`;
         if (item.paused > 0) return `已暂停 · ${{formatYuan(item.paused)}} / 期`;
@@ -5011,9 +5153,12 @@ def build_html(
       function updateTitleTotals() {{
         const holdingTotal = Object.values(portfolioState).reduce((sum, item) => sum + normalizeAmount(item.holding), 0);
         const activeTotal = Object.values(portfolioState).reduce((sum, item) => sum + normalizeAmount(item.active), 0);
+        const projectedAdditionTotal = Object.values(portfolioState).reduce((sum, item) => sum + projectedAddition(item), 0);
         const holdingTotalNode = document.getElementById("holding-total-value");
+        const projectedTotalNode = document.getElementById("projected-holding-total-value");
         const activeTotalNode = document.getElementById("active-auto-total-value");
         if (holdingTotalNode) holdingTotalNode.innerHTML = dataText(formatYuan(holdingTotal));
+        if (projectedTotalNode) projectedTotalNode.innerHTML = dataText(formatYuan(holdingTotal + projectedAdditionTotal));
         if (activeTotalNode) activeTotalNode.innerHTML = `${{dataText(formatYuan(activeTotal))}} / 期`;
       }}
       function updateMobileCard(code) {{
@@ -5036,6 +5181,10 @@ def build_html(
           if (item.active > 0) lines[1].innerHTML = `${{formatAmountWithDelta(item.active, limitDirection)}} / 期`;
           else if (item.paused > 0) lines[1].innerHTML = `${{formatAmountWithDelta(item.paused, limitDirection)}} / 期`;
           else lines[1].textContent = "未设置";
+        }}
+        if (lines[2]) {{
+          const projectedText = projectedAddition(item) > 0 ? `+${{formatYuan(projectedAddition(item))}}` : "0元";
+          lines[2].innerHTML = dataText(projectedText);
         }}
         const investLine = lines[1]?.closest("span");
         if (investLine) {{
@@ -5074,7 +5223,10 @@ def build_html(
             : item.paused > 0
               ? `<span class="position-line paused-line"><em>暂停</em><strong>${{formatAmountWithDelta(item.paused, limitDirection)}} / 期</strong>${{subscriptionBadge}}</span>`
               : `<span class="position-line muted-line"><em>定投</em><strong>未设置</strong>${{subscriptionBadge}}</span>`;
-          positionCell.innerHTML = `<div class="position-plan">${{holdingLine}}${{investLine}}</div>`;
+          const projectedLine = projectedAddition(item) > 0
+            ? `<span class="position-line projected-line"><em>预计</em><strong>+${{formatYuan(projectedAddition(item))}}</strong></span>`
+            : "";
+          positionCell.innerHTML = `<div class="position-plan">${{holdingLine}}${{investLine}}${{projectedLine}}</div>`;
         }}
       }}
       function updateAutoRows() {{
@@ -5628,6 +5780,7 @@ def write_snapshot(
 ) -> None:
     cards = score_cards(funds)
     tracking_latest = latest_tracking_record(tracking_payload or {})
+    projection = projected_auto_invest_plan()
     execution_alerts = execution_alerts or {}
     payload = {
         "generated_at": now_beijing().isoformat(timespec="seconds"),
@@ -5665,7 +5818,12 @@ def write_snapshot(
             "calendar_policy": AUTO_INVEST_CALENDAR_POLICY,
             "calendar_source_url": AUTO_INVEST_CALENDAR_SOURCE_URL,
             "cashflow_policy": AUTO_INVEST_CASHFLOW_POLICY,
-            "holding_total_update_policy": "scheduled_auto_invest_amounts_do_not_change_holding_total_until_confirmed_transaction_or_user_snapshot",
+            "holding_total_update_policy": "scheduled auto-invest creates projected additions and projected holding totals, but confirmed holding_total changes only after confirmed transaction, user snapshot, or manual generator update",
+            "projected_periods": projection["periods"],
+            "projected_addition_total": projection["addition_total"],
+            "projected_additions": projection["additions"],
+            "projected_holding_total": projection["projected_holding_total"],
+            "projection_policy": projection["policy"],
             "active_total": sum(AUTO_INVEST_AMOUNTS.values()),
             "paused_total": sum(PAUSED_AUTO_INVEST_AMOUNTS.values()),
             "active_amounts": AUTO_INVEST_AMOUNTS,
@@ -5680,6 +5838,12 @@ def write_snapshot(
             "holding_amounts": HOLDING_AMOUNTS,
             "holding_total_source": "confirmed_user_snapshot_or_manual_generator_constants",
             "cashflow_policy": AUTO_INVEST_CASHFLOW_POLICY,
+            "projected_auto_invest_addition_total": projection["addition_total"],
+            "projected_holding_total": projection["projected_holding_total"],
+            "projected_holding_amounts": {
+                code: HOLDING_AMOUNTS.get(code, 0) + projection["additions"].get(code, 0)
+                for code in FUND_CODES
+            },
             "active_without_holding": sorted(set(AUTO_INVEST_AMOUNTS) - set(HOLDING_AMOUNTS)),
             "holding_but_paused": sorted(set(HOLDING_AMOUNTS) & set(PAUSED_AUTO_INVEST_AMOUNTS)),
         },
@@ -5691,7 +5855,7 @@ def write_snapshot(
             "refresh_policy": "GitHub Actions refreshes the main data three times per Beijing day; portfolio_tracking.json upserts today's record and appends only when the Beijing date changes.",
             "refresh_times_beijing": list(AUTO_REFRESH_TIMES_BEIJING),
             "cashflow_policy": AUTO_INVEST_CASHFLOW_POLICY,
-            "planned_vs_confirmed_policy": "auto_invest_plans are scheduled cashflows; transactions table is reserved for confirmed buy/sell/dividend/fee records that can update actual holding and cost basis.",
+            "planned_vs_confirmed_policy": "auto_invest_plans generate projected additions for daily tracking; transactions table is reserved for confirmed buy/sell/dividend/fee records that can update confirmed holding and cost basis.",
             "note": "Long-term holding and return records are stored in portfolio_tracking.json; generated HTML reads the saved records but does not invent market value or profit.",
         },
         "funds": [
@@ -5702,6 +5866,8 @@ def write_snapshot(
                 "holding_amount": HOLDING_AMOUNTS.get(f.code, 0),
                 "auto_invest_amount": AUTO_INVEST_AMOUNTS.get(f.code, 0),
                 "paused_auto_invest_amount": PAUSED_AUTO_INVEST_AMOUNTS.get(f.code, 0),
+                "projected_auto_invest_addition": projection["additions"].get(f.code, 0),
+                "projected_holding_amount": HOLDING_AMOUNTS.get(f.code, 0) + projection["additions"].get(f.code, 0),
                 "holding_horizon": "long",
                 "holding_horizon_text": "长期持有",
                 "investing_tier": cards[f.code]["tier"],

@@ -113,6 +113,11 @@ def apply_schema(conn: sqlite3.Connection) -> None:
         conn.execute(f"DROP VIEW IF EXISTS {view}")
     conn.executescript(SCHEMA.read_text(encoding="utf-8"))
     ensure_column(conn, "auto_invest_plans", "next_debit_business_date", "TEXT")
+    ensure_column(conn, "portfolio_records", "projected_auto_invest_periods", "INTEGER NOT NULL DEFAULT 0")
+    ensure_column(conn, "portfolio_records", "projected_auto_invest_addition_total", "REAL NOT NULL DEFAULT 0")
+    ensure_column(conn, "portfolio_records", "projected_holding_total", "REAL NOT NULL DEFAULT 0")
+    ensure_column(conn, "portfolio_positions", "projected_auto_invest_addition", "REAL NOT NULL DEFAULT 0")
+    ensure_column(conn, "portfolio_positions", "projected_holding_amount", "REAL NOT NULL DEFAULT 0")
     ensure_column(conn, "fund_daily_snapshots", "agency_limit_source", "TEXT")
     ensure_column(conn, "fund_daily_snapshots", "agency_limit_confidence", "TEXT")
     ensure_column(conn, "fund_daily_snapshots", "direct_limit_confidence", "TEXT")
@@ -340,6 +345,9 @@ def sync_tracking(conn: sqlite3.Connection, tracking: dict[str, Any], snapshot: 
                 "holding_total": record.get("holding_total") or 0,
                 "active_auto_invest_total": record.get("active_auto_invest_total") or 0,
                 "paused_auto_invest_total": record.get("paused_auto_invest_total") or 0,
+                "projected_auto_invest_periods": record.get("projected_auto_invest_periods") or 0,
+                "projected_auto_invest_addition_total": record.get("projected_auto_invest_addition_total") or 0,
+                "projected_holding_total": record.get("projected_holding_total") or record.get("holding_total") or 0,
                 "market_value": record.get("market_value"),
                 "cost_basis": record.get("cost_basis"),
                 "profit": record.get("profit"),
@@ -368,6 +376,8 @@ def sync_tracking(conn: sqlite3.Connection, tracking: dict[str, Any], snapshot: 
                     "record_date": date_key,
                     "code": code,
                     "holding_amount": item.get("holding_amount") or 0,
+                    "projected_auto_invest_addition": item.get("projected_auto_invest_addition") or 0,
+                    "projected_holding_amount": item.get("projected_holding_amount") or item.get("holding_amount") or 0,
                     "market_value": item.get("market_value"),
                     "cost_basis": item.get("cost_basis"),
                     "profit": item.get("profit"),
@@ -417,7 +427,8 @@ def validate_database(conn: sqlite3.Connection, snapshot: dict[str, Any], latest
             raise SystemExit(f"database {table} expected {expected_count}, got {count}")
     portfolio = conn.execute(
         """
-        SELECT holding_total, active_auto_invest_total, paused_auto_invest_total
+        SELECT holding_total, active_auto_invest_total, paused_auto_invest_total,
+               projected_auto_invest_addition_total, projected_holding_total
         FROM portfolio_records
         WHERE record_date = ?
         """,
@@ -431,8 +442,10 @@ def validate_database(conn: sqlite3.Connection, snapshot: dict[str, Any], latest
         holding_plan.get("holding_total"),
         auto_plan.get("active_total"),
         auto_plan.get("paused_total"),
+        holding_plan.get("projected_auto_invest_addition_total"),
+        holding_plan.get("projected_holding_total"),
     )
-    actual_totals = (portfolio[0], portfolio[1], portfolio[2])
+    actual_totals = (portfolio[0], portfolio[1], portfolio[2], portfolio[3], portfolio[4])
     if actual_totals != expected_totals:
         raise SystemExit(f"database portfolio totals expected {expected_totals}, got {actual_totals}")
 

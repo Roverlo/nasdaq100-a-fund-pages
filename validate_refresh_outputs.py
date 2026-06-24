@@ -75,6 +75,10 @@ class PageInspector(HTMLParser):
         self.in_tbody = False
         self.in_tr = False
         self.current_cell_count = 0
+        self.current_aux_table: str | None = None
+        self.in_aux_thead = False
+        self.in_aux_tr = False
+        self.current_aux_cell_count = 0
         self.header_columns = 0
         self.body_columns: list[int] = []
         self.panel_ids: set[str] = set()
@@ -93,6 +97,9 @@ class PageInspector(HTMLParser):
         self.subscription_filter_options: list[str] = []
         self.holding_table_count = 0
         self.auto_plan_table_count = 0
+        self.tracking_history_columns = 0
+        self.tracking_fund_columns = 0
+        self.tracking_year_columns = 0
         self.main_sort_column_indexes: list[int] = []
         self.mobile_main_sort_column_indexes: list[int] = []
         self.plan_sort_header_count = 0
@@ -119,6 +126,19 @@ class PageInspector(HTMLParser):
             self.holding_table_count += 1
         if tag == "table" and "auto-plan-table" in classes:
             self.auto_plan_table_count += 1
+        if tag == "table" and "tracking-history-table" in classes:
+            self.current_aux_table = "tracking-history"
+        if tag == "table" and "tracking-fund-table" in classes:
+            self.current_aux_table = "tracking-fund"
+        if tag == "table" and "tracking-year-table" in classes:
+            self.current_aux_table = "tracking-year"
+        if self.current_aux_table and tag == "thead":
+            self.in_aux_thead = True
+        if self.current_aux_table and self.in_aux_thead and tag == "tr":
+            self.in_aux_tr = True
+            self.current_aux_cell_count = 0
+        if self.current_aux_table and self.in_aux_tr and tag in {"th", "td"}:
+            self.current_aux_cell_count += 1
         if tag == "th" and "sortable" in classes and "data-column-index" in attr:
             column_index = parse_int(attr.get("data-column-index"))
             if column_index is not None:
@@ -177,6 +197,19 @@ class PageInspector(HTMLParser):
             self.current_cell_count += 1
 
     def handle_endtag(self, tag: str) -> None:
+        if self.current_aux_table and self.in_aux_tr and tag == "tr":
+            if self.current_aux_table == "tracking-history":
+                self.tracking_history_columns = self.current_aux_cell_count
+            elif self.current_aux_table == "tracking-fund":
+                self.tracking_fund_columns = self.current_aux_cell_count
+            elif self.current_aux_table == "tracking-year":
+                self.tracking_year_columns = self.current_aux_cell_count
+            self.in_aux_tr = False
+            self.current_aux_cell_count = 0
+        if self.current_aux_table and tag == "thead":
+            self.in_aux_thead = False
+        if self.current_aux_table and tag == "table":
+            self.current_aux_table = None
         if self.in_main_table and tag == "tr":
             if self.in_thead:
                 self.header_columns = self.current_cell_count
@@ -267,6 +300,12 @@ def validate_tabs(path: Path, required_panels: set[str], require_portfolio_link:
         fail(f"{path.name} should link to portfolio.html for the holdings page")
     if page.tracking_panel_ids != TRACKING_SUBPANELS:
         fail(f"{path.name} tracking subpanels mismatch: {sorted(page.tracking_panel_ids)}")
+    if page.tracking_year_columns != 10:
+        fail(f"{path.name} tracking year columns expected 10, got {page.tracking_year_columns}")
+    if page.tracking_fund_columns != 9:
+        fail(f"{path.name} tracking fund columns expected 9, got {page.tracking_fund_columns}")
+    if page.tracking_history_columns != 9:
+        fail(f"{path.name} tracking history columns expected 9, got {page.tracking_history_columns}")
     if is_public_index:
         if page.status_filter_options:
             fail(f"{path.name} public page should not contain private status filter options: {page.status_filter_options}")
@@ -354,6 +393,18 @@ def validate_snapshot(snapshot: dict) -> None:
         fail("snapshot paused auto-invest total mismatch")
     auto_plan = snapshot.get("auto_invest_plan", {})
     holding_plan = snapshot.get("holding_plan", {})
+    projected_addition_total = generator.projected_auto_invest_addition_total()
+    projected_holding_total = generator.projected_holding_total()
+    if auto_plan.get("projected_periods") != generator.projected_auto_invest_periods_until():
+        fail("snapshot projected auto-invest periods mismatch")
+    if auto_plan.get("projected_addition_total") != projected_addition_total:
+        fail("snapshot projected auto-invest addition total mismatch")
+    if auto_plan.get("projected_holding_total") != projected_holding_total:
+        fail("snapshot auto-invest projected holding total mismatch")
+    if holding_plan.get("projected_auto_invest_addition_total") != projected_addition_total:
+        fail("snapshot holding projected auto-invest addition total mismatch")
+    if holding_plan.get("projected_holding_total") != projected_holding_total:
+        fail("snapshot holding projected total mismatch")
     if auto_plan.get("next_debit_business_date") != generator.AUTO_INVEST_NEXT_DEBIT_BUSINESS_DATE:
         fail("snapshot next debit business date mismatch")
     if auto_plan.get("cashflow_policy") != generator.AUTO_INVEST_CASHFLOW_POLICY:
@@ -454,6 +505,12 @@ def validate_tracking(snapshot: dict, tracking: dict) -> None:
     if latest.get("paused_auto_invest_total") != snapshot.get("auto_invest_plan", {}).get("paused_total"):
         fail("tracking latest paused_auto_invest_total mismatch")
     auto_plan = snapshot.get("auto_invest_plan", {})
+    if latest.get("projected_auto_invest_periods") != auto_plan.get("projected_periods"):
+        fail("tracking latest projected_auto_invest_periods mismatch")
+    if latest.get("projected_auto_invest_addition_total") != auto_plan.get("projected_addition_total"):
+        fail("tracking latest projected_auto_invest_addition_total mismatch")
+    if latest.get("projected_holding_total") != auto_plan.get("projected_holding_total"):
+        fail("tracking latest projected_holding_total mismatch")
     if latest.get("auto_invest_frequency") != auto_plan.get("frequency"):
         fail("tracking latest auto_invest_frequency mismatch")
     if latest.get("next_debit_date") != auto_plan.get("next_debit_date"):
@@ -478,6 +535,8 @@ def validate_tracking(snapshot: dict, tracking: dict) -> None:
             "holding_amount": snapshot_fund.get("holding_amount"),
             "active_auto_invest_amount": snapshot_fund.get("auto_invest_amount"),
             "paused_auto_invest_amount": snapshot_fund.get("paused_auto_invest_amount"),
+            "projected_auto_invest_addition": snapshot_fund.get("projected_auto_invest_addition"),
+            "projected_holding_amount": snapshot_fund.get("projected_holding_amount"),
         }
         plan_stats = generator.AUTO_INVEST_PLAN_PAGE_STATS.get(code, {})
         if isinstance(plan_stats, dict):
@@ -542,7 +601,8 @@ def validate_database(snapshot: dict, tracking: dict) -> None:
                 fail(f"SQLite {table} expected {expected_fund_count} rows for {date_value}, got {count}")
         row = conn.execute(
             """
-            SELECT holding_total, active_auto_invest_total, paused_auto_invest_total
+            SELECT holding_total, active_auto_invest_total, paused_auto_invest_total,
+                   projected_auto_invest_addition_total, projected_holding_total
             FROM portfolio_records
             WHERE record_date = ?
             """,
@@ -554,8 +614,10 @@ def validate_database(snapshot: dict, tracking: dict) -> None:
             snapshot.get("holding_plan", {}).get("holding_total"),
             snapshot.get("auto_invest_plan", {}).get("active_total"),
             snapshot.get("auto_invest_plan", {}).get("paused_total"),
+            snapshot.get("holding_plan", {}).get("projected_auto_invest_addition_total"),
+            snapshot.get("holding_plan", {}).get("projected_holding_total"),
         )
-        actual_totals = (row[0], row[1], row[2])
+        actual_totals = (row[0], row[1], row[2], row[3], row[4])
         if actual_totals != expected_totals:
             fail(f"SQLite portfolio totals expected {expected_totals}, got {actual_totals}")
         plan_row = conn.execute(
