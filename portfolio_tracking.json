@@ -1247,7 +1247,7 @@
     },
     {
       "date": "2026-06-26",
-      "recorded_at": "2026-06-26T01:23:57+08:00",
+      "recorded_at": "2026-06-26T12:59:13+08:00",
       "holding_total": 560,
       "active_auto_invest_total": 320,
       "paused_auto_invest_total": 0,
@@ -1267,7 +1267,7 @@
         "019441": {
           "name": "万家",
           "rating": "A",
-          "score": 70.7,
+          "score": 70.8,
           "holding_amount": 50,
           "active_auto_invest_amount": 50,
           "paused_auto_invest_amount": 0,
@@ -1318,7 +1318,7 @@
         "539001": {
           "name": "建信",
           "rating": "D",
-          "score": 25.7,
+          "score": 25.8,
           "holding_amount": 100,
           "active_auto_invest_amount": 50,
           "paused_auto_invest_amount": 0,
@@ -1335,7 +1335,7 @@
         "018966": {
           "name": "汇添富",
           "rating": "D",
-          "score": 29.0,
+          "score": 29.1,
           "holding_amount": 100,
           "active_auto_invest_amount": 100,
           "paused_auto_invest_amount": 0,
@@ -1352,7 +1352,7 @@
         "016452": {
           "name": "南方",
           "rating": "B",
-          "score": 57.0,
+          "score": 57.1,
           "holding_amount": 250,
           "active_auto_invest_amount": 50,
           "paused_auto_invest_amount": 0,
@@ -1369,7 +1369,7 @@
         "270042": {
           "name": "广发",
           "rating": "A",
-          "score": 67.7,
+          "score": 67.8,
           "holding_amount": 0,
           "active_auto_invest_amount": 10,
           "paused_auto_invest_amount": 0,
@@ -1386,7 +1386,7 @@
         "019172": {
           "name": "摩根",
           "rating": "C",
-          "score": 48.8,
+          "score": 48.9,
           "holding_amount": 20,
           "active_auto_invest_amount": 10,
           "paused_auto_invest_amount": 0,
@@ -1403,7 +1403,7 @@
         "019547": {
           "name": "招商",
           "rating": "B",
-          "score": 55.2,
+          "score": 55.3,
           "holding_amount": 20,
           "active_auto_invest_amount": 10,
           "paused_auto_invest_amount": 0,
@@ -1437,7 +1437,7 @@
         "019524": {
           "name": "华泰柏瑞",
           "rating": "C",
-          "score": 52.2,
+          "score": 52.3,
           "holding_amount": 0,
           "active_auto_invest_amount": 10,
           "paused_auto_invest_amount": 0,
@@ -1454,7 +1454,7 @@
         "018043": {
           "name": "天弘",
           "rating": "B",
-          "score": 64.9,
+          "score": 65.0,
           "holding_amount": 0,
           "active_auto_invest_amount": 0,
           "paused_auto_invest_amount": 0,
@@ -1488,7 +1488,7 @@
         "016532": {
           "name": "嘉实",
           "rating": "A",
-          "score": 71.3,
+          "score": 71.2,
           "holding_amount": 0,
           "active_auto_invest_amount": 0,
           "paused_auto_invest_amount": 0,
