@@ -97,29 +97,17 @@ CREATE TABLE IF NOT EXISTS execution_alerts (
 CREATE TABLE IF NOT EXISTS portfolio_records (
   record_date TEXT PRIMARY KEY,
   recorded_at TEXT,
-  holding_total REAL NOT NULL,
-  active_auto_invest_total REAL NOT NULL,
-  paused_auto_invest_total REAL NOT NULL,
-  projected_auto_invest_periods INTEGER NOT NULL DEFAULT 0,
-  projected_auto_invest_addition_total REAL NOT NULL DEFAULT 0,
-  projected_holding_total REAL NOT NULL DEFAULT 0,
-  market_value REAL,
-  cost_basis REAL,
-  profit REAL,
-  return_rate REAL,
+  active_auto_invest_count INTEGER NOT NULL DEFAULT 0,
+  paused_auto_invest_count INTEGER NOT NULL DEFAULT 0,
+  candidate_count INTEGER NOT NULL DEFAULT 0,
+  status_policy TEXT,
   note TEXT
 );
 
 CREATE TABLE IF NOT EXISTS portfolio_positions (
   record_date TEXT NOT NULL,
   code TEXT NOT NULL,
-  holding_amount REAL NOT NULL DEFAULT 0,
-  projected_auto_invest_addition REAL NOT NULL DEFAULT 0,
-  projected_holding_amount REAL NOT NULL DEFAULT 0,
-  market_value REAL,
-  cost_basis REAL,
-  profit REAL,
-  return_rate REAL,
+  status TEXT NOT NULL,
   rating TEXT,
   score REAL,
   PRIMARY KEY (record_date, code),
@@ -131,12 +119,6 @@ CREATE TABLE IF NOT EXISTS auto_invest_plans (
   record_date TEXT NOT NULL,
   code TEXT NOT NULL,
   status TEXT NOT NULL,
-  amount REAL NOT NULL DEFAULT 0,
-  active_amount REAL NOT NULL DEFAULT 0,
-  paused_amount REAL NOT NULL DEFAULT 0,
-  frequency TEXT,
-  next_debit_date TEXT,
-  next_debit_business_date TEXT,
   PRIMARY KEY (record_date, code),
   FOREIGN KEY (record_date) REFERENCES portfolio_records(record_date) ON DELETE CASCADE,
   FOREIGN KEY (code) REFERENCES funds(code)
@@ -216,26 +198,16 @@ SELECT
   f.code,
   f.display_name,
   f.name,
-  p.holding_amount,
-  p.projected_auto_invest_addition,
-  p.projected_holding_amount,
-  p.market_value,
-  p.cost_basis,
-  p.profit,
-  p.return_rate,
+  p.status,
   p.rating,
   p.score,
-  a.status AS auto_invest_status,
-  a.amount AS auto_invest_amount,
-  a.frequency,
-  a.next_debit_date,
-  a.next_debit_business_date
+  a.status AS auto_invest_status
 FROM portfolio_positions p
 JOIN funds f ON f.code = p.code
 LEFT JOIN auto_invest_plans a
   ON a.record_date = p.record_date AND a.code = p.code
 WHERE p.record_date = (SELECT record_date FROM v_latest_portfolio_date)
-ORDER BY COALESCE(p.holding_amount, 0) DESC, f.code;
+ORDER BY CASE p.status WHEN '定投中' THEN 0 WHEN '暂停定投' THEN 1 ELSE 2 END, f.code;
 
 CREATE VIEW IF NOT EXISTS v_monthly_portfolio_summary AS
 SELECT
@@ -243,14 +215,9 @@ SELECT
   COUNT(*) AS snapshot_count,
   MIN(record_date) AS first_record_date,
   MAX(record_date) AS latest_record_date,
-  ROUND(AVG(holding_total), 2) AS avg_holding_total,
-  ROUND(AVG(active_auto_invest_total), 2) AS avg_active_auto_invest_total,
-  ROUND(AVG(paused_auto_invest_total), 2) AS avg_paused_auto_invest_total,
-  ROUND(AVG(projected_auto_invest_addition_total), 2) AS avg_projected_auto_invest_addition_total,
-  ROUND(AVG(projected_holding_total), 2) AS avg_projected_holding_total,
-  ROUND(AVG(market_value), 2) AS avg_market_value,
-  ROUND(AVG(profit), 2) AS avg_profit,
-  ROUND(AVG(return_rate), 4) AS avg_return_rate
+  ROUND(AVG(active_auto_invest_count), 2) AS avg_active_auto_invest_count,
+  ROUND(AVG(paused_auto_invest_count), 2) AS avg_paused_auto_invest_count,
+  ROUND(AVG(candidate_count), 2) AS avg_candidate_count
 FROM portfolio_records
 GROUP BY substr(record_date, 1, 7)
 ORDER BY month;
@@ -261,13 +228,7 @@ SELECT
   f.code,
   f.display_name,
   f.name,
-  a.amount,
-  a.frequency,
-  a.next_debit_date,
-  a.next_debit_business_date,
-  p.holding_amount,
-  p.projected_auto_invest_addition,
-  p.projected_holding_amount,
+  a.status,
   p.rating,
   p.score
 FROM auto_invest_plans a
@@ -276,4 +237,4 @@ LEFT JOIN portfolio_positions p
   ON p.record_date = a.record_date AND p.code = a.code
 WHERE a.record_date = (SELECT record_date FROM v_latest_portfolio_date)
   AND a.status = '定投中'
-ORDER BY a.amount DESC, f.code;
+ORDER BY p.score DESC, f.code;

@@ -16,12 +16,12 @@ TRACKING = ROOT / generator.TRACKING_FILENAME
 DATABASE = ROOT / "data" / "nasdaq_funds.db"
 
 FULL_MAIN_COLUMNS = 18
-PUBLIC_MAIN_COLUMNS = 16
+PUBLIC_MAIN_COLUMNS = 18
 FUND_COUNT = len(generator.FUND_CODES)
 EXPECTED_STATUS_OPTIONS = ["定投中", "暂停定投", "候选"]
 EXPECTED_SUBSCRIPTION_OPTIONS = ["允许申购", "暂停申购"]
 FULL_SORT_COLUMN_INDEXES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17]
-PUBLIC_SORT_COLUMN_INDEXES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15]
+PUBLIC_SORT_COLUMN_INDEXES = FULL_SORT_COLUMN_INDEXES
 EXPECTED_ALERT_DIRECTIONS = {
     "subscription": {"", "opened", "paused"},
     "agency_limit": {"", "up", "down"},
@@ -39,9 +39,7 @@ EXPECTED_LIMIT_CONFIDENCES = {
 }
 TRACKING_SUBPANELS = {
     "tracking-panel-overview",
-    "tracking-panel-trend",
     "tracking-panel-years",
-    "tracking-panel-allocation",
     "tracking-panel-funds",
     "tracking-panel-snapshots",
 }
@@ -87,7 +85,7 @@ class PageInspector(HTMLParser):
         self.tab_controls: list[str] = []
         self.portfolio_link_found = False
         self.mobile_card_count = 0
-        self.mobile_private_count = 0
+        self.mobile_status_block_count = 0
         self.mobile_status_attr_count = 0
         self.in_status_filter = False
         self.status_filter_depth = 0
@@ -155,8 +153,8 @@ class PageInspector(HTMLParser):
             self.mobile_card_count += 1
             if "data-status" in attr:
                 self.mobile_status_attr_count += 1
-        if "mobile-card-private" in classes:
-            self.mobile_private_count += 1
+        if "mobile-card-status" in classes:
+            self.mobile_status_block_count += 1
         if tag == "button" and "tab-button" in classes:
             control = attr.get("aria-controls")
             if control:
@@ -297,19 +295,16 @@ def validate_tabs(path: Path, required_panels: set[str], require_portfolio_link:
     if missing_controls:
         fail(f"{path.name} tab buttons point to missing panels: {missing_controls}")
     if require_portfolio_link and not page.portfolio_link_found:
-        fail(f"{path.name} should link to portfolio.html for the holdings page")
+        fail(f"{path.name} should link to portfolio.html for the status detail page")
     if page.tracking_panel_ids != TRACKING_SUBPANELS:
         fail(f"{path.name} tracking subpanels mismatch: {sorted(page.tracking_panel_ids)}")
-    if page.tracking_year_columns != 10:
-        fail(f"{path.name} tracking year columns expected 10, got {page.tracking_year_columns}")
-    if page.tracking_fund_columns != 9:
-        fail(f"{path.name} tracking fund columns expected 9, got {page.tracking_fund_columns}")
-    if page.tracking_history_columns != 9:
-        fail(f"{path.name} tracking history columns expected 9, got {page.tracking_history_columns}")
-    if is_public_index:
-        if page.status_filter_options:
-            fail(f"{path.name} public page should not contain private status filter options: {page.status_filter_options}")
-    elif page.status_filter_options != EXPECTED_STATUS_OPTIONS:
+    if page.tracking_year_columns != 6:
+        fail(f"{path.name} tracking year columns expected 6, got {page.tracking_year_columns}")
+    if page.tracking_fund_columns != 4:
+        fail(f"{path.name} tracking fund columns expected 4, got {page.tracking_fund_columns}")
+    if page.tracking_history_columns != 5:
+        fail(f"{path.name} tracking history columns expected 5, got {page.tracking_history_columns}")
+    if page.status_filter_options != EXPECTED_STATUS_OPTIONS:
         fail(f"{path.name} status filter options expected 定投中/暂停定投/候选, got {page.status_filter_options}")
     if page.subscription_filter_options != EXPECTED_SUBSCRIPTION_OPTIONS:
         fail(f"{path.name} subscription filter options expected 允许申购/暂停申购, got {page.subscription_filter_options}")
@@ -322,33 +317,41 @@ def validate_tabs(path: Path, required_panels: set[str], require_portfolio_link:
         fail(f"{path.name} main sortable columns expected {expected_sort_indexes}, got {page.main_sort_column_indexes}")
     if page.mobile_main_sort_column_indexes != expected_sort_indexes:
         fail(f"{path.name} mobile main sort buttons expected {expected_sort_indexes}, got {page.mobile_main_sort_column_indexes}")
-    if require_portfolio_link and page.mobile_private_count:
-        fail(f"{path.name} public page should not contain private mobile holding blocks")
-    if require_portfolio_link and page.mobile_status_attr_count:
-        fail(f"{path.name} public page should not contain private mobile status attributes")
-    if not require_portfolio_link and page.mobile_private_count != FUND_COUNT:
-        fail(f"{path.name} private mobile holding blocks expected {FUND_COUNT}, got {page.mobile_private_count}")
+    if page.mobile_status_block_count != FUND_COUNT:
+        fail(f"{path.name} mobile status blocks expected {FUND_COUNT}, got {page.mobile_status_block_count}")
     if page.holding_table_count:
-        fail(f"{path.name} should not render the removed holding detail table")
+        fail(f"{path.name} should not render the removed personal holding detail table")
     if require_portfolio_link:
         if page.auto_plan_table_count:
-            fail(f"{path.name} public page should not contain portfolio auto-plan table")
+            fail(f"{path.name} public page should not contain editable status detail table")
         if page.plan_sort_header_count:
-            fail(f"{path.name} public page should not contain portfolio sort headers")
+            fail(f"{path.name} public page should not contain editable status detail sort headers")
         if page.mobile_plan_sort_button_count:
-            fail(f"{path.name} public page should not contain portfolio mobile sort buttons")
+            fail(f"{path.name} public page should not contain editable status detail mobile sort buttons")
     elif page.auto_plan_table_count != 1:
         fail(f"{path.name} auto-plan table expected 1, got {page.auto_plan_table_count}")
-    elif page.plan_sort_header_count != 6:
-        fail(f"{path.name} auto-plan sortable headers expected 6, got {page.plan_sort_header_count}")
-    elif page.mobile_plan_sort_button_count != 6:
-        fail(f"{path.name} mobile auto-plan sort buttons expected 6, got {page.mobile_plan_sort_button_count}")
+    elif page.plan_sort_header_count != 2:
+        fail(f"{path.name} auto-plan sortable headers expected 2, got {page.plan_sort_header_count}")
+    elif page.mobile_plan_sort_button_count != 2:
+        fail(f"{path.name} mobile auto-plan sort buttons expected 2, got {page.mobile_plan_sort_button_count}")
     forbidden_patterns = [
         r"C:\\ALL_in_H\\",
         r"tracking-file",
         r"Staticrypt",
         r"staticrypt",
         r"password",
+        r"legacyAmountIsPositive",
+        r"openAmountEditor",
+        r"beginAmountEdit",
+        r"editable-amount",
+        r"item\?\.active",
+        r"item\?\.paused",
+        r"data-field=\"active\"",
+        r"data-field=\"paused\"",
+        r"持仓 / 定投",
+        r"持仓/定投",
+        r"当前持有",
+        r"定投金额",
     ]
     for pattern in forbidden_patterns:
         if re.search(pattern, html, flags=re.I):
@@ -385,38 +388,24 @@ def validate_snapshot(snapshot: dict) -> None:
                 f"source health {key} expected {FUND_COUNT}/{FUND_COUNT}, "
                 f"got {success_count}/{required}; failed={check.get('failed_codes')}"
             )
-    if snapshot.get("holding_plan", {}).get("holding_total") != sum(generator.HOLDING_AMOUNTS.values()):
-        fail("snapshot holding total mismatch")
-    if snapshot.get("auto_invest_plan", {}).get("active_total") != sum(generator.AUTO_INVEST_AMOUNTS.values()):
-        fail("snapshot active auto-invest total mismatch")
-    if snapshot.get("auto_invest_plan", {}).get("paused_total") != sum(generator.PAUSED_AUTO_INVEST_AMOUNTS.values()):
-        fail("snapshot paused auto-invest total mismatch")
     auto_plan = snapshot.get("auto_invest_plan", {})
-    holding_plan = snapshot.get("holding_plan", {})
-    projected_addition_total = generator.projected_auto_invest_addition_total()
-    projected_holding_total = generator.projected_holding_total()
-    if auto_plan.get("projected_periods") != generator.projected_auto_invest_periods_until():
-        fail("snapshot projected auto-invest periods mismatch")
-    if auto_plan.get("projected_addition_total") != projected_addition_total:
-        fail("snapshot projected auto-invest addition total mismatch")
-    if auto_plan.get("projected_holding_total") != projected_holding_total:
-        fail("snapshot auto-invest projected holding total mismatch")
-    if holding_plan.get("projected_auto_invest_addition_total") != projected_addition_total:
-        fail("snapshot holding projected auto-invest addition total mismatch")
-    if holding_plan.get("projected_holding_total") != projected_holding_total:
-        fail("snapshot holding projected total mismatch")
-    if auto_plan.get("next_debit_business_date") != generator.AUTO_INVEST_NEXT_DEBIT_BUSINESS_DATE:
-        fail("snapshot next debit business date mismatch")
-    if auto_plan.get("cashflow_policy") != generator.AUTO_INVEST_CASHFLOW_POLICY:
-        fail("snapshot auto-invest cashflow policy mismatch")
-    if auto_plan.get("screenshot_summary") != generator.AUTO_INVEST_SCREENSHOT_SUMMARY:
-        fail("snapshot auto-invest screenshot summary mismatch")
-    if auto_plan.get("plan_page_stats") != generator.AUTO_INVEST_PLAN_PAGE_STATS:
-        fail("snapshot auto-invest plan page stats mismatch")
-    if holding_plan.get("cashflow_policy") != generator.AUTO_INVEST_CASHFLOW_POLICY:
-        fail("snapshot holding cashflow policy mismatch")
-    if holding_plan.get("holding_total") == sum(generator.HOLDING_AMOUNTS.values()) + sum(generator.AUTO_INVEST_AMOUNTS.values()):
-        fail("holding total appears to include scheduled auto-invest cashflow")
+    if auto_plan.get("status_policy") != generator.AUTO_INVEST_STATUS_POLICY:
+        fail("snapshot auto-invest status policy mismatch")
+    if auto_plan.get("active_count") != len(generator.AUTO_INVESTING_CODES):
+        fail("snapshot active auto-invest count mismatch")
+    if auto_plan.get("paused_count") != len(generator.PAUSED_AUTO_INVESTING_CODES):
+        fail("snapshot paused auto-invest count mismatch")
+    expected_candidate_count = len([code for code in generator.FUND_CODES if generator.fund_status(code) == "候选"])
+    if auto_plan.get("candidate_count") != expected_candidate_count:
+        fail("snapshot candidate count mismatch")
+    if auto_plan.get("active_codes") != sorted(generator.AUTO_INVESTING_CODES):
+        fail("snapshot active auto-invest codes mismatch")
+    if auto_plan.get("paused_codes") != sorted(generator.PAUSED_AUTO_INVESTING_CODES):
+        fail("snapshot paused auto-invest codes mismatch")
+    if auto_plan.get("status_summary") != generator.AUTO_INVEST_STATUS_SUMMARY:
+        fail("snapshot auto-invest status summary mismatch")
+    if "holding_plan" in snapshot:
+        fail("snapshot should not contain personal holding_plan")
     monitor = snapshot.get("execution_monitor")
     if not isinstance(monitor, dict):
         fail("snapshot missing execution_monitor")
@@ -437,6 +426,16 @@ def validate_snapshot(snapshot: dict) -> None:
         code = fund.get("code")
         if fund.get("status") not in set(EXPECTED_STATUS_OPTIONS):
             fail(f"snapshot fund {code} has invalid status {fund.get('status')}")
+        forbidden_personal_keys = {
+            "holding_amount",
+            "auto_invest_amount",
+            "paused_auto_invest_amount",
+            "projected_auto_invest_addition",
+            "projected_holding_amount",
+        }
+        leaked = forbidden_personal_keys & set(fund)
+        if leaked:
+            fail(f"snapshot fund {code} leaks personal amount keys: {sorted(leaked)}")
         if fund.get("subscription_status") not in set(EXPECTED_SUBSCRIPTION_OPTIONS):
             fail(f"snapshot fund {code} has invalid subscription_status {fund.get('subscription_status')}")
         agency_confidence = fund.get("agency_limit_confidence")
@@ -498,27 +497,29 @@ def validate_tracking(snapshot: dict, tracking: dict) -> None:
     latest_date = str(latest.get("date") or latest.get("recorded_at") or "")[:10]
     if latest_date != today:
         fail(f"latest tracking date expected {today}, got {latest_date}")
-    if latest.get("holding_total") != snapshot.get("holding_plan", {}).get("holding_total"):
-        fail("tracking latest holding_total mismatch")
-    if latest.get("active_auto_invest_total") != snapshot.get("auto_invest_plan", {}).get("active_total"):
-        fail("tracking latest active_auto_invest_total mismatch")
-    if latest.get("paused_auto_invest_total") != snapshot.get("auto_invest_plan", {}).get("paused_total"):
-        fail("tracking latest paused_auto_invest_total mismatch")
     auto_plan = snapshot.get("auto_invest_plan", {})
-    if latest.get("projected_auto_invest_periods") != auto_plan.get("projected_periods"):
-        fail("tracking latest projected_auto_invest_periods mismatch")
-    if latest.get("projected_auto_invest_addition_total") != auto_plan.get("projected_addition_total"):
-        fail("tracking latest projected_auto_invest_addition_total mismatch")
-    if latest.get("projected_holding_total") != auto_plan.get("projected_holding_total"):
-        fail("tracking latest projected_holding_total mismatch")
-    if latest.get("auto_invest_frequency") != auto_plan.get("frequency"):
-        fail("tracking latest auto_invest_frequency mismatch")
-    if latest.get("next_debit_date") != auto_plan.get("next_debit_date"):
-        fail("tracking latest next_debit_date mismatch")
-    if latest.get("next_debit_business_date") != auto_plan.get("next_debit_business_date"):
-        fail("tracking latest next_debit_business_date mismatch")
-    if latest.get("cashflow_policy") != auto_plan.get("cashflow_policy"):
-        fail("tracking latest cashflow_policy mismatch")
+    if latest.get("active_auto_invest_count") != auto_plan.get("active_count"):
+        fail("tracking latest active_auto_invest_count mismatch")
+    if latest.get("paused_auto_invest_count") != auto_plan.get("paused_count"):
+        fail("tracking latest paused_auto_invest_count mismatch")
+    if latest.get("candidate_count") != auto_plan.get("candidate_count"):
+        fail("tracking latest candidate_count mismatch")
+    if latest.get("status_policy") != auto_plan.get("status_policy"):
+        fail("tracking latest status_policy mismatch")
+    for forbidden in (
+        "holding_total",
+        "active_auto_invest_total",
+        "paused_auto_invest_total",
+        "projected_auto_invest_periods",
+        "projected_auto_invest_addition_total",
+        "projected_holding_total",
+        "market_value",
+        "cost_basis",
+        "profit",
+        "return_rate",
+    ):
+        if forbidden in latest:
+            fail(f"tracking latest should not contain {forbidden}")
     funds = latest.get("funds")
     if not isinstance(funds, dict):
         fail("latest tracking funds must be an object")
@@ -532,19 +533,24 @@ def validate_tracking(snapshot: dict, tracking: dict) -> None:
         checks = {
             "rating": snapshot_fund.get("investing_tier"),
             "score": snapshot_fund.get("investing_score"),
-            "holding_amount": snapshot_fund.get("holding_amount"),
-            "active_auto_invest_amount": snapshot_fund.get("auto_invest_amount"),
-            "paused_auto_invest_amount": snapshot_fund.get("paused_auto_invest_amount"),
-            "projected_auto_invest_addition": snapshot_fund.get("projected_auto_invest_addition"),
-            "projected_holding_amount": snapshot_fund.get("projected_holding_amount"),
+            "status": snapshot_fund.get("status"),
         }
-        plan_stats = generator.AUTO_INVEST_PLAN_PAGE_STATS.get(code, {})
-        if isinstance(plan_stats, dict):
-            checks["auto_invest_cumulative_amount"] = generator.number_or_none(plan_stats.get("cumulative_amount"))
-            checks["auto_invest_periods"] = generator.number_or_none(plan_stats.get("periods"))
         for key, expected in checks.items():
             if tracking_fund.get(key) != expected:
                 fail(f"tracking fund {code} {key} expected {expected}, got {tracking_fund.get(key)}")
+        leaked = {
+            "holding_amount",
+            "active_auto_invest_amount",
+            "paused_auto_invest_amount",
+            "projected_auto_invest_addition",
+            "projected_holding_amount",
+            "market_value",
+            "cost_basis",
+            "profit",
+            "return_rate",
+        } & set(tracking_fund)
+        if leaked:
+            fail(f"tracking fund {code} leaks personal amount keys: {sorted(leaked)}")
 
 
 def validate_database(snapshot: dict, tracking: dict) -> None:
@@ -601,8 +607,7 @@ def validate_database(snapshot: dict, tracking: dict) -> None:
                 fail(f"SQLite {table} expected {expected_fund_count} rows for {date_value}, got {count}")
         row = conn.execute(
             """
-            SELECT holding_total, active_auto_invest_total, paused_auto_invest_total,
-                   projected_auto_invest_addition_total, projected_holding_total
+            SELECT active_auto_invest_count, paused_auto_invest_count, candidate_count, status_policy
             FROM portfolio_records
             WHERE record_date = ?
             """,
@@ -611,36 +616,28 @@ def validate_database(snapshot: dict, tracking: dict) -> None:
         if row is None:
             fail("SQLite missing latest portfolio record")
         expected_totals = (
-            snapshot.get("holding_plan", {}).get("holding_total"),
-            snapshot.get("auto_invest_plan", {}).get("active_total"),
-            snapshot.get("auto_invest_plan", {}).get("paused_total"),
-            snapshot.get("holding_plan", {}).get("projected_auto_invest_addition_total"),
-            snapshot.get("holding_plan", {}).get("projected_holding_total"),
+            snapshot.get("auto_invest_plan", {}).get("active_count"),
+            snapshot.get("auto_invest_plan", {}).get("paused_count"),
+            snapshot.get("auto_invest_plan", {}).get("candidate_count"),
+            snapshot.get("auto_invest_plan", {}).get("status_policy"),
         )
-        actual_totals = (row[0], row[1], row[2], row[3], row[4])
+        actual_totals = (row[0], row[1], row[2], row[3])
         if actual_totals != expected_totals:
-            fail(f"SQLite portfolio totals expected {expected_totals}, got {actual_totals}")
-        plan_row = conn.execute(
-            """
-            SELECT frequency, next_debit_date, next_debit_business_date
-            FROM auto_invest_plans
-            WHERE record_date = ? AND amount > 0
-            ORDER BY amount DESC, code
-            LIMIT 1
-            """,
-            (latest_record_date,),
-        ).fetchone()
-        if plan_row is None:
-            fail("SQLite missing latest active/paused auto-invest plan row")
-        latest_tracking = tracking.get("records", [])[-1]
-        expected_plan = (
-            latest_tracking.get("auto_invest_frequency"),
-            latest_tracking.get("next_debit_date"),
-            latest_tracking.get("next_debit_business_date"),
+            fail(f"SQLite portfolio status totals expected {expected_totals}, got {actual_totals}")
+        grouped_status_rows = dict(
+            conn.execute(
+                "SELECT status, COUNT(*) FROM auto_invest_plans WHERE record_date = ? GROUP BY status",
+                (latest_record_date,),
+            ).fetchall()
         )
-        actual_plan = (plan_row[0], plan_row[1], plan_row[2])
-        if actual_plan != expected_plan:
-            fail(f"SQLite auto-invest dates expected {expected_plan}, got {actual_plan}")
+        status_rows = {status: int(grouped_status_rows.get(status, 0)) for status in EXPECTED_STATUS_OPTIONS}
+        expected_status_rows = {
+            "定投中": snapshot.get("auto_invest_plan", {}).get("active_count"),
+            "暂停定投": snapshot.get("auto_invest_plan", {}).get("paused_count"),
+            "候选": snapshot.get("auto_invest_plan", {}).get("candidate_count"),
+        }
+        if status_rows != expected_status_rows:
+            fail(f"SQLite auto-invest status counts expected {expected_status_rows}, got {status_rows}")
         view_count = conn.execute("SELECT COUNT(*) FROM v_latest_fund_scores").fetchone()[0]
         if view_count != expected_fund_count:
             fail(f"SQLite v_latest_fund_scores expected {expected_fund_count}, got {view_count}")

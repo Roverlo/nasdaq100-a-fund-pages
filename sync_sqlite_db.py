@@ -112,12 +112,6 @@ def apply_schema(conn: sqlite3.Connection) -> None:
     ):
         conn.execute(f"DROP VIEW IF EXISTS {view}")
     conn.executescript(SCHEMA.read_text(encoding="utf-8"))
-    ensure_column(conn, "auto_invest_plans", "next_debit_business_date", "TEXT")
-    ensure_column(conn, "portfolio_records", "projected_auto_invest_periods", "INTEGER NOT NULL DEFAULT 0")
-    ensure_column(conn, "portfolio_records", "projected_auto_invest_addition_total", "REAL NOT NULL DEFAULT 0")
-    ensure_column(conn, "portfolio_records", "projected_holding_total", "REAL NOT NULL DEFAULT 0")
-    ensure_column(conn, "portfolio_positions", "projected_auto_invest_addition", "REAL NOT NULL DEFAULT 0")
-    ensure_column(conn, "portfolio_positions", "projected_holding_amount", "REAL NOT NULL DEFAULT 0")
     ensure_column(conn, "fund_daily_snapshots", "agency_limit_source", "TEXT")
     ensure_column(conn, "fund_daily_snapshots", "agency_limit_confidence", "TEXT")
     ensure_column(conn, "fund_daily_snapshots", "direct_limit_confidence", "TEXT")
@@ -322,19 +316,12 @@ def sync_tracking(conn: sqlite3.Connection, tracking: dict[str, Any], snapshot: 
     if not records:
         raise SystemExit("tracking records must be a non-empty list")
     fund_codes = {str(fund.get("code")) for fund in snapshot.get("funds", []) if isinstance(fund, dict)}
-    plan = snapshot.get("auto_invest_plan") if isinstance(snapshot.get("auto_invest_plan"), dict) else {}
-    frequency = plan.get("frequency")
-    next_debit_date = plan.get("next_debit_date")
-    next_debit_business_date = plan.get("next_debit_business_date")
     latest_date = ""
     for record in records:
         date_key = record_date(record)
         if not date_key:
             raise SystemExit(f"tracking record missing date: {record}")
         latest_date = date_key
-        record_frequency = record.get("auto_invest_frequency") or frequency
-        record_next_debit_date = record.get("next_debit_date") or next_debit_date
-        record_next_debit_business_date = record.get("next_debit_business_date") or next_debit_business_date
         upsert_if_changed(
             conn,
             "portfolio_records",
@@ -342,16 +329,10 @@ def sync_tracking(conn: sqlite3.Connection, tracking: dict[str, Any], snapshot: 
             {
                 "record_date": date_key,
                 "recorded_at": record.get("recorded_at"),
-                "holding_total": record.get("holding_total") or 0,
-                "active_auto_invest_total": record.get("active_auto_invest_total") or 0,
-                "paused_auto_invest_total": record.get("paused_auto_invest_total") or 0,
-                "projected_auto_invest_periods": record.get("projected_auto_invest_periods") or 0,
-                "projected_auto_invest_addition_total": record.get("projected_auto_invest_addition_total") or 0,
-                "projected_holding_total": record.get("projected_holding_total") or record.get("holding_total") or 0,
-                "market_value": record.get("market_value"),
-                "cost_basis": record.get("cost_basis"),
-                "profit": record.get("profit"),
-                "return_rate": record.get("return_rate"),
+                "active_auto_invest_count": record.get("active_auto_invest_count") or 0,
+                "paused_auto_invest_count": record.get("paused_auto_invest_count") or 0,
+                "candidate_count": record.get("candidate_count") or 0,
+                "status_policy": record.get("status_policy"),
                 "note": record.get("note"),
             },
             volatile_columns={"recorded_at"},
@@ -364,10 +345,7 @@ def sync_tracking(conn: sqlite3.Connection, tracking: dict[str, Any], snapshot: 
                 continue
             if not isinstance(item, dict):
                 continue
-            active_amount = item.get("active_auto_invest_amount") or 0
-            paused_amount = item.get("paused_auto_invest_amount") or 0
-            status = "定投中" if active_amount else ("暂停定投" if paused_amount else "未定投")
-            amount = active_amount if active_amount else paused_amount
+            status = str(item.get("status") or "候选")
             upsert_if_changed(
                 conn,
                 "portfolio_positions",
@@ -375,13 +353,7 @@ def sync_tracking(conn: sqlite3.Connection, tracking: dict[str, Any], snapshot: 
                 {
                     "record_date": date_key,
                     "code": code,
-                    "holding_amount": item.get("holding_amount") or 0,
-                    "projected_auto_invest_addition": item.get("projected_auto_invest_addition") or 0,
-                    "projected_holding_amount": item.get("projected_holding_amount") or item.get("holding_amount") or 0,
-                    "market_value": item.get("market_value"),
-                    "cost_basis": item.get("cost_basis"),
-                    "profit": item.get("profit"),
-                    "return_rate": item.get("return_rate"),
+                    "status": status,
                     "rating": item.get("rating"),
                     "score": item.get("score"),
                 },
@@ -394,12 +366,6 @@ def sync_tracking(conn: sqlite3.Connection, tracking: dict[str, Any], snapshot: 
                     "record_date": date_key,
                     "code": code,
                     "status": status,
-                    "amount": amount,
-                    "active_amount": active_amount,
-                    "paused_amount": paused_amount,
-                    "frequency": record_frequency,
-                    "next_debit_date": record_next_debit_date,
-                    "next_debit_business_date": record_next_debit_business_date,
                 },
             )
     return latest_date
@@ -427,8 +393,7 @@ def validate_database(conn: sqlite3.Connection, snapshot: dict[str, Any], latest
             raise SystemExit(f"database {table} expected {expected_count}, got {count}")
     portfolio = conn.execute(
         """
-        SELECT holding_total, active_auto_invest_total, paused_auto_invest_total,
-               projected_auto_invest_addition_total, projected_holding_total
+        SELECT active_auto_invest_count, paused_auto_invest_count, candidate_count, status_policy
         FROM portfolio_records
         WHERE record_date = ?
         """,
@@ -436,24 +401,24 @@ def validate_database(conn: sqlite3.Connection, snapshot: dict[str, Any], latest
     ).fetchone()
     if portfolio is None:
         raise SystemExit("database missing latest portfolio record")
-    holding_plan = snapshot.get("holding_plan") if isinstance(snapshot.get("holding_plan"), dict) else {}
     auto_plan = snapshot.get("auto_invest_plan") if isinstance(snapshot.get("auto_invest_plan"), dict) else {}
     expected_totals = (
-        holding_plan.get("holding_total"),
-        auto_plan.get("active_total"),
-        auto_plan.get("paused_total"),
-        holding_plan.get("projected_auto_invest_addition_total"),
-        holding_plan.get("projected_holding_total"),
+        auto_plan.get("active_count"),
+        auto_plan.get("paused_count"),
+        auto_plan.get("candidate_count"),
+        auto_plan.get("status_policy"),
     )
-    actual_totals = (portfolio[0], portfolio[1], portfolio[2], portfolio[3], portfolio[4])
+    actual_totals = (portfolio[0], portfolio[1], portfolio[2], portfolio[3])
     if actual_totals != expected_totals:
-        raise SystemExit(f"database portfolio totals expected {expected_totals}, got {actual_totals}")
+        raise SystemExit(f"database portfolio status totals expected {expected_totals}, got {actual_totals}")
 
 
 def sync_database(snapshot_path: Path, tracking_path: Path, db_path: Path) -> None:
     snapshot = load_json(snapshot_path)
     tracking = load_json(tracking_path)
     db_path.parent.mkdir(parents=True, exist_ok=True)
+    if db_path.exists():
+        db_path.unlink()
     with sqlite3.connect(db_path) as conn:
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA foreign_keys = ON")
