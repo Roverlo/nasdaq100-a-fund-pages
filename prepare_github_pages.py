@@ -12,8 +12,8 @@ DOCS_DIR = ROOT / "docs"
 
 class PublicPageFilter(HTMLParser):
     VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
-    PRIVATE_ATTRS = {"data-status", "data-holding-amount", "data-auto-invest-amount", "data-paused-auto-invest-amount"}
-    PRIVATE_COLUMN_INDEXES = {3, 17}
+    PRIVATE_ATTRS: set[str] = set()
+    PRIVATE_COLUMN_INDEXES: set[int] = set()
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=False)
@@ -32,19 +32,13 @@ class PublicPageFilter(HTMLParser):
                 self.skip_depth += 1
             return
         if tag == "button" and attrs_dict.get("id") == "tab-portfolio":
-            self.output.append('<a class="tab-button tab-link" href="portfolio.html">持仓定投</a>')
+            self.output.append('<a class="tab-button tab-link" href="portfolio.html">定投状态</a>')
             self.skip_depth = 1
             return
         if tag == "section" and attrs_dict.get("id") == "panel-portfolio":
             self.skip_depth = 1
             return
         if tag == "div" and attrs_dict.get("id") == "portfolio-editor":
-            self.skip_depth = 1
-            return
-        if tag == "div" and attrs_dict.get("id") == "status-filter":
-            self.skip_depth = 1
-            return
-        if "mobile-card-private" in set((attrs_dict.get("class") or "").split()):
             self.skip_depth = 1
             return
         classes = set((attrs_dict.get("class") or "").split())
@@ -55,8 +49,6 @@ class PublicPageFilter(HTMLParser):
                 return
             attrs = self.remap_column_index_attr(attrs)
             attrs_dict = dict(attrs)
-        if "data-mobile-card" in attrs_dict:
-            attrs = [(name, value) for name, value in attrs if name != "data-status"]
         if tag == "table" and attrs_dict.get("id") == "main-table":
             self.in_main_table = True
             self.main_table_depth = 1
@@ -69,11 +61,6 @@ class PublicPageFilter(HTMLParser):
             self.cell_index = 0
         if self.in_main_table and tag in {"th", "td", "col"}:
             self.cell_index += 1
-            if self.cell_index in {4, 18}:
-                if tag == "col":
-                    return
-                self.skip_depth = 1
-                return
         if tag == "head":
             self.in_head = True
         if self.in_main_table:
@@ -183,13 +170,6 @@ class PublicPageFilter(HTMLParser):
 
 
 def strip_private_data(html: str) -> str:
-    html = re.sub(
-        r'\s*<div class="filter-control">\s*<span class="filter-label">定投状态</span>\s*<div class="select-menu" id="status-filter".*?</div>\s*</div>',
-        "",
-        html,
-        count=1,
-        flags=re.S,
-    )
     parser = PublicPageFilter()
     parser.feed(html)
     public_html = parser.get_html()

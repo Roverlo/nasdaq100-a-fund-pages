@@ -15,36 +15,26 @@ SELECT
   fund_size_billion
 FROM v_latest_fund_scores;
 
--- 2. Latest holdings and auto-invest plan in one view.
+-- 2. Latest auto-invest status in one view.
 SELECT
   display_name,
   code,
-  holding_amount,
-  projected_auto_invest_addition,
-  projected_holding_amount,
+  status,
   rating,
   score,
-  auto_invest_status,
-  auto_invest_amount,
-  frequency,
-  next_debit_date,
-  next_debit_business_date
+  auto_invest_status
 FROM v_portfolio_latest_positions
-WHERE holding_amount > 0 OR auto_invest_amount > 0;
+WHERE status <> '候选';
 
--- 3. Month-level long-term portfolio summary.
+-- 3. Month-level long-term status summary.
 SELECT
   month,
   snapshot_count,
   first_record_date,
   latest_record_date,
-  avg_holding_total,
-  avg_active_auto_invest_total,
-  avg_projected_auto_invest_addition_total,
-  avg_projected_holding_total,
-  avg_market_value,
-  avg_profit,
-  avg_return_rate
+  avg_active_auto_invest_count,
+  avg_paused_auto_invest_count,
+  avg_candidate_count
 FROM v_monthly_portfolio_summary;
 
 -- 4. Rating and score history for one fund.
@@ -59,23 +49,17 @@ JOIN funds f ON f.code = s.code
 WHERE s.code = '040046'
 ORDER BY s.snapshot_date;
 
--- 5. Active auto-invest plans, ordered by amount.
+-- 5. Active auto-invest status rows, ordered by score.
 SELECT
   display_name,
   code,
-  amount,
-  frequency,
-  next_debit_business_date,
-  holding_amount,
-  projected_auto_invest_addition,
-  projected_holding_amount,
+  status,
   rating,
   score
 FROM v_active_auto_invest_latest;
 
--- 6. Transaction table is for confirmed trades only; scheduled auto-invest plans do not change holding_total by themselves.
--- INSERT INTO transactions (trade_date, code, transaction_type, amount, shares, nav, fee, source, note)
--- VALUES ('2026-06-21', '040046', 'buy', 10, NULL, NULL, 0, '支付宝', '日定投');
+-- 6. Transaction table is intentionally unused by this public-data tracker.
+SELECT COUNT(*) AS transaction_rows FROM transactions;
 
 -- 7. Recent buyability and limit changes.
 SELECT

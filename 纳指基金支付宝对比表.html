@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="fund-page-generated-at" content="2026-06-28 18:55:15">
+  <meta name="fund-page-generated-at" content="2026-06-29 20:12:54">
   <meta name="fund-page-refresh-check-ms" content="300000">
   <title>纳指 100 A 类基金池</title>
   <link rel="icon" href="data:,">
@@ -547,7 +547,6 @@
       font-variant-numeric: tabular-nums;
     }
     .position-line.paused-line strong { color: var(--warn); }
-    .position-line.projected-line strong { color: var(--accent); }
     .position-line.muted-line strong { color: var(--muted); }
     .change-up { color: var(--good) !important; }
     .change-down { color: var(--bad) !important; }
@@ -766,8 +765,6 @@
     .auto-plan-table col.auto-fund-col { width: 28%; }
     .auto-plan-table col.rating-col { width: 14%; }
     .auto-plan-table col.auto-status-col { width: 17%; }
-    .auto-plan-table col.auto-amount-col { width: 20%; }
-    .auto-plan-table col.auto-holding-col { width: 15%; }
     .portfolio-table th,
     .portfolio-table td {
       padding-left: clamp(8px, 0.85vw, 12px);
@@ -792,14 +789,11 @@
       min-height: 20px;
       font-size: 12px;
     }
-    .editable-amount,
     .editable-status {
       cursor: pointer;
       position: relative;
       transition: background-color 120ms ease, box-shadow 120ms ease, color 120ms ease;
     }
-    .editable-amount:hover,
-    .editable-amount:focus-visible,
     .editable-status:hover,
     .editable-status:focus-visible {
       background: rgba(228, 236, 245, 0.52);
@@ -820,35 +814,6 @@
     .editor-panel {
       display: grid;
       gap: 8px;
-    }
-    .editor-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .editor-input {
-      width: 100%;
-      min-width: 0;
-      height: 38px;
-      border: 1px solid var(--line-strong);
-      border-radius: 3px;
-      background: #fffef9;
-      color: var(--ink);
-      font-family: var(--font-data);
-      font-size: 16px;
-      font-weight: 600;
-      font-variant-numeric: tabular-nums;
-      padding: 7px 9px;
-      outline: none;
-    }
-    .editor-input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 2px rgba(27, 54, 93, 0.12);
-    }
-    .editor-suffix {
-      color: var(--muted);
-      font-size: 12px;
-      white-space: nowrap;
     }
     .editor-action {
       border: 1px solid var(--line);
@@ -1502,7 +1467,7 @@
         color: var(--accent-strong);
         flex: 0 0 auto;
       }
-      .mobile-card-private {
+      .mobile-card-status {
         border-top: 1px solid var(--line);
         display: grid;
         gap: 7px;
@@ -1649,8 +1614,6 @@
       .auto-plan-table col.auto-fund-col { width: 25%; }
       .auto-plan-table col.rating-col { width: 16%; }
       .auto-plan-table col.auto-status-col { width: 18%; }
-      .auto-plan-table col.auto-amount-col { width: 20%; }
-      .auto-plan-table col.auto-holding-col { width: 14%; }
       #panel-portfolio .table-wrap,
       #panel-tracking .compact-table-wrap,
       #panel-scoring .scoring-wrap,
@@ -1789,7 +1752,7 @@
           <span class="subtitle-chip">QDII</span>
           <span class="subtitle-chip">长期定投</span>
           <span class="subtitle-chip">CNY</span>
-          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-28 18:55:15</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
+          <span class="subtitle-meta">最近更新：<span class="data-text">2026-06-29 20:12:54</span> · 自动刷新 <span class="data-text">08:45 / 16:45 / 23:15</span></span>
           <span class="subtitle-meta">来源：东方财富移动接口 / 天天基金费率页 / 基金公司公告</span>
         </p>
       </div>
@@ -1797,7 +1760,7 @@
         <div class="header-control-bar">
           <nav class="tabs" aria-label="表格页签">
             <button class="tab-button" type="button" role="tab" id="tab-main" aria-controls="panel-main" aria-selected="true">主表</button>
-            <button class="tab-button" type="button" role="tab" id="tab-portfolio" aria-controls="panel-portfolio" aria-selected="false">持仓定投</button>
+            <button class="tab-button" type="button" role="tab" id="tab-portfolio" aria-controls="panel-portfolio" aria-selected="false">定投状态</button>
             <button class="tab-button" type="button" role="tab" id="tab-tracking" aria-controls="panel-tracking" aria-selected="false">长期追踪</button>
             <button class="tab-button" type="button" role="tab" id="tab-scoring" aria-controls="panel-scoring" aria-selected="false">梯队评级规则</button>
             <button class="tab-button" type="button" role="tab" id="tab-sources" aria-controls="panel-sources" aria-selected="false">数据来源</button>
@@ -1885,7 +1848,7 @@
               <th>排名</th>
               <th class="sortable" data-column-index="1" data-sort-type="number"><button type="button" class="sort-button">定投梯队<span class="sort-indicator"></span></button></th>
               <th class="sortable" data-column-index="2" data-sort-type="text"><button type="button" class="sort-button">基金 / 代码<span class="sort-indicator"></span></button></th>
-              <th class="sortable" data-column-index="3" data-sort-type="number"><button type="button" class="sort-button">持仓 / 定投<span class="sort-indicator"></span></button></th>
+              <th class="sortable" data-column-index="3" data-sort-type="number"><button type="button" class="sort-button">状态摘要<span class="sort-indicator"></span></button></th>
               <th class="sortable" data-column-index="4" data-sort-type="number"><button type="button" class="sort-button">近3年<span class="sort-indicator"></span></button></th>
               <th class="sortable" data-column-index="5" data-sort-type="number"><button type="button" class="sort-button">近1年<span class="sort-indicator"></span></button></th>
               <th class="sortable" data-column-index="6" data-sort-type="number"><button type="button" class="sort-button">跟踪误差<span class="sort-indicator"></span></button></th>
@@ -1904,16 +1867,16 @@
           </thead>
           <tbody>
 
-            <tr class="tier-row tier-b-row" data-status="定投中" data-subscription-status="允许申购" data-tier="B" data-code="019441" data-fund-label="万家" data-score="50.9" data-holding-amount="50.00" data-auto-invest-amount="50.00" data-paused-auto-invest-amount="0.00" data-projected-auto-invest-addition="200.00" data-agency-limit="50.000000" data-direct-limit="10000.000000" data-agency-limit-text="50元" data-direct-limit-text="10000元">
+            <tr class="tier-row tier-c-row" data-status="定投中" data-subscription-status="允许申购" data-tier="C" data-code="019441" data-fund-label="万家" data-score="51.0" data-agency-limit="50.000000" data-direct-limit="10000.000000" data-agency-limit-text="50元" data-direct-limit-text="10000元">
               <td class="num row-rank"><span class="data-text">1</span></td>
-              <td class="num" data-sort-value="989"><span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">50.9</span></span></span></td>
+              <td class="num" data-sort-value="987"><span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">51.0</span></span></span></td>
               <td class="fund-cell" data-sort-value="万家纳斯达克100指数发起式(QDII)A 019441">
                 <div class="fund">
                   <span class="fund-name">万家纳斯达克100指数发起式(QDII)A</span>
                   <span class="code"><span class="data-text">019441</span></span>
                 </div>
               </td>
-              <td data-sort-value="50050000.000000"><div class="position-plan"><span class="position-line"><em>持有</em><strong><span class="data-text">50元</span></strong></span><span class="position-line"><em>定投</em><strong><span class="data-text">50元</span> / 期</strong></span><span class="position-line projected-line"><em>预计</em><strong>+200元</strong></span></div></td>
+              <td data-sort-value="0.000000"><div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong><span class="tag owned">定投中</span></strong></span></div></td>
               <td class="num" data-sort-value="19.620000"><span class="data-text">+19.62%</span></td>
               <td class="num" data-sort-value="23.580000"><span class="data-text">+23.58%</span></td>
               <td data-sort-value="2.060000"><div class="tracking-detail"><strong><span class="data-text">+2.06%</span></strong><span>同类均值 <span class="data-text">+2.09%</span></span></div></td>
@@ -1930,18 +1893,18 @@
               <td data-sort-value="0"><span class="tag owned">定投中</span></td>
             </tr>
 
-            <tr class="tier-row tier-s-row" data-status="定投中" data-subscription-status="允许申购" data-tier="S" data-code="040046" data-fund-label="华安" data-score="85.7" data-holding-amount="10.00" data-auto-invest-amount="10.00" data-paused-auto-invest-amount="0.00" data-projected-auto-invest-addition="40.00" data-agency-limit="10.000000" data-direct-limit="1000.000000" data-agency-limit-text="10元" data-direct-limit-text="1000元">
+            <tr class="tier-row tier-s-row" data-status="定投中" data-subscription-status="允许申购" data-tier="S" data-code="040046" data-fund-label="华安" data-score="81.3" data-agency-limit="10.000000" data-direct-limit="1000.000000" data-agency-limit-text="10元" data-direct-limit-text="1000元">
               <td class="num row-rank"><span class="data-text">2</span></td>
-              <td class="num" data-sort-value="999"><span class="tier-pill tier-s"><strong>S</strong><span><span class="data-text">85.7</span></span></span></td>
+              <td class="num" data-sort-value="999"><span class="tier-pill tier-s"><strong>S</strong><span><span class="data-text">81.3</span></span></span></td>
               <td class="fund-cell" data-sort-value="华安纳斯达克100ETF联接(QDII)A 040046">
                 <div class="fund">
                   <span class="fund-name">华安纳斯达克100ETF联接(QDII)A</span>
                   <span class="code"><span class="data-text">040046</span></span>
                 </div>
               </td>
-              <td data-sort-value="10010000.000000"><div class="position-plan"><span class="position-line"><em>持有</em><strong><span class="data-text">10元</span></strong></span><span class="position-line"><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span><span class="position-line projected-line"><em>预计</em><strong>+40元</strong></span></div></td>
-              <td class="num" data-sort-value="20.420000"><span class="data-text">+20.42%</span></td>
-              <td class="num" data-sort-value="24.970000"><span class="data-text">+24.97%</span></td>
+              <td data-sort-value="0.000000"><div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong><span class="tag owned">定投中</span></strong></span></div></td>
+              <td class="num" data-sort-value="21.670000"><span class="data-text">+21.67%</span></td>
+              <td class="num" data-sort-value="22.440000"><span class="data-text">+22.44%</span></td>
               <td data-sort-value="1.060000"><div class="tracking-detail"><strong><span class="data-text">+1.06%</span></strong><span>同类均值 <span class="data-text">+2.09%</span></span></div></td>
               <td class="num" data-sort-value="0.800000"><span class="tag warn"><span class="data-text">0.80%/年</span></span></td>
               <td class="num" data-sort-value="47.030000"><span class="data-text">47.0亿</span></td>
@@ -1952,22 +1915,22 @@
               <td class="num" data-sort-value="1000.000000"><span class="tag info" title="公告镜像"><span class="data-text">1000元</span></span></td>
               <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.60%/年</span></span><span>托管费率 <span class="data-text">0.20%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
               <td data-sort-value="7.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天</span><strong><span class="data-text">0%</span></strong></div></div></td>
-              <td class="num" data-sort-value="0.760000"><span class="data-text">+0.76%</span></td>
+              <td class="num" data-sort-value="-1.180000"><span class="data-text">-1.18%</span></td>
               <td data-sort-value="0"><span class="tag owned">定投中</span></td>
             </tr>
 
-            <tr class="tier-row tier-c-row" data-status="定投中" data-subscription-status="允许申购" data-tier="C" data-code="000834" data-fund-label="大成" data-score="47.3" data-holding-amount="10.00" data-auto-invest-amount="10.00" data-paused-auto-invest-amount="0.00" data-projected-auto-invest-addition="40.00" data-agency-limit="10.000000" data-direct-limit="100.000000" data-agency-limit-text="10元" data-direct-limit-text="100元">
+            <tr class="tier-row tier-c-row" data-status="定投中" data-subscription-status="允许申购" data-tier="C" data-code="000834" data-fund-label="大成" data-score="51.0" data-agency-limit="10.000000" data-direct-limit="100.000000" data-agency-limit-text="10元" data-direct-limit-text="100元">
               <td class="num row-rank"><span class="data-text">3</span></td>
-              <td class="num" data-sort-value="986"><span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">47.3</span></span></span></td>
+              <td class="num" data-sort-value="986"><span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">51.0</span></span></span></td>
               <td class="fund-cell" data-sort-value="大成纳斯达克100ETF联接(QDII)A 000834">
                 <div class="fund">
                   <span class="fund-name">大成纳斯达克100ETF联接(QDII)A</span>
                   <span class="code"><span class="data-text">000834</span></span>
                 </div>
               </td>
-              <td data-sort-value="10010000.000000"><div class="position-plan"><span class="position-line"><em>持有</em><strong><span class="data-text">10元</span></strong></span><span class="position-line"><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span><span class="position-line projected-line"><em>预计</em><strong>+40元</strong></span></div></td>
-              <td class="num" data-sort-value="19.150000"><span class="data-text">+19.15%</span></td>
-              <td class="num" data-sort-value="24.020000"><span class="data-text">+24.02%</span></td>
+              <td data-sort-value="0.000000"><div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong><span class="tag owned">定投中</span></strong></span></div></td>
+              <td class="num" data-sort-value="20.420000"><span class="data-text">+20.42%</span></td>
+              <td class="num" data-sort-value="21.500000"><span class="data-text">+21.50%</span></td>
               <td data-sort-value="1.050000"><div class="tracking-detail"><strong><span class="data-text">+1.05%</span></strong><span>同类均值 <span class="data-text">+2.09%</span></span></div></td>
               <td class="num" data-sort-value="1.000000"><span class="tag bad"><span class="data-text">1.00%/年</span></span></td>
               <td class="num" data-sort-value="34.530000"><span class="data-text">34.5亿</span></td>
@@ -1978,22 +1941,22 @@
               <td class="num" data-sort-value="100.000000"><span class="tag info" title="公告镜像"><span class="data-text">100元</span></span></td>
               <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.80%/年</span></span><span>托管费率 <span class="data-text">0.20%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
               <td data-sort-value="730.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天-&lt;1年</span><strong><span class="data-text">0.5%</span></strong></div><div class="rule-line"><span>≥1年-&lt;2年</span><strong><span class="data-text">0.25%</span></strong></div><div class="rule-line"><span>≥2年</span><strong><span class="data-text">0%</span></strong></div></div></td>
-              <td class="num" data-sort-value="0.820000"><span class="data-text">+0.82%</span></td>
+              <td class="num" data-sort-value="-1.170000"><span class="data-text">-1.17%</span></td>
               <td data-sort-value="0"><span class="tag owned">定投中</span></td>
             </tr>
 
-            <tr class="tier-row tier-d-row" data-status="定投中" data-subscription-status="允许申购" data-tier="D" data-code="539001" data-fund-label="建信" data-score="27.2" data-holding-amount="100.00" data-auto-invest-amount="50.00" data-paused-auto-invest-amount="0.00" data-projected-auto-invest-addition="200.00" data-agency-limit="100.000000" data-direct-limit="100.000000" data-agency-limit-text="100元" data-direct-limit-text="100元">
+            <tr class="tier-row tier-d-row" data-status="定投中" data-subscription-status="允许申购" data-tier="D" data-code="539001" data-fund-label="建信" data-score="31.6" data-agency-limit="100.000000" data-direct-limit="100.000000" data-agency-limit-text="100元" data-direct-limit-text="100元">
               <td class="num row-rank"><span class="data-text">4</span></td>
-              <td class="num" data-sort-value="983"><span class="tier-pill tier-d"><strong>D</strong><span><span class="data-text">27.2</span></span></span></td>
+              <td class="num" data-sort-value="983"><span class="tier-pill tier-d"><strong>D</strong><span><span class="data-text">31.6</span></span></span></td>
               <td class="fund-cell" data-sort-value="建信纳斯达克100指数(QDII)A人民币 539001">
                 <div class="fund">
                   <span class="fund-name">建信纳斯达克100指数(QDII)A人民币</span>
                   <span class="code"><span class="data-text">539001</span></span>
                 </div>
               </td>
-              <td data-sort-value="100050000.000000"><div class="position-plan"><span class="position-line"><em>持有</em><strong><span class="data-text">100元</span></strong></span><span class="position-line"><em>定投</em><strong><span class="data-text">50元</span> / 期</strong></span><span class="position-line projected-line"><em>预计</em><strong>+200元</strong></span></div></td>
-              <td class="num" data-sort-value="19.160000"><span class="data-text">+19.16%</span></td>
-              <td class="num" data-sort-value="23.230000"><span class="data-text">+23.23%</span></td>
+              <td data-sort-value="0.000000"><div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong><span class="tag owned">定投中</span></strong></span></div></td>
+              <td class="num" data-sort-value="20.350000"><span class="data-text">+20.35%</span></td>
+              <td class="num" data-sort-value="20.860000"><span class="data-text">+20.86%</span></td>
               <td data-sort-value="2.170000"><div class="tracking-detail"><strong><span class="data-text">+2.17%</span></strong><span>同类均值 <span class="data-text">+2.09%</span></span></div></td>
               <td class="num" data-sort-value="1.000000"><span class="tag bad"><span class="data-text">1.00%/年</span></span></td>
               <td class="num" data-sort-value="16.240000"><span class="data-text">16.2亿</span></td>
@@ -2004,22 +1967,22 @@
               <td class="num" data-sort-value="100.000000"><span class="tag info" title="公告镜像"><span class="data-text">100元</span></span></td>
               <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.80%/年</span></span><span>托管费率 <span class="data-text">0.20%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
               <td data-sort-value="90.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>7-30天</span><strong><span class="data-text">0.5%</span></strong></div><div class="rule-line"><span>30-90天</span><strong><span class="data-text">0.3%</span></strong></div><div class="rule-line"><span>≥90天</span><strong><span class="data-text">0%</span></strong></div></div></td>
-              <td class="num" data-sort-value="0.740000"><span class="data-text">+0.74%</span></td>
+              <td class="num" data-sort-value="-1.120000"><span class="data-text">-1.12%</span></td>
               <td data-sort-value="0"><span class="tag owned">定投中</span></td>
             </tr>
 
-            <tr class="tier-row tier-d-row" data-status="定投中" data-subscription-status="允许申购" data-tier="D" data-code="018966" data-fund-label="汇添富" data-score="29.2" data-holding-amount="100.00" data-auto-invest-amount="100.00" data-paused-auto-invest-amount="0.00" data-projected-auto-invest-addition="400.00" data-agency-limit="100.000000" data-direct-limit="100.000000" data-agency-limit-text="100元" data-direct-limit-text="100元">
+            <tr class="tier-row tier-d-row" data-status="定投中" data-subscription-status="允许申购" data-tier="D" data-code="018966" data-fund-label="汇添富" data-score="37.9" data-agency-limit="100.000000" data-direct-limit="100.000000" data-agency-limit-text="100元" data-direct-limit-text="100元">
               <td class="num row-rank"><span class="data-text">5</span></td>
-              <td class="num" data-sort-value="984"><span class="tier-pill tier-d"><strong>D</strong><span><span class="data-text">29.2</span></span></span></td>
+              <td class="num" data-sort-value="984"><span class="tier-pill tier-d"><strong>D</strong><span><span class="data-text">37.9</span></span></span></td>
               <td class="fund-cell" data-sort-value="汇添富纳斯达克100ETF发起式联接(QDII)人民币A 018966">
                 <div class="fund">
                   <span class="fund-name">汇添富纳斯达克100ETF发起式联接(QDII)人民币A</span>
                   <span class="code"><span class="data-text">018966</span></span>
                 </div>
               </td>
-              <td data-sort-value="100100000.000000"><div class="position-plan"><span class="position-line"><em>持有</em><strong><span class="data-text">100元</span></strong></span><span class="position-line"><em>定投</em><strong><span class="data-text">100元</span> / 期</strong></span><span class="position-line projected-line"><em>预计</em><strong>+400元</strong></span></div></td>
-              <td class="num" data-sort-value="18.560000"><span class="data-text">+18.56%</span></td>
-              <td class="num" data-sort-value="22.280000"><span class="data-text">+22.28%</span></td>
+              <td data-sort-value="0.000000"><div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong><span class="tag owned">定投中</span></strong></span></div></td>
+              <td class="num" data-sort-value="19.740000"><span class="data-text">+19.74%</span></td>
+              <td class="num" data-sort-value="19.960000"><span class="data-text">+19.96%</span></td>
               <td data-sort-value="1.720000"><div class="tracking-detail"><strong><span class="data-text">+1.72%</span></strong><span>同类均值 <span class="data-text">+2.09%</span></span></div></td>
               <td class="num" data-sort-value="0.650000"><span class="tag good"><span class="data-text">0.65%/年</span></span></td>
               <td class="num" data-sort-value="10.350000"><span class="data-text">10.3亿</span></td>
@@ -2030,22 +1993,22 @@
               <td class="num" data-sort-value="100.000000"><span class="tag info" title="公告镜像"><span class="data-text">100元</span></span></td>
               <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.15%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
               <td data-sort-value="7.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天</span><strong><span class="data-text">0%</span></strong></div></div></td>
-              <td class="num" data-sort-value="0.710000"><span class="data-text">+0.71%</span></td>
+              <td class="num" data-sort-value="-1.090000"><span class="data-text">-1.09%</span></td>
               <td data-sort-value="0"><span class="tag owned">定投中</span></td>
             </tr>
 
-            <tr class="tier-row tier-b-row" data-status="定投中" data-subscription-status="允许申购" data-tier="B" data-code="016452" data-fund-label="南方" data-score="57.9" data-holding-amount="250.00" data-auto-invest-amount="50.00" data-paused-auto-invest-amount="0.00" data-projected-auto-invest-addition="200.00" data-agency-limit="50.000000" data-direct-limit="50.000000" data-agency-limit-text="50元" data-direct-limit-text="50元">
+            <tr class="tier-row tier-b-row" data-status="定投中" data-subscription-status="允许申购" data-tier="B" data-code="016452" data-fund-label="南方" data-score="59.5" data-agency-limit="50.000000" data-direct-limit="50.000000" data-agency-limit-text="50元" data-direct-limit-text="50元">
               <td class="num row-rank"><span class="data-text">6</span></td>
-              <td class="num" data-sort-value="992"><span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">57.9</span></span></span></td>
+              <td class="num" data-sort-value="992"><span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">59.5</span></span></span></td>
               <td class="fund-cell" data-sort-value="南方纳斯达克100指数发起(QDII)A 016452">
                 <div class="fund">
                   <span class="fund-name">南方纳斯达克100指数发起(QDII)A</span>
                   <span class="code"><span class="data-text">016452</span></span>
                 </div>
               </td>
-              <td data-sort-value="250050000.000000"><div class="position-plan"><span class="position-line"><em>持有</em><strong><span class="data-text">250元</span></strong></span><span class="position-line"><em>定投</em><strong><span class="data-text">50元</span> / 期</strong></span><span class="position-line projected-line"><em>预计</em><strong>+200元</strong></span></div></td>
-              <td class="num" data-sort-value="19.370000"><span class="data-text">+19.37%</span></td>
-              <td class="num" data-sort-value="23.620000"><span class="data-text">+23.62%</span></td>
+              <td data-sort-value="0.000000"><div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong><span class="tag owned">定投中</span></strong></span></div></td>
+              <td class="num" data-sort-value="20.480000"><span class="data-text">+20.48%</span></td>
+              <td class="num" data-sort-value="21.210000"><span class="data-text">+21.21%</span></td>
               <td data-sort-value="1.450000"><div class="tracking-detail"><strong><span class="data-text">+1.45%</span></strong><span>同类均值 <span class="data-text">+2.09%</span></span></div></td>
               <td class="num" data-sort-value="0.650000"><span class="tag good"><span class="data-text">0.65%/年</span></span></td>
               <td class="num" data-sort-value="31.110000"><span class="data-text">31.1亿</span></td>
@@ -2056,22 +2019,22 @@
               <td class="num" data-sort-value="50.000000"><span class="tag info" title="基金公司状态页"><span class="data-text">50元</span></span></td>
               <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.15%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
               <td data-sort-value="7.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天</span><strong><span class="data-text">0%</span></strong></div></div></td>
-              <td class="num" data-sort-value="0.750000"><span class="data-text">+0.75%</span></td>
+              <td class="num" data-sort-value="-1.140000"><span class="data-text">-1.14%</span></td>
               <td data-sort-value="0"><span class="tag owned">定投中</span></td>
             </tr>
 
-            <tr class="tier-row tier-a-row" data-status="定投中" data-subscription-status="允许申购" data-tier="A" data-code="270042" data-fund-label="广发" data-score="68.7" data-holding-amount="0.00" data-auto-invest-amount="10.00" data-paused-auto-invest-amount="0.00" data-projected-auto-invest-addition="40.00" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
+            <tr class="tier-row tier-a-row" data-status="定投中" data-subscription-status="允许申购" data-tier="A" data-code="270042" data-fund-label="广发" data-score="65.6" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
               <td class="num row-rank"><span class="data-text">7</span></td>
-              <td class="num" data-sort-value="995"><span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">68.7</span></span></span></td>
+              <td class="num" data-sort-value="994"><span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">65.6</span></span></span></td>
               <td class="fund-cell" data-sort-value="广发纳斯达克100ETF联接人民币(QDII)A 270042">
                 <div class="fund">
                   <span class="fund-name">广发纳斯达克100ETF联接人民币(QDII)A</span>
                   <span class="code"><span class="data-text">270042</span></span>
                 </div>
               </td>
-              <td data-sort-value="10000.000000"><div class="position-plan"><span class="position-line muted-line"><em>持有</em><strong>0元</strong></span><span class="position-line"><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span><span class="position-line projected-line"><em>预计</em><strong>+40元</strong></span></div></td>
-              <td class="num" data-sort-value="20.170000"><span class="data-text">+20.17%</span></td>
-              <td class="num" data-sort-value="24.430000"><span class="data-text">+24.43%</span></td>
+              <td data-sort-value="0.000000"><div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong><span class="tag owned">定投中</span></strong></span></div></td>
+              <td class="num" data-sort-value="21.360000"><span class="data-text">+21.36%</span></td>
+              <td class="num" data-sort-value="21.910000"><span class="data-text">+21.91%</span></td>
               <td data-sort-value="1.090000"><div class="tracking-detail"><strong><span class="data-text">+1.09%</span></strong><span>同类均值 <span class="data-text">+2.09%</span></span></div></td>
               <td class="num" data-sort-value="1.000000"><span class="tag bad"><span class="data-text">1.00%/年</span></span></td>
               <td class="num" data-sort-value="97.160000"><span class="data-text">97.2亿</span></td>
@@ -2082,22 +2045,22 @@
               <td class="num" data-sort-value="10.000000"><span class="tag bad" title="公告镜像"><span class="data-text">10元</span></span></td>
               <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.80%/年</span></span><span>托管费率 <span class="data-text">0.20%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
               <td data-sort-value="730.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天-&lt;1年</span><strong><span class="data-text">0.5%</span></strong></div><div class="rule-line"><span>≥1年-&lt;2年</span><strong><span class="data-text">0.3%</span></strong></div><div class="rule-line"><span>≥2年</span><strong><span class="data-text">0%</span></strong></div></div></td>
-              <td class="num" data-sort-value="0.780000"><span class="data-text">+0.78%</span></td>
+              <td class="num" data-sort-value="-1.200000"><span class="data-text">-1.20%</span></td>
               <td data-sort-value="0"><span class="tag owned">定投中</span></td>
             </tr>
 
-            <tr class="tier-row tier-c-row" data-status="定投中" data-subscription-status="允许申购" data-tier="C" data-code="019172" data-fund-label="摩根" data-score="47.7" data-holding-amount="20.00" data-auto-invest-amount="10.00" data-paused-auto-invest-amount="0.00" data-projected-auto-invest-addition="40.00" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
+            <tr class="tier-row tier-b-row" data-status="定投中" data-subscription-status="允许申购" data-tier="B" data-code="019172" data-fund-label="摩根" data-score="51.7" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
               <td class="num row-rank"><span class="data-text">8</span></td>
-              <td class="num" data-sort-value="988"><span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">47.7</span></span></span></td>
+              <td class="num" data-sort-value="989"><span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">51.7</span></span></span></td>
               <td class="fund-cell" data-sort-value="摩根纳斯达克100指数(QDII)人民币A 019172">
                 <div class="fund">
                   <span class="fund-name">摩根纳斯达克100指数(QDII)人民币A</span>
                   <span class="code"><span class="data-text">019172</span></span>
                 </div>
               </td>
-              <td data-sort-value="20010000.000000"><div class="position-plan"><span class="position-line"><em>持有</em><strong><span class="data-text">20元</span></strong></span><span class="position-line"><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span><span class="position-line projected-line"><em>预计</em><strong>+40元</strong></span></div></td>
-              <td class="num" data-sort-value="19.160000"><span class="data-text">+19.16%</span></td>
-              <td class="num" data-sort-value="24.140000"><span class="data-text">+24.14%</span></td>
+              <td data-sort-value="0.000000"><div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong><span class="tag owned">定投中</span></strong></span></div></td>
+              <td class="num" data-sort-value="20.390000"><span class="data-text">+20.39%</span></td>
+              <td class="num" data-sort-value="21.820000"><span class="data-text">+21.82%</span></td>
               <td data-sort-value="2.270000"><div class="tracking-detail"><strong><span class="data-text">+2.27%</span></strong><span>同类均值 <span class="data-text">+2.09%</span></span></div></td>
               <td class="num" data-sort-value="0.600000"><span class="tag good"><span class="data-text">0.60%/年</span></span></td>
               <td class="num" data-sort-value="21.780000"><span class="data-text">21.8亿</span></td>
@@ -2108,22 +2071,22 @@
               <td class="num" data-sort-value="10.000000"><span class="tag bad" title="公告镜像"><span class="data-text">10元</span></span></td>
               <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.10%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
               <td data-sort-value="7.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天</span><strong><span class="data-text">0%</span></strong></div></div></td>
-              <td class="num" data-sort-value="0.680000"><span class="data-text">+0.68%</span></td>
+              <td class="num" data-sort-value="-1.060000"><span class="data-text">-1.06%</span></td>
               <td data-sort-value="0"><span class="tag owned">定投中</span></td>
             </tr>
 
-            <tr class="tier-row tier-b-row" data-status="定投中" data-subscription-status="允许申购" data-tier="B" data-code="019547" data-fund-label="招商" data-score="54.5" data-holding-amount="20.00" data-auto-invest-amount="10.00" data-paused-auto-invest-amount="0.00" data-projected-auto-invest-addition="40.00" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
+            <tr class="tier-row tier-b-row" data-status="定投中" data-subscription-status="允许申购" data-tier="B" data-code="019547" data-fund-label="招商" data-score="57.4" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
               <td class="num row-rank"><span class="data-text">9</span></td>
-              <td class="num" data-sort-value="991"><span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">54.5</span></span></span></td>
+              <td class="num" data-sort-value="991"><span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">57.4</span></span></span></td>
               <td class="fund-cell" data-sort-value="招商纳斯达克100ETF发起式联接(QDII)A 019547">
                 <div class="fund">
                   <span class="fund-name">招商纳斯达克100ETF发起式联接(QDII)A</span>
                   <span class="code"><span class="data-text">019547</span></span>
                 </div>
               </td>
-              <td data-sort-value="20010000.000000"><div class="position-plan"><span class="position-line"><em>持有</em><strong><span class="data-text">20元</span></strong></span><span class="position-line"><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span><span class="position-line projected-line"><em>预计</em><strong>+40元</strong></span></div></td>
-              <td class="num" data-sort-value="19.380000"><span class="data-text">+19.38%</span></td>
-              <td class="num" data-sort-value="23.820000"><span class="data-text">+23.82%</span></td>
+              <td data-sort-value="0.000000"><div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong><span class="tag owned">定投中</span></strong></span></div></td>
+              <td class="num" data-sort-value="20.580000"><span class="data-text">+20.58%</span></td>
+              <td class="num" data-sort-value="21.500000"><span class="data-text">+21.50%</span></td>
               <td data-sort-value="1.730000"><div class="tracking-detail"><strong><span class="data-text">+1.73%</span></strong><span>同类均值 <span class="data-text">+2.09%</span></span></div></td>
               <td class="num" data-sort-value="0.650000"><span class="tag good"><span class="data-text">0.65%/年</span></span></td>
               <td class="num" data-sort-value="16.520000"><span class="data-text">16.5亿</span></td>
@@ -2134,20 +2097,20 @@
               <td class="num" data-sort-value="10.000000"><span class="tag bad" title="公告镜像"><span class="data-text">10元</span></span></td>
               <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.15%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
               <td data-sort-value="7.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天</span><strong><span class="data-text">0%</span></strong></div></div></td>
-              <td class="num" data-sort-value="0.720000"><span class="data-text">+0.72%</span></td>
+              <td class="num" data-sort-value="-1.080000"><span class="data-text">-1.08%</span></td>
               <td data-sort-value="0"><span class="tag owned">定投中</span></td>
             </tr>
 
-            <tr class="tier-row tier-c-row" data-status="定投中" data-subscription-status="允许申购" data-tier="C" data-code="019736" data-fund-label="宝盈" data-score="45.0" data-holding-amount="0.00" data-auto-invest-amount="10.00" data-paused-auto-invest-amount="0.00" data-projected-auto-invest-addition="40.00" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
+            <tr class="tier-row tier-c-row" data-status="定投中" data-subscription-status="允许申购" data-tier="C" data-code="019736" data-fund-label="宝盈" data-score="48.4" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
               <td class="num row-rank"><span class="data-text">10</span></td>
-              <td class="num" data-sort-value="985"><span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">45.0</span></span></span></td>
+              <td class="num" data-sort-value="985"><span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">48.4</span></span></span></td>
               <td class="fund-cell" data-sort-value="宝盈纳斯达克100指数发起(QDII)A人民币 019736">
                 <div class="fund">
                   <span class="fund-name">宝盈纳斯达克100指数发起(QDII)A人民币</span>
                   <span class="code"><span class="data-text">019736</span></span>
                 </div>
               </td>
-              <td data-sort-value="10000.000000"><div class="position-plan"><span class="position-line muted-line"><em>持有</em><strong>0元</strong></span><span class="position-line"><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span><span class="position-line projected-line"><em>预计</em><strong>+40元</strong></span></div></td>
+              <td data-sort-value="0.000000"><div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong><span class="tag owned">定投中</span></strong></span></div></td>
               <td class="num" data-sort-value="19.020000"><span class="data-text">+19.02%</span></td>
               <td class="num" data-sort-value="23.440000"><span class="data-text">+23.44%</span></td>
               <td data-sort-value="1.640000"><div class="tracking-detail"><strong><span class="data-text">+1.64%</span></strong><span>同类均值 <span class="data-text">+2.09%</span></span></div></td>
@@ -2164,18 +2127,18 @@
               <td data-sort-value="0"><span class="tag owned">定投中</span></td>
             </tr>
 
-            <tr class="tier-row tier-b-row" data-status="定投中" data-subscription-status="允许申购" data-tier="B" data-code="019524" data-fund-label="华泰柏瑞" data-score="52.1" data-holding-amount="0.00" data-auto-invest-amount="10.00" data-paused-auto-invest-amount="0.00" data-projected-auto-invest-addition="40.00" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
+            <tr class="tier-row tier-b-row" data-status="定投中" data-subscription-status="允许申购" data-tier="B" data-code="019524" data-fund-label="华泰柏瑞" data-score="55.3" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
               <td class="num row-rank"><span class="data-text">11</span></td>
-              <td class="num" data-sort-value="990"><span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">52.1</span></span></span></td>
+              <td class="num" data-sort-value="990"><span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">55.3</span></span></span></td>
               <td class="fund-cell" data-sort-value="华泰柏瑞纳斯达克100ETF发起式联接(QDII)A 019524">
                 <div class="fund">
                   <span class="fund-name">华泰柏瑞纳斯达克100ETF发起式联接(QDII)A</span>
                   <span class="code"><span class="data-text">019524</span></span>
                 </div>
               </td>
-              <td data-sort-value="10000.000000"><div class="position-plan"><span class="position-line muted-line"><em>持有</em><strong>0元</strong></span><span class="position-line"><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span><span class="position-line projected-line"><em>预计</em><strong>+40元</strong></span></div></td>
-              <td class="num" data-sort-value="19.420000"><span class="data-text">+19.42%</span></td>
-              <td class="num" data-sort-value="23.210000"><span class="data-text">+23.21%</span></td>
+              <td data-sort-value="0.000000"><div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong><span class="tag owned">定投中</span></strong></span></div></td>
+              <td class="num" data-sort-value="20.610000"><span class="data-text">+20.61%</span></td>
+              <td class="num" data-sort-value="20.860000"><span class="data-text">+20.86%</span></td>
               <td data-sort-value="1.540000"><div class="tracking-detail"><strong><span class="data-text">+1.54%</span></strong><span>同类均值 <span class="data-text">+2.09%</span></span></div></td>
               <td class="num" data-sort-value="0.650000"><span class="tag good"><span class="data-text">0.65%/年</span></span></td>
               <td class="num" data-sort-value="7.020000"><span class="data-text">7.0亿</span></td>
@@ -2186,22 +2149,22 @@
               <td class="num" data-sort-value="10.000000"><span class="tag bad" title="公告镜像"><span class="data-text">10元</span></span></td>
               <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.15%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
               <td data-sort-value="30.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>7-30天</span><strong><span class="data-text">0.1%</span></strong></div><div class="rule-line"><span>≥30天</span><strong><span class="data-text">0%</span></strong></div></div></td>
-              <td class="num" data-sort-value="0.720000"><span class="data-text">+0.72%</span></td>
+              <td class="num" data-sort-value="-1.090000"><span class="data-text">-1.09%</span></td>
               <td data-sort-value="0"><span class="tag owned">定投中</span></td>
             </tr>
 
-            <tr class="tier-row tier-a-row" data-status="候选" data-subscription-status="暂停申购" data-tier="A" data-code="018043" data-fund-label="天弘" data-score="65.6" data-holding-amount="0.00" data-auto-invest-amount="0.00" data-paused-auto-invest-amount="0.00" data-projected-auto-invest-addition="0.00" data-agency-limit="100.000000" data-direct-limit="100.000000" data-agency-limit-text="100元" data-direct-limit-text="100元">
+            <tr class="tier-row tier-a-row" data-status="候选" data-subscription-status="暂停申购" data-tier="A" data-code="018043" data-fund-label="天弘" data-score="66.5" data-agency-limit="100.000000" data-direct-limit="100.000000" data-agency-limit-text="100元" data-direct-limit-text="100元">
               <td class="num row-rank"><span class="data-text">12</span></td>
-              <td class="num" data-sort-value="994"><span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">65.6</span></span></span></td>
+              <td class="num" data-sort-value="995"><span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">66.5</span></span></span></td>
               <td class="fund-cell" data-sort-value="天弘纳斯达克100指数发起(QDII)A 018043">
                 <div class="fund">
                   <span class="fund-name">天弘纳斯达克100指数发起(QDII)A</span>
                   <span class="code"><span class="data-text">018043</span></span>
                 </div>
               </td>
-              <td data-sort-value="0.000000"><div class="position-plan"><span class="position-line muted-line"><em>持有</em><strong>0元</strong></span><span class="position-line muted-line"><em>定投</em><strong>未设置</strong></span></div></td>
-              <td class="num" data-sort-value="19.520000"><span class="data-text">+19.52%</span></td>
-              <td class="num" data-sort-value="24.210000"><span class="data-text">+24.21%</span></td>
+              <td data-sort-value="2.000000"><div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong><span class="tag watch">候选</span></strong></span></div></td>
+              <td class="num" data-sort-value="20.690000"><span class="data-text">+20.69%</span></td>
+              <td class="num" data-sort-value="21.820000"><span class="data-text">+21.82%</span></td>
               <td data-sort-value="1.450000"><div class="tracking-detail"><strong><span class="data-text">+1.45%</span></strong><span>同类均值 <span class="data-text">+2.09%</span></span></div></td>
               <td class="num" data-sort-value="0.600000"><span class="tag good"><span class="data-text">0.60%/年</span></span></td>
               <td class="num" data-sort-value="21.860000"><span class="data-text">21.9亿</span></td>
@@ -2212,22 +2175,22 @@
               <td class="num" data-sort-value="100.000000"><span class="tag info" title="公告镜像"><span class="data-text">100元</span></span></td>
               <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.10%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
               <td data-sort-value="365.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>7-180天</span><strong><span class="data-text">0.5%</span></strong></div><div class="rule-line"><span>180-365天</span><strong><span class="data-text">0.25%</span></strong></div><div class="rule-line"><span>≥365天</span><strong><span class="data-text">0%</span></strong></div></div></td>
-              <td class="num" data-sort-value="0.750000"><span class="data-text">+0.75%</span></td>
+              <td class="num" data-sort-value="-1.120000"><span class="data-text">-1.12%</span></td>
               <td data-sort-value="2"><span class="tag watch">候选</span></td>
             </tr>
 
-            <tr class="tier-row tier-a-row" data-status="候选" data-subscription-status="暂停申购" data-tier="A" data-code="016055" data-fund-label="博时" data-score="72.3" data-holding-amount="0.00" data-auto-invest-amount="0.00" data-paused-auto-invest-amount="0.00" data-projected-auto-invest-addition="0.00" data-agency-limit="100.000000" data-direct-limit="-1" data-agency-limit-text="100元" data-direct-limit-text="未抓到">
+            <tr class="tier-row tier-a-row" data-status="候选" data-subscription-status="暂停申购" data-tier="A" data-code="016055" data-fund-label="博时" data-score="71.3" data-agency-limit="100.000000" data-direct-limit="-1" data-agency-limit-text="100元" data-direct-limit-text="未抓到">
               <td class="num row-rank"><span class="data-text">13</span></td>
-              <td class="num" data-sort-value="997"><span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">72.3</span></span></span></td>
+              <td class="num" data-sort-value="997"><span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">71.3</span></span></span></td>
               <td class="fund-cell" data-sort-value="博时纳斯达克100ETF发起式联接(QDII)A人民币 016055">
                 <div class="fund">
                   <span class="fund-name">博时纳斯达克100ETF发起式联接(QDII)A人民币</span>
                   <span class="code"><span class="data-text">016055</span></span>
                 </div>
               </td>
-              <td data-sort-value="0.000000"><div class="position-plan"><span class="position-line muted-line"><em>持有</em><strong>0元</strong></span><span class="position-line muted-line"><em>定投</em><strong>未设置</strong></span></div></td>
-              <td class="num" data-sort-value="19.820000"><span class="data-text">+19.82%</span></td>
-              <td class="num" data-sort-value="24.690000"><span class="data-text">+24.69%</span></td>
+              <td data-sort-value="2.000000"><div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong><span class="tag watch">候选</span></strong></span></div></td>
+              <td class="num" data-sort-value="21.000000"><span class="data-text">+21.00%</span></td>
+              <td class="num" data-sort-value="22.300000"><span class="data-text">+22.30%</span></td>
               <td data-sort-value="1.440000"><div class="tracking-detail"><strong><span class="data-text">+1.44%</span></strong><span>同类均值 <span class="data-text">+2.09%</span></span></div></td>
               <td class="num" data-sort-value="0.650000"><span class="tag good"><span class="data-text">0.65%/年</span></span></td>
               <td class="num" data-sort-value="13.010000"><span class="data-text">13.0亿</span></td>
@@ -2238,22 +2201,22 @@
               <td class="num" data-sort-value="999999"><span class="tag warn" title="待核验">未抓到</span></td>
               <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.15%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
               <td data-sort-value="7.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天</span><strong><span class="data-text">0%</span></strong></div></div></td>
-              <td class="num" data-sort-value="0.730000"><span class="data-text">+0.73%</span></td>
+              <td class="num" data-sort-value="-1.110000"><span class="data-text">-1.11%</span></td>
               <td data-sort-value="2"><span class="tag watch">候选</span></td>
             </tr>
 
-            <tr class="tier-row tier-a-row" data-status="候选" data-subscription-status="暂停申购" data-tier="A" data-code="016532" data-fund-label="嘉实" data-score="71.1" data-holding-amount="0.00" data-auto-invest-amount="0.00" data-paused-auto-invest-amount="0.00" data-projected-auto-invest-addition="0.00" data-agency-limit="100.000000" data-direct-limit="1000.000000" data-agency-limit-text="100元" data-direct-limit-text="1000元">
+            <tr class="tier-row tier-a-row" data-status="候选" data-subscription-status="暂停申购" data-tier="A" data-code="016532" data-fund-label="嘉实" data-score="70.5" data-agency-limit="100.000000" data-direct-limit="1000.000000" data-agency-limit-text="100元" data-direct-limit-text="1000元">
               <td class="num row-rank"><span class="data-text">14</span></td>
-              <td class="num" data-sort-value="996"><span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">71.1</span></span></span></td>
+              <td class="num" data-sort-value="996"><span class="tier-pill tier-a"><strong>A</strong><span><span class="data-text">70.5</span></span></span></td>
               <td class="fund-cell" data-sort-value="嘉实纳斯达克100ETF发起联接(QDII)A人民币 016532">
                 <div class="fund">
                   <span class="fund-name">嘉实纳斯达克100ETF发起联接(QDII)A人民币</span>
                   <span class="code"><span class="data-text">016532</span></span>
                 </div>
               </td>
-              <td data-sort-value="0.000000"><div class="position-plan"><span class="position-line muted-line"><em>持有</em><strong>0元</strong></span><span class="position-line muted-line"><em>定投</em><strong>未设置</strong></span></div></td>
-              <td class="num" data-sort-value="20.030000"><span class="data-text">+20.03%</span></td>
-              <td class="num" data-sort-value="23.720000"><span class="data-text">+23.72%</span></td>
+              <td data-sort-value="2.000000"><div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong><span class="tag watch">候选</span></strong></span></div></td>
+              <td class="num" data-sort-value="21.220000"><span class="data-text">+21.22%</span></td>
+              <td class="num" data-sort-value="21.370000"><span class="data-text">+21.37%</span></td>
               <td data-sort-value="1.500000"><div class="tracking-detail"><strong><span class="data-text">+1.50%</span></strong><span>同类均值 <span class="data-text">+2.09%</span></span></div></td>
               <td class="num" data-sort-value="0.600000"><span class="tag good"><span class="data-text">0.60%/年</span></span></td>
               <td class="num" data-sort-value="18.860000"><span class="data-text">18.9亿</span></td>
@@ -2264,22 +2227,22 @@
               <td class="num" data-sort-value="1000.000000"><span class="tag info" title="公告镜像"><span class="data-text">1000元</span></span></td>
               <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.10%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
               <td data-sort-value="30.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>7-30天</span><strong><span class="data-text">0.1%</span></strong></div><div class="rule-line"><span>≥30天</span><strong><span class="data-text">0%</span></strong></div></div></td>
-              <td class="num" data-sort-value="0.730000"><span class="data-text">+0.73%</span></td>
+              <td class="num" data-sort-value="-1.100000"><span class="data-text">-1.10%</span></td>
               <td data-sort-value="2"><span class="tag watch">候选</span></td>
             </tr>
 
-            <tr class="tier-row tier-c-row" data-status="候选" data-subscription-status="暂停申购" data-tier="C" data-code="015299" data-fund-label="华夏" data-score="47.7" data-holding-amount="0.00" data-auto-invest-amount="0.00" data-paused-auto-invest-amount="0.00" data-projected-auto-invest-addition="0.00" data-agency-limit="100.000000" data-direct-limit="100.000000" data-agency-limit-text="100元" data-direct-limit-text="100元">
+            <tr class="tier-row tier-c-row" data-status="候选" data-subscription-status="暂停申购" data-tier="C" data-code="015299" data-fund-label="华夏" data-score="51.1" data-agency-limit="100.000000" data-direct-limit="100.000000" data-agency-limit-text="100元" data-direct-limit-text="100元">
               <td class="num row-rank"><span class="data-text">15</span></td>
-              <td class="num" data-sort-value="987"><span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">47.7</span></span></span></td>
+              <td class="num" data-sort-value="988"><span class="tier-pill tier-c"><strong>C</strong><span><span class="data-text">51.1</span></span></span></td>
               <td class="fund-cell" data-sort-value="华夏纳斯达克100ETF发起式联接(QDII)A 015299">
                 <div class="fund">
                   <span class="fund-name">华夏纳斯达克100ETF发起式联接(QDII)A</span>
                   <span class="code"><span class="data-text">015299</span></span>
                 </div>
               </td>
-              <td data-sort-value="0.000000"><div class="position-plan"><span class="position-line muted-line"><em>持有</em><strong>0元</strong></span><span class="position-line muted-line"><em>定投</em><strong>未设置</strong></span></div></td>
-              <td class="num" data-sort-value="19.720000"><span class="data-text">+19.72%</span></td>
-              <td class="num" data-sort-value="24.790000"><span class="data-text">+24.79%</span></td>
+              <td data-sort-value="2.000000"><div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong><span class="tag watch">候选</span></strong></span></div></td>
+              <td class="num" data-sort-value="21.180000"><span class="data-text">+21.18%</span></td>
+              <td class="num" data-sort-value="22.500000"><span class="data-text">+22.50%</span></td>
               <td data-sort-value="2.500000"><div class="tracking-detail"><strong><span class="data-text">+2.50%</span></strong><span>同类均值 <span class="data-text">+2.09%</span></span></div></td>
               <td class="num" data-sort-value="0.800000"><span class="tag warn"><span class="data-text">0.80%/年</span></span></td>
               <td class="num" data-sort-value="3.150000"><span class="data-text">3.1亿</span></td>
@@ -2290,22 +2253,22 @@
               <td class="num" data-sort-value="100.000000"><span class="tag info" title="公告镜像"><span class="data-text">100元</span></span></td>
               <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.60%/年</span></span><span>托管费率 <span class="data-text">0.20%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
               <td data-sort-value="7.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天</span><strong><span class="data-text">0%</span></strong></div></div></td>
-              <td class="num" data-sort-value="0.670000"><span class="data-text">+0.67%</span></td>
+              <td class="num" data-sort-value="-1.010000"><span class="data-text">-1.01%</span></td>
               <td data-sort-value="2"><span class="tag watch">候选</span></td>
             </tr>
 
-            <tr class="tier-row tier-b-row" data-status="候选" data-subscription-status="暂停申购" data-tier="B" data-code="161130" data-fund-label="易方达" data-score="62.4" data-holding-amount="0.00" data-auto-invest-amount="0.00" data-paused-auto-invest-amount="0.00" data-projected-auto-invest-addition="0.00" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
+            <tr class="tier-row tier-b-row" data-status="候选" data-subscription-status="暂停申购" data-tier="B" data-code="161130" data-fund-label="易方达" data-score="63.5" data-agency-limit="10.000000" data-direct-limit="10.000000" data-agency-limit-text="10元" data-direct-limit-text="10元">
               <td class="num row-rank"><span class="data-text">16</span></td>
-              <td class="num" data-sort-value="993"><span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">62.4</span></span></span></td>
+              <td class="num" data-sort-value="993"><span class="tier-pill tier-b"><strong>B</strong><span><span class="data-text">63.5</span></span></span></td>
               <td class="fund-cell" data-sort-value="易方达纳斯达克100ETF联接(QDII-LOF)A(人民币) 161130">
                 <div class="fund">
                   <span class="fund-name">易方达纳斯达克100ETF联接(QDII-LOF)A(人民币)</span>
                   <span class="code"><span class="data-text">161130</span></span>
                 </div>
               </td>
-              <td data-sort-value="0.000000"><div class="position-plan"><span class="position-line muted-line"><em>持有</em><strong>0元</strong></span><span class="position-line muted-line"><em>定投</em><strong>未设置</strong></span></div></td>
-              <td class="num" data-sort-value="19.690000"><span class="data-text">+19.69%</span></td>
-              <td class="num" data-sort-value="23.650000"><span class="data-text">+23.65%</span></td>
+              <td data-sort-value="2.000000"><div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong><span class="tag watch">候选</span></strong></span></div></td>
+              <td class="num" data-sort-value="20.880000"><span class="data-text">+20.88%</span></td>
+              <td class="num" data-sort-value="21.280000"><span class="data-text">+21.28%</span></td>
               <td data-sort-value="1.440000"><div class="tracking-detail"><strong><span class="data-text">+1.44%</span></strong><span>同类均值 <span class="data-text">+2.09%</span></span></div></td>
               <td class="num" data-sort-value="0.600000"><span class="tag good"><span class="data-text">0.60%/年</span></span></td>
               <td class="num" data-sort-value="15.170000"><span class="data-text">15.2亿</span></td>
@@ -2316,22 +2279,22 @@
               <td class="num" data-sort-value="10.000000"><span class="tag bad" title="公告镜像"><span class="data-text">10元</span></span></td>
               <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.50%/年</span></span><span>托管费率 <span class="data-text">0.10%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
               <td data-sort-value="730.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;等于6天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>≥7天-&lt;等于364天</span><strong><span class="data-text">0.5%</span></strong></div><div class="rule-line"><span>≥365天-&lt;等于729天</span><strong><span class="data-text">0.25%</span></strong></div><div class="rule-line"><span>≥730天</span><strong><span class="data-text">0%</span></strong></div></div></td>
-              <td class="num" data-sort-value="0.740000"><span class="data-text">+0.74%</span></td>
+              <td class="num" data-sort-value="-1.100000"><span class="data-text">-1.10%</span></td>
               <td data-sort-value="2"><span class="tag watch">候选</span></td>
             </tr>
 
-            <tr class="tier-row tier-s-row" data-status="候选" data-subscription-status="暂停申购" data-tier="S" data-code="160213" data-fund-label="国泰" data-score="76.1" data-holding-amount="0.00" data-auto-invest-amount="0.00" data-paused-auto-invest-amount="0.00" data-projected-auto-invest-addition="0.00" data-agency-limit="100.000000" data-direct-limit="100.000000" data-agency-limit-text="100元" data-direct-limit-text="100元">
+            <tr class="tier-row tier-s-row" data-status="候选" data-subscription-status="暂停申购" data-tier="S" data-code="160213" data-fund-label="国泰" data-score="71.6" data-agency-limit="100.000000" data-direct-limit="100.000000" data-agency-limit-text="100元" data-direct-limit-text="100元">
               <td class="num row-rank"><span class="data-text">17</span></td>
-              <td class="num" data-sort-value="998"><span class="tier-pill tier-s"><strong>S</strong><span><span class="data-text">76.1</span></span></span></td>
+              <td class="num" data-sort-value="998"><span class="tier-pill tier-s"><strong>S</strong><span><span class="data-text">71.6</span></span></span></td>
               <td class="fund-cell" data-sort-value="国泰纳斯达克100指数 160213">
                 <div class="fund">
                   <span class="fund-name">国泰纳斯达克100指数</span>
                   <span class="code"><span class="data-text">160213</span></span>
                 </div>
               </td>
-              <td data-sort-value="0.000000"><div class="position-plan"><span class="position-line muted-line"><em>持有</em><strong>0元</strong></span><span class="position-line muted-line"><em>定投</em><strong>未设置</strong></span></div></td>
-              <td class="num" data-sort-value="20.570000"><span class="data-text">+20.57%</span></td>
-              <td class="num" data-sort-value="25.260000"><span class="data-text">+25.26%</span></td>
+              <td data-sort-value="2.000000"><div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong><span class="tag watch">候选</span></strong></span></div></td>
+              <td class="num" data-sort-value="21.890000"><span class="data-text">+21.89%</span></td>
+              <td class="num" data-sort-value="22.770000"><span class="data-text">+22.77%</span></td>
               <td data-sort-value="1.180000"><div class="tracking-detail"><strong><span class="data-text">+1.18%</span></strong><span>同类均值 <span class="data-text">+2.09%</span></span></div></td>
               <td class="num" data-sort-value="1.000000"><span class="tag bad"><span class="data-text">1.00%/年</span></span></td>
               <td class="num" data-sort-value="16.360000"><span class="data-text">16.4亿</span></td>
@@ -2342,7 +2305,7 @@
               <td class="num" data-sort-value="100.000000"><span class="tag info" title="公告镜像"><span class="data-text">100元</span></span></td>
               <td data-sort-value="0.000000"><div class="fee-detail"><span>管理费率 <span class="data-text">0.80%/年</span></span><span>托管费率 <span class="data-text">0.20%/年</span></span><span>销售服务费率 <span class="data-text">0.00%/年</span></span></div></td>
               <td data-sort-value="730.000000"><div class="sell-rules"><div class="rule-line"><span>&lt;7天</span><strong><span class="data-text">1.5%</span></strong></div><div class="rule-line"><span>7-365天</span><strong><span class="data-text">0.5%</span></strong></div><div class="rule-line"><span>365-730天</span><strong><span class="data-text">0.25%</span></strong></div><div class="rule-line"><span>≥730天</span><strong><span class="data-text">0%</span></strong></div></div></td>
-              <td class="num" data-sort-value="0.760000"><span class="data-text">+0.76%</span></td>
+              <td class="num" data-sort-value="-1.140000"><span class="data-text">-1.14%</span></td>
               <td data-sort-value="2"><span class="tag watch">候选</span></td>
             </tr>
           </tbody>
@@ -2351,7 +2314,7 @@
       <div class="mobile-main-sortbar" aria-label="主表排序">
         <button type="button" class="mobile-main-sort-button" data-column-index="1" data-sort-type="number">梯队<span class="sort-indicator"></span></button>
         <button type="button" class="mobile-main-sort-button" data-column-index="2" data-sort-type="text">基金<span class="sort-indicator"></span></button>
-        <button type="button" class="mobile-main-sort-button" data-column-index="3" data-sort-type="number">持仓/定投<span class="sort-indicator"></span></button>
+        <button type="button" class="mobile-main-sort-button" data-column-index="3" data-sort-type="number">状态摘要<span class="sort-indicator"></span></button>
         <button type="button" class="mobile-main-sort-button" data-column-index="4" data-sort-type="number">近3年<span class="sort-indicator"></span></button>
         <button type="button" class="mobile-main-sort-button" data-column-index="5" data-sort-type="number">近1年<span class="sort-indicator"></span></button>
         <button type="button" class="mobile-main-sort-button" data-column-index="6" data-sort-type="number">跟踪误差<span class="sort-indicator"></span></button>
@@ -2368,7 +2331,7 @@
       </div>
       <div class="mobile-fund-list" id="mobile-fund-list" aria-label="手机基金列表">
 
-            <article class="mobile-fund-card tier-b-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="B" data-code="019441" data-score="50.9">
+            <article class="mobile-fund-card tier-c-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="C" data-code="019441" data-score="51.0">
               <div class="mobile-card-head">
                 <div class="mobile-card-title">
                   <strong>万家</strong>
@@ -2376,15 +2339,13 @@
                 </div>
                 <div class="mobile-card-rating">
                   <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">1</span></span> 名</span>
-                  <span class="mobile-tier tier-b"><strong>B</strong><span>档</span></span>
-                  <span class="mobile-score"><span class="data-text">50.9</span> 分</span>
+                  <span class="mobile-tier tier-c"><strong>C</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">51.0</span> 分</span>
                 </div>
               </div>
-              <div class="mobile-card-private">
+              <div class="mobile-card-status">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong><span class="data-text">50元</span></strong></span>
-                  <span><em>定投</em><strong><span class="data-text">50元</span> / 期</strong></span>
-                  <span><em>预计</em><strong><span class="data-text">+200元</span></strong></span>
+                  <span><em>定投</em><strong>定投中</strong></span>
                 </div>
                 <span class="tag owned mobile-status">定投中</span>
               </div>
@@ -2405,7 +2366,7 @@
             </article>
 
 
-            <article class="mobile-fund-card tier-s-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="S" data-code="040046" data-score="85.7">
+            <article class="mobile-fund-card tier-s-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="S" data-code="040046" data-score="81.3">
               <div class="mobile-card-head">
                 <div class="mobile-card-title">
                   <strong>华安</strong>
@@ -2414,20 +2375,18 @@
                 <div class="mobile-card-rating">
                   <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">2</span></span> 名</span>
                   <span class="mobile-tier tier-s"><strong>S</strong><span>档</span></span>
-                  <span class="mobile-score"><span class="data-text">85.7</span> 分</span>
+                  <span class="mobile-score"><span class="data-text">81.3</span> 分</span>
                 </div>
               </div>
-              <div class="mobile-card-private">
+              <div class="mobile-card-status">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong><span class="data-text">10元</span></strong></span>
-                  <span><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span>
-                  <span><em>预计</em><strong><span class="data-text">+40元</span></strong></span>
+                  <span><em>定投</em><strong>定投中</strong></span>
                 </div>
                 <span class="tag owned mobile-status">定投中</span>
               </div>
               <div class="mobile-metric-grid">
-                <div><span>近3年</span><strong><span class="data-text">+20.42%</span></strong></div>
-                <div><span>近1年</span><strong><span class="data-text">+24.97%</span></strong></div>
+                <div><span>近3年</span><strong><span class="data-text">+21.67%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+22.44%</span></strong></div>
                 <div><span>跟踪误差</span><strong><span class="data-text">+1.06%</span></strong></div>
                 <div><span>管理+托管</span><strong><span class="data-text">0.80%/年</span></strong></div>
                 <div><span>规模</span><strong><span class="data-text">47.0亿</span></strong></div>
@@ -2442,7 +2401,7 @@
             </article>
 
 
-            <article class="mobile-fund-card tier-c-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="C" data-code="000834" data-score="47.3">
+            <article class="mobile-fund-card tier-c-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="C" data-code="000834" data-score="51.0">
               <div class="mobile-card-head">
                 <div class="mobile-card-title">
                   <strong>大成</strong>
@@ -2451,20 +2410,18 @@
                 <div class="mobile-card-rating">
                   <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">3</span></span> 名</span>
                   <span class="mobile-tier tier-c"><strong>C</strong><span>档</span></span>
-                  <span class="mobile-score"><span class="data-text">47.3</span> 分</span>
+                  <span class="mobile-score"><span class="data-text">51.0</span> 分</span>
                 </div>
               </div>
-              <div class="mobile-card-private">
+              <div class="mobile-card-status">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong><span class="data-text">10元</span></strong></span>
-                  <span><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span>
-                  <span><em>预计</em><strong><span class="data-text">+40元</span></strong></span>
+                  <span><em>定投</em><strong>定投中</strong></span>
                 </div>
                 <span class="tag owned mobile-status">定投中</span>
               </div>
               <div class="mobile-metric-grid">
-                <div><span>近3年</span><strong><span class="data-text">+19.15%</span></strong></div>
-                <div><span>近1年</span><strong><span class="data-text">+24.02%</span></strong></div>
+                <div><span>近3年</span><strong><span class="data-text">+20.42%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+21.50%</span></strong></div>
                 <div><span>跟踪误差</span><strong><span class="data-text">+1.05%</span></strong></div>
                 <div><span>管理+托管</span><strong><span class="data-text">1.00%/年</span></strong></div>
                 <div><span>规模</span><strong><span class="data-text">34.5亿</span></strong></div>
@@ -2479,7 +2436,7 @@
             </article>
 
 
-            <article class="mobile-fund-card tier-d-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="D" data-code="539001" data-score="27.2">
+            <article class="mobile-fund-card tier-d-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="D" data-code="539001" data-score="31.6">
               <div class="mobile-card-head">
                 <div class="mobile-card-title">
                   <strong>建信</strong>
@@ -2488,20 +2445,18 @@
                 <div class="mobile-card-rating">
                   <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">4</span></span> 名</span>
                   <span class="mobile-tier tier-d"><strong>D</strong><span>档</span></span>
-                  <span class="mobile-score"><span class="data-text">27.2</span> 分</span>
+                  <span class="mobile-score"><span class="data-text">31.6</span> 分</span>
                 </div>
               </div>
-              <div class="mobile-card-private">
+              <div class="mobile-card-status">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong><span class="data-text">100元</span></strong></span>
-                  <span><em>定投</em><strong><span class="data-text">50元</span> / 期</strong></span>
-                  <span><em>预计</em><strong><span class="data-text">+200元</span></strong></span>
+                  <span><em>定投</em><strong>定投中</strong></span>
                 </div>
                 <span class="tag owned mobile-status">定投中</span>
               </div>
               <div class="mobile-metric-grid">
-                <div><span>近3年</span><strong><span class="data-text">+19.16%</span></strong></div>
-                <div><span>近1年</span><strong><span class="data-text">+23.23%</span></strong></div>
+                <div><span>近3年</span><strong><span class="data-text">+20.35%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+20.86%</span></strong></div>
                 <div><span>跟踪误差</span><strong><span class="data-text">+2.17%</span></strong></div>
                 <div><span>管理+托管</span><strong><span class="data-text">1.00%/年</span></strong></div>
                 <div><span>规模</span><strong><span class="data-text">16.2亿</span></strong></div>
@@ -2516,7 +2471,7 @@
             </article>
 
 
-            <article class="mobile-fund-card tier-d-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="D" data-code="018966" data-score="29.2">
+            <article class="mobile-fund-card tier-d-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="D" data-code="018966" data-score="37.9">
               <div class="mobile-card-head">
                 <div class="mobile-card-title">
                   <strong>汇添富</strong>
@@ -2525,20 +2480,18 @@
                 <div class="mobile-card-rating">
                   <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">5</span></span> 名</span>
                   <span class="mobile-tier tier-d"><strong>D</strong><span>档</span></span>
-                  <span class="mobile-score"><span class="data-text">29.2</span> 分</span>
+                  <span class="mobile-score"><span class="data-text">37.9</span> 分</span>
                 </div>
               </div>
-              <div class="mobile-card-private">
+              <div class="mobile-card-status">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong><span class="data-text">100元</span></strong></span>
-                  <span><em>定投</em><strong><span class="data-text">100元</span> / 期</strong></span>
-                  <span><em>预计</em><strong><span class="data-text">+400元</span></strong></span>
+                  <span><em>定投</em><strong>定投中</strong></span>
                 </div>
                 <span class="tag owned mobile-status">定投中</span>
               </div>
               <div class="mobile-metric-grid">
-                <div><span>近3年</span><strong><span class="data-text">+18.56%</span></strong></div>
-                <div><span>近1年</span><strong><span class="data-text">+22.28%</span></strong></div>
+                <div><span>近3年</span><strong><span class="data-text">+19.74%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+19.96%</span></strong></div>
                 <div><span>跟踪误差</span><strong><span class="data-text">+1.72%</span></strong></div>
                 <div><span>管理+托管</span><strong><span class="data-text">0.65%/年</span></strong></div>
                 <div><span>规模</span><strong><span class="data-text">10.3亿</span></strong></div>
@@ -2553,7 +2506,7 @@
             </article>
 
 
-            <article class="mobile-fund-card tier-b-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="B" data-code="016452" data-score="57.9">
+            <article class="mobile-fund-card tier-b-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="B" data-code="016452" data-score="59.5">
               <div class="mobile-card-head">
                 <div class="mobile-card-title">
                   <strong>南方</strong>
@@ -2562,20 +2515,18 @@
                 <div class="mobile-card-rating">
                   <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">6</span></span> 名</span>
                   <span class="mobile-tier tier-b"><strong>B</strong><span>档</span></span>
-                  <span class="mobile-score"><span class="data-text">57.9</span> 分</span>
+                  <span class="mobile-score"><span class="data-text">59.5</span> 分</span>
                 </div>
               </div>
-              <div class="mobile-card-private">
+              <div class="mobile-card-status">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong><span class="data-text">250元</span></strong></span>
-                  <span><em>定投</em><strong><span class="data-text">50元</span> / 期</strong></span>
-                  <span><em>预计</em><strong><span class="data-text">+200元</span></strong></span>
+                  <span><em>定投</em><strong>定投中</strong></span>
                 </div>
                 <span class="tag owned mobile-status">定投中</span>
               </div>
               <div class="mobile-metric-grid">
-                <div><span>近3年</span><strong><span class="data-text">+19.37%</span></strong></div>
-                <div><span>近1年</span><strong><span class="data-text">+23.62%</span></strong></div>
+                <div><span>近3年</span><strong><span class="data-text">+20.48%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+21.21%</span></strong></div>
                 <div><span>跟踪误差</span><strong><span class="data-text">+1.45%</span></strong></div>
                 <div><span>管理+托管</span><strong><span class="data-text">0.65%/年</span></strong></div>
                 <div><span>规模</span><strong><span class="data-text">31.1亿</span></strong></div>
@@ -2590,7 +2541,7 @@
             </article>
 
 
-            <article class="mobile-fund-card tier-a-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="A" data-code="270042" data-score="68.7">
+            <article class="mobile-fund-card tier-a-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="A" data-code="270042" data-score="65.6">
               <div class="mobile-card-head">
                 <div class="mobile-card-title">
                   <strong>广发</strong>
@@ -2599,20 +2550,18 @@
                 <div class="mobile-card-rating">
                   <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">7</span></span> 名</span>
                   <span class="mobile-tier tier-a"><strong>A</strong><span>档</span></span>
-                  <span class="mobile-score"><span class="data-text">68.7</span> 分</span>
+                  <span class="mobile-score"><span class="data-text">65.6</span> 分</span>
                 </div>
               </div>
-              <div class="mobile-card-private">
+              <div class="mobile-card-status">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
-                  <span><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span>
-                  <span><em>预计</em><strong><span class="data-text">+40元</span></strong></span>
+                  <span><em>定投</em><strong>定投中</strong></span>
                 </div>
                 <span class="tag owned mobile-status">定投中</span>
               </div>
               <div class="mobile-metric-grid">
-                <div><span>近3年</span><strong><span class="data-text">+20.17%</span></strong></div>
-                <div><span>近1年</span><strong><span class="data-text">+24.43%</span></strong></div>
+                <div><span>近3年</span><strong><span class="data-text">+21.36%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+21.91%</span></strong></div>
                 <div><span>跟踪误差</span><strong><span class="data-text">+1.09%</span></strong></div>
                 <div><span>管理+托管</span><strong><span class="data-text">1.00%/年</span></strong></div>
                 <div><span>规模</span><strong><span class="data-text">97.2亿</span></strong></div>
@@ -2627,7 +2576,7 @@
             </article>
 
 
-            <article class="mobile-fund-card tier-c-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="C" data-code="019172" data-score="47.7">
+            <article class="mobile-fund-card tier-b-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="B" data-code="019172" data-score="51.7">
               <div class="mobile-card-head">
                 <div class="mobile-card-title">
                   <strong>摩根</strong>
@@ -2635,21 +2584,19 @@
                 </div>
                 <div class="mobile-card-rating">
                   <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">8</span></span> 名</span>
-                  <span class="mobile-tier tier-c"><strong>C</strong><span>档</span></span>
-                  <span class="mobile-score"><span class="data-text">47.7</span> 分</span>
+                  <span class="mobile-tier tier-b"><strong>B</strong><span>档</span></span>
+                  <span class="mobile-score"><span class="data-text">51.7</span> 分</span>
                 </div>
               </div>
-              <div class="mobile-card-private">
+              <div class="mobile-card-status">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong><span class="data-text">20元</span></strong></span>
-                  <span><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span>
-                  <span><em>预计</em><strong><span class="data-text">+40元</span></strong></span>
+                  <span><em>定投</em><strong>定投中</strong></span>
                 </div>
                 <span class="tag owned mobile-status">定投中</span>
               </div>
               <div class="mobile-metric-grid">
-                <div><span>近3年</span><strong><span class="data-text">+19.16%</span></strong></div>
-                <div><span>近1年</span><strong><span class="data-text">+24.14%</span></strong></div>
+                <div><span>近3年</span><strong><span class="data-text">+20.39%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+21.82%</span></strong></div>
                 <div><span>跟踪误差</span><strong><span class="data-text">+2.27%</span></strong></div>
                 <div><span>管理+托管</span><strong><span class="data-text">0.60%/年</span></strong></div>
                 <div><span>规模</span><strong><span class="data-text">21.8亿</span></strong></div>
@@ -2664,7 +2611,7 @@
             </article>
 
 
-            <article class="mobile-fund-card tier-b-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="B" data-code="019547" data-score="54.5">
+            <article class="mobile-fund-card tier-b-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="B" data-code="019547" data-score="57.4">
               <div class="mobile-card-head">
                 <div class="mobile-card-title">
                   <strong>招商</strong>
@@ -2673,20 +2620,18 @@
                 <div class="mobile-card-rating">
                   <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">9</span></span> 名</span>
                   <span class="mobile-tier tier-b"><strong>B</strong><span>档</span></span>
-                  <span class="mobile-score"><span class="data-text">54.5</span> 分</span>
+                  <span class="mobile-score"><span class="data-text">57.4</span> 分</span>
                 </div>
               </div>
-              <div class="mobile-card-private">
+              <div class="mobile-card-status">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong><span class="data-text">20元</span></strong></span>
-                  <span><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span>
-                  <span><em>预计</em><strong><span class="data-text">+40元</span></strong></span>
+                  <span><em>定投</em><strong>定投中</strong></span>
                 </div>
                 <span class="tag owned mobile-status">定投中</span>
               </div>
               <div class="mobile-metric-grid">
-                <div><span>近3年</span><strong><span class="data-text">+19.38%</span></strong></div>
-                <div><span>近1年</span><strong><span class="data-text">+23.82%</span></strong></div>
+                <div><span>近3年</span><strong><span class="data-text">+20.58%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+21.50%</span></strong></div>
                 <div><span>跟踪误差</span><strong><span class="data-text">+1.73%</span></strong></div>
                 <div><span>管理+托管</span><strong><span class="data-text">0.65%/年</span></strong></div>
                 <div><span>规模</span><strong><span class="data-text">16.5亿</span></strong></div>
@@ -2701,7 +2646,7 @@
             </article>
 
 
-            <article class="mobile-fund-card tier-c-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="C" data-code="019736" data-score="45.0">
+            <article class="mobile-fund-card tier-c-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="C" data-code="019736" data-score="48.4">
               <div class="mobile-card-head">
                 <div class="mobile-card-title">
                   <strong>宝盈</strong>
@@ -2710,14 +2655,12 @@
                 <div class="mobile-card-rating">
                   <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">10</span></span> 名</span>
                   <span class="mobile-tier tier-c"><strong>C</strong><span>档</span></span>
-                  <span class="mobile-score"><span class="data-text">45.0</span> 分</span>
+                  <span class="mobile-score"><span class="data-text">48.4</span> 分</span>
                 </div>
               </div>
-              <div class="mobile-card-private">
+              <div class="mobile-card-status">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
-                  <span><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span>
-                  <span><em>预计</em><strong><span class="data-text">+40元</span></strong></span>
+                  <span><em>定投</em><strong>定投中</strong></span>
                 </div>
                 <span class="tag owned mobile-status">定投中</span>
               </div>
@@ -2738,7 +2681,7 @@
             </article>
 
 
-            <article class="mobile-fund-card tier-b-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="B" data-code="019524" data-score="52.1">
+            <article class="mobile-fund-card tier-b-card" data-mobile-card data-status="定投中" data-subscription-status="允许申购" data-tier="B" data-code="019524" data-score="55.3">
               <div class="mobile-card-head">
                 <div class="mobile-card-title">
                   <strong>华泰柏瑞</strong>
@@ -2747,20 +2690,18 @@
                 <div class="mobile-card-rating">
                   <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">11</span></span> 名</span>
                   <span class="mobile-tier tier-b"><strong>B</strong><span>档</span></span>
-                  <span class="mobile-score"><span class="data-text">52.1</span> 分</span>
+                  <span class="mobile-score"><span class="data-text">55.3</span> 分</span>
                 </div>
               </div>
-              <div class="mobile-card-private">
+              <div class="mobile-card-status">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
-                  <span><em>定投</em><strong><span class="data-text">10元</span> / 期</strong></span>
-                  <span><em>预计</em><strong><span class="data-text">+40元</span></strong></span>
+                  <span><em>定投</em><strong>定投中</strong></span>
                 </div>
                 <span class="tag owned mobile-status">定投中</span>
               </div>
               <div class="mobile-metric-grid">
-                <div><span>近3年</span><strong><span class="data-text">+19.42%</span></strong></div>
-                <div><span>近1年</span><strong><span class="data-text">+23.21%</span></strong></div>
+                <div><span>近3年</span><strong><span class="data-text">+20.61%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+20.86%</span></strong></div>
                 <div><span>跟踪误差</span><strong><span class="data-text">+1.54%</span></strong></div>
                 <div><span>管理+托管</span><strong><span class="data-text">0.65%/年</span></strong></div>
                 <div><span>规模</span><strong><span class="data-text">7.0亿</span></strong></div>
@@ -2775,7 +2716,7 @@
             </article>
 
 
-            <article class="mobile-fund-card tier-a-card" data-mobile-card data-status="候选" data-subscription-status="暂停申购" data-tier="A" data-code="018043" data-score="65.6">
+            <article class="mobile-fund-card tier-a-card" data-mobile-card data-status="候选" data-subscription-status="暂停申购" data-tier="A" data-code="018043" data-score="66.5">
               <div class="mobile-card-head">
                 <div class="mobile-card-title">
                   <strong>天弘</strong>
@@ -2784,20 +2725,18 @@
                 <div class="mobile-card-rating">
                   <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">12</span></span> 名</span>
                   <span class="mobile-tier tier-a"><strong>A</strong><span>档</span></span>
-                  <span class="mobile-score"><span class="data-text">65.6</span> 分</span>
+                  <span class="mobile-score"><span class="data-text">66.5</span> 分</span>
                 </div>
               </div>
-              <div class="mobile-card-private">
+              <div class="mobile-card-status">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
-                  <span><em>定投</em><strong>未设置</strong></span>
-                  <span><em>预计</em><strong><span class="data-text">0元</span></strong></span>
+                  <span><em>定投</em><strong>候选</strong></span>
                 </div>
                 <span class="tag watch mobile-status">候选</span>
               </div>
               <div class="mobile-metric-grid">
-                <div><span>近3年</span><strong><span class="data-text">+19.52%</span></strong></div>
-                <div><span>近1年</span><strong><span class="data-text">+24.21%</span></strong></div>
+                <div><span>近3年</span><strong><span class="data-text">+20.69%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+21.82%</span></strong></div>
                 <div><span>跟踪误差</span><strong><span class="data-text">+1.45%</span></strong></div>
                 <div><span>管理+托管</span><strong><span class="data-text">0.60%/年</span></strong></div>
                 <div><span>规模</span><strong><span class="data-text">21.9亿</span></strong></div>
@@ -2812,7 +2751,7 @@
             </article>
 
 
-            <article class="mobile-fund-card tier-a-card" data-mobile-card data-status="候选" data-subscription-status="暂停申购" data-tier="A" data-code="016055" data-score="72.3">
+            <article class="mobile-fund-card tier-a-card" data-mobile-card data-status="候选" data-subscription-status="暂停申购" data-tier="A" data-code="016055" data-score="71.3">
               <div class="mobile-card-head">
                 <div class="mobile-card-title">
                   <strong>博时</strong>
@@ -2821,20 +2760,18 @@
                 <div class="mobile-card-rating">
                   <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">13</span></span> 名</span>
                   <span class="mobile-tier tier-a"><strong>A</strong><span>档</span></span>
-                  <span class="mobile-score"><span class="data-text">72.3</span> 分</span>
+                  <span class="mobile-score"><span class="data-text">71.3</span> 分</span>
                 </div>
               </div>
-              <div class="mobile-card-private">
+              <div class="mobile-card-status">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
-                  <span><em>定投</em><strong>未设置</strong></span>
-                  <span><em>预计</em><strong><span class="data-text">0元</span></strong></span>
+                  <span><em>定投</em><strong>候选</strong></span>
                 </div>
                 <span class="tag watch mobile-status">候选</span>
               </div>
               <div class="mobile-metric-grid">
-                <div><span>近3年</span><strong><span class="data-text">+19.82%</span></strong></div>
-                <div><span>近1年</span><strong><span class="data-text">+24.69%</span></strong></div>
+                <div><span>近3年</span><strong><span class="data-text">+21.00%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+22.30%</span></strong></div>
                 <div><span>跟踪误差</span><strong><span class="data-text">+1.44%</span></strong></div>
                 <div><span>管理+托管</span><strong><span class="data-text">0.65%/年</span></strong></div>
                 <div><span>规模</span><strong><span class="data-text">13.0亿</span></strong></div>
@@ -2849,7 +2786,7 @@
             </article>
 
 
-            <article class="mobile-fund-card tier-a-card" data-mobile-card data-status="候选" data-subscription-status="暂停申购" data-tier="A" data-code="016532" data-score="71.1">
+            <article class="mobile-fund-card tier-a-card" data-mobile-card data-status="候选" data-subscription-status="暂停申购" data-tier="A" data-code="016532" data-score="70.5">
               <div class="mobile-card-head">
                 <div class="mobile-card-title">
                   <strong>嘉实</strong>
@@ -2858,20 +2795,18 @@
                 <div class="mobile-card-rating">
                   <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">14</span></span> 名</span>
                   <span class="mobile-tier tier-a"><strong>A</strong><span>档</span></span>
-                  <span class="mobile-score"><span class="data-text">71.1</span> 分</span>
+                  <span class="mobile-score"><span class="data-text">70.5</span> 分</span>
                 </div>
               </div>
-              <div class="mobile-card-private">
+              <div class="mobile-card-status">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
-                  <span><em>定投</em><strong>未设置</strong></span>
-                  <span><em>预计</em><strong><span class="data-text">0元</span></strong></span>
+                  <span><em>定投</em><strong>候选</strong></span>
                 </div>
                 <span class="tag watch mobile-status">候选</span>
               </div>
               <div class="mobile-metric-grid">
-                <div><span>近3年</span><strong><span class="data-text">+20.03%</span></strong></div>
-                <div><span>近1年</span><strong><span class="data-text">+23.72%</span></strong></div>
+                <div><span>近3年</span><strong><span class="data-text">+21.22%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+21.37%</span></strong></div>
                 <div><span>跟踪误差</span><strong><span class="data-text">+1.50%</span></strong></div>
                 <div><span>管理+托管</span><strong><span class="data-text">0.60%/年</span></strong></div>
                 <div><span>规模</span><strong><span class="data-text">18.9亿</span></strong></div>
@@ -2886,7 +2821,7 @@
             </article>
 
 
-            <article class="mobile-fund-card tier-c-card" data-mobile-card data-status="候选" data-subscription-status="暂停申购" data-tier="C" data-code="015299" data-score="47.7">
+            <article class="mobile-fund-card tier-c-card" data-mobile-card data-status="候选" data-subscription-status="暂停申购" data-tier="C" data-code="015299" data-score="51.1">
               <div class="mobile-card-head">
                 <div class="mobile-card-title">
                   <strong>华夏</strong>
@@ -2895,20 +2830,18 @@
                 <div class="mobile-card-rating">
                   <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">15</span></span> 名</span>
                   <span class="mobile-tier tier-c"><strong>C</strong><span>档</span></span>
-                  <span class="mobile-score"><span class="data-text">47.7</span> 分</span>
+                  <span class="mobile-score"><span class="data-text">51.1</span> 分</span>
                 </div>
               </div>
-              <div class="mobile-card-private">
+              <div class="mobile-card-status">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
-                  <span><em>定投</em><strong>未设置</strong></span>
-                  <span><em>预计</em><strong><span class="data-text">0元</span></strong></span>
+                  <span><em>定投</em><strong>候选</strong></span>
                 </div>
                 <span class="tag watch mobile-status">候选</span>
               </div>
               <div class="mobile-metric-grid">
-                <div><span>近3年</span><strong><span class="data-text">+19.72%</span></strong></div>
-                <div><span>近1年</span><strong><span class="data-text">+24.79%</span></strong></div>
+                <div><span>近3年</span><strong><span class="data-text">+21.18%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+22.50%</span></strong></div>
                 <div><span>跟踪误差</span><strong><span class="data-text">+2.50%</span></strong></div>
                 <div><span>管理+托管</span><strong><span class="data-text">0.80%/年</span></strong></div>
                 <div><span>规模</span><strong><span class="data-text">3.1亿</span></strong></div>
@@ -2923,7 +2856,7 @@
             </article>
 
 
-            <article class="mobile-fund-card tier-b-card" data-mobile-card data-status="候选" data-subscription-status="暂停申购" data-tier="B" data-code="161130" data-score="62.4">
+            <article class="mobile-fund-card tier-b-card" data-mobile-card data-status="候选" data-subscription-status="暂停申购" data-tier="B" data-code="161130" data-score="63.5">
               <div class="mobile-card-head">
                 <div class="mobile-card-title">
                   <strong>易方达</strong>
@@ -2932,20 +2865,18 @@
                 <div class="mobile-card-rating">
                   <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">16</span></span> 名</span>
                   <span class="mobile-tier tier-b"><strong>B</strong><span>档</span></span>
-                  <span class="mobile-score"><span class="data-text">62.4</span> 分</span>
+                  <span class="mobile-score"><span class="data-text">63.5</span> 分</span>
                 </div>
               </div>
-              <div class="mobile-card-private">
+              <div class="mobile-card-status">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
-                  <span><em>定投</em><strong>未设置</strong></span>
-                  <span><em>预计</em><strong><span class="data-text">0元</span></strong></span>
+                  <span><em>定投</em><strong>候选</strong></span>
                 </div>
                 <span class="tag watch mobile-status">候选</span>
               </div>
               <div class="mobile-metric-grid">
-                <div><span>近3年</span><strong><span class="data-text">+19.69%</span></strong></div>
-                <div><span>近1年</span><strong><span class="data-text">+23.65%</span></strong></div>
+                <div><span>近3年</span><strong><span class="data-text">+20.88%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+21.28%</span></strong></div>
                 <div><span>跟踪误差</span><strong><span class="data-text">+1.44%</span></strong></div>
                 <div><span>管理+托管</span><strong><span class="data-text">0.60%/年</span></strong></div>
                 <div><span>规模</span><strong><span class="data-text">15.2亿</span></strong></div>
@@ -2960,7 +2891,7 @@
             </article>
 
 
-            <article class="mobile-fund-card tier-s-card" data-mobile-card data-status="候选" data-subscription-status="暂停申购" data-tier="S" data-code="160213" data-score="76.1">
+            <article class="mobile-fund-card tier-s-card" data-mobile-card data-status="候选" data-subscription-status="暂停申购" data-tier="S" data-code="160213" data-score="71.6">
               <div class="mobile-card-head">
                 <div class="mobile-card-title">
                   <strong>国泰</strong>
@@ -2969,20 +2900,18 @@
                 <div class="mobile-card-rating">
                   <span class="mobile-rank">第 <span class="mobile-rank-number"><span class="data-text">17</span></span> 名</span>
                   <span class="mobile-tier tier-s"><strong>S</strong><span>档</span></span>
-                  <span class="mobile-score"><span class="data-text">76.1</span> 分</span>
+                  <span class="mobile-score"><span class="data-text">71.6</span> 分</span>
                 </div>
               </div>
-              <div class="mobile-card-private">
+              <div class="mobile-card-status">
                 <div class="mobile-position-lines">
-                  <span><em>持有</em><strong><span class="data-text">0元</span></strong></span>
-                  <span><em>定投</em><strong>未设置</strong></span>
-                  <span><em>预计</em><strong><span class="data-text">0元</span></strong></span>
+                  <span><em>定投</em><strong>候选</strong></span>
                 </div>
                 <span class="tag watch mobile-status">候选</span>
               </div>
               <div class="mobile-metric-grid">
-                <div><span>近3年</span><strong><span class="data-text">+20.57%</span></strong></div>
-                <div><span>近1年</span><strong><span class="data-text">+25.26%</span></strong></div>
+                <div><span>近3年</span><strong><span class="data-text">+21.89%</span></strong></div>
+                <div><span>近1年</span><strong><span class="data-text">+22.77%</span></strong></div>
                 <div><span>跟踪误差</span><strong><span class="data-text">+1.18%</span></strong></div>
                 <div><span>管理+托管</span><strong><span class="data-text">1.00%/年</span></strong></div>
                 <div><span>规模</span><strong><span class="data-text">16.4亿</span></strong></div>
@@ -3002,14 +2931,10 @@
     <section class="section tab-panel" id="panel-portfolio" role="tabpanel" aria-labelledby="tab-portfolio" hidden>
       <div class="portfolio-grid">
         <div class="portfolio-block">
-          <div class="section-title"><h2>定投计划</h2><span class="title-metric">确认持仓 <strong id="holding-total-value"><span class="data-text">560元</span></strong></span><span class="title-metric">预计持仓 <strong id="projected-holding-total-value"><span class="data-text">1840元</span></strong></span><span class="title-metric">已推算 <strong><span class="data-text">4</span> 期</strong></span><span class="title-metric">定投中总额 <strong id="active-auto-total-value"><span class="data-text">320元</span> / 期</strong></span></div>
+          <div class="section-title"><h2>定投状态</h2><span class="title-metric">定投中 <strong id="active-auto-count-value"><span class="data-text">11</span></strong></span><span class="title-metric">暂停 <strong id="paused-auto-count-value"><span class="data-text">0</span></strong></span></div>
           <div class="mobile-plan-sortbar" aria-label="定投计划排序">
             <button type="button" class="mobile-plan-sort-button" data-plan-column-index="2" data-sort-type="number">评级<span class="sort-indicator"></span></button>
             <button type="button" class="mobile-plan-sort-button" data-plan-column-index="3" data-sort-type="number">状态<span class="sort-indicator"></span></button>
-            <button type="button" class="mobile-plan-sort-button" data-plan-column-index="4" data-sort-type="number">金额<span class="sort-indicator"></span></button>
-            <button type="button" class="mobile-plan-sort-button" data-plan-column-index="5" data-sort-type="number">累计<span class="sort-indicator"></span></button>
-            <button type="button" class="mobile-plan-sort-button" data-plan-column-index="6" data-sort-type="number">期数<span class="sort-indicator"></span></button>
-            <button type="button" class="mobile-plan-sort-button" data-plan-column-index="7" data-sort-type="number">持有<span class="sort-indicator"></span></button>
           </div>
           <div class="table-wrap compact-table-wrap">
             <table class="small-table portfolio-table auto-plan-table">
@@ -3018,132 +2943,84 @@
                 <col class="auto-fund-col">
                 <col class="rating-col">
                 <col class="auto-status-col">
-                <col class="auto-amount-col">
-                <col class="auto-cumulative-col">
-                <col class="auto-periods-col">
-                <col class="auto-holding-col">
               </colgroup>
-              <thead><tr><th>序号</th><th>基金</th><th class="sortable" data-plan-column-index="2" data-sort-type="number"><button type="button" class="sort-button">评级<span class="sort-indicator"></span></button></th><th class="sortable" data-plan-column-index="3" data-sort-type="number"><button type="button" class="sort-button">状态<span class="sort-indicator"></span></button></th><th class="sortable" data-plan-column-index="4" data-sort-type="number"><button type="button" class="sort-button">金额<span class="sort-indicator"></span></button></th><th class="sortable" data-plan-column-index="5" data-sort-type="number"><button type="button" class="sort-button">累计定投<span class="sort-indicator"></span></button></th><th class="sortable" data-plan-column-index="6" data-sort-type="number"><button type="button" class="sort-button">已投期数<span class="sort-indicator"></span></button></th><th class="sortable" data-plan-column-index="7" data-sort-type="number"><button type="button" class="sort-button">当前持有<span class="sort-indicator"></span></button></th></tr></thead>
+              <thead><tr><th>序号</th><th>基金</th><th class="sortable" data-plan-column-index="2" data-sort-type="number"><button type="button" class="sort-button">评级<span class="sort-indicator"></span></button></th><th class="sortable" data-plan-column-index="3" data-sort-type="number"><button type="button" class="sort-button">状态<span class="sort-indicator"></span></button></th></tr></thead>
               <tbody>
-            <tr data-code="018966">
+            <tr data-code="040046">
               <td class="num record-index" data-label="序号"><span class="data-text">1</span></td>
-              <td data-label="基金">汇添富 <span class="data-text">018966</span></td>
-              <td class="num" data-label="评级" data-sort-value="29.200000"><span class="tier-pill portfolio-tier tier-d"><strong>D</strong><span><span class="data-text">29.2</span></span></span></td>
+              <td data-label="基金">华安 <span class="data-text">040046</span></td>
+              <td class="num" data-label="评级" data-sort-value="81.300000"><span class="tier-pill portfolio-tier tier-s"><strong>S</strong><span><span class="data-text">81.3</span></span></span></td>
               <td class="editable-status" data-label="状态" data-field="status" data-sort-value="0" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
-              <td class="num editable-amount" data-label="金额" data-field="plan_amount" data-sort-value="100.000000" tabindex="0" role="button" title="点击修改定投金额"><span class="data-text">100元</span> / 期</td>
-              <td class="num" data-label="累计定投" data-sort-value="0.000000"><span class="data-text">0元</span></td>
-              <td class="num" data-label="已投期数" data-sort-value="0.000000"><span class="data-text">0</span></td>
-              <td class="num editable-amount" data-label="当前持有" data-field="holding" data-sort-value="100.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">100元</span></td>
             </tr>
 
-            <tr data-code="019441">
+            <tr data-code="270042">
               <td class="num record-index" data-label="序号"><span class="data-text">2</span></td>
-              <td data-label="基金">万家 <span class="data-text">019441</span></td>
-              <td class="num" data-label="评级" data-sort-value="50.900000"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">50.9</span></span></span></td>
+              <td data-label="基金">广发 <span class="data-text">270042</span></td>
+              <td class="num" data-label="评级" data-sort-value="65.600000"><span class="tier-pill portfolio-tier tier-a"><strong>A</strong><span><span class="data-text">65.6</span></span></span></td>
               <td class="editable-status" data-label="状态" data-field="status" data-sort-value="0" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
-              <td class="num editable-amount" data-label="金额" data-field="plan_amount" data-sort-value="50.000000" tabindex="0" role="button" title="点击修改定投金额"><span class="data-text">50元</span> / 期</td>
-              <td class="num" data-label="累计定投" data-sort-value="0.000000"><span class="data-text">0元</span></td>
-              <td class="num" data-label="已投期数" data-sort-value="0.000000"><span class="data-text">0</span></td>
-              <td class="num editable-amount" data-label="当前持有" data-field="holding" data-sort-value="50.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">50元</span></td>
             </tr>
 
             <tr data-code="016452">
               <td class="num record-index" data-label="序号"><span class="data-text">3</span></td>
               <td data-label="基金">南方 <span class="data-text">016452</span></td>
-              <td class="num" data-label="评级" data-sort-value="57.900000"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">57.9</span></span></span></td>
+              <td class="num" data-label="评级" data-sort-value="59.500000"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">59.5</span></span></span></td>
               <td class="editable-status" data-label="状态" data-field="status" data-sort-value="0" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
-              <td class="num editable-amount" data-label="金额" data-field="plan_amount" data-sort-value="50.000000" tabindex="0" role="button" title="点击修改定投金额"><span class="data-text">50元</span> / 期</td>
-              <td class="num" data-label="累计定投" data-sort-value="100.000000"><span class="data-text">100元</span></td>
-              <td class="num" data-label="已投期数" data-sort-value="2.000000"><span class="data-text">2</span></td>
-              <td class="num editable-amount" data-label="当前持有" data-field="holding" data-sort-value="250.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">250元</span></td>
-            </tr>
-
-            <tr data-code="539001">
-              <td class="num record-index" data-label="序号"><span class="data-text">4</span></td>
-              <td data-label="基金">建信 <span class="data-text">539001</span></td>
-              <td class="num" data-label="评级" data-sort-value="27.200000"><span class="tier-pill portfolio-tier tier-d"><strong>D</strong><span><span class="data-text">27.2</span></span></span></td>
-              <td class="editable-status" data-label="状态" data-field="status" data-sort-value="0" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
-              <td class="num editable-amount" data-label="金额" data-field="plan_amount" data-sort-value="50.000000" tabindex="0" role="button" title="点击修改定投金额"><span class="data-text">50元</span> / 期</td>
-              <td class="num" data-label="累计定投" data-sort-value="-1"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="已投期数" data-sort-value="-1"><span class="muted-cell">--</span></td>
-              <td class="num editable-amount" data-label="当前持有" data-field="holding" data-sort-value="100.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">100元</span></td>
-            </tr>
-
-            <tr data-code="040046">
-              <td class="num record-index" data-label="序号"><span class="data-text">5</span></td>
-              <td data-label="基金">华安 <span class="data-text">040046</span></td>
-              <td class="num" data-label="评级" data-sort-value="85.700000"><span class="tier-pill portfolio-tier tier-s"><strong>S</strong><span><span class="data-text">85.7</span></span></span></td>
-              <td class="editable-status" data-label="状态" data-field="status" data-sort-value="0" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
-              <td class="num editable-amount" data-label="金额" data-field="plan_amount" data-sort-value="10.000000" tabindex="0" role="button" title="点击修改定投金额"><span class="data-text">10元</span> / 期</td>
-              <td class="num" data-label="累计定投" data-sort-value="10.000000"><span class="data-text">10元</span></td>
-              <td class="num" data-label="已投期数" data-sort-value="1.000000"><span class="data-text">1</span></td>
-              <td class="num editable-amount" data-label="当前持有" data-field="holding" data-sort-value="10.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">10元</span></td>
-            </tr>
-
-            <tr data-code="019524">
-              <td class="num record-index" data-label="序号"><span class="data-text">6</span></td>
-              <td data-label="基金">华泰柏瑞 <span class="data-text">019524</span></td>
-              <td class="num" data-label="评级" data-sort-value="52.100000"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">52.1</span></span></span></td>
-              <td class="editable-status" data-label="状态" data-field="status" data-sort-value="0" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
-              <td class="num editable-amount" data-label="金额" data-field="plan_amount" data-sort-value="10.000000" tabindex="0" role="button" title="点击修改定投金额"><span class="data-text">10元</span> / 期</td>
-              <td class="num" data-label="累计定投" data-sort-value="10.000000"><span class="data-text">10元</span></td>
-              <td class="num" data-label="已投期数" data-sort-value="1.000000"><span class="data-text">1</span></td>
-              <td class="num editable-amount" data-label="当前持有" data-field="holding" data-sort-value="0.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">0元</span></td>
-            </tr>
-
-            <tr data-code="000834">
-              <td class="num record-index" data-label="序号"><span class="data-text">7</span></td>
-              <td data-label="基金">大成 <span class="data-text">000834</span></td>
-              <td class="num" data-label="评级" data-sort-value="47.300000"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">47.3</span></span></span></td>
-              <td class="editable-status" data-label="状态" data-field="status" data-sort-value="0" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
-              <td class="num editable-amount" data-label="金额" data-field="plan_amount" data-sort-value="10.000000" tabindex="0" role="button" title="点击修改定投金额"><span class="data-text">10元</span> / 期</td>
-              <td class="num" data-label="累计定投" data-sort-value="0.000000"><span class="data-text">0元</span></td>
-              <td class="num" data-label="已投期数" data-sort-value="0.000000"><span class="data-text">0</span></td>
-              <td class="num editable-amount" data-label="当前持有" data-field="holding" data-sort-value="10.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">10元</span></td>
-            </tr>
-
-            <tr data-code="019736">
-              <td class="num record-index" data-label="序号"><span class="data-text">8</span></td>
-              <td data-label="基金">宝盈 <span class="data-text">019736</span></td>
-              <td class="num" data-label="评级" data-sort-value="45.000000"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">45.0</span></span></span></td>
-              <td class="editable-status" data-label="状态" data-field="status" data-sort-value="0" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
-              <td class="num editable-amount" data-label="金额" data-field="plan_amount" data-sort-value="10.000000" tabindex="0" role="button" title="点击修改定投金额"><span class="data-text">10元</span> / 期</td>
-              <td class="num" data-label="累计定投" data-sort-value="0.000000"><span class="data-text">0元</span></td>
-              <td class="num" data-label="已投期数" data-sort-value="0.000000"><span class="data-text">0</span></td>
-              <td class="num editable-amount" data-label="当前持有" data-field="holding" data-sort-value="0.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">0元</span></td>
-            </tr>
-
-            <tr data-code="270042">
-              <td class="num record-index" data-label="序号"><span class="data-text">9</span></td>
-              <td data-label="基金">广发 <span class="data-text">270042</span></td>
-              <td class="num" data-label="评级" data-sort-value="68.700000"><span class="tier-pill portfolio-tier tier-a"><strong>A</strong><span><span class="data-text">68.7</span></span></span></td>
-              <td class="editable-status" data-label="状态" data-field="status" data-sort-value="0" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
-              <td class="num editable-amount" data-label="金额" data-field="plan_amount" data-sort-value="10.000000" tabindex="0" role="button" title="点击修改定投金额"><span class="data-text">10元</span> / 期</td>
-              <td class="num" data-label="累计定投" data-sort-value="10.000000"><span class="data-text">10元</span></td>
-              <td class="num" data-label="已投期数" data-sort-value="1.000000"><span class="data-text">1</span></td>
-              <td class="num editable-amount" data-label="当前持有" data-field="holding" data-sort-value="0.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">0元</span></td>
             </tr>
 
             <tr data-code="019547">
-              <td class="num record-index" data-label="序号"><span class="data-text">10</span></td>
+              <td class="num record-index" data-label="序号"><span class="data-text">4</span></td>
               <td data-label="基金">招商 <span class="data-text">019547</span></td>
-              <td class="num" data-label="评级" data-sort-value="54.500000"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">54.5</span></span></span></td>
+              <td class="num" data-label="评级" data-sort-value="57.400000"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">57.4</span></span></span></td>
               <td class="editable-status" data-label="状态" data-field="status" data-sort-value="0" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
-              <td class="num editable-amount" data-label="金额" data-field="plan_amount" data-sort-value="10.000000" tabindex="0" role="button" title="点击修改定投金额"><span class="data-text">10元</span> / 期</td>
-              <td class="num" data-label="累计定投" data-sort-value="20.000000"><span class="data-text">20元</span></td>
-              <td class="num" data-label="已投期数" data-sort-value="2.000000"><span class="data-text">2</span></td>
-              <td class="num editable-amount" data-label="当前持有" data-field="holding" data-sort-value="20.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">20元</span></td>
+            </tr>
+
+            <tr data-code="019524">
+              <td class="num record-index" data-label="序号"><span class="data-text">5</span></td>
+              <td data-label="基金">华泰柏瑞 <span class="data-text">019524</span></td>
+              <td class="num" data-label="评级" data-sort-value="55.300000"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">55.3</span></span></span></td>
+              <td class="editable-status" data-label="状态" data-field="status" data-sort-value="0" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
             </tr>
 
             <tr data-code="019172">
-              <td class="num record-index" data-label="序号"><span class="data-text">11</span></td>
+              <td class="num record-index" data-label="序号"><span class="data-text">6</span></td>
               <td data-label="基金">摩根 <span class="data-text">019172</span></td>
-              <td class="num" data-label="评级" data-sort-value="47.700000"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">47.7</span></span></span></td>
+              <td class="num" data-label="评级" data-sort-value="51.700000"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">51.7</span></span></span></td>
               <td class="editable-status" data-label="状态" data-field="status" data-sort-value="0" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
-              <td class="num editable-amount" data-label="金额" data-field="plan_amount" data-sort-value="10.000000" tabindex="0" role="button" title="点击修改定投金额"><span class="data-text">10元</span> / 期</td>
-              <td class="num" data-label="累计定投" data-sort-value="20.000000"><span class="data-text">20元</span></td>
-              <td class="num" data-label="已投期数" data-sort-value="2.000000"><span class="data-text">2</span></td>
-              <td class="num editable-amount" data-label="当前持有" data-field="holding" data-sort-value="20.000000" tabindex="0" role="button" title="点击修改持有金额"><span class="data-text">20元</span></td>
+            </tr>
+
+            <tr data-code="019441">
+              <td class="num record-index" data-label="序号"><span class="data-text">7</span></td>
+              <td data-label="基金">万家 <span class="data-text">019441</span></td>
+              <td class="num" data-label="评级" data-sort-value="51.000000"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">51.0</span></span></span></td>
+              <td class="editable-status" data-label="状态" data-field="status" data-sort-value="0" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
+            </tr>
+
+            <tr data-code="000834">
+              <td class="num record-index" data-label="序号"><span class="data-text">8</span></td>
+              <td data-label="基金">大成 <span class="data-text">000834</span></td>
+              <td class="num" data-label="评级" data-sort-value="51.000000"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">51.0</span></span></span></td>
+              <td class="editable-status" data-label="状态" data-field="status" data-sort-value="0" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
+            </tr>
+
+            <tr data-code="019736">
+              <td class="num record-index" data-label="序号"><span class="data-text">9</span></td>
+              <td data-label="基金">宝盈 <span class="data-text">019736</span></td>
+              <td class="num" data-label="评级" data-sort-value="48.400000"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">48.4</span></span></span></td>
+              <td class="editable-status" data-label="状态" data-field="status" data-sort-value="0" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
+            </tr>
+
+            <tr data-code="018966">
+              <td class="num record-index" data-label="序号"><span class="data-text">10</span></td>
+              <td data-label="基金">汇添富 <span class="data-text">018966</span></td>
+              <td class="num" data-label="评级" data-sort-value="37.900000"><span class="tier-pill portfolio-tier tier-d"><strong>D</strong><span><span class="data-text">37.9</span></span></span></td>
+              <td class="editable-status" data-label="状态" data-field="status" data-sort-value="0" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
+            </tr>
+
+            <tr data-code="539001">
+              <td class="num record-index" data-label="序号"><span class="data-text">11</span></td>
+              <td data-label="基金">建信 <span class="data-text">539001</span></td>
+              <td class="num" data-label="评级" data-sort-value="31.600000"><span class="tier-pill portfolio-tier tier-d"><strong>D</strong><span><span class="data-text">31.6</span></span></span></td>
+              <td class="editable-status" data-label="状态" data-field="status" data-sort-value="0" tabindex="0" role="button" title="点击选择定投状态"><span class="tag owned">定投中</span></td>
             </tr></tbody>
             </table>
           </div>
@@ -3157,85 +3034,29 @@
           <h2>长期追踪</h2>
         </div>
         <div class="tracking-metrics">
-          <span class="tracking-metric">最近记录 <strong><span class="data-text">2026-06-28</span></strong></span>
-          <span class="tracking-metric">记录数 <strong><span class="data-text">7</span></strong></span>
-          <span class="tracking-metric">确认持仓 <strong><span class="data-text">560元</span></strong></span>
-          <span class="tracking-metric">预计投入 <strong><span class="data-text">1280元</span></strong></span>
-          <span class="tracking-metric">预计持仓 <strong><span class="data-text">1840元</span></strong></span>
-          <span class="tracking-metric">定投中 <strong><span class="data-text">320元</span> / 期</strong></span>
-          <span class="tracking-metric">暂停 <strong><span class="data-text">0元</span> / 期</strong></span>
+          <span class="tracking-metric">最近记录 <strong><span class="data-text">2026-06-29</span></strong></span>
+          <span class="tracking-metric">记录数 <strong><span class="data-text">8</span></strong></span>
+          <span class="tracking-metric">定投中 <strong><span class="data-text">11</span></strong></span>
+          <span class="tracking-metric">暂停 <strong><span class="data-text">0</span></strong></span>
+          <span class="tracking-metric">候选 <strong><span class="data-text">6</span></strong></span>
         </div>
       </div>
       <div class="tracking-subtabs" role="tablist" aria-label="长期追踪视图">
         <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-overview" aria-controls="tracking-panel-overview" aria-selected="true">总览</button>
-        <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-trend" aria-controls="tracking-panel-trend" aria-selected="false">趋势</button>
         <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-years" aria-controls="tracking-panel-years" aria-selected="false">年度</button>
-        <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-allocation" aria-controls="tracking-panel-allocation" aria-selected="false">结构</button>
         <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-funds" aria-controls="tracking-panel-funds" aria-selected="false">明细</button>
         <button class="tracking-subtab" type="button" role="tab" id="tracking-tab-snapshots" aria-controls="tracking-panel-snapshots" aria-selected="false">快照</button>
       </div>
       <div class="tracking-subpanel" id="tracking-panel-overview" role="tabpanel" aria-labelledby="tracking-tab-overview">
         <div class="tracking-overview-panel">
           <div class="tracking-overview-grid">
-            <div class="tracking-overview-card"><span>追踪区间</span><strong><span class="data-text">2026-06-22 至 2026-06-28</span></strong></div>
-            <div class="tracking-overview-card"><span>历史快照</span><strong><span class="data-text">7</span> 条</strong></div>
+            <div class="tracking-overview-card"><span>追踪区间</span><strong><span class="data-text">2026-06-22 至 2026-06-29</span></strong></div>
+            <div class="tracking-overview-card"><span>历史快照</span><strong><span class="data-text">8</span> 条</strong></div>
             <div class="tracking-overview-card"><span>覆盖年份</span><strong><span class="data-text">1</span> 年</strong></div>
-            <div class="tracking-overview-card"><span>已推算定投</span><strong><span class="data-text">4</span> 期</strong></div>
-            <div class="tracking-overview-card"><span>预计投入</span><strong><span class="data-text">1280元</span></strong></div>
-            <div class="tracking-overview-card"><span>预计持仓</span><strong><span class="data-text">1840元</span></strong></div>
-            <div class="tracking-overview-card"><span>当前基线</span><strong><span class="data-text">11</span> 支</strong></div>
-          </div>
-          <div class="tracking-chart-stack">
-            <div class="tracking-chart-card">
-              <div class="section-title"><h2>资产轨迹</h2><span class="title-metric">确认持仓 / 预计持仓 / 市值</span></div>
-              <div class="chart-frame">
-    <svg class="tracking-chart-svg" viewBox="0 0 640 220" role="img" aria-label="确认持仓">
-      <rect class="chart-bg" x="0" y="0" width="640" height="220" />
-      <line class="chart-grid" x1="46" y1="18.00" x2="622" y2="18.00" /><text class="chart-axis" x="38" y="22.00" text-anchor="end">1840</text><line class="chart-grid" x1="46" y1="103.00" x2="622" y2="103.00" /><text class="chart-axis" x="38" y="107.00" text-anchor="end">1200</text><line class="chart-grid" x1="46" y1="188.00" x2="622" y2="188.00" /><text class="chart-axis" x="38" y="192.00" text-anchor="end">560</text>
-      <foreignObject x="46" y="0" width="576" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="chart-legend"><span class="chart-legend-item"><i class="legend-dot legend-dot-1"></i>确认持仓</span><span class="chart-legend-item"><i class="legend-dot legend-dot-2"></i>预计持仓</span></div></foreignObject>
-      <path class="chart-series chart-series-1" d="M 46.00 188.00 L 142.00 188.00 L 238.00 188.00 L 334.00 188.00 L 430.00 188.00 L 526.00 188.00 L 622.00 188.00" /><circle class="chart-point chart-point-1" cx="46.00" cy="188.00" r="3.2" /><circle class="chart-point chart-point-1" cx="142.00" cy="188.00" r="3.2" /><circle class="chart-point chart-point-1" cx="238.00" cy="188.00" r="3.2" /><circle class="chart-point chart-point-1" cx="334.00" cy="188.00" r="3.2" /><circle class="chart-point chart-point-1" cx="430.00" cy="188.00" r="3.2" /><circle class="chart-point chart-point-1" cx="526.00" cy="188.00" r="3.2" /><circle class="chart-point chart-point-1" cx="622.00" cy="188.00" r="3.2" /><path class="chart-series chart-series-2" d="M 46.00 188.00 L 142.00 145.50 L 238.00 103.00 L 334.00 60.50 L 430.00 18.00 L 526.00 18.00 L 622.00 18.00" /><circle class="chart-point chart-point-2" cx="46.00" cy="188.00" r="3.2" /><circle class="chart-point chart-point-2" cx="142.00" cy="145.50" r="3.2" /><circle class="chart-point chart-point-2" cx="238.00" cy="103.00" r="3.2" /><circle class="chart-point chart-point-2" cx="334.00" cy="60.50" r="3.2" /><circle class="chart-point chart-point-2" cx="430.00" cy="18.00" r="3.2" /><circle class="chart-point chart-point-2" cx="526.00" cy="18.00" r="3.2" /><circle class="chart-point chart-point-2" cx="622.00" cy="18.00" r="3.2" />
-      <text class="chart-axis" x="46" y="211" text-anchor="start">2026-06-22</text>
-      <text class="chart-axis" x="622" y="211" text-anchor="end">2026-06-28</text>
-    </svg>
-    </div>
-            </div>
-            <div class="tracking-chart-card">
-              <div class="section-title"><h2>收益轨迹</h2><span class="title-metric">收益 / 收益率</span></div>
-              <div class="chart-frame">
-        <svg class="tracking-chart-svg" viewBox="0 0 640 220" role="img" aria-label="等待收益记录">
-          <rect class="chart-bg" x="0" y="0" width="640" height="220" />
-          <line class="chart-grid" x1="46" y1="103.00" x2="622" y2="103.00" />
-          <text class="chart-empty" x="320.00" y="110.00" text-anchor="middle">等待收益记录</text>
-        </svg>
-        </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="tracking-subpanel" id="tracking-panel-trend" role="tabpanel" aria-labelledby="tracking-tab-trend" hidden>
-        <div class="tracking-chart-stack tracking-wide-stack">
-          <div class="tracking-chart-card">
-            <div class="section-title"><h2>资产轨迹</h2><span class="title-metric">确认持仓 / 预计持仓 / 市值</span></div>
-            <div class="chart-frame">
-    <svg class="tracking-chart-svg" viewBox="0 0 640 220" role="img" aria-label="确认持仓">
-      <rect class="chart-bg" x="0" y="0" width="640" height="220" />
-      <line class="chart-grid" x1="46" y1="18.00" x2="622" y2="18.00" /><text class="chart-axis" x="38" y="22.00" text-anchor="end">1840</text><line class="chart-grid" x1="46" y1="103.00" x2="622" y2="103.00" /><text class="chart-axis" x="38" y="107.00" text-anchor="end">1200</text><line class="chart-grid" x1="46" y1="188.00" x2="622" y2="188.00" /><text class="chart-axis" x="38" y="192.00" text-anchor="end">560</text>
-      <foreignObject x="46" y="0" width="576" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="chart-legend"><span class="chart-legend-item"><i class="legend-dot legend-dot-1"></i>确认持仓</span><span class="chart-legend-item"><i class="legend-dot legend-dot-2"></i>预计持仓</span></div></foreignObject>
-      <path class="chart-series chart-series-1" d="M 46.00 188.00 L 142.00 188.00 L 238.00 188.00 L 334.00 188.00 L 430.00 188.00 L 526.00 188.00 L 622.00 188.00" /><circle class="chart-point chart-point-1" cx="46.00" cy="188.00" r="3.2" /><circle class="chart-point chart-point-1" cx="142.00" cy="188.00" r="3.2" /><circle class="chart-point chart-point-1" cx="238.00" cy="188.00" r="3.2" /><circle class="chart-point chart-point-1" cx="334.00" cy="188.00" r="3.2" /><circle class="chart-point chart-point-1" cx="430.00" cy="188.00" r="3.2" /><circle class="chart-point chart-point-1" cx="526.00" cy="188.00" r="3.2" /><circle class="chart-point chart-point-1" cx="622.00" cy="188.00" r="3.2" /><path class="chart-series chart-series-2" d="M 46.00 188.00 L 142.00 145.50 L 238.00 103.00 L 334.00 60.50 L 430.00 18.00 L 526.00 18.00 L 622.00 18.00" /><circle class="chart-point chart-point-2" cx="46.00" cy="188.00" r="3.2" /><circle class="chart-point chart-point-2" cx="142.00" cy="145.50" r="3.2" /><circle class="chart-point chart-point-2" cx="238.00" cy="103.00" r="3.2" /><circle class="chart-point chart-point-2" cx="334.00" cy="60.50" r="3.2" /><circle class="chart-point chart-point-2" cx="430.00" cy="18.00" r="3.2" /><circle class="chart-point chart-point-2" cx="526.00" cy="18.00" r="3.2" /><circle class="chart-point chart-point-2" cx="622.00" cy="18.00" r="3.2" />
-      <text class="chart-axis" x="46" y="211" text-anchor="start">2026-06-22</text>
-      <text class="chart-axis" x="622" y="211" text-anchor="end">2026-06-28</text>
-    </svg>
-    </div>
-          </div>
-          <div class="tracking-chart-card">
-            <div class="section-title"><h2>收益轨迹</h2><span class="title-metric">收益 / 收益率</span></div>
-            <div class="chart-frame">
-        <svg class="tracking-chart-svg" viewBox="0 0 640 220" role="img" aria-label="等待收益记录">
-          <rect class="chart-bg" x="0" y="0" width="640" height="220" />
-          <line class="chart-grid" x1="46" y1="103.00" x2="622" y2="103.00" />
-          <text class="chart-empty" x="320.00" y="110.00" text-anchor="middle">等待收益记录</text>
-        </svg>
-        </div>
+            <div class="tracking-overview-card"><span>定投中</span><strong><span class="data-text">11</span> 支</strong></div>
+            <div class="tracking-overview-card"><span>暂停</span><strong><span class="data-text">0</span> 支</strong></div>
+            <div class="tracking-overview-card"><span>候选</span><strong><span class="data-text">6</span> 支</strong></div>
+            <div class="tracking-overview-card"><span>状态明细</span><strong><span class="data-text">11</span> 支</strong></div>
           </div>
         </div>
       </div>
@@ -3252,133 +3073,20 @@
                   <col class="date-col">
                   <col class="amount-col">
                   <col class="amount-col">
-                  <col class="amount-col">
-                  <col class="amount-col">
-                  <col class="amount-col">
                 </colgroup>
-                <thead><tr><th>年份</th><th>记录</th><th>首条</th><th>末条</th><th>确认变化</th><th>预计投入</th><th>期末预计</th><th>期末市值</th><th>期末收益</th><th>收益率</th></tr></thead>
+                <thead><tr><th>年份</th><th>记录</th><th>首条</th><th>末条</th><th>定投中</th><th>暂停</th></tr></thead>
                 <tbody>
             <tr>
               <td class="num" data-label="年份"><span class="data-text">2026</span></td>
-              <td class="num" data-label="记录"><span class="data-text">7</span></td>
+              <td class="num" data-label="记录"><span class="data-text">8</span></td>
               <td data-label="首条">2026-06-22</td>
-              <td data-label="末条">2026-06-28</td>
-              <td class="num" data-label="确认变化"><span class="data-text">0元</span></td>
-              <td class="num" data-label="预计投入"><span class="data-text">1280元</span></td>
-              <td class="num" data-label="期末预计"><span class="data-text">1840元</span></td>
-              <td class="num" data-label="期末市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="期末收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
+              <td data-label="末条">2026-06-29</td>
+              <td class="num" data-label="定投中"><span class="data-text">11</span></td>
+              <td class="num" data-label="暂停"><span class="data-text">0</span></td>
             </tr>
             </tbody>
               </table>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="tracking-subpanel" id="tracking-panel-allocation" role="tabpanel" aria-labelledby="tracking-tab-allocation" hidden>
-        <div class="tracking-single-panel">
-          <div class="tracking-allocation-card">
-            <div class="section-title"><h2>持仓结构</h2><span class="title-metric">按预计持仓金额</span></div>
-            <div class="allocation-list">
-            <div class="allocation-row">
-              <div class="allocation-head">
-                <span>汇添富 <span class="data-text">018966</span></span>
-                <strong>500元 · 27.2%</strong>
-              </div>
-              <div class="allocation-track"><span class="tier-d" style="width: 27.17%"></span></div>
-            </div>
-
-
-            <div class="allocation-row">
-              <div class="allocation-head">
-                <span>南方 <span class="data-text">016452</span></span>
-                <strong>450元 · 24.5%</strong>
-              </div>
-              <div class="allocation-track"><span class="tier-b" style="width: 24.46%"></span></div>
-            </div>
-
-
-            <div class="allocation-row">
-              <div class="allocation-head">
-                <span>建信 <span class="data-text">539001</span></span>
-                <strong>300元 · 16.3%</strong>
-              </div>
-              <div class="allocation-track"><span class="tier-d" style="width: 16.30%"></span></div>
-            </div>
-
-
-            <div class="allocation-row">
-              <div class="allocation-head">
-                <span>万家 <span class="data-text">019441</span></span>
-                <strong>250元 · 13.6%</strong>
-              </div>
-              <div class="allocation-track"><span class="tier-b" style="width: 13.59%"></span></div>
-            </div>
-
-
-            <div class="allocation-row">
-              <div class="allocation-head">
-                <span>招商 <span class="data-text">019547</span></span>
-                <strong>60元 · 3.3%</strong>
-              </div>
-              <div class="allocation-track"><span class="tier-b" style="width: 3.26%"></span></div>
-            </div>
-
-
-            <div class="allocation-row">
-              <div class="allocation-head">
-                <span>摩根 <span class="data-text">019172</span></span>
-                <strong>60元 · 3.3%</strong>
-              </div>
-              <div class="allocation-track"><span class="tier-c" style="width: 3.26%"></span></div>
-            </div>
-
-
-            <div class="allocation-row">
-              <div class="allocation-head">
-                <span>华安 <span class="data-text">040046</span></span>
-                <strong>50元 · 2.7%</strong>
-              </div>
-              <div class="allocation-track"><span class="tier-s" style="width: 2.72%"></span></div>
-            </div>
-
-
-            <div class="allocation-row">
-              <div class="allocation-head">
-                <span>大成 <span class="data-text">000834</span></span>
-                <strong>50元 · 2.7%</strong>
-              </div>
-              <div class="allocation-track"><span class="tier-c" style="width: 2.72%"></span></div>
-            </div>
-
-
-            <div class="allocation-row">
-              <div class="allocation-head">
-                <span>广发 <span class="data-text">270042</span></span>
-                <strong>40元 · 2.2%</strong>
-              </div>
-              <div class="allocation-track"><span class="tier-a" style="width: 2.17%"></span></div>
-            </div>
-
-
-            <div class="allocation-row">
-              <div class="allocation-head">
-                <span>华泰柏瑞 <span class="data-text">019524</span></span>
-                <strong>40元 · 2.2%</strong>
-              </div>
-              <div class="allocation-track"><span class="tier-b" style="width: 2.17%"></span></div>
-            </div>
-
-
-            <div class="allocation-row">
-              <div class="allocation-head">
-                <span>宝盈 <span class="data-text">019736</span></span>
-                <strong>40元 · 2.2%</strong>
-              </div>
-              <div class="allocation-track"><span class="tier-c" style="width: 2.17%"></span></div>
-            </div>
-</div>
           </div>
         </div>
       </div>
@@ -3392,155 +3100,95 @@
                   <col class="record-col">
                   <col class="fund-col-small">
                   <col class="rating-col">
-                  <col class="amount-col">
-                  <col class="amount-col">
                   <col class="plan-col">
-                  <col class="amount-col">
-                  <col class="amount-col">
-                  <col class="amount-col">
                 </colgroup>
-                <thead><tr><th>序号</th><th>基金</th><th>评级</th><th>确认持有</th><th>预计持有</th><th>定投</th><th>市值</th><th>收益</th><th>收益率</th></tr></thead>
+                <thead><tr><th>序号</th><th>基金</th><th>评级</th><th>状态</th></tr></thead>
                 <tbody>
-            <tr data-code="016452">
+            <tr data-code="040046">
               <td class="num record-index" data-label="序号"><span class="data-text">1</span></td>
-              <td data-label="基金">南方 <span class="data-text">016452</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">57.9</span></span></span></td>
-              <td class="num" data-label="确认持有"><span class="data-text">250元</span></td>
-              <td class="num" data-label="预计持有"><span class="data-text">450元</span></td>
-              <td class="num" data-label="定投"><span class="data-text">50元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
+              <td data-label="基金">华安 <span class="data-text">040046</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-s"><strong>S</strong><span><span class="data-text">81.3</span></span></span></td>
+              <td data-label="状态"><span class="tag owned">定投中</span></td>
             </tr>
             
 
-            <tr data-code="018966">
+            <tr data-code="270042">
               <td class="num record-index" data-label="序号"><span class="data-text">2</span></td>
-              <td data-label="基金">汇添富 <span class="data-text">018966</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-d"><strong>D</strong><span><span class="data-text">29.2</span></span></span></td>
-              <td class="num" data-label="确认持有"><span class="data-text">100元</span></td>
-              <td class="num" data-label="预计持有"><span class="data-text">500元</span></td>
-              <td class="num" data-label="定投"><span class="data-text">100元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
+              <td data-label="基金">广发 <span class="data-text">270042</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-a"><strong>A</strong><span><span class="data-text">65.6</span></span></span></td>
+              <td data-label="状态"><span class="tag owned">定投中</span></td>
             </tr>
             
 
-            <tr data-code="539001">
+            <tr data-code="016452">
               <td class="num record-index" data-label="序号"><span class="data-text">3</span></td>
-              <td data-label="基金">建信 <span class="data-text">539001</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-d"><strong>D</strong><span><span class="data-text">27.2</span></span></span></td>
-              <td class="num" data-label="确认持有"><span class="data-text">100元</span></td>
-              <td class="num" data-label="预计持有"><span class="data-text">300元</span></td>
-              <td class="num" data-label="定投"><span class="data-text">50元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
-            </tr>
-            
-
-            <tr data-code="019441">
-              <td class="num record-index" data-label="序号"><span class="data-text">4</span></td>
-              <td data-label="基金">万家 <span class="data-text">019441</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">50.9</span></span></span></td>
-              <td class="num" data-label="确认持有"><span class="data-text">50元</span></td>
-              <td class="num" data-label="预计持有"><span class="data-text">250元</span></td>
-              <td class="num" data-label="定投"><span class="data-text">50元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
+              <td data-label="基金">南方 <span class="data-text">016452</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">59.5</span></span></span></td>
+              <td data-label="状态"><span class="tag owned">定投中</span></td>
             </tr>
             
 
             <tr data-code="019547">
-              <td class="num record-index" data-label="序号"><span class="data-text">5</span></td>
+              <td class="num record-index" data-label="序号"><span class="data-text">4</span></td>
               <td data-label="基金">招商 <span class="data-text">019547</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">54.5</span></span></span></td>
-              <td class="num" data-label="确认持有"><span class="data-text">20元</span></td>
-              <td class="num" data-label="预计持有"><span class="data-text">60元</span></td>
-              <td class="num" data-label="定投"><span class="data-text">10元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">57.4</span></span></span></td>
+              <td data-label="状态"><span class="tag owned">定投中</span></td>
+            </tr>
+            
+
+            <tr data-code="019524">
+              <td class="num record-index" data-label="序号"><span class="data-text">5</span></td>
+              <td data-label="基金">华泰柏瑞 <span class="data-text">019524</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">55.3</span></span></span></td>
+              <td data-label="状态"><span class="tag owned">定投中</span></td>
             </tr>
             
 
             <tr data-code="019172">
               <td class="num record-index" data-label="序号"><span class="data-text">6</span></td>
               <td data-label="基金">摩根 <span class="data-text">019172</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">47.7</span></span></span></td>
-              <td class="num" data-label="确认持有"><span class="data-text">20元</span></td>
-              <td class="num" data-label="预计持有"><span class="data-text">60元</span></td>
-              <td class="num" data-label="定投"><span class="data-text">10元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">51.7</span></span></span></td>
+              <td data-label="状态"><span class="tag owned">定投中</span></td>
             </tr>
             
 
-            <tr data-code="040046">
+            <tr data-code="019441">
               <td class="num record-index" data-label="序号"><span class="data-text">7</span></td>
-              <td data-label="基金">华安 <span class="data-text">040046</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-s"><strong>S</strong><span><span class="data-text">85.7</span></span></span></td>
-              <td class="num" data-label="确认持有"><span class="data-text">10元</span></td>
-              <td class="num" data-label="预计持有"><span class="data-text">50元</span></td>
-              <td class="num" data-label="定投"><span class="data-text">10元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
+              <td data-label="基金">万家 <span class="data-text">019441</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">51.0</span></span></span></td>
+              <td data-label="状态"><span class="tag owned">定投中</span></td>
             </tr>
             
 
             <tr data-code="000834">
               <td class="num record-index" data-label="序号"><span class="data-text">8</span></td>
               <td data-label="基金">大成 <span class="data-text">000834</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">47.3</span></span></span></td>
-              <td class="num" data-label="确认持有"><span class="data-text">10元</span></td>
-              <td class="num" data-label="预计持有"><span class="data-text">50元</span></td>
-              <td class="num" data-label="定投"><span class="data-text">10元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
-            </tr>
-            
-
-            <tr data-code="270042">
-              <td class="num record-index" data-label="序号"><span class="data-text">9</span></td>
-              <td data-label="基金">广发 <span class="data-text">270042</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-a"><strong>A</strong><span><span class="data-text">68.7</span></span></span></td>
-              <td class="num" data-label="确认持有"><span class="data-text">0元</span></td>
-              <td class="num" data-label="预计持有"><span class="data-text">40元</span></td>
-              <td class="num" data-label="定投"><span class="data-text">10元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
-            </tr>
-            
-
-            <tr data-code="019524">
-              <td class="num record-index" data-label="序号"><span class="data-text">10</span></td>
-              <td data-label="基金">华泰柏瑞 <span class="data-text">019524</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-b"><strong>B</strong><span><span class="data-text">52.1</span></span></span></td>
-              <td class="num" data-label="确认持有"><span class="data-text">0元</span></td>
-              <td class="num" data-label="预计持有"><span class="data-text">40元</span></td>
-              <td class="num" data-label="定投"><span class="data-text">10元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">51.0</span></span></span></td>
+              <td data-label="状态"><span class="tag owned">定投中</span></td>
             </tr>
             
 
             <tr data-code="019736">
-              <td class="num record-index" data-label="序号"><span class="data-text">11</span></td>
+              <td class="num record-index" data-label="序号"><span class="data-text">9</span></td>
               <td data-label="基金">宝盈 <span class="data-text">019736</span></td>
-              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">45.0</span></span></span></td>
-              <td class="num" data-label="确认持有"><span class="data-text">0元</span></td>
-              <td class="num" data-label="预计持有"><span class="data-text">40元</span></td>
-              <td class="num" data-label="定投"><span class="data-text">10元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-c"><strong>C</strong><span><span class="data-text">48.4</span></span></span></td>
+              <td data-label="状态"><span class="tag owned">定投中</span></td>
+            </tr>
+            
+
+            <tr data-code="018966">
+              <td class="num record-index" data-label="序号"><span class="data-text">10</span></td>
+              <td data-label="基金">汇添富 <span class="data-text">018966</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-d"><strong>D</strong><span><span class="data-text">37.9</span></span></span></td>
+              <td data-label="状态"><span class="tag owned">定投中</span></td>
+            </tr>
+            
+
+            <tr data-code="539001">
+              <td class="num record-index" data-label="序号"><span class="data-text">11</span></td>
+              <td data-label="基金">建信 <span class="data-text">539001</span></td>
+              <td class="num" data-label="评级"><span class="tier-pill portfolio-tier tier-d"><strong>D</strong><span><span class="data-text">31.6</span></span></span></td>
+              <td data-label="状态"><span class="tag owned">定投中</span></td>
             </tr>
             </tbody>
               </table>
@@ -3551,7 +3199,7 @@
       <div class="tracking-subpanel" id="tracking-panel-snapshots" role="tabpanel" aria-labelledby="tracking-tab-snapshots" hidden>
         <div class="tracking-single-panel">
           <div class="tracking-block">
-            <div class="section-title"><h2>追踪快照</h2><span class="title-metric">累计 <strong><span class="data-text">7</span></strong> 条</span></div>
+            <div class="section-title"><h2>追踪快照</h2><span class="title-metric">累计 <strong><span class="data-text">8</span></strong> 条</span></div>
             <div class="table-wrap compact-table-wrap">
               <table class="small-table tracking-table tracking-history-table">
                 <colgroup>
@@ -3560,88 +3208,63 @@
                   <col class="amount-col">
                   <col class="amount-col">
                   <col class="amount-col">
-                  <col class="amount-col">
-                  <col class="amount-col">
-                  <col class="amount-col">
-                  <col class="amount-col">
                 </colgroup>
-                <thead><tr><th>序号</th><th>日期</th><th>确认持仓</th><th>预计投入</th><th>预计持仓</th><th>定投中</th><th>市值</th><th>收益</th><th>收益率</th></tr></thead>
+                <thead><tr><th>序号</th><th>日期</th><th>定投中</th><th>暂停</th><th>候选</th></tr></thead>
                 <tbody><tr>
               <td class="num record-index" data-label="序号"><span class="data-text">1</span></td>
-              <td data-label="日期">2026-06-28</td>
-              <td class="num" data-label="确认持仓"><span class="data-text">560元</span></td>
-              <td class="num" data-label="预计投入"><span class="data-text">1280元</span></td>
-              <td class="num" data-label="预计持仓"><span class="data-text">1840元</span></td>
-              <td class="num" data-label="定投中"><span class="data-text">320元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
+              <td data-label="日期">2026-06-29</td>
+              <td class="num" data-label="定投中"><span class="data-text">11</span></td>
+              <td class="num" data-label="暂停"><span class="data-text">0</span></td>
+              <td class="num" data-label="候选"><span class="data-text">6</span></td>
             </tr>
 <tr>
               <td class="num record-index" data-label="序号"><span class="data-text">2</span></td>
-              <td data-label="日期">2026-06-27</td>
-              <td class="num" data-label="确认持仓"><span class="data-text">560元</span></td>
-              <td class="num" data-label="预计投入"><span class="data-text">1280元</span></td>
-              <td class="num" data-label="预计持仓"><span class="data-text">1840元</span></td>
-              <td class="num" data-label="定投中"><span class="data-text">320元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
+              <td data-label="日期">2026-06-28</td>
+              <td class="num" data-label="定投中"><span class="data-text">11</span></td>
+              <td class="num" data-label="暂停"><span class="data-text">0</span></td>
+              <td class="num" data-label="候选"><span class="data-text">6</span></td>
             </tr>
 <tr>
               <td class="num record-index" data-label="序号"><span class="data-text">3</span></td>
-              <td data-label="日期">2026-06-26</td>
-              <td class="num" data-label="确认持仓"><span class="data-text">560元</span></td>
-              <td class="num" data-label="预计投入"><span class="data-text">1280元</span></td>
-              <td class="num" data-label="预计持仓"><span class="data-text">1840元</span></td>
-              <td class="num" data-label="定投中"><span class="data-text">320元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
+              <td data-label="日期">2026-06-27</td>
+              <td class="num" data-label="定投中"><span class="data-text">11</span></td>
+              <td class="num" data-label="暂停"><span class="data-text">0</span></td>
+              <td class="num" data-label="候选"><span class="data-text">6</span></td>
             </tr>
 <tr>
               <td class="num record-index" data-label="序号"><span class="data-text">4</span></td>
-              <td data-label="日期">2026-06-25</td>
-              <td class="num" data-label="确认持仓"><span class="data-text">560元</span></td>
-              <td class="num" data-label="预计投入"><span class="data-text">960元</span></td>
-              <td class="num" data-label="预计持仓"><span class="data-text">1520元</span></td>
-              <td class="num" data-label="定投中"><span class="data-text">320元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
+              <td data-label="日期">2026-06-26</td>
+              <td class="num" data-label="定投中"><span class="data-text">11</span></td>
+              <td class="num" data-label="暂停"><span class="data-text">0</span></td>
+              <td class="num" data-label="候选"><span class="data-text">6</span></td>
             </tr>
 <tr>
               <td class="num record-index" data-label="序号"><span class="data-text">5</span></td>
-              <td data-label="日期">2026-06-24</td>
-              <td class="num" data-label="确认持仓"><span class="data-text">560元</span></td>
-              <td class="num" data-label="预计投入"><span class="data-text">640元</span></td>
-              <td class="num" data-label="预计持仓"><span class="data-text">1200元</span></td>
-              <td class="num" data-label="定投中"><span class="data-text">320元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
+              <td data-label="日期">2026-06-25</td>
+              <td class="num" data-label="定投中"><span class="data-text">11</span></td>
+              <td class="num" data-label="暂停"><span class="data-text">0</span></td>
+              <td class="num" data-label="候选"><span class="data-text">6</span></td>
             </tr>
 <tr>
               <td class="num record-index" data-label="序号"><span class="data-text">6</span></td>
-              <td data-label="日期">2026-06-23</td>
-              <td class="num" data-label="确认持仓"><span class="data-text">560元</span></td>
-              <td class="num" data-label="预计投入"><span class="data-text">320元</span></td>
-              <td class="num" data-label="预计持仓"><span class="data-text">880元</span></td>
-              <td class="num" data-label="定投中"><span class="data-text">320元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
+              <td data-label="日期">2026-06-24</td>
+              <td class="num" data-label="定投中"><span class="data-text">11</span></td>
+              <td class="num" data-label="暂停"><span class="data-text">0</span></td>
+              <td class="num" data-label="候选"><span class="data-text">6</span></td>
             </tr>
 <tr>
               <td class="num record-index" data-label="序号"><span class="data-text">7</span></td>
+              <td data-label="日期">2026-06-23</td>
+              <td class="num" data-label="定投中"><span class="data-text">11</span></td>
+              <td class="num" data-label="暂停"><span class="data-text">0</span></td>
+              <td class="num" data-label="候选"><span class="data-text">6</span></td>
+            </tr>
+<tr>
+              <td class="num record-index" data-label="序号"><span class="data-text">8</span></td>
               <td data-label="日期">2026-06-22</td>
-              <td class="num" data-label="确认持仓"><span class="data-text">560元</span></td>
-              <td class="num" data-label="预计投入"><span class="data-text">0元</span></td>
-              <td class="num" data-label="预计持仓"><span class="data-text">560元</span></td>
-              <td class="num" data-label="定投中"><span class="data-text">270元/期</span></td>
-              <td class="num" data-label="市值"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益"><span class="muted-cell">--</span></td>
-              <td class="num" data-label="收益率"><span class="muted-cell">--</span></td>
+              <td class="num" data-label="定投中"><span class="data-text">10</span></td>
+              <td class="num" data-label="暂停"><span class="data-text">1</span></td>
+              <td class="num" data-label="候选"><span class="data-text">6</span></td>
             </tr></tbody>
               </table>
             </div>
@@ -3756,7 +3379,7 @@
   <div id="portfolio-editor" class="portfolio-editor" hidden></div>
   <script>
     (function () {
-      const pageGeneratedAt = "2026-06-28 18:55:15";
+      const pageGeneratedAt = "2026-06-29 20:12:54";
       const refreshCheckIntervalMs = 300000;
       const refreshCheckMetaName = "fund-page-generated-at";
       function comparableVersion(value) {
@@ -3794,7 +3417,7 @@
         window.setTimeout(checkPublishedRefresh, 30 * 1000);
         window.setInterval(checkPublishedRefresh, refreshCheckIntervalMs);
       }
-      const initialPortfolioState = {"019441": {"label": "万家", "holding": 50, "active": 50, "paused": 0}, "040046": {"label": "华安", "holding": 10, "active": 10, "paused": 0}, "000834": {"label": "大成", "holding": 10, "active": 10, "paused": 0}, "539001": {"label": "建信", "holding": 100, "active": 50, "paused": 0}, "018966": {"label": "汇添富", "holding": 100, "active": 100, "paused": 0}, "016452": {"label": "南方", "holding": 250, "active": 50, "paused": 0}, "270042": {"label": "广发", "holding": 0, "active": 10, "paused": 0}, "019172": {"label": "摩根", "holding": 20, "active": 10, "paused": 0}, "019547": {"label": "招商", "holding": 20, "active": 10, "paused": 0}, "019736": {"label": "宝盈", "holding": 0, "active": 10, "paused": 0}, "019524": {"label": "华泰柏瑞", "holding": 0, "active": 10, "paused": 0}, "018043": {"label": "天弘", "holding": 0, "active": 0, "paused": 0}, "016055": {"label": "博时", "holding": 0, "active": 0, "paused": 0}, "016532": {"label": "嘉实", "holding": 0, "active": 0, "paused": 0}, "015299": {"label": "华夏", "holding": 0, "active": 0, "paused": 0}, "161130": {"label": "易方达", "holding": 0, "active": 0, "paused": 0}, "160213": {"label": "国泰", "holding": 0, "active": 0, "paused": 0}};
+      const initialPortfolioState = {"019441": {"label": "万家", "status": "定投中"}, "040046": {"label": "华安", "status": "定投中"}, "000834": {"label": "大成", "status": "定投中"}, "539001": {"label": "建信", "status": "定投中"}, "018966": {"label": "汇添富", "status": "定投中"}, "016452": {"label": "南方", "status": "定投中"}, "270042": {"label": "广发", "status": "定投中"}, "019172": {"label": "摩根", "status": "定投中"}, "019547": {"label": "招商", "status": "定投中"}, "019736": {"label": "宝盈", "status": "定投中"}, "019524": {"label": "华泰柏瑞", "status": "定投中"}, "018043": {"label": "天弘", "status": "候选"}, "016055": {"label": "博时", "status": "候选"}, "016532": {"label": "嘉实", "status": "候选"}, "015299": {"label": "华夏", "status": "候选"}, "161130": {"label": "易方达", "status": "候选"}, "160213": {"label": "国泰", "status": "候选"}};
       const fundExecutionAlerts = {};
       const portfolioStorageKey = "nasdaqFundPortfolioStateV1";
       const tabButtons = Array.from(document.querySelectorAll(".tab-button"));
@@ -3843,14 +3466,9 @@
       const totalRows = tbody ? tbody.querySelectorAll("tr").length : 0;
       let activeIndex = 0;
       let activeDirection = "desc";
-      function normalizeAmount(value) {
+      function legacyAmountIsPositive(value) {
         const number = Number(String(value ?? "").replace(/[^0-9.]/g, ""));
-        if (!Number.isFinite(number) || number < 0) return 0;
-        return Math.round(number * 100) / 100;
-      }
-      function formatYuan(value) {
-        const amount = normalizeAmount(value);
-        return amount % 1 === 0 ? `${amount.toFixed(0)}元` : `${amount.toFixed(2).replace(/0+$/, "").replace(/[.]$/, "")}元`;
+        return Number.isFinite(number) && number > 0;
       }
       function dataText(value) {
         return `<span class="data-text">${value}</span>`;
@@ -3877,12 +3495,6 @@
       function subscriptionChangeBadge(code) {
         return changeBadge(alertLabel(code, "subscription"), alertDirection(code, "subscription"));
       }
-      function formatAmountWithDelta(value, direction) {
-        const amount = formatYuan(value);
-        if (direction === "up") return `<span class="data-text change-up">${amount}++</span>`;
-        if (direction === "down") return `<span class="data-text change-down">${amount}--</span>`;
-        return dataText(amount);
-      }
       function tagClass(status) {
         if (status === "定投中") return "owned";
         if (status === "暂停定投") return "paused";
@@ -3900,11 +3512,15 @@
           code,
           {
             label: item.label || code,
-            holding: normalizeAmount(item.holding),
-            active: normalizeAmount(item.active),
-            paused: normalizeAmount(item.paused),
+            status: ["定投中", "暂停定投", "候选"].includes(item.status) ? item.status : "候选",
           },
         ]));
+      }
+      function statusFromSavedItem(item) {
+        if (["定投中", "暂停定投", "候选"].includes(item?.status)) return item.status;
+        if (legacyAmountIsPositive(item?.active)) return "定投中";
+        if (legacyAmountIsPositive(item?.paused)) return "暂停定投";
+        return "候选";
       }
       function readPortfolioState() {
         const state = cloneInitialPortfolioState();
@@ -3915,9 +3531,7 @@
           if (!saved || typeof saved !== "object") return state;
           Object.entries(saved).forEach(([code, item]) => {
             if (!state[code] || !item || typeof item !== "object") return;
-            state[code].holding = normalizeAmount(item.holding);
-            state[code].active = normalizeAmount(item.active);
-            state[code].paused = normalizeAmount(item.paused);
+            state[code].status = statusFromSavedItem(item);
           });
         } catch (error) {}
         return state;
@@ -3929,39 +3543,21 @@
         } catch (error) {}
       }
       function currentStatus(item) {
-        if (item.active > 0) return "定投中";
-        if (item.paused > 0) return "暂停定投";
-        return "候选";
-      }
-      function planAmount(item) {
-        return item.active > 0 ? item.active : item.paused;
-      }
-      const projectedAutoInvestPeriods = 4;
-      function projectedAddition(item) {
-        return Math.max(0, normalizeAmount(item.active) * projectedAutoInvestPeriods);
-      }
-      function planText(item) {
-        if (item.active > 0) return `定投中 · ${formatYuan(item.active)} / 期`;
-        if (item.paused > 0) return `已暂停 · ${formatYuan(item.paused)} / 期`;
-        return "未设置";
+        return ["定投中", "暂停定投", "候选"].includes(item?.status) ? item.status : "候选";
       }
       function updateTitleTotals() {
-        const holdingTotal = Object.values(portfolioState).reduce((sum, item) => sum + normalizeAmount(item.holding), 0);
-        const activeTotal = Object.values(portfolioState).reduce((sum, item) => sum + normalizeAmount(item.active), 0);
-        const projectedAdditionTotal = Object.values(portfolioState).reduce((sum, item) => sum + projectedAddition(item), 0);
-        const holdingTotalNode = document.getElementById("holding-total-value");
-        const projectedTotalNode = document.getElementById("projected-holding-total-value");
-        const activeTotalNode = document.getElementById("active-auto-total-value");
-        if (holdingTotalNode) holdingTotalNode.innerHTML = dataText(formatYuan(holdingTotal));
-        if (projectedTotalNode) projectedTotalNode.innerHTML = dataText(formatYuan(holdingTotal + projectedAdditionTotal));
-        if (activeTotalNode) activeTotalNode.innerHTML = `${dataText(formatYuan(activeTotal))} / 期`;
+        const activeCount = Object.values(portfolioState).filter((item) => currentStatus(item) === "定投中").length;
+        const pausedCount = Object.values(portfolioState).filter((item) => currentStatus(item) === "暂停定投").length;
+        const activeNode = document.getElementById("active-auto-count-value");
+        const pausedNode = document.getElementById("paused-auto-count-value");
+        if (activeNode) activeNode.innerHTML = dataText(String(activeCount));
+        if (pausedNode) pausedNode.innerHTML = dataText(String(pausedCount));
       }
       function updateMobileCard(code) {
         if (!mobileFundList) return;
         const item = portfolioState[code];
         const card = mobileFundList.querySelector(`[data-mobile-card][data-code="${code}"]`);
         if (!item || !card) return;
-        const limitDirection = bestLimitDirection(code);
         const subscriptionBadge = subscriptionChangeBadge(code);
         const status = currentStatus(item);
         card.dataset.status = status;
@@ -3971,23 +3567,14 @@
           statusNode.textContent = status;
         }
         const lines = card.querySelectorAll(".mobile-position-lines strong");
-        if (lines[0]) lines[0].innerHTML = item.holding > 0 ? formatAmountWithDelta(item.holding, limitDirection) : dataText("0元");
-        if (lines[1]) {
-          if (item.active > 0) lines[1].innerHTML = `${formatAmountWithDelta(item.active, limitDirection)} / 期`;
-          else if (item.paused > 0) lines[1].innerHTML = `${formatAmountWithDelta(item.paused, limitDirection)} / 期`;
-          else lines[1].textContent = "未设置";
-        }
-        if (lines[2]) {
-          const projectedText = projectedAddition(item) > 0 ? `+${formatYuan(projectedAddition(item))}` : "0元";
-          lines[2].innerHTML = dataText(projectedText);
-        }
-        const investLine = lines[1]?.closest("span");
+        if (lines[0]) lines[0].textContent = status;
+        const investLine = lines[0]?.closest("span");
         if (investLine) {
           const existingBadge = investLine.querySelector(".change-badge");
           if (existingBadge) existingBadge.remove();
           if (subscriptionBadge) investLine.insertAdjacentHTML("beforeend", subscriptionBadge);
           const label = investLine.querySelector("em");
-          if (label) label.textContent = item.paused > 0 && item.active <= 0 ? "暂停" : "定投";
+          if (label) label.textContent = "定投";
         }
       }
       function updateMainRow(code) {
@@ -3996,9 +3583,6 @@
         if (!item || !row) return;
         const status = currentStatus(item);
         row.dataset.status = status;
-        row.dataset.holdingAmount = String(item.holding);
-        row.dataset.autoInvestAmount = String(item.active);
-        row.dataset.pausedAutoInvestAmount = String(item.paused);
         const statusCell = row.children[17];
         if (statusCell) {
           statusCell.dataset.sortValue = String(statusRank(status));
@@ -4006,22 +3590,9 @@
         }
         const positionCell = row.children[3];
         if (positionCell) {
-          const limitDirection = bestLimitDirection(code);
           const subscriptionBadge = subscriptionChangeBadge(code);
-          const positionSort = item.holding * 1000000 + item.active * 1000 + item.paused;
-          positionCell.dataset.sortValue = String(positionSort);
-          const holdingLine = item.holding > 0
-            ? `<span class="position-line"><em>持有</em><strong>${formatAmountWithDelta(item.holding, limitDirection)}</strong></span>`
-            : `<span class="position-line muted-line"><em>持有</em><strong>0元</strong></span>`;
-          const investLine = item.active > 0
-            ? `<span class="position-line"><em>定投</em><strong>${formatAmountWithDelta(item.active, limitDirection)} / 期</strong>${subscriptionBadge}</span>`
-            : item.paused > 0
-              ? `<span class="position-line paused-line"><em>暂停</em><strong>${formatAmountWithDelta(item.paused, limitDirection)} / 期</strong>${subscriptionBadge}</span>`
-              : `<span class="position-line muted-line"><em>定投</em><strong>未设置</strong>${subscriptionBadge}</span>`;
-          const projectedLine = projectedAddition(item) > 0
-            ? `<span class="position-line projected-line"><em>预计</em><strong>+${formatYuan(projectedAddition(item))}</strong></span>`
-            : "";
-          positionCell.innerHTML = `<div class="position-plan">${holdingLine}${investLine}${projectedLine}</div>`;
+          positionCell.dataset.sortValue = String(statusRank(status));
+          positionCell.innerHTML = `<div class="position-plan status-only-plan"><span class="position-line"><em>状态</em><strong>${statusTag(status)}</strong>${subscriptionBadge}</span></div>`;
         }
       }
       function updateAutoRows() {
@@ -4031,20 +3602,9 @@
           if (!item) return;
           const status = currentStatus(item);
           const statusCell = row.querySelector('[data-field="status"]');
-          const amountCell = row.querySelector('[data-field="plan_amount"]');
-          const holdingCell = row.querySelector('[data-field="holding"]');
           if (statusCell) {
             statusCell.dataset.sortValue = String(statusRank(status));
             statusCell.innerHTML = statusTag(status);
-          }
-          if (amountCell) {
-            const amount = planAmount(item);
-            amountCell.dataset.sortValue = String(amount);
-            amountCell.innerHTML = `${dataText(formatYuan(amount))} / 期`;
-          }
-          if (holdingCell) {
-            holdingCell.dataset.sortValue = String(item.holding);
-            holdingCell.innerHTML = dataText(formatYuan(item.holding));
           }
         });
       }
@@ -4058,33 +3618,7 @@
       function setPlanStatus(code, status) {
         const item = portfolioState[code];
         if (!item) return;
-        const amount = planAmount(item) || 10;
-        if (status === "定投中") {
-          item.active = amount;
-          item.paused = 0;
-        } else if (status === "暂停定投") {
-          item.paused = amount;
-          item.active = 0;
-        } else {
-          item.active = 0;
-          item.paused = 0;
-        }
-        savePortfolioState();
-        refreshPortfolioViews();
-      }
-      function setAmount(code, field, value) {
-        const item = portfolioState[code];
-        if (!item) return;
-        const amount = normalizeAmount(value);
-        if (field === "holding") item.holding = amount;
-        if (field === "plan_amount") {
-          if (item.active > 0 || item.paused === 0) item.active = amount;
-          else item.paused = amount;
-          if (amount === 0) {
-            item.active = 0;
-            item.paused = 0;
-          }
-        }
+        item.status = ["定投中", "暂停定投", "候选"].includes(status) ? status : "候选";
         savePortfolioState();
         refreshPortfolioViews();
       }
@@ -4108,51 +3642,6 @@
         }
         portfolioEditor.style.left = `${Math.round(left)}px`;
         portfolioEditor.style.top = `${Math.round(top)}px`;
-      }
-      function openAmountEditor(cell) {
-        const row = cell.closest("tr[data-code]");
-        const code = row?.dataset.code;
-        const field = cell.dataset.field;
-        const item = code ? portfolioState[code] : null;
-        if (!item || !field || !portfolioEditor) return;
-        const currentValue = field === "holding" ? item.holding : planAmount(item);
-        activeEditorCell = cell;
-        portfolioEditor.hidden = false;
-        portfolioEditor.innerHTML = `
-          <div class="editor-panel" role="dialog" aria-label="修改金额">
-            <div class="editor-row">
-              <input class="editor-input" type="number" min="0" step="1" inputmode="decimal" value="${currentValue}" aria-label="金额">
-              <span class="editor-suffix">元${field === "plan_amount" ? " / 期" : ""}</span>
-            </div>
-            <div class="editor-row">
-              <button type="button" class="editor-action primary" data-action="commit">确定</button>
-              <button type="button" class="editor-action" data-action="cancel">取消</button>
-            </div>
-          </div>
-        `;
-        placePortfolioEditor(cell);
-        const input = portfolioEditor.querySelector(".editor-input");
-        const commit = () => {
-          setAmount(code, field, input.value);
-          closePortfolioEditor();
-        };
-        portfolioEditor.querySelector('[data-action="commit"]')?.addEventListener("click", commit);
-        portfolioEditor.querySelector('[data-action="cancel"]')?.addEventListener("click", closePortfolioEditor);
-        input?.addEventListener("keydown", (event) => {
-          if (event.key === "Enter") {
-            event.preventDefault();
-            commit();
-          }
-          if (event.key === "Escape") {
-            event.preventDefault();
-            closePortfolioEditor();
-          }
-        });
-        requestAnimationFrame(() => {
-          placePortfolioEditor(cell);
-          input?.focus();
-          input?.select();
-        });
       }
       function openStatusEditor(cell) {
         const row = cell.closest("tr[data-code]");
@@ -4187,9 +3676,6 @@
           placePortfolioEditor(cell);
           portfolioEditor.querySelector('[aria-selected="true"]')?.focus();
         });
-      }
-      function beginAmountEdit(cell) {
-        openAmountEditor(cell);
       }
       function beginStatusEdit(cell) {
         openStatusEditor(cell);
@@ -4516,22 +4002,13 @@
           });
         });
         portfolioTable.addEventListener("click", (event) => {
-          const amountCell = event.target.closest(".editable-amount");
-          if (amountCell && portfolioTable.contains(amountCell)) {
-            beginAmountEdit(amountCell);
-            return;
-          }
           const statusCell = event.target.closest(".editable-status");
           if (statusCell && portfolioTable.contains(statusCell)) beginStatusEdit(statusCell);
         });
         portfolioTable.addEventListener("keydown", (event) => {
           if (event.key !== "Enter" && event.key !== " ") return;
-          const amountCell = event.target.closest(".editable-amount");
           const statusCell = event.target.closest(".editable-status");
-          if (amountCell && portfolioTable.contains(amountCell)) {
-            event.preventDefault();
-            beginAmountEdit(amountCell);
-          } else if (statusCell && portfolioTable.contains(statusCell)) {
+          if (statusCell && portfolioTable.contains(statusCell)) {
             event.preventDefault();
             beginStatusEdit(statusCell);
           }
