@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T12:31:31+08:00",
+  "generated_at": "2026-07-04T00:45:50+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -54,18 +54,18 @@
   "execution_alerts": {
     "019441": {
       "code": "019441",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -86,18 +86,18 @@
     },
     "040046": {
       "code": "040046",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -118,18 +118,18 @@
     },
     "000834": {
       "code": "000834",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -150,18 +150,18 @@
     },
     "539001": {
       "code": "539001",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -182,18 +182,18 @@
     },
     "018966": {
       "code": "018966",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -214,18 +214,18 @@
     },
     "016452": {
       "code": "016452",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -246,18 +246,18 @@
     },
     "270042": {
       "code": "270042",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -278,18 +278,18 @@
     },
     "019172": {
       "code": "019172",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -310,18 +310,18 @@
     },
     "019547": {
       "code": "019547",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -342,18 +342,18 @@
     },
     "019736": {
       "code": "019736",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -374,18 +374,18 @@
     },
     "019524": {
       "code": "019524",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -408,18 +408,18 @@
   "change_alerts": {
     "019441": {
       "code": "019441",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -440,18 +440,18 @@
     },
     "040046": {
       "code": "040046",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -472,18 +472,18 @@
     },
     "000834": {
       "code": "000834",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -504,18 +504,18 @@
     },
     "539001": {
       "code": "539001",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -536,18 +536,18 @@
     },
     "018966": {
       "code": "018966",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -568,18 +568,18 @@
     },
     "016452": {
       "code": "016452",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -600,18 +600,18 @@
     },
     "270042": {
       "code": "270042",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -632,18 +632,18 @@
     },
     "019172": {
       "code": "019172",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -664,18 +664,18 @@
     },
     "019547": {
       "code": "019547",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -696,18 +696,18 @@
     },
     "019736": {
       "code": "019736",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -728,18 +728,18 @@
     },
     "019524": {
       "code": "019524",
-      "detected_at": "2026-07-03T12:31:31+08:00",
-      "previous_generated_at": "2026-07-02T01:23:58+08:00",
+      "detected_at": "2026-07-04T00:45:50+08:00",
+      "previous_generated_at": "2026-07-03T12:31:31+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-07-06T12:31:31+08:00",
+      "retained_until": "2026-07-07T00:45:50+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -873,8 +873,8 @@
   "tracking_plan": {
     "schema_version": 2,
     "file": "portfolio_tracking.json",
-    "record_count": 11,
-    "latest_date": "2026-07-03",
+    "record_count": 12,
+    "latest_date": "2026-07-04",
     "refresh_policy": "GitHub Actions refreshes the main data three times per Beijing day; portfolio_tracking.json upserts today's record and appends only when the Beijing date changes.",
     "refresh_times_beijing": [
       "08:45",
@@ -891,11 +891,11 @@
       "status": "定投中",
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
-      "investing_tier": "C",
-      "investing_score": 49.6,
-      "investing_rank": 13,
-      "subscription_status": "暂停申购",
-      "subscription_status_raw": "暂停申购(单日投资上限50元)",
+      "investing_tier": "B",
+      "investing_score": 51.9,
+      "investing_rank": 11,
+      "subscription_status": "允许申购",
+      "subscription_status_raw": "限大额(单日投资上限50元)",
       "fund_size_billion": 4.38,
       "daily_limit": 50.0,
       "agency_limit_label": "",
@@ -906,18 +906,18 @@
       "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {
         "code": "019441",
-        "detected_at": "2026-07-03T12:31:31+08:00",
-        "previous_generated_at": "2026-07-02T01:23:58+08:00",
+        "detected_at": "2026-07-04T00:45:50+08:00",
+        "previous_generated_at": "2026-07-03T12:31:31+08:00",
         "retention_hours": 72,
-        "retained_until": "2026-07-06T12:31:31+08:00",
+        "retained_until": "2026-07-07T00:45:50+08:00",
         "summary": [
-          "暂停申购"
+          "恢复申购"
         ],
         "subscription": {
-          "direction": "paused",
-          "previous": "允许申购",
-          "current": "暂停申购",
-          "label": "暂停申购"
+          "direction": "opened",
+          "previous": "暂停申购",
+          "current": "允许申购",
+          "label": "恢复申购"
         },
         "agency_limit": {
           "direction": "",
@@ -942,13 +942,13 @@
       "sales_fee": 0.0,
       "base_annual_fee_rate": 0.65,
       "operation_fee": 0.65,
-      "one_year": 23.76,
-      "three_year": 21.24,
-      "day_change": -1.5,
+      "one_year": 21.07,
+      "three_year": 19.57,
+      "day_change": -1.48,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 2.07,
       "tracking_avg_error": 2.12,
-      "tracking_error_date": "2026-07-01",
+      "tracking_error_date": "2026-07-02",
       "free_after_days": 30,
       "redemption_rules": [
         [
@@ -978,32 +978,32 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "S",
-      "investing_score": 85.7,
+      "investing_score": 85.3,
       "investing_rank": 1,
-      "subscription_status": "暂停申购",
-      "subscription_status_raw": "暂停申购(单日投资上限10元)",
+      "subscription_status": "允许申购",
+      "subscription_status_raw": "限大额(单日投资上限10元)",
       "fund_size_billion": 47.03,
       "daily_limit": 10.0,
       "agency_limit_label": "",
-      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购(单日投资上限10元)",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限10元)",
       "agency_limit_confidence": "third_party_api",
       "direct_limit": 1000.0,
       "direct_limit_source": "直销限额: 华安基金公告PDF，直销机构单日每个基金账户累计申购/定投限额；生效日/公告日: 2025-12-05；公告明确普通渠道每类人民币份额10元，直销机构1000元。；https://pdf.dfcfw.com/pdf/H2_AN202512041793575251_1.pdf",
       "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {
         "code": "040046",
-        "detected_at": "2026-07-03T12:31:31+08:00",
-        "previous_generated_at": "2026-07-02T01:23:58+08:00",
+        "detected_at": "2026-07-04T00:45:50+08:00",
+        "previous_generated_at": "2026-07-03T12:31:31+08:00",
         "retention_hours": 72,
-        "retained_until": "2026-07-06T12:31:31+08:00",
+        "retained_until": "2026-07-07T00:45:50+08:00",
         "summary": [
-          "暂停申购"
+          "恢复申购"
         ],
         "subscription": {
-          "direction": "paused",
-          "previous": "允许申购",
-          "current": "暂停申购",
-          "label": "暂停申购"
+          "direction": "opened",
+          "previous": "暂停申购",
+          "current": "允许申购",
+          "label": "恢复申购"
         },
         "agency_limit": {
           "direction": "",
@@ -1028,13 +1028,13 @@
       "sales_fee": 0.0,
       "base_annual_fee_rate": 0.8,
       "operation_fee": 0.8,
-      "one_year": 25.18,
-      "three_year": 22.27,
-      "day_change": -1.56,
+      "one_year": 22.29,
+      "three_year": 20.41,
+      "day_change": -1.6,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.06,
       "tracking_avg_error": 2.12,
-      "tracking_error_date": "2026-07-01",
+      "tracking_error_date": "2026-07-02",
       "free_after_days": 7,
       "redemption_rules": [
         [
@@ -1059,32 +1059,32 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "C",
-      "investing_score": 50.3,
-      "investing_rank": 12,
-      "subscription_status": "暂停申购",
-      "subscription_status_raw": "暂停申购(单日投资上限10元)",
+      "investing_score": 47.7,
+      "investing_rank": 15,
+      "subscription_status": "允许申购",
+      "subscription_status_raw": "限大额(单日投资上限10元)",
       "fund_size_billion": 34.53,
       "daily_limit": 10.0,
       "agency_limit_label": "",
-      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购(单日投资上限10元)",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限10元)",
       "agency_limit_confidence": "third_party_api",
       "direct_limit": 100.0,
       "direct_limit_source": "直销限额: 大成基金公告PDF，直销渠道单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-06-04；公告明确直销渠道100元，代销机构10元。；https://pdf.dfcfw.com/pdf/H2_AN202606031823188725_1.pdf",
       "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {
         "code": "000834",
-        "detected_at": "2026-07-03T12:31:31+08:00",
-        "previous_generated_at": "2026-07-02T01:23:58+08:00",
+        "detected_at": "2026-07-04T00:45:50+08:00",
+        "previous_generated_at": "2026-07-03T12:31:31+08:00",
         "retention_hours": 72,
-        "retained_until": "2026-07-06T12:31:31+08:00",
+        "retained_until": "2026-07-07T00:45:50+08:00",
         "summary": [
-          "暂停申购"
+          "恢复申购"
         ],
         "subscription": {
-          "direction": "paused",
-          "previous": "允许申购",
-          "current": "暂停申购",
-          "label": "暂停申购"
+          "direction": "opened",
+          "previous": "暂停申购",
+          "current": "允许申购",
+          "label": "恢复申购"
         },
         "agency_limit": {
           "direction": "",
@@ -1109,13 +1109,13 @@
       "sales_fee": 0.0,
       "base_annual_fee_rate": 1.0,
       "operation_fee": 1.0,
-      "one_year": 24.21,
-      "three_year": 21.0,
-      "day_change": -1.56,
+      "one_year": 21.31,
+      "three_year": 19.12,
+      "day_change": -1.63,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.06,
       "tracking_avg_error": 2.12,
-      "tracking_error_date": "2026-07-01",
+      "tracking_error_date": "2026-07-02",
       "free_after_days": 730,
       "redemption_rules": [
         [
@@ -1148,32 +1148,32 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "D",
-      "investing_score": 24.8,
+      "investing_score": 26.1,
       "investing_rank": 17,
-      "subscription_status": "暂停申购",
-      "subscription_status_raw": "暂停申购(单日投资上限100元)",
+      "subscription_status": "允许申购",
+      "subscription_status_raw": "限大额(单日投资上限100元)",
       "fund_size_billion": 16.24,
       "daily_limit": 100.0,
       "agency_limit_label": "",
-      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购(单日投资上限100元)",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限100元)",
       "agency_limit_confidence": "third_party_api",
       "direct_limit": 100.0,
       "direct_limit_source": "直销限额: 建信基金公告PDF，人民币份额单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-02-27；公告未区分直销/代销；按人民币A/C/D份额统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202602261820057584_1.pdf",
       "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {
         "code": "539001",
-        "detected_at": "2026-07-03T12:31:31+08:00",
-        "previous_generated_at": "2026-07-02T01:23:58+08:00",
+        "detected_at": "2026-07-04T00:45:50+08:00",
+        "previous_generated_at": "2026-07-03T12:31:31+08:00",
         "retention_hours": 72,
-        "retained_until": "2026-07-06T12:31:31+08:00",
+        "retained_until": "2026-07-07T00:45:50+08:00",
         "summary": [
-          "暂停申购"
+          "恢复申购"
         ],
         "subscription": {
-          "direction": "paused",
-          "previous": "允许申购",
-          "current": "暂停申购",
-          "label": "暂停申购"
+          "direction": "opened",
+          "previous": "暂停申购",
+          "current": "允许申购",
+          "label": "恢复申购"
         },
         "agency_limit": {
           "direction": "",
@@ -1198,13 +1198,13 @@
       "sales_fee": 0.0,
       "base_annual_fee_rate": 1.0,
       "operation_fee": 1.0,
-      "one_year": 23.33,
-      "three_year": 20.66,
-      "day_change": -1.54,
+      "one_year": 20.65,
+      "three_year": 18.97,
+      "day_change": -1.49,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 2.18,
       "tracking_avg_error": 2.12,
-      "tracking_error_date": "2026-07-01",
+      "tracking_error_date": "2026-07-02",
       "free_after_days": 90,
       "redemption_rules": [
         [
@@ -1239,30 +1239,30 @@
       "investing_tier": "D",
       "investing_score": 29.2,
       "investing_rank": 16,
-      "subscription_status": "暂停申购",
-      "subscription_status_raw": "暂停申购(单日投资上限50元)",
+      "subscription_status": "允许申购",
+      "subscription_status_raw": "限大额(单日投资上限50元)",
       "fund_size_billion": 10.35,
       "daily_limit": 50.0,
       "agency_limit_label": "",
-      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购(单日投资上限50元)",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限50元)",
       "agency_limit_confidence": "third_party_api",
       "direct_limit": 100.0,
       "direct_limit_source": "直销限额: 汇添富基金公告PDF，人民币A/C/E单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-04-17；公告未区分直销/代销，按本基金人民币A/C/E统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202604171821282012_1.pdf",
       "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {
         "code": "018966",
-        "detected_at": "2026-07-03T12:31:31+08:00",
-        "previous_generated_at": "2026-07-02T01:23:58+08:00",
+        "detected_at": "2026-07-04T00:45:50+08:00",
+        "previous_generated_at": "2026-07-03T12:31:31+08:00",
         "retention_hours": 72,
-        "retained_until": "2026-07-06T12:31:31+08:00",
+        "retained_until": "2026-07-07T00:45:50+08:00",
         "summary": [
-          "暂停申购"
+          "恢复申购"
         ],
         "subscription": {
-          "direction": "paused",
-          "previous": "允许申购",
-          "current": "暂停申购",
-          "label": "暂停申购"
+          "direction": "opened",
+          "previous": "暂停申购",
+          "current": "允许申购",
+          "label": "恢复申购"
         },
         "agency_limit": {
           "direction": "",
@@ -1287,13 +1287,13 @@
       "sales_fee": 0.0,
       "base_annual_fee_rate": 0.65,
       "operation_fee": 0.65,
-      "one_year": 22.36,
-      "three_year": 20.13,
+      "one_year": 19.63,
+      "three_year": 18.44,
       "day_change": -1.52,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.74,
       "tracking_avg_error": 2.12,
-      "tracking_error_date": "2026-07-01",
+      "tracking_error_date": "2026-07-02",
       "free_after_days": 7,
       "redemption_rules": [
         [
@@ -1318,32 +1318,32 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "B",
-      "investing_score": 58.5,
+      "investing_score": 58.4,
       "investing_rank": 8,
-      "subscription_status": "暂停申购",
-      "subscription_status_raw": "暂停申购(单日投资上限50元)",
+      "subscription_status": "允许申购",
+      "subscription_status_raw": "限大额(单日投资上限50元)",
       "fund_size_billion": 31.11,
       "daily_limit": 50.0,
       "agency_limit_label": "",
-      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购(单日投资上限50元)",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限50元)",
       "agency_limit_confidence": "third_party_api",
       "direct_limit": 50.0,
       "direct_limit_source": "直销限额: 南方基金官网产品状态及限额接口，A类大额申购/定投/转换转入限额；生效日/公告日: 2026-06-18；官网产品状态接口未区分直销/代销；按南方基金官网A类当前限额记录。；https://www.nffund.com/new/transaction-guide/product-status-and-limits.html",
       "direct_limit_confidence": "fund_company_status_page",
       "execution_alert": {
         "code": "016452",
-        "detected_at": "2026-07-03T12:31:31+08:00",
-        "previous_generated_at": "2026-07-02T01:23:58+08:00",
+        "detected_at": "2026-07-04T00:45:50+08:00",
+        "previous_generated_at": "2026-07-03T12:31:31+08:00",
         "retention_hours": 72,
-        "retained_until": "2026-07-06T12:31:31+08:00",
+        "retained_until": "2026-07-07T00:45:50+08:00",
         "summary": [
-          "暂停申购"
+          "恢复申购"
         ],
         "subscription": {
-          "direction": "paused",
-          "previous": "允许申购",
-          "current": "暂停申购",
-          "label": "暂停申购"
+          "direction": "opened",
+          "previous": "暂停申购",
+          "current": "允许申购",
+          "label": "恢复申购"
         },
         "agency_limit": {
           "direction": "",
@@ -1368,13 +1368,13 @@
       "sales_fee": 0.0,
       "base_annual_fee_rate": 0.65,
       "operation_fee": 0.65,
-      "one_year": 23.84,
-      "three_year": 21.06,
+      "one_year": 21.05,
+      "three_year": 19.29,
       "day_change": -1.56,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.45,
       "tracking_avg_error": 2.12,
-      "tracking_error_date": "2026-07-01",
+      "tracking_error_date": "2026-07-02",
       "free_after_days": 7,
       "redemption_rules": [
         [
@@ -1399,32 +1399,32 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "A",
-      "investing_score": 68.2,
+      "investing_score": 66.8,
       "investing_rank": 5,
-      "subscription_status": "暂停申购",
-      "subscription_status_raw": "暂停申购(单日投资上限10元)",
+      "subscription_status": "允许申购",
+      "subscription_status_raw": "限大额(单日投资上限10元)",
       "fund_size_billion": 97.16,
       "daily_limit": 10.0,
       "agency_limit_label": "",
-      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购(单日投资上限10元)",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限10元)",
       "agency_limit_confidence": "third_party_api",
       "direct_limit": 10.0,
       "direct_limit_source": "直销限额: 广发基金公告正文，人民币A/C/F份额单日单个基金账户申购含定投/不定投/转换转入业务限额；生效日/公告日: 2025-10-31；公告未区分直销/代销；投资者通过多家销售渠道的多笔申请累计计算；人民币A类270042当前限额10元。；https://pdf.dfcfw.com/pdf/H2_AN202510301771709226_1.pdf",
       "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {
         "code": "270042",
-        "detected_at": "2026-07-03T12:31:31+08:00",
-        "previous_generated_at": "2026-07-02T01:23:58+08:00",
+        "detected_at": "2026-07-04T00:45:50+08:00",
+        "previous_generated_at": "2026-07-03T12:31:31+08:00",
         "retention_hours": 72,
-        "retained_until": "2026-07-06T12:31:31+08:00",
+        "retained_until": "2026-07-07T00:45:50+08:00",
         "summary": [
-          "暂停申购"
+          "恢复申购"
         ],
         "subscription": {
-          "direction": "paused",
-          "previous": "允许申购",
-          "current": "暂停申购",
-          "label": "暂停申购"
+          "direction": "opened",
+          "previous": "暂停申购",
+          "current": "允许申购",
+          "label": "恢复申购"
         },
         "agency_limit": {
           "direction": "",
@@ -1449,13 +1449,13 @@
       "sales_fee": 0.0,
       "base_annual_fee_rate": 1.0,
       "operation_fee": 1.0,
-      "one_year": 24.66,
-      "three_year": 21.93,
-      "day_change": -1.6,
+      "one_year": 21.75,
+      "three_year": 20.05,
+      "day_change": -1.63,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.09,
       "tracking_avg_error": 2.12,
-      "tracking_error_date": "2026-07-01",
+      "tracking_error_date": "2026-07-02",
       "free_after_days": 730,
       "redemption_rules": [
         [
@@ -1488,32 +1488,32 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "C",
-      "investing_score": 46.4,
-      "investing_rank": 14,
-      "subscription_status": "暂停申购",
-      "subscription_status_raw": "暂停申购(单日投资上限10元)",
+      "investing_score": 49.4,
+      "investing_rank": 12,
+      "subscription_status": "允许申购",
+      "subscription_status_raw": "限大额(单日投资上限10元)",
       "fund_size_billion": 21.78,
       "daily_limit": 10.0,
       "agency_limit_label": "",
-      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购(单日投资上限10元)",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限10元)",
       "agency_limit_confidence": "third_party_api",
       "direct_limit": 10.0,
       "direct_limit_source": "直销限额: 摩根基金公告正文，人民币A/C单日申购/定投/转换转入累计限额；生效日/公告日: 2026-06-11；公告未区分直销/代销，按人民币份额统一限制记录；该公告比2026-04-27的100元公告更新。；https://pdf.dfcfw.com/pdf/H2_AN202606101823421439_1.pdf",
       "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {
         "code": "019172",
-        "detected_at": "2026-07-03T12:31:31+08:00",
-        "previous_generated_at": "2026-07-02T01:23:58+08:00",
+        "detected_at": "2026-07-04T00:45:50+08:00",
+        "previous_generated_at": "2026-07-03T12:31:31+08:00",
         "retention_hours": 72,
-        "retained_until": "2026-07-06T12:31:31+08:00",
+        "retained_until": "2026-07-07T00:45:50+08:00",
         "summary": [
-          "暂停申购"
+          "恢复申购"
         ],
         "subscription": {
-          "direction": "paused",
-          "previous": "允许申购",
-          "current": "暂停申购",
-          "label": "暂停申购"
+          "direction": "opened",
+          "previous": "暂停申购",
+          "current": "允许申购",
+          "label": "恢复申购"
         },
         "agency_limit": {
           "direction": "",
@@ -1538,13 +1538,13 @@
       "sales_fee": 0.0,
       "base_annual_fee_rate": 0.6,
       "operation_fee": 0.6,
-      "one_year": 24.27,
-      "three_year": 20.75,
-      "day_change": -1.47,
+      "one_year": 21.61,
+      "three_year": 19.13,
+      "day_change": -1.44,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 2.29,
       "tracking_avg_error": 2.12,
-      "tracking_error_date": "2026-07-01",
+      "tracking_error_date": "2026-07-02",
       "free_after_days": 7,
       "redemption_rules": [
         [
@@ -1569,32 +1569,32 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "B",
-      "investing_score": 53.4,
-      "investing_rank": 11,
-      "subscription_status": "暂停申购",
-      "subscription_status_raw": "暂停申购(单日投资上限10元)",
+      "investing_score": 56.1,
+      "investing_rank": 9,
+      "subscription_status": "允许申购",
+      "subscription_status_raw": "限大额(单日投资上限10元)",
       "fund_size_billion": 16.52,
       "daily_limit": 10.0,
       "agency_limit_label": "",
-      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购(单日投资上限10元)",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限10元)",
       "agency_limit_confidence": "third_party_api",
       "direct_limit": 10.0,
       "direct_limit_source": "直销限额: 招商基金公告PDF，A/C单日单个基金账户申购/定投累计限额；生效日/公告日: 2026-06-10；公告未区分直销/代销，按本基金A/C统一限制记录。；https://pdf.dfcfw.com/pdf/H2_AN202606091823377663_1.pdf",
       "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {
         "code": "019547",
-        "detected_at": "2026-07-03T12:31:31+08:00",
-        "previous_generated_at": "2026-07-02T01:23:58+08:00",
+        "detected_at": "2026-07-04T00:45:50+08:00",
+        "previous_generated_at": "2026-07-03T12:31:31+08:00",
         "retention_hours": 72,
-        "retained_until": "2026-07-06T12:31:31+08:00",
+        "retained_until": "2026-07-07T00:45:50+08:00",
         "summary": [
-          "暂停申购"
+          "恢复申购"
         ],
         "subscription": {
-          "direction": "paused",
-          "previous": "允许申购",
-          "current": "暂停申购",
-          "label": "暂停申购"
+          "direction": "opened",
+          "previous": "暂停申购",
+          "current": "允许申购",
+          "label": "恢复申购"
         },
         "agency_limit": {
           "direction": "",
@@ -1619,13 +1619,13 @@
       "sales_fee": 0.0,
       "base_annual_fee_rate": 0.65,
       "operation_fee": 0.65,
-      "one_year": 23.95,
-      "three_year": 21.01,
-      "day_change": -1.53,
+      "one_year": 21.29,
+      "three_year": 19.36,
+      "day_change": -1.46,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.74,
       "tracking_avg_error": 2.12,
-      "tracking_error_date": "2026-07-01",
+      "tracking_error_date": "2026-07-02",
       "free_after_days": 7,
       "redemption_rules": [
         [
@@ -1650,32 +1650,32 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "C",
-      "investing_score": 46.2,
-      "investing_rank": 15,
-      "subscription_status": "暂停申购",
-      "subscription_status_raw": "暂停申购(单日投资上限10元)",
+      "investing_score": 47.9,
+      "investing_rank": 14,
+      "subscription_status": "允许申购",
+      "subscription_status_raw": "限大额(单日投资上限10元)",
       "fund_size_billion": 5.68,
       "daily_limit": 10.0,
       "agency_limit_label": "",
-      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购(单日投资上限10元)",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限10元)",
       "agency_limit_confidence": "third_party_api",
       "direct_limit": 10.0,
       "direct_limit_source": "直销限额: 宝盈基金公告正文，A/C人民币份额申购含定投限制金额；生效日/公告日: 2026-06-11；公告未区分直销/代销；A/C均为10元。；https://pdf.dfcfw.com/pdf/H2_AN202606101823409504_1.pdf",
       "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {
         "code": "019736",
-        "detected_at": "2026-07-03T12:31:31+08:00",
-        "previous_generated_at": "2026-07-02T01:23:58+08:00",
+        "detected_at": "2026-07-04T00:45:50+08:00",
+        "previous_generated_at": "2026-07-03T12:31:31+08:00",
         "retention_hours": 72,
-        "retained_until": "2026-07-06T12:31:31+08:00",
+        "retained_until": "2026-07-07T00:45:50+08:00",
         "summary": [
-          "暂停申购"
+          "恢复申购"
         ],
         "subscription": {
-          "direction": "paused",
-          "previous": "允许申购",
-          "current": "暂停申购",
-          "label": "暂停申购"
+          "direction": "opened",
+          "previous": "暂停申购",
+          "current": "允许申购",
+          "label": "恢复申购"
         },
         "agency_limit": {
           "direction": "",
@@ -1700,13 +1700,13 @@
       "sales_fee": 0.0,
       "base_annual_fee_rate": 0.65,
       "operation_fee": 0.65,
-      "one_year": 23.56,
-      "three_year": 20.74,
-      "day_change": -1.52,
+      "one_year": 20.95,
+      "three_year": 19.04,
+      "day_change": -1.49,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.65,
       "tracking_avg_error": 2.12,
-      "tracking_error_date": "2026-07-01",
+      "tracking_error_date": "2026-07-02",
       "free_after_days": 7,
       "redemption_rules": [
         [
@@ -1731,32 +1731,32 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "B",
-      "investing_score": 53.9,
+      "investing_score": 55.2,
       "investing_rank": 10,
-      "subscription_status": "暂停申购",
-      "subscription_status_raw": "暂停申购(单日投资上限10元)",
+      "subscription_status": "允许申购",
+      "subscription_status_raw": "限大额(单日投资上限10元)",
       "fund_size_billion": 7.02,
       "daily_limit": 10.0,
       "agency_limit_label": "",
-      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购(单日投资上限10元)",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=限大额(单日投资上限10元)",
       "agency_limit_confidence": "third_party_api",
       "direct_limit": 10.0,
       "direct_limit_source": "直销限额: 华泰柏瑞基金公告正文，A/C/I份额申购含定投限制金额；生效日/公告日: 2026-04-23；公告未区分直销/代销；A/C/I份额合并计算10元。；https://pdf.dfcfw.com/pdf/H2_AN202604231821470346_1.pdf",
       "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {
         "code": "019524",
-        "detected_at": "2026-07-03T12:31:31+08:00",
-        "previous_generated_at": "2026-07-02T01:23:58+08:00",
+        "detected_at": "2026-07-04T00:45:50+08:00",
+        "previous_generated_at": "2026-07-03T12:31:31+08:00",
         "retention_hours": 72,
-        "retained_until": "2026-07-06T12:31:31+08:00",
+        "retained_until": "2026-07-07T00:45:50+08:00",
         "summary": [
-          "暂停申购"
+          "恢复申购"
         ],
         "subscription": {
-          "direction": "paused",
-          "previous": "允许申购",
-          "current": "暂停申购",
-          "label": "暂停申购"
+          "direction": "opened",
+          "previous": "暂停申购",
+          "current": "允许申购",
+          "label": "恢复申购"
         },
         "agency_limit": {
           "direction": "",
@@ -1781,13 +1781,13 @@
       "sales_fee": 0.0,
       "base_annual_fee_rate": 0.65,
       "operation_fee": 0.65,
-      "one_year": 23.44,
-      "three_year": 21.19,
+      "one_year": 20.75,
+      "three_year": 19.47,
       "day_change": -1.5,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.55,
       "tracking_avg_error": 2.12,
-      "tracking_error_date": "2026-07-01",
+      "tracking_error_date": "2026-07-02",
       "free_after_days": 30,
       "redemption_rules": [
         [
@@ -1816,7 +1816,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "A",
-      "investing_score": 64.4,
+      "investing_score": 65.6,
       "investing_rank": 6,
       "subscription_status": "暂停申购",
       "subscription_status_raw": "暂停申购(单日投资上限100元)",
@@ -1835,13 +1835,13 @@
       "sales_fee": 0.0,
       "base_annual_fee_rate": 0.6,
       "operation_fee": 0.6,
-      "one_year": 24.36,
-      "three_year": 21.16,
-      "day_change": -1.52,
+      "one_year": 21.63,
+      "three_year": 19.43,
+      "day_change": -1.51,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.45,
       "tracking_avg_error": 2.12,
-      "tracking_error_date": "2026-07-01",
+      "tracking_error_date": "2026-07-02",
       "free_after_days": 365,
       "redemption_rules": [
         [
@@ -1874,8 +1874,8 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "A",
-      "investing_score": 70.7,
-      "investing_rank": 4,
+      "investing_score": 72.3,
+      "investing_rank": 3,
       "subscription_status": "暂停申购",
       "subscription_status_raw": "暂停申购(单日投资上限100元)",
       "fund_size_billion": 13.01,
@@ -1893,13 +1893,13 @@
       "sales_fee": 0.0,
       "base_annual_fee_rate": 0.65,
       "operation_fee": 0.65,
-      "one_year": 24.88,
-      "three_year": 21.47,
-      "day_change": -1.52,
+      "one_year": 22.13,
+      "three_year": 19.74,
+      "day_change": -1.51,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.44,
       "tracking_avg_error": 2.12,
-      "tracking_error_date": "2026-07-01",
+      "tracking_error_date": "2026-07-02",
       "free_after_days": 7,
       "redemption_rules": [
         [
@@ -1924,8 +1924,8 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "A",
-      "investing_score": 71.1,
-      "investing_rank": 3,
+      "investing_score": 72.3,
+      "investing_rank": 4,
       "subscription_status": "暂停申购",
       "subscription_status_raw": "暂停申购(单日投资上限100元)",
       "fund_size_billion": 18.86,
@@ -1943,13 +1943,13 @@
       "sales_fee": 0.0,
       "base_annual_fee_rate": 0.6,
       "operation_fee": 0.6,
-      "one_year": 24.02,
-      "three_year": 21.76,
-      "day_change": -1.49,
+      "one_year": 21.28,
+      "three_year": 20.0,
+      "day_change": -1.52,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.51,
       "tracking_avg_error": 2.12,
-      "tracking_error_date": "2026-07-01",
+      "tracking_error_date": "2026-07-02",
       "free_after_days": 30,
       "redemption_rules": [
         [
@@ -1977,9 +1977,9 @@
       "status": "候选",
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
-      "investing_tier": "B",
-      "investing_score": 57.2,
-      "investing_rank": 9,
+      "investing_tier": "C",
+      "investing_score": 48.9,
+      "investing_rank": 13,
       "subscription_status": "暂停申购",
       "subscription_status_raw": "暂停申购(单日投资上限100元)",
       "fund_size_billion": 3.15,
@@ -1997,13 +1997,13 @@
       "sales_fee": 0.0,
       "base_annual_fee_rate": 0.8,
       "operation_fee": 0.8,
-      "one_year": 25.06,
-      "three_year": 22.07,
-      "day_change": -1.32,
+      "one_year": 22.12,
+      "three_year": 19.76,
+      "day_change": -1.62,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 2.53,
       "tracking_avg_error": 2.12,
-      "tracking_error_date": "2026-07-01",
+      "tracking_error_date": "2026-07-02",
       "free_after_days": 7,
       "redemption_rules": [
         [
@@ -2028,7 +2028,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "B",
-      "investing_score": 62.9,
+      "investing_score": 64.0,
       "investing_rank": 7,
       "subscription_status": "暂停申购",
       "subscription_status_raw": "暂停申购(单日投资上限10元)",
@@ -2047,13 +2047,13 @@
       "sales_fee": 0.0,
       "base_annual_fee_rate": 0.6,
       "operation_fee": 0.6,
-      "one_year": 23.87,
-      "three_year": 21.43,
-      "day_change": -1.5,
+      "one_year": 21.13,
+      "three_year": 19.69,
+      "day_change": -1.52,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.45,
       "tracking_avg_error": 2.12,
-      "tracking_error_date": "2026-07-01",
+      "tracking_error_date": "2026-07-02",
       "free_after_days": 730,
       "redemption_rules": [
         [
@@ -2105,13 +2105,13 @@
       "sales_fee": 0.0,
       "base_annual_fee_rate": 1.0,
       "operation_fee": 1.0,
-      "one_year": 25.5,
-      "three_year": 22.45,
-      "day_change": -1.56,
+      "one_year": 22.6,
+      "three_year": 20.6,
+      "day_change": -1.59,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.19,
       "tracking_avg_error": 2.12,
-      "tracking_error_date": "2026-07-01",
+      "tracking_error_date": "2026-07-02",
       "free_after_days": 730,
       "redemption_rules": [
         [
