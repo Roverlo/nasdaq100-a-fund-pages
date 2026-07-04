@@ -738,7 +738,7 @@ class Fund:
         return self.management_fee + self.custody_fee
 
 
-def fetch_text(url: str, encoding: str = "utf-8", timeout: int = 20) -> str:
+def fetch_text(url: str, encoding: str = "utf-8", timeout: int = 20, attempts: int = 4) -> str:
     req = Request(
         url,
         headers={
@@ -746,9 +746,20 @@ def fetch_text(url: str, encoding: str = "utf-8", timeout: int = 20) -> str:
             "Referer": "https://fund.eastmoney.com/",
         },
     )
-    with urlopen(req, timeout=timeout) as resp:
-        raw = resp.read()
-    return raw.decode(encoding, errors="ignore")
+    last_error: Exception | None = None
+    for attempt in range(attempts):
+        try:
+            with urlopen(req, timeout=timeout) as resp:
+                raw = resp.read()
+            return raw.decode(encoding, errors="ignore")
+        except (URLError, TimeoutError, OSError) as exc:
+            last_error = exc
+            if attempt + 1 >= attempts:
+                break
+            time.sleep(0.8 + attempt * 1.2)
+    if last_error:
+        raise last_error
+    return ""
 
 
 def fetch_direct_limit_announcements(code: str, page_size: int = 100) -> list[dict[str, str]]:
