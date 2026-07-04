@@ -1844,9 +1844,10 @@ def legacy_tracking_status(item: object, code: str) -> str:
 
 def sanitize_tracking_record(record: dict[str, object], fresh: dict[str, object]) -> dict[str, object]:
     date_key = tracking_record_date(record) or str(fresh.get("date") or "")
+    is_today_record = date_key == str(fresh.get("date") or "")
     recorded_at = record.get("recorded_at")
     if not isinstance(recorded_at, str) or not recorded_at.strip():
-        recorded_at = fresh.get("recorded_at") if date_key == fresh.get("date") else f"{date_key}T00:00:00+08:00"
+        recorded_at = fresh.get("recorded_at") if is_today_record else f"{date_key}T00:00:00+08:00"
 
     fresh_funds = fresh.get("funds") if isinstance(fresh.get("funds"), dict) else {}
     existing_funds = record.get("funds") if isinstance(record.get("funds"), dict) else {}
@@ -1855,14 +1856,14 @@ def sanitize_tracking_record(record: dict[str, object], fresh: dict[str, object]
         fresh_item = fresh_funds.get(code) if isinstance(fresh_funds, dict) else None
         existing_item = existing_funds.get(code) if isinstance(existing_funds, dict) else None
         item = dict(fresh_item) if isinstance(fresh_item, dict) else {"name": FUND_DISPLAY_LABELS.get(code, code)}
-        if isinstance(existing_item, dict):
+        if isinstance(existing_item, dict) and not is_today_record:
             if existing_item.get("name"):
                 item["name"] = existing_item.get("name")
             if existing_item.get("rating") is not None:
                 item["rating"] = existing_item.get("rating")
             if existing_item.get("score") is not None:
                 item["score"] = existing_item.get("score")
-        item["status"] = legacy_tracking_status(existing_item, code)
+        item["status"] = fund_status(code) if is_today_record else legacy_tracking_status(existing_item, code)
         sanitized_funds[code] = item
 
     status_counts = {
@@ -1878,7 +1879,7 @@ def sanitize_tracking_record(record: dict[str, object], fresh: dict[str, object]
         "candidate_count": status_counts["候选"],
         "status_policy": AUTO_INVEST_STATUS_POLICY,
         "funds": sanitized_funds,
-        "note": "当日自动刷新" if date_key == fresh.get("date") else "历史记录已迁移为状态快照",
+        "note": "当日自动刷新" if is_today_record else "历史记录已迁移为状态快照",
     }
 
 
