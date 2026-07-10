@@ -2033,6 +2033,119 @@
           "status": "候选"
         }
       },
+      "note": "历史记录已迁移为状态快照"
+    },
+    {
+      "date": "2026-07-11",
+      "recorded_at": "2026-07-11T01:07:46+08:00",
+      "active_auto_invest_count": 11,
+      "paused_auto_invest_count": 0,
+      "candidate_count": 6,
+      "status_policy": "本项目不再记录个人定投金额、持仓金额、收益或按业务日推算账本；只保留定投中、暂停定投、候选三类状态标签。具体金额、成交和收益以支付宝或基金公司交易页为准。",
+      "funds": {
+        "019441": {
+          "name": "万家",
+          "rating": "C",
+          "score": 51.4,
+          "status": "定投中"
+        },
+        "040046": {
+          "name": "华安",
+          "rating": "S",
+          "score": 83.8,
+          "status": "定投中"
+        },
+        "000834": {
+          "name": "大成",
+          "rating": "C",
+          "score": 43.3,
+          "status": "定投中"
+        },
+        "539001": {
+          "name": "建信",
+          "rating": "D",
+          "score": 20.6,
+          "status": "定投中"
+        },
+        "018966": {
+          "name": "汇添富",
+          "rating": "D",
+          "score": 29.1,
+          "status": "定投中"
+        },
+        "016452": {
+          "name": "南方",
+          "rating": "B",
+          "score": 55.4,
+          "status": "定投中"
+        },
+        "270042": {
+          "name": "广发",
+          "rating": "A",
+          "score": 63.1,
+          "status": "定投中"
+        },
+        "019172": {
+          "name": "摩根",
+          "rating": "C",
+          "score": 46.2,
+          "status": "定投中"
+        },
+        "019547": {
+          "name": "招商",
+          "rating": "B",
+          "score": 54.8,
+          "status": "定投中"
+        },
+        "019736": {
+          "name": "宝盈",
+          "rating": "C",
+          "score": 54.0,
+          "status": "定投中"
+        },
+        "019524": {
+          "name": "华泰柏瑞",
+          "rating": "B",
+          "score": 54.8,
+          "status": "定投中"
+        },
+        "018043": {
+          "name": "天弘",
+          "rating": "A",
+          "score": 63.7,
+          "status": "候选"
+        },
+        "016055": {
+          "name": "博时",
+          "rating": "A",
+          "score": 72.9,
+          "status": "候选"
+        },
+        "016532": {
+          "name": "嘉实",
+          "rating": "A",
+          "score": 72.5,
+          "status": "候选"
+        },
+        "015299": {
+          "name": "华夏",
+          "rating": "B",
+          "score": 61.5,
+          "status": "候选"
+        },
+        "161130": {
+          "name": "易方达",
+          "rating": "B",
+          "score": 62.4,
+          "status": "候选"
+        },
+        "160213": {
+          "name": "国泰",
+          "rating": "S",
+          "score": 76.1,
+          "status": "候选"
+        }
+      },
       "note": "当日自动刷新"
     }
   ]
