@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-11T18:06:53+08:00",
+  "generated_at": "2026-07-12T00:11:46+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -51,74 +51,8 @@
     "alert_retention_hours": 72,
     "alert_policy": "Compare current refresh against the previous snapshot; keep unchanged alerts for a short window so opened pages can still show recent buyability or limit moves. Subscription status and limits remain execution information and do not affect tier scores."
   },
-  "execution_alerts": {
-    "016452": {
-      "code": "016452",
-      "detected_at": "2026-07-08T18:50:02+08:00",
-      "previous_generated_at": "2026-07-08T12:01:00+08:00",
-      "retention_hours": 72,
-      "retained_until": "2026-07-11T18:50:02+08:00",
-      "summary": [
-        "代销下调"
-      ],
-      "subscription": {
-        "direction": "",
-        "previous": "允许申购",
-        "current": "允许申购",
-        "label": ""
-      },
-      "agency_limit": {
-        "direction": "down",
-        "previous": 50.0,
-        "current": 10.0,
-        "previous_text": "50元",
-        "current_text": "10元",
-        "label": "代销下调"
-      },
-      "direct_limit": {
-        "direction": "",
-        "previous": 50.0,
-        "current": 50.0,
-        "previous_text": "50元",
-        "current_text": "50元",
-        "label": ""
-      }
-    }
-  },
-  "change_alerts": {
-    "016452": {
-      "code": "016452",
-      "detected_at": "2026-07-08T18:50:02+08:00",
-      "previous_generated_at": "2026-07-08T12:01:00+08:00",
-      "retention_hours": 72,
-      "retained_until": "2026-07-11T18:50:02+08:00",
-      "summary": [
-        "代销下调"
-      ],
-      "subscription": {
-        "direction": "",
-        "previous": "允许申购",
-        "current": "允许申购",
-        "label": ""
-      },
-      "agency_limit": {
-        "direction": "down",
-        "previous": 50.0,
-        "current": 10.0,
-        "previous_text": "50元",
-        "current_text": "10元",
-        "label": "代销下调"
-      },
-      "direct_limit": {
-        "direction": "",
-        "previous": 50.0,
-        "current": 50.0,
-        "previous_text": "50元",
-        "current_text": "50元",
-        "label": ""
-      }
-    }
-  },
+  "execution_alerts": {},
+  "change_alerts": {},
   "scoring_model": {
     "method": "return-priority model for the current A-share watchlist; return metrics carry 55%, tracking error and base fee carry 35%, fund size carries 6%, transaction frictions carry 4%; subscription status and purchase limits are execution filters only and do not affect tier scores; lower-is-better metrics are reverse normalized; fund size uses log10 before normalization",
     "tier_method": "S/A/B/C/D relative percentile buckets within the current watchlist",
@@ -233,8 +167,8 @@
   "tracking_plan": {
     "schema_version": 2,
     "file": "portfolio_tracking.json",
-    "record_count": 19,
-    "latest_date": "2026-07-11",
+    "record_count": 20,
+    "latest_date": "2026-07-12",
     "refresh_policy": "GitHub Actions refreshes the main data three times per Beijing day; portfolio_tracking.json upserts today's record and appends only when the Beijing date changes.",
     "refresh_times_beijing": [
       "08:45",
@@ -535,38 +469,7 @@
       "direct_limit": 50.0,
       "direct_limit_source": "直销限额: 南方基金官网产品状态及限额接口，A类大额申购/定投/转换转入限额；生效日/公告日: 2026-06-18；官网产品状态接口未区分直销/代销；按南方基金官网A类当前限额记录。；https://www.nffund.com/new/transaction-guide/product-status-and-limits.html",
       "direct_limit_confidence": "fund_company_status_page",
-      "execution_alert": {
-        "code": "016452",
-        "detected_at": "2026-07-08T18:50:02+08:00",
-        "previous_generated_at": "2026-07-08T12:01:00+08:00",
-        "retention_hours": 72,
-        "retained_until": "2026-07-11T18:50:02+08:00",
-        "summary": [
-          "代销下调"
-        ],
-        "subscription": {
-          "direction": "",
-          "previous": "允许申购",
-          "current": "允许申购",
-          "label": ""
-        },
-        "agency_limit": {
-          "direction": "down",
-          "previous": 50.0,
-          "current": 10.0,
-          "previous_text": "50元",
-          "current_text": "10元",
-          "label": "代销下调"
-        },
-        "direct_limit": {
-          "direction": "",
-          "previous": 50.0,
-          "current": 50.0,
-          "previous_text": "50元",
-          "current_text": "50元",
-          "label": ""
-        }
-      },
+      "execution_alert": {},
       "buy_rate": 0.12,
       "management_fee": 0.5,
       "custody_fee": 0.15,
