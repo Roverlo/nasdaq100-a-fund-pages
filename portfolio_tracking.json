@@ -2516,13 +2516,13 @@
         "539001": {
           "name": "建信",
           "rating": "D",
-          "score": 26.3,
+          "score": 26.0,
           "status": "定投中"
         },
         "018966": {
           "name": "汇添富",
           "rating": "D",
-          "score": 29.1,
+          "score": 29.0,
           "status": "定投中"
         },
         "016452": {
@@ -2540,13 +2540,13 @@
         "019172": {
           "name": "摩根",
           "rating": "C",
-          "score": 46.4,
+          "score": 46.2,
           "status": "定投中"
         },
         "019547": {
           "name": "招商",
           "rating": "B",
-          "score": 54.6,
+          "score": 54.4,
           "status": "定投中"
         },
         "019736": {
@@ -2564,13 +2564,13 @@
         "018043": {
           "name": "天弘",
           "rating": "A",
-          "score": 62.5,
+          "score": 62.4,
           "status": "候选"
         },
         "016055": {
           "name": "博时",
           "rating": "A",
-          "score": 73.0,
+          "score": 72.9,
           "status": "候选"
         },
         "016532": {
@@ -2581,20 +2581,20 @@
         },
         "015299": {
           "name": "华夏",
-          "rating": "B",
+          "rating": "A",
           "score": 61.6,
           "status": "候选"
         },
         "161130": {
           "name": "易方达",
-          "rating": "A",
-          "score": 61.8,
+          "rating": "B",
+          "score": 61.6,
           "status": "候选"
         },
         "160213": {
           "name": "国泰",
           "rating": "S",
-          "score": 75.3,
+          "score": 75.1,
           "status": "候选"
         }
       },
