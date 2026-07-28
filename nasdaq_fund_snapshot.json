@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-28T01:08:08+08:00",
+  "generated_at": "2026-07-28T11:52:25+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -210,7 +210,7 @@
       "day_change": -1.03,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 2.1,
-      "tracking_avg_error": 2.2,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-07-24",
       "free_after_days": 30,
       "redemption_rules": [
@@ -265,7 +265,7 @@
       "day_change": -1.11,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.06,
-      "tracking_avg_error": 2.2,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-07-24",
       "free_after_days": 7,
       "redemption_rules": [
@@ -315,7 +315,7 @@
       "day_change": -1.11,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.06,
-      "tracking_avg_error": 2.2,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-07-24",
       "free_after_days": 730,
       "redemption_rules": [
@@ -373,7 +373,7 @@
       "day_change": -1.03,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 2.26,
-      "tracking_avg_error": 2.2,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-07-24",
       "free_after_days": 90,
       "redemption_rules": [
@@ -431,7 +431,7 @@
       "day_change": -1.05,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.77,
-      "tracking_avg_error": 2.2,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-07-24",
       "free_after_days": 7,
       "redemption_rules": [
@@ -481,7 +481,7 @@
       "day_change": -1.06,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.47,
-      "tracking_avg_error": 2.2,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-07-24",
       "free_after_days": 7,
       "redemption_rules": [
@@ -531,7 +531,7 @@
       "day_change": -1.13,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.09,
-      "tracking_avg_error": 2.2,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-07-24",
       "free_after_days": 730,
       "redemption_rules": [
@@ -589,7 +589,7 @@
       "day_change": -1.0,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 2.35,
-      "tracking_avg_error": 2.2,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-07-24",
       "free_after_days": 7,
       "redemption_rules": [
@@ -639,7 +639,7 @@
       "day_change": -1.02,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.77,
-      "tracking_avg_error": 2.2,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-07-24",
       "free_after_days": 7,
       "redemption_rules": [
@@ -665,7 +665,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "B",
-      "investing_score": 64.4,
+      "investing_score": 64.3,
       "investing_rank": 9,
       "subscription_status": "允许申购",
       "subscription_status_raw": "限大额(单日投资上限10元)",
@@ -688,8 +688,8 @@
       "three_year": 2.0,
       "day_change": -1.04,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.67,
-      "tracking_avg_error": 2.2,
+      "tracking_error": 1.68,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-07-24",
       "free_after_days": 7,
       "redemption_rules": [
@@ -739,7 +739,7 @@
       "day_change": -1.04,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.59,
-      "tracking_avg_error": 2.2,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-07-24",
       "free_after_days": 30,
       "redemption_rules": [
@@ -793,7 +793,7 @@
       "day_change": -1.05,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.49,
-      "tracking_avg_error": 2.2,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-07-24",
       "free_after_days": 365,
       "redemption_rules": [
@@ -851,7 +851,7 @@
       "day_change": -1.05,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.48,
-      "tracking_avg_error": 2.2,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-07-24",
       "free_after_days": 7,
       "redemption_rules": [
@@ -877,7 +877,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "S",
-      "investing_score": 78.6,
+      "investing_score": 78.4,
       "investing_rank": 2,
       "subscription_status": "暂停申购",
       "subscription_status_raw": "暂停申购(单日投资上限100元)",
@@ -900,8 +900,8 @@
       "three_year": 2.32,
       "day_change": -1.04,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.53,
-      "tracking_avg_error": 2.2,
+      "tracking_error": 1.54,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-07-24",
       "free_after_days": 30,
       "redemption_rules": [
@@ -955,7 +955,7 @@
       "day_change": -1.02,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 2.57,
-      "tracking_avg_error": 2.2,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-07-24",
       "free_after_days": 7,
       "redemption_rules": [
@@ -981,7 +981,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "A",
-      "investing_score": 68.5,
+      "investing_score": 68.4,
       "investing_rank": 4,
       "subscription_status": "暂停申购",
       "subscription_status_raw": "暂停申购(单日投资上限10元)",
@@ -1004,8 +1004,8 @@
       "three_year": 2.05,
       "day_change": -1.04,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.47,
-      "tracking_avg_error": 2.2,
+      "tracking_error": 1.48,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-07-24",
       "free_after_days": 730,
       "redemption_rules": [
@@ -1039,7 +1039,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "B",
-      "investing_score": 65.6,
+      "investing_score": 65.5,
       "investing_rank": 7,
       "subscription_status": "暂停申购",
       "subscription_status_raw": "暂停申购(单日投资上限100元)",
@@ -1062,8 +1062,8 @@
       "three_year": 2.05,
       "day_change": -1.09,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.19,
-      "tracking_avg_error": 2.2,
+      "tracking_error": 1.2,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-07-24",
       "free_after_days": 730,
       "redemption_rules": [
