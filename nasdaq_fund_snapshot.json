@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-06T00:54:26+08:00",
+  "generated_at": "2026-08-06T11:54:46+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -210,7 +210,7 @@
       "day_change": 3.17,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 2.11,
-      "tracking_avg_error": 2.26,
+      "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-04",
       "free_after_days": 30,
       "redemption_rules": [
@@ -265,7 +265,7 @@
       "day_change": 3.33,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.05,
-      "tracking_avg_error": 2.26,
+      "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-04",
       "free_after_days": 7,
       "redemption_rules": [
@@ -315,7 +315,7 @@
       "day_change": 3.34,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.05,
-      "tracking_avg_error": 2.26,
+      "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-04",
       "free_after_days": 730,
       "redemption_rules": [
@@ -349,7 +349,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "D",
-      "investing_score": 28.5,
+      "investing_score": 28.4,
       "investing_rank": 17,
       "subscription_status": "允许申购",
       "subscription_status_raw": "限大额(单日投资上限100元)",
@@ -372,8 +372,8 @@
       "three_year": 6.62,
       "day_change": 3.05,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 2.25,
-      "tracking_avg_error": 2.26,
+      "tracking_error": 2.26,
+      "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-04",
       "free_after_days": 90,
       "redemption_rules": [
@@ -431,7 +431,7 @@
       "day_change": 3.18,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.76,
-      "tracking_avg_error": 2.26,
+      "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-04",
       "free_after_days": 7,
       "redemption_rules": [
@@ -481,7 +481,7 @@
       "day_change": 3.23,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.47,
-      "tracking_avg_error": 2.26,
+      "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-04",
       "free_after_days": 7,
       "redemption_rules": [
@@ -531,7 +531,7 @@
       "day_change": 3.38,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.08,
-      "tracking_avg_error": 2.26,
+      "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-04",
       "free_after_days": 730,
       "redemption_rules": [
@@ -589,7 +589,7 @@
       "day_change": 3.15,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 2.36,
-      "tracking_avg_error": 2.26,
+      "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-04",
       "free_after_days": 7,
       "redemption_rules": [
@@ -639,7 +639,7 @@
       "day_change": 3.18,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.77,
-      "tracking_avg_error": 2.26,
+      "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-04",
       "free_after_days": 7,
       "redemption_rules": [
@@ -689,7 +689,7 @@
       "day_change": 3.18,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.68,
-      "tracking_avg_error": 2.26,
+      "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-04",
       "free_after_days": 7,
       "redemption_rules": [
@@ -715,7 +715,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "B",
-      "investing_score": 63.9,
+      "investing_score": 63.8,
       "investing_rank": 9,
       "subscription_status": "允许申购",
       "subscription_status_raw": "限大额(单日投资上限10元)",
@@ -738,8 +738,8 @@
       "three_year": 7.09,
       "day_change": 3.17,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.59,
-      "tracking_avg_error": 2.26,
+      "tracking_error": 1.6,
+      "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-04",
       "free_after_days": 30,
       "redemption_rules": [
@@ -793,7 +793,7 @@
       "day_change": 3.19,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.5,
-      "tracking_avg_error": 2.26,
+      "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-04",
       "free_after_days": 365,
       "redemption_rules": [
@@ -827,7 +827,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "S",
-      "investing_score": 80.5,
+      "investing_score": 80.3,
       "investing_rank": 2,
       "subscription_status": "暂停申购",
       "subscription_status_raw": "暂停申购(单日投资上限100元)",
@@ -850,8 +850,8 @@
       "three_year": 7.15,
       "day_change": 3.19,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.48,
-      "tracking_avg_error": 2.26,
+      "tracking_error": 1.49,
+      "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-04",
       "free_after_days": 7,
       "redemption_rules": [
@@ -901,7 +901,7 @@
       "day_change": 3.19,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.54,
-      "tracking_avg_error": 2.26,
+      "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-04",
       "free_after_days": 30,
       "redemption_rules": [
@@ -955,7 +955,7 @@
       "day_change": 3.16,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 2.55,
-      "tracking_avg_error": 2.26,
+      "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-04",
       "free_after_days": 7,
       "redemption_rules": [
@@ -1005,7 +1005,7 @@
       "day_change": 3.19,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.48,
-      "tracking_avg_error": 2.26,
+      "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-04",
       "free_after_days": 730,
       "redemption_rules": [
@@ -1063,7 +1063,7 @@
       "day_change": 3.33,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.19,
-      "tracking_avg_error": 2.26,
+      "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-04",
       "free_after_days": 730,
       "redemption_rules": [
