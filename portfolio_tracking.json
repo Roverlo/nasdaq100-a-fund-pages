@@ -5661,38 +5661,38 @@
       "funds": {
         "019441": {
           "name": "万家",
-          "rating": "A",
-          "score": 68.1,
+          "rating": "S",
+          "score": 72.7,
           "status": "定投中"
         },
         "040046": {
           "name": "华安",
-          "rating": "C",
-          "score": 58.7,
+          "rating": "B",
+          "score": 60.2,
           "status": "定投中"
         },
         "000834": {
           "name": "大成",
           "rating": "D",
-          "score": 36.1,
+          "score": 36.2,
           "status": "定投中"
         },
         "539001": {
           "name": "建信",
           "rating": "C",
-          "score": 37.0,
+          "score": 40.5,
           "status": "定投中"
         },
         "018966": {
           "name": "汇添富",
           "rating": "C",
-          "score": 45.5,
+          "score": 48.0,
           "status": "定投中"
         },
         "016452": {
           "name": "南方",
           "rating": "B",
-          "score": 60.4,
+          "score": 62.8,
           "status": "定投中"
         },
         "270042": {
@@ -5704,61 +5704,61 @@
         "019172": {
           "name": "摩根",
           "rating": "B",
-          "score": 61.2,
+          "score": 64.8,
           "status": "定投中"
         },
         "019547": {
           "name": "招商",
-          "rating": "A",
-          "score": 70.2,
+          "rating": "S",
+          "score": 74.6,
           "status": "定投中"
         },
         "019736": {
           "name": "宝盈",
           "rating": "B",
-          "score": 63.7,
+          "score": 67.5,
           "status": "定投中"
         },
         "019524": {
           "name": "华泰柏瑞",
-          "rating": "B",
-          "score": 63.6,
+          "rating": "A",
+          "score": 67.6,
           "status": "定投中"
         },
         "018043": {
           "name": "天弘",
           "rating": "A",
-          "score": 68.0,
+          "score": 71.0,
           "status": "候选"
         },
         "016055": {
           "name": "博时",
-          "rating": "S",
-          "score": 80.9,
+          "rating": "B",
+          "score": 66.0,
           "status": "候选"
         },
         "016532": {
           "name": "嘉实",
-          "rating": "S",
-          "score": 81.8,
+          "rating": "A",
+          "score": 67.7,
           "status": "候选"
         },
         "015299": {
           "name": "华夏",
           "rating": "C",
-          "score": 54.5,
+          "score": 42.7,
           "status": "候选"
         },
         "161130": {
           "name": "易方达",
-          "rating": "A",
-          "score": 69.8,
+          "rating": "C",
+          "score": 55.1,
           "status": "候选"
         },
         "160213": {
           "name": "国泰",
-          "rating": "B",
-          "score": 66.1,
+          "rating": "A",
+          "score": 69.9,
           "status": "候选"
         }
       },
