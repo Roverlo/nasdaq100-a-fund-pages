@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T23:39:06+08:00",
+  "generated_at": "2026-08-18T10:06:15+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -167,8 +167,8 @@
   "tracking_plan": {
     "schema_version": 2,
     "file": "portfolio_tracking.json",
-    "record_count": 56,
-    "latest_date": "2026-08-17",
+    "record_count": 57,
+    "latest_date": "2026-08-18",
     "refresh_policy": "GitHub Actions refreshes the main data three times per Beijing day; portfolio_tracking.json upserts today's record and appends only when the Beijing date changes.",
     "refresh_times_beijing": [
       "08:45",
@@ -186,7 +186,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "A",
-      "investing_score": 70.4,
+      "investing_score": 70.5,
       "investing_rank": 5,
       "subscription_status": "允许申购",
       "subscription_status_raw": "限大额(单日投资上限10元)",
@@ -209,7 +209,7 @@
       "three_year": 1.16,
       "day_change": -0.13,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 2.1,
+      "tracking_error": 2.09,
       "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-14",
       "free_after_days": 30,
@@ -827,7 +827,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "S",
-      "investing_score": 81.1,
+      "investing_score": 81.2,
       "investing_rank": 2,
       "subscription_status": "暂停申购",
       "subscription_status_raw": "暂停申购(单日投资上限100元)",
@@ -850,7 +850,7 @@
       "three_year": 1.03,
       "day_change": -0.13,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.47,
+      "tracking_error": 1.46,
       "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-14",
       "free_after_days": 7,
