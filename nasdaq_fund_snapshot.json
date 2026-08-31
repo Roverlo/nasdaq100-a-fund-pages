@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-01T00:24:11+08:00",
+  "generated_at": "2026-09-01T04:50:24+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -473,7 +473,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "C",
-      "investing_score": 47.0,
+      "investing_score": 47.1,
       "investing_rank": 13,
       "subscription_status": "允许申购",
       "subscription_status_raw": "限大额(单日投资上限10元)",
@@ -496,7 +496,7 @@
       "three_year": -3.24,
       "day_change": -0.7,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.72,
+      "tracking_error": 1.71,
       "tracking_avg_error": 2.27,
       "tracking_error_date": "2026-08-28",
       "free_after_days": 7,
