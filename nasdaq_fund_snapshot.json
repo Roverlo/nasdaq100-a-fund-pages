@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-07T01:37:01+08:00",
+  "generated_at": "2026-09-07T13:15:12+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -2036,11 +2036,11 @@
       "investing_score": 81.2,
       "investing_rank": 1,
       "subscription_status": "暂停申购",
-      "subscription_status_raw": "暂停申购(单日投资上限100元)",
+      "subscription_status_raw": "暂停申购",
       "fund_size_billion": 15.04,
-      "daily_limit": 100.0,
+      "daily_limit": 100,
       "agency_limit_label": "",
-      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购(单日投资上限100元)",
+      "agency_limit_source": "代销限额: 东方财富移动接口 SGZT=暂停申购",
       "agency_limit_confidence": "third_party_api",
       "direct_limit": null,
       "direct_limit_source": "直销限额: 博时基金公告正文，A/C类份额自2025-09-29起暂停申购、转换转入、定期定额投资业务；生效日/公告日: 2025-09-29；后续2025-11月100元公告限制的是I类024237，不适用于A人民币016055；A类暂停期间直销交易限额待恢复申购后重新核验。；https://pdf.dfcfw.com/pdf/H2_AN202509271751405684_1.pdf",
