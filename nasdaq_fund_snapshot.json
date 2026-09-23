@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23T02:57:46+08:00",
+  "generated_at": "2026-09-23T13:13:29+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -255,7 +255,7 @@
       "investing_score": 75.4,
       "investing_rank": 3,
       "subscription_status": "允许申购",
-      "subscription_status_raw": "限大额(单日投资上限100元)",
+      "subscription_status_raw": "限大额(单日投资上限10元)",
       "fund_size_billion": 9.68,
       "daily_limit": 50.0,
       "agency_limit_label": "",
