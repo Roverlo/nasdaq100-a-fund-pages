@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-25T13:26:08+08:00",
+  "generated_at": "2026-09-25T22:11:35+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -148,38 +148,6 @@
         "label": ""
       }
     },
-    "019524": {
-      "code": "019524",
-      "detected_at": "2026-09-22T21:41:48+08:00",
-      "previous_generated_at": "2026-09-22T13:25:09+08:00",
-      "retention_hours": 72,
-      "retained_until": "2026-09-25T21:41:48+08:00",
-      "summary": [
-        "恢复申购"
-      ],
-      "subscription": {
-        "direction": "opened",
-        "previous": "暂停申购",
-        "current": "允许申购",
-        "label": "恢复申购"
-      },
-      "agency_limit": {
-        "direction": "",
-        "previous": 5.0,
-        "current": 5.0,
-        "previous_text": "5元",
-        "current_text": "5元",
-        "label": ""
-      },
-      "direct_limit": {
-        "direction": "",
-        "previous": 10.0,
-        "current": 10.0,
-        "previous_text": "10元",
-        "current_text": "10元",
-        "label": ""
-      }
-    },
     "160213": {
       "code": "160213",
       "detected_at": "2026-09-24T21:48:36+08:00",
@@ -300,38 +268,6 @@
         "previous_text": "200元",
         "current_text": "10元",
         "label": "代销下调"
-      },
-      "direct_limit": {
-        "direction": "",
-        "previous": 10.0,
-        "current": 10.0,
-        "previous_text": "10元",
-        "current_text": "10元",
-        "label": ""
-      }
-    },
-    "019524": {
-      "code": "019524",
-      "detected_at": "2026-09-22T21:41:48+08:00",
-      "previous_generated_at": "2026-09-22T13:25:09+08:00",
-      "retention_hours": 72,
-      "retained_until": "2026-09-25T21:41:48+08:00",
-      "summary": [
-        "恢复申购"
-      ],
-      "subscription": {
-        "direction": "opened",
-        "previous": "暂停申购",
-        "current": "允许申购",
-        "label": "恢复申购"
-      },
-      "agency_limit": {
-        "direction": "",
-        "previous": 5.0,
-        "current": 5.0,
-        "previous_text": "5元",
-        "current_text": "5元",
-        "label": ""
       },
       "direct_limit": {
         "direction": "",
@@ -1142,38 +1078,7 @@
       "direct_limit": 10.0,
       "direct_limit_source": "直销限额: 华泰柏瑞基金公告正文，A/C/I份额申购含定投限制金额；生效日/公告日: 2026-04-23；公告未区分直销/代销；A/C/I份额合并计算10元。；https://pdf.dfcfw.com/pdf/H2_AN202604231821470346_1.pdf",
       "direct_limit_confidence": "official_disclosure_mirror",
-      "execution_alert": {
-        "code": "019524",
-        "detected_at": "2026-09-22T21:41:48+08:00",
-        "previous_generated_at": "2026-09-22T13:25:09+08:00",
-        "retention_hours": 72,
-        "retained_until": "2026-09-25T21:41:48+08:00",
-        "summary": [
-          "恢复申购"
-        ],
-        "subscription": {
-          "direction": "opened",
-          "previous": "暂停申购",
-          "current": "允许申购",
-          "label": "恢复申购"
-        },
-        "agency_limit": {
-          "direction": "",
-          "previous": 5.0,
-          "current": 5.0,
-          "previous_text": "5元",
-          "current_text": "5元",
-          "label": ""
-        },
-        "direct_limit": {
-          "direction": "",
-          "previous": 10.0,
-          "current": 10.0,
-          "previous_text": "10元",
-          "current_text": "10元",
-          "label": ""
-        }
-      },
+      "execution_alert": {},
       "buy_rate": 0.12,
       "management_fee": 0.5,
       "custody_fee": 0.15,
