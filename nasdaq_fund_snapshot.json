@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-27T13:55:28+08:00",
+  "generated_at": "2026-09-27T22:19:34+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -51,138 +51,8 @@
     "alert_retention_hours": 72,
     "alert_policy": "Compare current refresh against the previous snapshot; keep unchanged alerts for a short window so opened pages can still show recent buyability or limit moves. Subscription status and limits remain execution information and do not affect tier scores."
   },
-  "execution_alerts": {
-    "019736": {
-      "code": "019736",
-      "detected_at": "2026-09-24T21:48:36+08:00",
-      "previous_generated_at": "2026-09-24T13:28:29+08:00",
-      "retention_hours": 72,
-      "retained_until": "2026-09-27T21:48:36+08:00",
-      "summary": [
-        "代销下调"
-      ],
-      "subscription": {
-        "direction": "",
-        "previous": "允许申购",
-        "current": "允许申购",
-        "label": ""
-      },
-      "agency_limit": {
-        "direction": "down",
-        "previous": 200.0,
-        "current": 10.0,
-        "previous_text": "200元",
-        "current_text": "10元",
-        "label": "代销下调"
-      },
-      "direct_limit": {
-        "direction": "",
-        "previous": 10.0,
-        "current": 10.0,
-        "previous_text": "10元",
-        "current_text": "10元",
-        "label": ""
-      }
-    },
-    "160213": {
-      "code": "160213",
-      "detected_at": "2026-09-24T21:48:36+08:00",
-      "previous_generated_at": "2026-09-24T13:28:29+08:00",
-      "retention_hours": 72,
-      "retained_until": "2026-09-27T21:48:36+08:00",
-      "summary": [
-        "暂停申购"
-      ],
-      "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
-      },
-      "agency_limit": {
-        "direction": "",
-        "previous": 100.0,
-        "current": 100.0,
-        "previous_text": "100元",
-        "current_text": "100元",
-        "label": ""
-      },
-      "direct_limit": {
-        "direction": "",
-        "previous": 100.0,
-        "current": 100.0,
-        "previous_text": "100元",
-        "current_text": "100元",
-        "label": ""
-      }
-    }
-  },
-  "change_alerts": {
-    "019736": {
-      "code": "019736",
-      "detected_at": "2026-09-24T21:48:36+08:00",
-      "previous_generated_at": "2026-09-24T13:28:29+08:00",
-      "retention_hours": 72,
-      "retained_until": "2026-09-27T21:48:36+08:00",
-      "summary": [
-        "代销下调"
-      ],
-      "subscription": {
-        "direction": "",
-        "previous": "允许申购",
-        "current": "允许申购",
-        "label": ""
-      },
-      "agency_limit": {
-        "direction": "down",
-        "previous": 200.0,
-        "current": 10.0,
-        "previous_text": "200元",
-        "current_text": "10元",
-        "label": "代销下调"
-      },
-      "direct_limit": {
-        "direction": "",
-        "previous": 10.0,
-        "current": 10.0,
-        "previous_text": "10元",
-        "current_text": "10元",
-        "label": ""
-      }
-    },
-    "160213": {
-      "code": "160213",
-      "detected_at": "2026-09-24T21:48:36+08:00",
-      "previous_generated_at": "2026-09-24T13:28:29+08:00",
-      "retention_hours": 72,
-      "retained_until": "2026-09-27T21:48:36+08:00",
-      "summary": [
-        "暂停申购"
-      ],
-      "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
-      },
-      "agency_limit": {
-        "direction": "",
-        "previous": 100.0,
-        "current": 100.0,
-        "previous_text": "100元",
-        "current_text": "100元",
-        "label": ""
-      },
-      "direct_limit": {
-        "direction": "",
-        "previous": 100.0,
-        "current": 100.0,
-        "previous_text": "100元",
-        "current_text": "100元",
-        "label": ""
-      }
-    }
-  },
+  "execution_alerts": {},
+  "change_alerts": {},
   "scoring_model": {
     "method": "return-priority model for the current A-share watchlist; return metrics carry 55%, tracking error and base fee carry 35%, fund size carries 6%, transaction frictions carry 4%; subscription status and purchase limits are execution filters only and do not affect tier scores; lower-is-better metrics are reverse normalized; fund size uses log10 before normalization",
     "tier_method": "S/A/B/C/D relative percentile buckets within the current watchlist",
@@ -807,38 +677,7 @@
       "direct_limit": 10.0,
       "direct_limit_source": "直销限额: 宝盈基金公告正文，A/C人民币份额申购含定投限制金额；生效日/公告日: 2026-06-11；公告未区分直销/代销；A/C均为10元。；https://pdf.dfcfw.com/pdf/H2_AN202606101823409504_1.pdf",
       "direct_limit_confidence": "official_disclosure_mirror",
-      "execution_alert": {
-        "code": "019736",
-        "detected_at": "2026-09-24T21:48:36+08:00",
-        "previous_generated_at": "2026-09-24T13:28:29+08:00",
-        "retention_hours": 72,
-        "retained_until": "2026-09-27T21:48:36+08:00",
-        "summary": [
-          "代销下调"
-        ],
-        "subscription": {
-          "direction": "",
-          "previous": "允许申购",
-          "current": "允许申购",
-          "label": ""
-        },
-        "agency_limit": {
-          "direction": "down",
-          "previous": 200.0,
-          "current": 10.0,
-          "previous_text": "200元",
-          "current_text": "10元",
-          "label": "代销下调"
-        },
-        "direct_limit": {
-          "direction": "",
-          "previous": 10.0,
-          "current": 10.0,
-          "previous_text": "10元",
-          "current_text": "10元",
-          "label": ""
-        }
-      },
+      "execution_alert": {},
       "buy_rate": 0.12,
       "management_fee": 0.5,
       "custody_fee": 0.15,
@@ -1212,38 +1051,7 @@
       "direct_limit": 100.0,
       "direct_limit_source": "直销限额: 国泰基金公告正文，单日每个基金账户累计申购及定投业务金额限制；生效日/公告日: 2026-05-26；公告未区分直销/代销；当前东方财富接口显示暂停申购，能否下单以交易页为准。；https://pdf.dfcfw.com/pdf/H2_AN202605261822869261_1.pdf",
       "direct_limit_confidence": "official_disclosure_mirror",
-      "execution_alert": {
-        "code": "160213",
-        "detected_at": "2026-09-24T21:48:36+08:00",
-        "previous_generated_at": "2026-09-24T13:28:29+08:00",
-        "retention_hours": 72,
-        "retained_until": "2026-09-27T21:48:36+08:00",
-        "summary": [
-          "暂停申购"
-        ],
-        "subscription": {
-          "direction": "paused",
-          "previous": "允许申购",
-          "current": "暂停申购",
-          "label": "暂停申购"
-        },
-        "agency_limit": {
-          "direction": "",
-          "previous": 100.0,
-          "current": 100.0,
-          "previous_text": "100元",
-          "current_text": "100元",
-          "label": ""
-        },
-        "direct_limit": {
-          "direction": "",
-          "previous": 100.0,
-          "current": 100.0,
-          "previous_text": "100元",
-          "current_text": "100元",
-          "label": ""
-        }
-      },
+      "execution_alert": {},
       "buy_rate": 0.15,
       "management_fee": 0.8,
       "custody_fee": 0.2,
