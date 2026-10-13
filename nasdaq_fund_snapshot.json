@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-13T06:30:08+08:00",
+  "generated_at": "2026-10-13T15:08:11+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -278,7 +278,7 @@
       "day_change": 0.42,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 2.18,
-      "tracking_avg_error": 2.24,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-10-09",
       "free_after_days": 30,
       "redemption_rules": [
@@ -333,7 +333,7 @@
       "day_change": 0.41,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 0.99,
-      "tracking_avg_error": 2.24,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-10-09",
       "free_after_days": 7,
       "redemption_rules": [
@@ -383,7 +383,7 @@
       "day_change": 0.41,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.03,
-      "tracking_avg_error": 2.24,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-10-09",
       "free_after_days": 730,
       "redemption_rules": [
@@ -441,7 +441,7 @@
       "day_change": 0.35,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 2.26,
-      "tracking_avg_error": 2.24,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-10-09",
       "free_after_days": 90,
       "redemption_rules": [
@@ -499,7 +499,7 @@
       "day_change": 0.43,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.78,
-      "tracking_avg_error": 2.24,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-10-09",
       "free_after_days": 7,
       "redemption_rules": [
@@ -549,7 +549,7 @@
       "day_change": 0.43,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.44,
-      "tracking_avg_error": 2.24,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-10-09",
       "free_after_days": 7,
       "redemption_rules": [
@@ -631,7 +631,7 @@
       "day_change": 0.41,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.02,
-      "tracking_avg_error": 2.24,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-10-09",
       "free_after_days": 730,
       "redemption_rules": [
@@ -689,7 +689,7 @@
       "day_change": 0.43,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 2.35,
-      "tracking_avg_error": 2.24,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-10-09",
       "free_after_days": 7,
       "redemption_rules": [
@@ -739,7 +739,7 @@
       "day_change": 0.39,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.76,
-      "tracking_avg_error": 2.24,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-10-09",
       "free_after_days": 7,
       "redemption_rules": [
@@ -789,7 +789,7 @@
       "day_change": 0.4,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.7,
-      "tracking_avg_error": 2.24,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-10-09",
       "free_after_days": 7,
       "redemption_rules": [
@@ -839,7 +839,7 @@
       "day_change": 0.4,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.58,
-      "tracking_avg_error": 2.24,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-10-09",
       "free_after_days": 30,
       "redemption_rules": [
@@ -893,7 +893,7 @@
       "day_change": 0.41,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.49,
-      "tracking_avg_error": 2.24,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-10-09",
       "free_after_days": 365,
       "redemption_rules": [
@@ -951,7 +951,7 @@
       "day_change": 0.39,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.46,
-      "tracking_avg_error": 2.24,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-10-09",
       "free_after_days": 7,
       "redemption_rules": [
@@ -1001,7 +1001,7 @@
       "day_change": 0.42,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.51,
-      "tracking_avg_error": 2.24,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-10-09",
       "free_after_days": 30,
       "redemption_rules": [
@@ -1055,7 +1055,7 @@
       "day_change": 0.35,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 2.44,
-      "tracking_avg_error": 2.24,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-10-09",
       "free_after_days": 7,
       "redemption_rules": [
@@ -1105,7 +1105,7 @@
       "day_change": 0.44,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.45,
-      "tracking_avg_error": 2.24,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-10-09",
       "free_after_days": 730,
       "redemption_rules": [
@@ -1163,7 +1163,7 @@
       "day_change": 0.41,
       "tracking_index": "纳斯达克100指数",
       "tracking_error": 1.1,
-      "tracking_avg_error": 2.24,
+      "tracking_avg_error": 2.23,
       "tracking_error_date": "2026-10-09",
       "free_after_days": 730,
       "redemption_rules": [
