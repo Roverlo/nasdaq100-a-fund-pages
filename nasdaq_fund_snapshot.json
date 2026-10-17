@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-17T20:27:21+08:00",
+  "generated_at": "2026-10-18T01:52:43+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -51,74 +51,8 @@
     "alert_retention_hours": 72,
     "alert_policy": "Compare current refresh against the previous snapshot; keep unchanged alerts for a short window so opened pages can still show recent buyability or limit moves. Subscription status and limits remain execution information and do not affect tier scores."
   },
-  "execution_alerts": {
-    "270042": {
-      "code": "270042",
-      "detected_at": "2026-10-14T22:04:11+08:00",
-      "previous_generated_at": "2026-10-14T13:26:09+08:00",
-      "retention_hours": 72,
-      "retained_until": "2026-10-17T22:04:11+08:00",
-      "summary": [
-        "暂停申购"
-      ],
-      "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
-      },
-      "agency_limit": {
-        "direction": "",
-        "previous": 10.0,
-        "current": 10.0,
-        "previous_text": "10元",
-        "current_text": "10元",
-        "label": ""
-      },
-      "direct_limit": {
-        "direction": "",
-        "previous": 10.0,
-        "current": 10.0,
-        "previous_text": "10元",
-        "current_text": "10元",
-        "label": ""
-      }
-    }
-  },
-  "change_alerts": {
-    "270042": {
-      "code": "270042",
-      "detected_at": "2026-10-14T22:04:11+08:00",
-      "previous_generated_at": "2026-10-14T13:26:09+08:00",
-      "retention_hours": 72,
-      "retained_until": "2026-10-17T22:04:11+08:00",
-      "summary": [
-        "暂停申购"
-      ],
-      "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
-      },
-      "agency_limit": {
-        "direction": "",
-        "previous": 10.0,
-        "current": 10.0,
-        "previous_text": "10元",
-        "current_text": "10元",
-        "label": ""
-      },
-      "direct_limit": {
-        "direction": "",
-        "previous": 10.0,
-        "current": 10.0,
-        "previous_text": "10元",
-        "current_text": "10元",
-        "label": ""
-      }
-    }
-  },
+  "execution_alerts": {},
+  "change_alerts": {},
   "scoring_model": {
     "method": "return-priority model for the current A-share watchlist; return metrics carry 55%, tracking error and base fee carry 35%, fund size carries 6%, transaction frictions carry 4%; subscription status and purchase limits are execution filters only and do not affect tier scores; lower-is-better metrics are reverse normalized; fund size uses log10 before normalization",
     "tier_method": "S/A/B/C/D relative percentile buckets within the current watchlist",
@@ -233,8 +167,8 @@
   "tracking_plan": {
     "schema_version": 2,
     "file": "portfolio_tracking.json",
-    "record_count": 117,
-    "latest_date": "2026-10-17",
+    "record_count": 118,
+    "latest_date": "2026-10-18",
     "refresh_policy": "GitHub Actions refreshes the main data three times per Beijing day; portfolio_tracking.json upserts today's record and appends only when the Beijing date changes.",
     "refresh_times_beijing": [
       "08:45",
@@ -585,38 +519,7 @@
       "direct_limit": 10.0,
       "direct_limit_source": "直销限额: 广发基金公告正文，人民币A/C/F份额单日单个基金账户申购含定投/不定投/转换转入业务限额；生效日/公告日: 2025-10-31；公告未区分直销/代销；投资者通过多家销售渠道的多笔申请累计计算；人民币A类270042当前限额10元。；https://pdf.dfcfw.com/pdf/H2_AN202510301771709226_1.pdf",
       "direct_limit_confidence": "official_disclosure_mirror",
-      "execution_alert": {
-        "code": "270042",
-        "detected_at": "2026-10-14T22:04:11+08:00",
-        "previous_generated_at": "2026-10-14T13:26:09+08:00",
-        "retention_hours": 72,
-        "retained_until": "2026-10-17T22:04:11+08:00",
-        "summary": [
-          "暂停申购"
-        ],
-        "subscription": {
-          "direction": "paused",
-          "previous": "允许申购",
-          "current": "暂停申购",
-          "label": "暂停申购"
-        },
-        "agency_limit": {
-          "direction": "",
-          "previous": 10.0,
-          "current": 10.0,
-          "previous_text": "10元",
-          "current_text": "10元",
-          "label": ""
-        },
-        "direct_limit": {
-          "direction": "",
-          "previous": 10.0,
-          "current": 10.0,
-          "previous_text": "10元",
-          "current_text": "10元",
-          "label": ""
-        }
-      },
+      "execution_alert": {},
       "buy_rate": 0.13,
       "management_fee": 0.8,
       "custody_fee": 0.2,
