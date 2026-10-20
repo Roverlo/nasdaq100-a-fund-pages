@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-20T21:53:30+08:00",
+  "generated_at": "2026-10-21T03:16:29+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -52,6 +52,38 @@
     "alert_policy": "Compare current refresh against the previous snapshot; keep unchanged alerts for a short window so opened pages can still show recent buyability or limit moves. Subscription status and limits remain execution information and do not affect tier scores."
   },
   "execution_alerts": {
+    "019441": {
+      "code": "019441",
+      "detected_at": "2026-10-21T03:16:29+08:00",
+      "previous_generated_at": "2026-10-20T21:53:30+08:00",
+      "retention_hours": 72,
+      "retained_until": "2026-10-24T03:16:29+08:00",
+      "summary": [
+        "暂停申购"
+      ],
+      "subscription": {
+        "direction": "paused",
+        "previous": "允许申购",
+        "current": "暂停申购",
+        "label": "暂停申购"
+      },
+      "agency_limit": {
+        "direction": "",
+        "previous": 50.0,
+        "current": 50.0,
+        "previous_text": "50元",
+        "current_text": "50元",
+        "label": ""
+      },
+      "direct_limit": {
+        "direction": "",
+        "previous": 10000.0,
+        "current": 10000.0,
+        "previous_text": "10000元",
+        "current_text": "10000元",
+        "label": ""
+      }
+    },
     "040046": {
       "code": "040046",
       "detected_at": "2026-10-20T21:53:30+08:00",
@@ -86,6 +118,38 @@
     }
   },
   "change_alerts": {
+    "019441": {
+      "code": "019441",
+      "detected_at": "2026-10-21T03:16:29+08:00",
+      "previous_generated_at": "2026-10-20T21:53:30+08:00",
+      "retention_hours": 72,
+      "retained_until": "2026-10-24T03:16:29+08:00",
+      "summary": [
+        "暂停申购"
+      ],
+      "subscription": {
+        "direction": "paused",
+        "previous": "允许申购",
+        "current": "暂停申购",
+        "label": "暂停申购"
+      },
+      "agency_limit": {
+        "direction": "",
+        "previous": 50.0,
+        "current": 50.0,
+        "previous_text": "50元",
+        "current_text": "50元",
+        "label": ""
+      },
+      "direct_limit": {
+        "direction": "",
+        "previous": 10000.0,
+        "current": 10000.0,
+        "previous_text": "10000元",
+        "current_text": "10000元",
+        "label": ""
+      }
+    },
     "040046": {
       "code": "040046",
       "detected_at": "2026-10-20T21:53:30+08:00",
@@ -233,8 +297,8 @@
   "tracking_plan": {
     "schema_version": 2,
     "file": "portfolio_tracking.json",
-    "record_count": 120,
-    "latest_date": "2026-10-20",
+    "record_count": 121,
+    "latest_date": "2026-10-21",
     "refresh_policy": "GitHub Actions refreshes the main data three times per Beijing day; portfolio_tracking.json upserts today's record and appends only when the Beijing date changes.",
     "refresh_times_beijing": [
       "08:45",
@@ -252,10 +316,10 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "B",
-      "investing_score": 74.3,
+      "investing_score": 74.4,
       "investing_rank": 7,
-      "subscription_status": "允许申购",
-      "subscription_status_raw": "限大额(单日投资上限10元)",
+      "subscription_status": "暂停申购",
+      "subscription_status_raw": "暂停申购(单日投资上限5元)",
       "fund_size_billion": 9.68,
       "daily_limit": 50.0,
       "agency_limit_label": "",
@@ -264,7 +328,38 @@
       "direct_limit": 10000.0,
       "direct_limit_source": "直销限额: 万家基金公告正文，A/C单日单个基金账户单笔或多笔申购含定投累计金额限制；生效日/公告日: 2026-06-22；公告未区分直销/代销；A类、C类分别计算；同时设置13.5亿元总规模上限。；https://pdf.dfcfw.com/pdf/H2_AN202606191823686344_1.pdf",
       "direct_limit_confidence": "official_disclosure_mirror",
-      "execution_alert": {},
+      "execution_alert": {
+        "code": "019441",
+        "detected_at": "2026-10-21T03:16:29+08:00",
+        "previous_generated_at": "2026-10-20T21:53:30+08:00",
+        "retention_hours": 72,
+        "retained_until": "2026-10-24T03:16:29+08:00",
+        "summary": [
+          "暂停申购"
+        ],
+        "subscription": {
+          "direction": "paused",
+          "previous": "允许申购",
+          "current": "暂停申购",
+          "label": "暂停申购"
+        },
+        "agency_limit": {
+          "direction": "",
+          "previous": 50.0,
+          "current": 50.0,
+          "previous_text": "50元",
+          "current_text": "50元",
+          "label": ""
+        },
+        "direct_limit": {
+          "direction": "",
+          "previous": 10000.0,
+          "current": 10000.0,
+          "previous_text": "10000元",
+          "current_text": "10000元",
+          "label": ""
+        }
+      },
       "buy_rate": 0.1,
       "management_fee": 0.5,
       "custody_fee": 0.15,
@@ -469,7 +564,7 @@
       "three_year": 1.86,
       "day_change": 1.03,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 2.22,
+      "tracking_error": 2.23,
       "tracking_avg_error": 2.21,
       "tracking_error_date": "2026-10-19",
       "free_after_days": 90,
@@ -527,7 +622,7 @@
       "three_year": 0.53,
       "day_change": 1.09,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.76,
+      "tracking_error": 1.77,
       "tracking_avg_error": 2.21,
       "tracking_error_date": "2026-10-19",
       "free_after_days": 7,
@@ -662,7 +757,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "B",
-      "investing_score": 68.4,
+      "investing_score": 68.5,
       "investing_rank": 8,
       "subscription_status": "允许申购",
       "subscription_status_raw": "限大额(单日投资上限10元)",
@@ -735,7 +830,7 @@
       "three_year": 2.19,
       "day_change": 1.03,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.73,
+      "tracking_error": 1.74,
       "tracking_avg_error": 2.21,
       "tracking_error_date": "2026-10-19",
       "free_after_days": 7,
@@ -762,7 +857,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "B",
-      "investing_score": 68.4,
+      "investing_score": 68.3,
       "investing_rank": 9,
       "subscription_status": "允许申购",
       "subscription_status_raw": "限大额(单日投资上限10元)",
@@ -785,7 +880,7 @@
       "three_year": 2.03,
       "day_change": 1.08,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.68,
+      "tracking_error": 1.69,
       "tracking_avg_error": 2.21,
       "tracking_error_date": "2026-10-19",
       "free_after_days": 7,
@@ -924,7 +1019,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "S",
-      "investing_score": 86.6,
+      "investing_score": 86.7,
       "investing_rank": 1,
       "subscription_status": "暂停申购",
       "subscription_status_raw": "暂停申购",
@@ -1051,7 +1146,7 @@
       "three_year": 1.7,
       "day_change": 1.04,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 2.42,
+      "tracking_error": 2.43,
       "tracking_avg_error": 2.21,
       "tracking_error_date": "2026-10-19",
       "free_after_days": 7,
@@ -1078,7 +1173,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "A",
-      "investing_score": 78.4,
+      "investing_score": 78.3,
       "investing_rank": 3,
       "subscription_status": "暂停申购",
       "subscription_status_raw": "暂停申购(单日投资上限10元)",
@@ -1101,7 +1196,7 @@
       "three_year": 2.25,
       "day_change": 1.08,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.44,
+      "tracking_error": 1.45,
       "tracking_avg_error": 2.21,
       "tracking_error_date": "2026-10-19",
       "free_after_days": 730,
