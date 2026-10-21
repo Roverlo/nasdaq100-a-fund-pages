@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-21T03:16:29+08:00",
+  "generated_at": "2026-10-21T13:20:58+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -54,18 +54,18 @@
   "execution_alerts": {
     "019441": {
       "code": "019441",
-      "detected_at": "2026-10-21T03:16:29+08:00",
-      "previous_generated_at": "2026-10-20T21:53:30+08:00",
+      "detected_at": "2026-10-21T13:20:58+08:00",
+      "previous_generated_at": "2026-10-21T03:16:29+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-10-24T03:16:29+08:00",
+      "retained_until": "2026-10-24T13:20:58+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -120,18 +120,18 @@
   "change_alerts": {
     "019441": {
       "code": "019441",
-      "detected_at": "2026-10-21T03:16:29+08:00",
-      "previous_generated_at": "2026-10-20T21:53:30+08:00",
+      "detected_at": "2026-10-21T13:20:58+08:00",
+      "previous_generated_at": "2026-10-21T03:16:29+08:00",
       "retention_hours": 72,
-      "retained_until": "2026-10-24T03:16:29+08:00",
+      "retained_until": "2026-10-24T13:20:58+08:00",
       "summary": [
-        "暂停申购"
+        "恢复申购"
       ],
       "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
+        "direction": "opened",
+        "previous": "暂停申购",
+        "current": "允许申购",
+        "label": "恢复申购"
       },
       "agency_limit": {
         "direction": "",
@@ -318,8 +318,8 @@
       "investing_tier": "B",
       "investing_score": 74.4,
       "investing_rank": 7,
-      "subscription_status": "暂停申购",
-      "subscription_status_raw": "暂停申购(单日投资上限5元)",
+      "subscription_status": "允许申购",
+      "subscription_status_raw": "限大额(单日投资上限5元)",
       "fund_size_billion": 9.68,
       "daily_limit": 50.0,
       "agency_limit_label": "",
@@ -330,18 +330,18 @@
       "direct_limit_confidence": "official_disclosure_mirror",
       "execution_alert": {
         "code": "019441",
-        "detected_at": "2026-10-21T03:16:29+08:00",
-        "previous_generated_at": "2026-10-20T21:53:30+08:00",
+        "detected_at": "2026-10-21T13:20:58+08:00",
+        "previous_generated_at": "2026-10-21T03:16:29+08:00",
         "retention_hours": 72,
-        "retained_until": "2026-10-24T03:16:29+08:00",
+        "retained_until": "2026-10-24T13:20:58+08:00",
         "summary": [
-          "暂停申购"
+          "恢复申购"
         ],
         "subscription": {
-          "direction": "paused",
-          "previous": "允许申购",
-          "current": "暂停申购",
-          "label": "暂停申购"
+          "direction": "opened",
+          "previous": "暂停申购",
+          "current": "允许申购",
+          "label": "恢复申购"
         },
         "agency_limit": {
           "direction": "",
