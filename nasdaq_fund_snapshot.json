@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-23T21:50:28+08:00",
+  "generated_at": "2026-10-24T03:13:46+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -83,38 +83,6 @@
         "current_text": "10000元",
         "label": ""
       }
-    },
-    "040046": {
-      "code": "040046",
-      "detected_at": "2026-10-20T21:53:30+08:00",
-      "previous_generated_at": "2026-10-20T13:21:59+08:00",
-      "retention_hours": 72,
-      "retained_until": "2026-10-23T21:53:30+08:00",
-      "summary": [
-        "暂停申购"
-      ],
-      "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
-      },
-      "agency_limit": {
-        "direction": "",
-        "previous": 5.0,
-        "current": 5.0,
-        "previous_text": "5元",
-        "current_text": "5元",
-        "label": ""
-      },
-      "direct_limit": {
-        "direction": "",
-        "previous": 1000.0,
-        "current": 1000.0,
-        "previous_text": "1000元",
-        "current_text": "1000元",
-        "label": ""
-      }
     }
   },
   "change_alerts": {
@@ -147,38 +115,6 @@
         "current": 10000.0,
         "previous_text": "10000元",
         "current_text": "10000元",
-        "label": ""
-      }
-    },
-    "040046": {
-      "code": "040046",
-      "detected_at": "2026-10-20T21:53:30+08:00",
-      "previous_generated_at": "2026-10-20T13:21:59+08:00",
-      "retention_hours": 72,
-      "retained_until": "2026-10-23T21:53:30+08:00",
-      "summary": [
-        "暂停申购"
-      ],
-      "subscription": {
-        "direction": "paused",
-        "previous": "允许申购",
-        "current": "暂停申购",
-        "label": "暂停申购"
-      },
-      "agency_limit": {
-        "direction": "",
-        "previous": 5.0,
-        "current": 5.0,
-        "previous_text": "5元",
-        "current_text": "5元",
-        "label": ""
-      },
-      "direct_limit": {
-        "direction": "",
-        "previous": 1000.0,
-        "current": 1000.0,
-        "previous_text": "1000元",
-        "current_text": "1000元",
         "label": ""
       }
     }
@@ -297,8 +233,8 @@
   "tracking_plan": {
     "schema_version": 2,
     "file": "portfolio_tracking.json",
-    "record_count": 123,
-    "latest_date": "2026-10-23",
+    "record_count": 124,
+    "latest_date": "2026-10-24",
     "refresh_policy": "GitHub Actions refreshes the main data three times per Beijing day; portfolio_tracking.json upserts today's record and appends only when the Beijing date changes.",
     "refresh_times_beijing": [
       "08:45",
@@ -370,7 +306,7 @@
       "three_year": -0.78,
       "day_change": -2.72,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 2.17,
+      "tracking_error": 2.18,
       "tracking_avg_error": 2.22,
       "tracking_error_date": "2026-10-22",
       "free_after_days": 30,
@@ -414,38 +350,7 @@
       "direct_limit": 1000.0,
       "direct_limit_source": "直销限额: 华安基金公告PDF，直销机构单日每个基金账户累计申购/定投限额；生效日/公告日: 2025-12-05；公告明确普通渠道每类人民币份额10元，直销机构1000元。；https://pdf.dfcfw.com/pdf/H2_AN202512041793575251_1.pdf",
       "direct_limit_confidence": "official_disclosure_mirror",
-      "execution_alert": {
-        "code": "040046",
-        "detected_at": "2026-10-20T21:53:30+08:00",
-        "previous_generated_at": "2026-10-20T13:21:59+08:00",
-        "retention_hours": 72,
-        "retained_until": "2026-10-23T21:53:30+08:00",
-        "summary": [
-          "暂停申购"
-        ],
-        "subscription": {
-          "direction": "paused",
-          "previous": "允许申购",
-          "current": "暂停申购",
-          "label": "暂停申购"
-        },
-        "agency_limit": {
-          "direction": "",
-          "previous": 5.0,
-          "current": 5.0,
-          "previous_text": "5元",
-          "current_text": "5元",
-          "label": ""
-        },
-        "direct_limit": {
-          "direction": "",
-          "previous": 1000.0,
-          "current": 1000.0,
-          "previous_text": "1000元",
-          "current_text": "1000元",
-          "label": ""
-        }
-      },
+      "execution_alert": {},
       "buy_rate": 0.12,
       "management_fee": 0.6,
       "custody_fee": 0.2,
@@ -541,7 +446,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "D",
-      "investing_score": 44.8,
+      "investing_score": 44.5,
       "investing_rank": 16,
       "subscription_status": "允许申购",
       "subscription_status_raw": "限大额(单日投资上限10元)",
@@ -564,7 +469,7 @@
       "three_year": -1.35,
       "day_change": -2.52,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 2.23,
+      "tracking_error": 2.26,
       "tracking_avg_error": 2.22,
       "tracking_error_date": "2026-10-22",
       "free_after_days": 90,
@@ -622,7 +527,7 @@
       "three_year": -2.64,
       "day_change": -2.75,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.76,
+      "tracking_error": 1.77,
       "tracking_avg_error": 2.22,
       "tracking_error_date": "2026-10-22",
       "free_after_days": 7,
@@ -649,7 +554,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "A",
-      "investing_score": 75.7,
+      "investing_score": 75.6,
       "investing_rank": 5,
       "subscription_status": "允许申购",
       "subscription_status_raw": "限大额(单日投资上限10元)",
@@ -672,7 +577,7 @@
       "three_year": -1.2,
       "day_change": -2.77,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.42,
+      "tracking_error": 1.43,
       "tracking_avg_error": 2.22,
       "tracking_error_date": "2026-10-22",
       "free_after_days": 7,
@@ -780,7 +685,7 @@
       "three_year": -1.04,
       "day_change": -2.72,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 2.31,
+      "tracking_error": 2.32,
       "tracking_avg_error": 2.22,
       "tracking_error_date": "2026-10-22",
       "free_after_days": 7,
@@ -807,7 +712,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "A",
-      "investing_score": 78.0,
+      "investing_score": 77.8,
       "investing_rank": 4,
       "subscription_status": "暂停申购",
       "subscription_status_raw": "暂停申购(单日投资上限10元)",
@@ -830,7 +735,7 @@
       "three_year": -0.95,
       "day_change": -2.64,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.74,
+      "tracking_error": 1.76,
       "tracking_avg_error": 2.22,
       "tracking_error_date": "2026-10-22",
       "free_after_days": 7,
@@ -857,7 +762,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "B",
-      "investing_score": 68.4,
+      "investing_score": 68.3,
       "investing_rank": 9,
       "subscription_status": "允许申购",
       "subscription_status_raw": "限大额(单日投资上限10元)",
@@ -880,7 +785,7 @@
       "three_year": -1.17,
       "day_change": -2.73,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.69,
+      "tracking_error": 1.7,
       "tracking_avg_error": 2.22,
       "tracking_error_date": "2026-10-22",
       "free_after_days": 7,
@@ -907,7 +812,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "B",
-      "investing_score": 68.0,
+      "investing_score": 67.8,
       "investing_rank": 10,
       "subscription_status": "允许申购",
       "subscription_status_raw": "限大额(单日投资上限5元)",
@@ -930,7 +835,7 @@
       "three_year": -1.22,
       "day_change": -2.67,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.55,
+      "tracking_error": 1.57,
       "tracking_avg_error": 2.22,
       "tracking_error_date": "2026-10-22",
       "free_after_days": 30,
@@ -961,7 +866,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "A",
-      "investing_score": 75.4,
+      "investing_score": 75.3,
       "investing_rank": 6,
       "subscription_status": "暂停申购",
       "subscription_status_raw": "暂停申购(单日投资上限100元)",
@@ -984,7 +889,7 @@
       "three_year": -1.24,
       "day_change": -2.75,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.48,
+      "tracking_error": 1.49,
       "tracking_avg_error": 2.22,
       "tracking_error_date": "2026-10-22",
       "free_after_days": 365,
@@ -1019,7 +924,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "S",
-      "investing_score": 86.0,
+      "investing_score": 85.9,
       "investing_rank": 1,
       "subscription_status": "暂停申购",
       "subscription_status_raw": "暂停申购",
@@ -1042,7 +947,7 @@
       "three_year": -0.89,
       "day_change": -2.75,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.46,
+      "tracking_error": 1.47,
       "tracking_avg_error": 2.22,
       "tracking_error_date": "2026-10-22",
       "free_after_days": 7,
@@ -1069,7 +974,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "S",
-      "investing_score": 84.4,
+      "investing_score": 84.3,
       "investing_rank": 2,
       "subscription_status": "暂停申购",
       "subscription_status_raw": "暂停申购(单日投资上限100元)",
@@ -1092,7 +997,7 @@
       "three_year": -0.89,
       "day_change": -2.75,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.5,
+      "tracking_error": 1.51,
       "tracking_avg_error": 2.22,
       "tracking_error_date": "2026-10-22",
       "free_after_days": 30,
@@ -1146,7 +1051,7 @@
       "three_year": -1.56,
       "day_change": -2.8,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 2.42,
+      "tracking_error": 2.43,
       "tracking_avg_error": 2.22,
       "tracking_error_date": "2026-10-22",
       "free_after_days": 7,
@@ -1173,7 +1078,7 @@
       "holding_horizon": "long",
       "holding_horizon_text": "长期持有",
       "investing_tier": "A",
-      "investing_score": 78.1,
+      "investing_score": 78.0,
       "investing_rank": 3,
       "subscription_status": "暂停申购",
       "subscription_status_raw": "暂停申购(单日投资上限10元)",
@@ -1196,7 +1101,7 @@
       "three_year": -0.98,
       "day_change": -2.75,
       "tracking_index": "纳斯达克100指数",
-      "tracking_error": 1.44,
+      "tracking_error": 1.45,
       "tracking_avg_error": 2.22,
       "tracking_error_date": "2026-10-22",
       "free_after_days": 730,
