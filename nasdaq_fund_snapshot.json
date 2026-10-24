@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-24T13:04:04+08:00",
+  "generated_at": "2026-10-24T20:56:39+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -51,74 +51,8 @@
     "alert_retention_hours": 72,
     "alert_policy": "Compare current refresh against the previous snapshot; keep unchanged alerts for a short window so opened pages can still show recent buyability or limit moves. Subscription status and limits remain execution information and do not affect tier scores."
   },
-  "execution_alerts": {
-    "019441": {
-      "code": "019441",
-      "detected_at": "2026-10-21T13:20:58+08:00",
-      "previous_generated_at": "2026-10-21T03:16:29+08:00",
-      "retention_hours": 72,
-      "retained_until": "2026-10-24T13:20:58+08:00",
-      "summary": [
-        "恢复申购"
-      ],
-      "subscription": {
-        "direction": "opened",
-        "previous": "暂停申购",
-        "current": "允许申购",
-        "label": "恢复申购"
-      },
-      "agency_limit": {
-        "direction": "",
-        "previous": 50.0,
-        "current": 50.0,
-        "previous_text": "50元",
-        "current_text": "50元",
-        "label": ""
-      },
-      "direct_limit": {
-        "direction": "",
-        "previous": 10000.0,
-        "current": 10000.0,
-        "previous_text": "10000元",
-        "current_text": "10000元",
-        "label": ""
-      }
-    }
-  },
-  "change_alerts": {
-    "019441": {
-      "code": "019441",
-      "detected_at": "2026-10-21T13:20:58+08:00",
-      "previous_generated_at": "2026-10-21T03:16:29+08:00",
-      "retention_hours": 72,
-      "retained_until": "2026-10-24T13:20:58+08:00",
-      "summary": [
-        "恢复申购"
-      ],
-      "subscription": {
-        "direction": "opened",
-        "previous": "暂停申购",
-        "current": "允许申购",
-        "label": "恢复申购"
-      },
-      "agency_limit": {
-        "direction": "",
-        "previous": 50.0,
-        "current": 50.0,
-        "previous_text": "50元",
-        "current_text": "50元",
-        "label": ""
-      },
-      "direct_limit": {
-        "direction": "",
-        "previous": 10000.0,
-        "current": 10000.0,
-        "previous_text": "10000元",
-        "current_text": "10000元",
-        "label": ""
-      }
-    }
-  },
+  "execution_alerts": {},
+  "change_alerts": {},
   "scoring_model": {
     "method": "return-priority model for the current A-share watchlist; return metrics carry 55%, tracking error and base fee carry 35%, fund size carries 6%, transaction frictions carry 4%; subscription status and purchase limits are execution filters only and do not affect tier scores; lower-is-better metrics are reverse normalized; fund size uses log10 before normalization",
     "tier_method": "S/A/B/C/D relative percentile buckets within the current watchlist",
@@ -264,38 +198,7 @@
       "direct_limit": 10000.0,
       "direct_limit_source": "直销限额: 万家基金公告正文，A/C单日单个基金账户单笔或多笔申购含定投累计金额限制；生效日/公告日: 2026-06-22；公告未区分直销/代销；A类、C类分别计算；同时设置13.5亿元总规模上限。；https://pdf.dfcfw.com/pdf/H2_AN202606191823686344_1.pdf",
       "direct_limit_confidence": "official_disclosure_mirror",
-      "execution_alert": {
-        "code": "019441",
-        "detected_at": "2026-10-21T13:20:58+08:00",
-        "previous_generated_at": "2026-10-21T03:16:29+08:00",
-        "retention_hours": 72,
-        "retained_until": "2026-10-24T13:20:58+08:00",
-        "summary": [
-          "恢复申购"
-        ],
-        "subscription": {
-          "direction": "opened",
-          "previous": "暂停申购",
-          "current": "允许申购",
-          "label": "恢复申购"
-        },
-        "agency_limit": {
-          "direction": "",
-          "previous": 50.0,
-          "current": 50.0,
-          "previous_text": "50元",
-          "current_text": "50元",
-          "label": ""
-        },
-        "direct_limit": {
-          "direction": "",
-          "previous": 10000.0,
-          "current": 10000.0,
-          "previous_text": "10000元",
-          "current_text": "10000元",
-          "label": ""
-        }
-      },
+      "execution_alert": {},
       "buy_rate": 0.1,
       "management_fee": 0.5,
       "custody_fee": 0.15,
