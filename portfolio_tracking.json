@@ -14589,7 +14589,7 @@
         "019441": {
           "name": "万家",
           "rating": "B",
-          "score": 75.0,
+          "score": 75.1,
           "status": "定投中"
         },
         "040046": {
@@ -14601,13 +14601,13 @@
         "000834": {
           "name": "大成",
           "rating": "C",
-          "score": 48.7,
+          "score": 48.9,
           "status": "定投中"
         },
         "539001": {
           "name": "建信",
-          "rating": "D",
-          "score": 46.2,
+          "rating": "C",
+          "score": 47.8,
           "status": "定投中"
         },
         "018966": {
@@ -14625,25 +14625,25 @@
         "270042": {
           "name": "广发",
           "rating": "C",
-          "score": 61.5,
+          "score": 61.6,
           "status": "定投中"
         },
         "019172": {
           "name": "摩根",
           "rating": "C",
-          "score": 67.3,
+          "score": 67.1,
           "status": "定投中"
         },
         "019547": {
           "name": "招商",
           "rating": "A",
-          "score": 75.4,
+          "score": 76.8,
           "status": "定投中"
         },
         "019736": {
           "name": "宝盈",
           "rating": "B",
-          "score": 67.9,
+          "score": 68.1,
           "status": "定投中"
         },
         "019524": {
@@ -14661,31 +14661,31 @@
         "016055": {
           "name": "博时",
           "rating": "S",
-          "score": 87.0,
+          "score": 86.6,
           "status": "候选"
         },
         "016532": {
           "name": "嘉实",
           "rating": "S",
-          "score": 87.6,
+          "score": 88.3,
           "status": "候选"
         },
         "015299": {
           "name": "华夏",
-          "rating": "C",
-          "score": 46.4,
+          "rating": "D",
+          "score": 44.8,
           "status": "候选"
         },
         "161130": {
           "name": "易方达",
           "rating": "A",
-          "score": 78.8,
+          "score": 79.2,
           "status": "候选"
         },
         "160213": {
           "name": "国泰",
           "rating": "B",
-          "score": 69.1,
+          "score": 68.8,
           "status": "候选"
         }
       },
