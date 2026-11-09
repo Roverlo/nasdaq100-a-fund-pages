@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-08T23:36:43+08:00",
+  "generated_at": "2026-11-09T15:14:09+08:00",
   "source_health": {
     "fund_count": 17,
     "checks": {
@@ -167,8 +167,8 @@
   "tracking_plan": {
     "schema_version": 2,
     "file": "portfolio_tracking.json",
-    "record_count": 139,
-    "latest_date": "2026-11-08",
+    "record_count": 140,
+    "latest_date": "2026-11-09",
     "refresh_policy": "GitHub Actions refreshes the main data three times per Beijing day; portfolio_tracking.json upserts today's record and appends only when the Beijing date changes.",
     "refresh_times_beijing": [
       "08:45",
